@@ -100,7 +100,7 @@ The File Registry is the project's index of every file in it, structured as a ta
 
 ### Structure
 
-This section interprets the columns of the **Registered Files** table below — what each column holds and what values are valid.
+This section interprets the columns of the **Registered Files** table below — what each column holds and what values are valid — and the extension that is derived from the File column.
 
 #### Type
 
@@ -145,7 +145,13 @@ Every registered file MUST carry an explicit protocol value. AI MAY propose new 
 
 #### Extension
 
-Registered file names use one extension separated by a single period, except dot-files without an extension per the **Dot-file extension** rule and files of type `design` per the **Design-tool exemption** rule. The extension is recorded in the Extension column. The set of permitted extensions is closed. Only the following extensions are allowed:
+Registered file names use one extension separated by a single period, except dot-files without an extension per the **Dot-file extension** rule and files of type `design` per the **Design-tool exemption** rule.
+
+The extension MUST be derived from the File column as the part of the file name after its last period, including that period (e.g. `.md` for `AGENTS.md`). A leading dot per the **Leading dot** rule is not an extension separator; a dot-file without a further period has no extension (e.g. `.gitignore`).
+
+The Registered Files table MUST NOT carry an Extension column; derive the extension from the File column instead.
+
+The set of permitted extensions is closed. Only the following extensions are allowed:
 
 - `.txt`
 - `.md`
@@ -196,7 +202,7 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Dot-file extension. A file whose name starts with a dot MAY have no extension.
 
-- Name uniqueness. No two entries in the File Registry MAY share the same combination of file name and extension, compared case-insensitively, regardless of subfolder. When a proposed file name collides with an existing entry, AI MUST flag the collision and propose a distinct name before registration.
+- Name uniqueness. No two entries in the File Registry MAY share the same value in the File column, compared case-insensitively, regardless of subfolder. When a proposed file name collides with an existing entry, AI MUST flag the collision and propose a distinct name before registration.
 
 - Path discipline. AI MUST place every registered file at the path recorded in its registry row (subfolder plus file name). Moving a file requires updating the row first; loose files outside their registered path MUST be flagged when detected.
 
@@ -214,7 +220,7 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Platform-imposed note. The registry's Description field for `README.md` MUST note its platform-imposed name.
 
-- Design-tool exemption. Files of type `design` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; keep the names the design tool assigned, because the handoff refers to the files by those names. Their extension is the part after the last period (e.g. `.html` for `Main.dc.html`) and MUST be a permitted extension.
+- Design-tool exemption. Files of type `design` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; keep the names the design tool assigned, because the handoff refers to the files by those names. Their extension is derived per the **Extension** section (e.g. `.html` for `Main.dc.html`) and MUST be a permitted extension.
 
 - Design-tool note. The registry's Description field for every file of type `design` MUST note its tool-imposed name.
 
