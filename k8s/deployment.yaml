@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: charemma-web-security
+  labels:
+    app: charemma-web-security
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: charemma-web-security
+  template:
+    metadata:
+      labels:
+        app: charemma-web-security
+    spec:
+      containers:
+        - name: charemma-web-security
+          image: ghcr.io/charemma/charemma-web-security:latest
+          ports:
+            - containerPort: 80
