@@ -3,7 +3,8 @@
   "default_lang": "de",
   "languages": [
     { "code": "de", "label": "DE", "prefix": "" },
-    { "code": "en", "label": "EN", "prefix": "en/" }
+    { "code": "en", "label": "EN", "prefix": "en/" },
+    { "code": "el", "label": "EL", "prefix": "el/" }
   ],
   "pages": [
     { "template": "index.html.j2", "path": "" },

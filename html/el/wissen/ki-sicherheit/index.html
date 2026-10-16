@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ασφάλεια AI · Επισκόπηση θεμάτων · security.charemma.de</title>
+  <meta name="description" content="Όλα τα άρθρα γνώσης για κινδύνους σε εφαρμογές LLM και pipelines AI.">
+  <link rel="canonical" href="https://security.charemma.de/el/wissen/ki-sicherheit/">
+  <link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/">
+  <link rel="alternate" hreflang="en" href="https://security.charemma.de/en/wissen/ki-sicherheit/">
+  <link rel="alternate" hreflang="el" href="https://security.charemma.de/el/wissen/ki-sicherheit/">
+  <link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/">
+  <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js"></script>
+</head>
+<body class="page-light">
+  <div class="site-header-bar">
+    <header class="site-header">
+      <a class="brand" href="/el/#top"><span class="brand__user">charemma@</span><span>security</span><span class="brand__prompt">:~$</span></a>
+      <nav class="site-nav" aria-label="Κύρια πλοήγηση">
+        <span class="lang-switch" role="group" aria-label="Sprache / Language / Γλώσσα">
+          <a href="/wissen/ki-sicherheit/" hreflang="de" lang="de" data-lang="de">DE</a>
+          <a href="/en/wissen/ki-sicherheit/" hreflang="en" lang="en" data-lang="en">EN</a>
+          <a href="/el/wissen/ki-sicherheit/" hreflang="el" lang="el" data-lang="el" aria-current="true">EL</a>
+        </span>
+      </nav>
+    </header>
+  </div>
+
+  <main>
+    <div class="overview container">
+      <div class="overview__head">
+        <a class="overview__back" href="/el/#wissen">← πίσω στην αρχική</a>
+        <span class="knowledge__eyebrow">
+          <span class="pill"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>
+Γνώση</span>
+          <span>Επισκόπηση θεμάτων</span>
+        </span>
+        <h1 class="overview__title">Ασφάλεια AI</h1>
+        <p class="overview__lead">Όλα τα άρθρα γνώσης για κινδύνους σε εφαρμογές LLM και pipelines AI. Κάθε θέμα εξηγείται σύντομα και οδηγεί στο αναλυτικό άρθρο.</p>
+      </div>
+      <section class="overview__group">
+        <div class="topic-group__head">
+          <h2 class="topic-group__title topic-group__title--lg">Εφαρμογές LLM</h2>
+          <span class="topic-group__sub">Κίνδυνοι σε εφαρμογές με γλωσσικά μοντέλα</span>
+          <span class="topic-group__count">10 θέματα</span>
+        </div>
+        <ul class="topic-grid">
+          <li class="topic-card" id="prompt-injection">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM01</span></span>
+            <h3 class="topic-card__title">Prompt injection</h3>
+            <p class="topic-card__body">Είσοδοι – άμεσα ή κρυμμένες σε έγγραφα, ιστοσελίδες και e-mails – κάνουν ένα μοντέλο να αγνοήσει τις οδηγίες του ή να εκτελέσει ξένες.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="sensitive-information-disclosure">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM02</span></span>
+            <h3 class="topic-card__title">Sensitive information disclosure</h3>
+            <p class="topic-card__body">Ένα μοντέλο αποκαλύπτει εμπιστευτικά δεδομένα – από τα δεδομένα εκπαίδευσης, το πλαίσιο της συνομιλίας ή συνδεδεμένα συστήματα.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="excessive-agency">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM03</span></span>
+            <h3 class="topic-card__title">Excessive agency</h3>
+            <p class="topic-card__body">Ένας agent μπορεί να κάνει περισσότερα απ’ όσα χρειάζεται: πάρα πολλά εργαλεία, υπερβολικά δικαιώματα, ελάχιστη ανθρώπινη επιβεβαίωση.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="supply-chain">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM04</span></span>
+            <h3 class="topic-card__title">Supply chain</h3>
+            <p class="topic-card__body">Κίνδυνοι που μπαίνουν σε μια εφαρμογή μέσω μοντέλων, datasets, plugins και βιβλιοθηκών τρίτων.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="data-and-model-poisoning">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM05</span></span>
+            <h3 class="topic-card__title">Data and model poisoning</h3>
+            <p class="topic-card__body">Παραποιημένα δεδομένα εκπαίδευσης, fine-tuning ή embeddings αλλάζουν σκόπιμα τη συμπεριφορά ενός μοντέλου.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="unbounded-consumption">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM06</span></span>
+            <h3 class="topic-card__title">Unbounded consumption</h3>
+            <p class="topic-card__body">Ανεξέλεγκτα αιτήματα ανεβάζουν κόστος και φορτίο ή επιτρέπουν τη συστηματική «αντιγραφή» ενός μοντέλου.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="misinformation">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM07</span></span>
+            <h3 class="topic-card__title">Misinformation</h3>
+            <p class="topic-card__body">Πειστικά διατυπωμένες αλλά λανθασμένες απαντήσεις, στις οποίες βασίζονται άνθρωποι ή άλλα συστήματα.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="hidden-context-exposure">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM08</span></span>
+            <h3 class="topic-card__title">Hidden context exposure</h3>
+            <p class="topic-card__body">Κρυφές οδηγίες και πλαίσιο – π.χ. system prompts – γίνονται ορατά και αποκαλύπτουν λογική, κανόνες ή μυστικά.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="vector-and-embedding-weaknesses">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM09</span></span>
+            <h3 class="topic-card__title">Vector and embedding weaknesses</h3>
+            <p class="topic-card__body">Αδυναμίες σε συστήματα RAG: έλλειψη διαχωρισμού πρόσβασης, παραποιημένα ή διαρρέοντα δεδομένα διανυσμάτων.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="improper-output-handling">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">LLM10</span></span>
+            <h3 class="topic-card__title">Improper output handling</h3>
+            <p class="topic-card__body">Οι έξοδοι του μοντέλου επεξεργάζονται χωρίς έλεγχο – ως HTML, SQL ή εντολή shell – και ανοίγουν κλασικά κενά.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+        </ul>
+      </section>
+      <section class="overview__group">
+        <div class="topic-group__head">
+          <h2 class="topic-group__title topic-group__title--lg">Pipelines AI</h2>
+          <span class="topic-group__sub">Από τα δεδομένα μέχρι το inference endpoint</span>
+          <span class="topic-group__count">5 θέματα</span>
+        </div>
+        <ul class="topic-grid">
+          <li class="topic-card" id="daten-und-rag-ingestion">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">PIPE·01</span></span>
+            <h3 class="topic-card__title">Δεδομένα &amp; RAG ingestion</h3>
+            <p class="topic-card__body">Όποιος μπορεί να εισαγάγει δεδομένα εκπαίδευσης, fine-tuning ή retrieval μπορεί να επηρεάσει τη συμπεριφορά του συστήματος.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="modell-lieferkette">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">PIPE·02</span></span>
+            <h3 class="topic-card__title">Εφοδιαστική αλυσίδα μοντέλων</h3>
+            <p class="topic-card__body">Προέλευση και ακεραιότητα μοντέλων, βαρών και εξαρτήσεων – μαζί με registries και ανασφαλείς μορφές αρχείων.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="agenten-und-tool-anbindung">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">PIPE·03</span></span>
+            <h3 class="topic-card__title">Agents &amp; σύνδεση εργαλείων</h3>
+            <p class="topic-card__body">MCP servers, δικαιώματα εργαλείων και αυτοματοποίηση καθορίζουν τι μπορεί πραγματικά να κάνει ένας χειραγωγημένος agent.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="inferenz-infrastruktur">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">PIPE·04</span></span>
+            <h3 class="topic-card__title">Υποδομή inference</h3>
+            <p class="topic-card__body">Οι model servers και τα APIs είναι υπηρεσίες όπως όλες: εκτεθειμένες, συχνά με αδύναμη απομόνωση, σπάνια με όρια πόρων.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+          <li class="topic-card" id="secrets-und-schluessel">
+            <span class="topic-card__meta"><span class="topic-card__badge">Γνώση</span><span class="topic-card__id">PIPE·05</span></span>
+            <h3 class="topic-card__title">Secrets &amp; κλειδιά</h3>
+            <p class="topic-card__body">API keys παρόχων μοντέλων και διαπιστευτήρια καταλήγουν εύκολα σε prompts, logs και μεταβλητές pipeline.</p>
+            <span class="topic-card__upcoming">Το άρθρο έρχεται σύντομα</span>
+          </li>
+        </ul>
+      </section>
+
+      <p class="overview__source">Πηγή των κατηγοριών LLM: <a href="https://genai.owasp.org/home/resources/owasp-genai-llm-top-10-2026/">OWASP Top 10 for LLM Applications 2026</a></p>
+    </div>
+
+  </main>
+
+  <div class="site-footer-bar">
+    <footer class="site-footer">
+      <span>© 2026 Charalambos Emmanouilidis</span>
+      <div class="site-footer__links">
+        <a href="https://github.com/charemma">GitHub</a>
+        <a href="https://charemma.de">charemma.de</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
