@@ -3,3 +3,4 @@
 *.orig
 *.backup
 __pycache__/
+.tmp/
