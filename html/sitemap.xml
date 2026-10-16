@@ -3,11 +3,25 @@
   <url>
     <loc>https://security.charemma.de/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://security.charemma.de/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/"/>
+  </url>
+  <url>
+    <loc>https://security.charemma.de/en/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://security.charemma.de/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/"/>
   </url>
   <url>
     <loc>https://security.charemma.de/wissen/ki-sicherheit/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://security.charemma.de/en/wissen/ki-sicherheit/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/"/>
+  </url>
+  <url>
+    <loc>https://security.charemma.de/en/wissen/ki-sicherheit/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://security.charemma.de/en/wissen/ki-sicherheit/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/"/>
   </url>
 </urlset>

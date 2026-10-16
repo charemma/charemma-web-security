@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "title": "Penetration testing for Linux infrastructure · Charalambos Emmanouilidis",
+    "description": "Penetration testing with a focus on Linux infrastructure: servers, containers and Kubernetes, plus the web applications running on them.",
+    "overview_title": "AI security · Topic overview · security.charemma.de",
+    "overview_description": "All knowledge articles on risks in LLM applications and AI pipelines."
+  },
+  "a11y": {
+    "nav": "Main navigation",
+    "lang": "Sprache / Language / Γλώσσα",
+    "profile": "Profile",
+    "console": "Console"
+  },
+  "nav": [
+    { "id": "leistungen", "label": "Services" },
+    { "id": "fallbeispiel", "label": "Approach" },
+    { "id": "ablauf", "label": "Process" },
+    { "id": "wissen", "label": "Knowledge" }
+  ],
+  "hero": {
+    "focus": "Focus: Linux infrastructure",
+    "loc": "Germany · remote",
+    "h1a": "I attack your systems ",
+    "h1b": "before someone else does.",
+    "lead": "Penetration testing with a focus on Linux infrastructure: servers, containers and Kubernetes – and the web applications running on them. AI-assisted reconnaissance, manual depth and a report your team can act on right away.",
+    "cta": "Request a pentest",
+    "mail_subject": "Pentest request"
+  },
+  "profile": [
+    { "key": "certifications", "value": "OSCP · SCP Web Application Security" },
+    { "key": "methodology", "value": "BSI pentest guideline · OWASP WSTG" },
+    { "key": "offensive_since", "value": "2019 · bug bounty, disclosure, pentests" },
+    { "key": "reports", "value": "German · English" }
+  ],
+  "services": {
+    "eyebrow": "01 / services",
+    "title": "What I test",
+    "items": [
+      { "tag": "linux · focus", "title": "Linux servers & infrastructure", "body": "Exposed services, SSH, sudo and file permissions, systemd units, firewall rules and privilege escalation – from attacker shell to root." },
+      { "tag": "linux · container", "title": "Containers & Kubernetes", "body": "Container escapes, RBAC, network policies, secrets and images: how far does an attacker get from a compromised pod?" },
+      { "tag": "web / api", "title": "Web application & API pentest", "body": "Manual testing following OWASP WSTG: authentication, authorization, input validation, injection and business logic." },
+      { "tag": "external", "title": "External attack surface", "body": "What does an attacker see from the outside? Subdomains, exposed services and forgotten systems – mapped with AI, assessed by hand." },
+      { "tag": "linux · ci/cd", "title": "Pipeline & supply chain", "body": "Build runners, secrets, permissions, container images and dependencies: who can push what into production?" },
+      { "tag": "ai", "title": "AI applications & pipelines", "body": "LLM features following the OWASP Top 10 for LLM Applications, agents with tool access, and the data and model pipeline behind them." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "02 / approach",
+    "title_a": "Agents map it. ",
+    "title_b": "I go in.",
+    "lead": "AI agents gather in parallel what is publicly discoverable about your systems. Then I take over: targeted, manual and all the way to a verifiable proof. The result is a report your team can act on right away.",
+    "note": "The animation follows a real black-box assessment – simplified and anonymised.",
+    "net": "network",
+    "results": ["Proof of concept, reproducible at any time", "A concrete fix for every finding", "Help closing the gaps"]
+  },
+  "engagement": {
+    "meter_label": "Phase {n} of {total}",
+    "cv": { "handover": "handover · findings", "weak": "vulnerability?", "manual": "MANUAL", "assist": "AI-ASSISTED · HUMAN REVIEW", "ai": "AI-DRIVEN WITH SUBAGENTS" },
+    "depth": ["information gathering", "information gathering", "analysis", "manual testing", "exploit", "reporting"],
+    "hits": ["subdomains & technologies captured", "hosts, ports & services mapped", "suspicious service", "sql injection + misconfiguration", "remote code execution", "report with fixes delivered"],
+    "work": ["…", "anomaly", "500", "unexpected", "leak?", "stacktrace"]
+  },
+  "process": {
+    "eyebrow": "03 / process",
+    "title": "From scoping to retest",
+    "steps": [
+      { "n": "01", "title": "Scoping", "body": "Goals, scope, test type (black, grey or white box) and time window agreed in writing." },
+      { "n": "02", "title": "Testing", "body": "AI-assisted reconnaissance, then manual testing. Critical findings are reported immediately, not just in the report." },
+      { "n": "03", "title": "Report", "body": "Management summary plus technical findings with reproduction steps, PoC and a concrete fix." },
+      { "n": "04", "title": "Retest", "body": "After your fixes I test again and confirm the remediation in writing." }
+    ]
+  },
+  "toolbox": {
+    "eyebrow": "04 / toolbox",
+    "title": "Knowing Linux from the inside to attack it from the outside",
+    "lead": "I have worked with Linux every day since 2006 – from embedded systems in medical and camera technology to build and development servers and production Kubernetes clusters. I know the systems I attack from the inside: permissions, services, configuration and the usual shortcuts in operations. For reconnaissance and reporting I use my own agent workflows; my lab is fully reproducible, and I train regularly on HackTheBox."
+  },
+  "knowledge": {
+    "badge": "Knowledge",
+    "eyebrow": "05 / ai-security",
+    "title": "More than prompt injection",
+    "lead": "AI applications inherit the weaknesses of classic software and add their own. Here I explain the most important risks for LLM applications and AI pipelines – briefly, clearly and with a link to the in-depth article.",
+    "more": "Read more",
+    "all": "All AI security topics",
+    "note": "Based on the OWASP Top 10 for LLM Applications 2026 and hands-on work with agent workflows.",
+    "groups": {
+      "llm": { "title": "LLM applications", "sub": "Risks in applications built on language models" },
+      "pipe": { "title": "AI pipelines", "sub": "From the data to the inference endpoint" }
+    }
+  },
+  "overview": {
+    "eyebrow": "Topic overview",
+    "title": "AI security",
+    "lead": "All knowledge articles on risks in LLM applications and AI pipelines. Each entry explains the topic briefly and links to the in-depth article.",
+    "back": "← back to the homepage",
+    "more": "Read the article",
+    "upcoming": "Article coming soon",
+    "source": "Source of the LLM categories:",
+    "count": "topics"
+  },
+  "cta": {
+    "title": "What would an attacker find in your systems?",
+    "button": "Book an initial call →"
+  },
+  "not_found": {
+    "title": "Page not found",
+    "body": "There is nothing at this address.",
+    "back": "Back to the homepage"
+  }
+}
