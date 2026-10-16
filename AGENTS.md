@@ -117,6 +117,12 @@ The Type column carries a categorical label describing what the file is. The set
 - `config`: a file configuring a development tool for the repository itself, not for the implementation.
 - `glossary`: a file defining project terms, each with its meaning and anti-meaning.
 - `docs`: a file for human readers explaining the project, its purpose and provenance; not rules, specs, or glossary entries.
+- `design`: a visual design source produced by a design tool (handoff notes, design components, theme values) that specs are derived from.
+  - Files of type `design` MUST carry the `read-only` protocol.
+  - When writing or changing a spec on a topic no other spec covers, the `design` files MUST be treated as the ground truth for that topic's layout, colors and texts.
+  - When writing or changing a spec on a topic another spec already covers, the existing spec MUST be followed; do not fall back to the `design` files for that topic.
+  - When it is unclear whether a spec covers a topic, AI MUST ask the user instead of choosing a source.
+  - Files of type `design` MUST NOT be used as a source for `generated` files; derive `generated` files from their Dependencies and Instructions only, and close design gaps with a spec first.
 
 AI MAY propose new types; AI MUST NOT introduce them silently. Adding a type requires explicit user approval and an entry here.
 
@@ -139,7 +145,7 @@ Every registered file MUST carry an explicit protocol value. AI MAY propose new 
 
 #### Extension
 
-Registered file names use one extension separated by a single period, except dot-files without an extension per the **Dot-file extension** rule. The extension is recorded in the Extension column. The set of permitted extensions is closed. Only the following extensions are allowed:
+Registered file names use one extension separated by a single period, except dot-files without an extension per the **Dot-file extension** rule and files of type `design` per the **Design-tool exemption** rule. The extension is recorded in the Extension column. The set of permitted extensions is closed. Only the following extensions are allowed:
 
 - `.txt`
 - `.md`
@@ -148,6 +154,7 @@ Registered file names use one extension separated by a single period, except dot
 - `.xlsx`
 - `.docx`
 - `.pptx`
+- `.css`
 
 AI MAY propose new extensions; AI MUST NOT introduce them silently. Adding an extension requires explicit user approval and an entry here.
 
@@ -206,6 +213,10 @@ The use of this column — whether a file requires it, and what the referenced f
 - Platform-imposed exemption. The file `README.md` is exempt from the Naming Convention rule; its uppercase name follows the convention by which code hosting platforms display a repository's front page.
 
 - Platform-imposed note. The registry's Description field for `README.md` MUST note its platform-imposed name.
+
+- Design-tool exemption. Files of type `design` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; keep the names the design tool assigned, because the handoff refers to the files by those names. Their extension is the part after the last period (e.g. `.html` for `Main.dc.html`) and MUST be a permitted extension.
+
+- Design-tool note. The registry's Description field for every file of type `design` MUST note its tool-imposed name.
 
 - Scratch exemption. Files inside `.tmp/` are exempt from all File Registry rules — registration, naming, uniqueness, path discipline, type and protocol assignment. The scratch directory is governed by the **Scratch Directory** section above.
 
