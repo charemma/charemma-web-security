@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Dark Theme – Farbwerte</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 960px; box-sizing: border-box; padding: 56px; background: #2d2e2e; color: #e4e5e5; font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif; display: flex; flex-direction: column; gap: 32px">
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <h1 style="margin: 0; font-size: 44px; line-height: 0.95"><span style="font-weight: 300; color: #a4a5a6; text-transform: lowercase">security</span> <span style="font-weight: 700; color: #268bd2; text-transform: uppercase">Dark</span></h1>
+    <p style="margin: 0; color: #979899; font-weight: 300; font-size: 18px">Rollen aus themes.light.css → Werte aus themes.dark.css, Akzent #e0a80d ersetzt durch #268bd2</p>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); border: 1px solid #404242; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 13px">
+    <div style="display: grid; grid-template-columns: 200px 1fr 1fr; gap: 16px; padding: 12px 20px; color: #979899; border-bottom: 1px solid #404242">
+      <span>Rolle</span><span>charemma.de (hell)</span><span>security (dunkel)</span>
+    </div>
+    <sc-for list="{{rows}}" as="r" hint-placeholder-count="14">
+      <div style="display: grid; grid-template-columns: 200px 1fr 1fr; gap: 16px; padding: 10px 20px; align-items: center; border-bottom: 1px solid #404242">
+        <span style="color: #c0c1c1">{{r.role}}</span>
+        <span style="display: flex; gap: 12px; align-items: center"><span style="width: 28px; height: 28px; border-radius: 3px; border: 1px solid #575859; background: {{r.light}}"></span>{{r.light}}</span>
+        <span style="display: flex; gap: 12px; align-items: center"><span style="width: 28px; height: 28px; border-radius: 3px; border: 1px solid #575859; background: {{r.dark}}"></span>{{r.dark}}</span>
+      </div>
+    </sc-for>
+  </div>
+  <p style="margin: 0; color: #979899; font-size: 15px">Kontrast auf #2d2e2e: #979899 5,0:1 · #a4a5a6 5,9:1 · #e4e5e5 11:1 · #268bd2 3,6:1 (nur ab 24px oder 19px fett, Linien und Flächen)</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":960,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { role: 'Hintergrund', light: '#ffffff', dark: '#2d2e2e' },
+        { role: 'Section ungerade', light: '#fbfbfb', dark: '#2b2c2c' },
+        { role: 'Section gerade', light: '#f8f8f8', dark: '#292a2a' },
+        { role: 'Section-Header', light: '#fafafa', dark: '#282929' },
+        { role: 'Fließtext', light: '#939393', dark: '#979899' },
+        { role: 'Überschrift', light: '#727272', dark: '#a4a5a6' },
+        { role: 'Titel 1. Wort', light: '#939393', dark: '#a4a5a6' },
+        { role: 'Akzent / Titel 2. Wort', light: '#268bd2', dark: '#268bd2' },
+        { role: 'Link-Hover', light: '#006EC1', dark: '#268bd2' },
+        { role: 'Linien', light: '#ececec', dark: '#404242' },
+        { role: 'Icons', light: '#e0e0e0', dark: '#575859' },
+        { role: 'Button-Fläche', light: '#ededed', dark: '#3f4040' },
+        { role: 'Button-Icon', light: '#c6c6c6', dark: '#717273' },
+        { role: 'Overlay-Text', light: '#3a3a3a', dark: '#e4e5e5' },
+        { role: 'Deko-Linie', light: '#535353', dark: '#c0c1c1' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

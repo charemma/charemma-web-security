@@ -1,0 +1,1297 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>security.charemma.de – Landing</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#2d2e2e}
+a{color:#e4e5e5;text-decoration-color:#268bd2;text-underline-offset:3px;transition:all .15s linear}a:hover,a:focus{color:#268bd2}
+.cx-grid{background-color:#282929;background-image:linear-gradient(#2d2e2e 1px,transparent 1px),linear-gradient(90deg,#2d2e2e 1px,transparent 1px);background-size:32px 32px}
+.cx-scan::after{content:"";position:absolute;inset:0;border-radius:4px;pointer-events:none;background:linear-gradient(90deg,transparent 0%,rgba(38,139,210,.22) 50%,transparent 100%);background-size:200% 100%;animation:cx-scan 1.1s linear infinite}
+@keyframes cx-scan{from{background-position:200% 0}to{background-position:-200% 0}}
+.cx-pwn{animation:cx-pwn 1.8s ease-in-out infinite}
+@keyframes cx-pwn{0%,100%{box-shadow:0 0 0 0 rgba(220,50,47,0),0 0 22px rgba(220,50,47,.25)}50%{box-shadow:0 0 0 8px rgba(220,50,47,.12),0 0 52px rgba(220,50,47,.5)}}
+.cx-packet{animation:cx-packet .55s ease-in infinite}
+@keyframes cx-packet{from{left:0;opacity:1}to{left:28px;opacity:.2}}
+.cx-glitch{display:inline-block;animation:cx-glitch .45s steps(2) 3}
+@keyframes cx-glitch{0%{text-shadow:3px 0 #dc322f,-3px 0 #268bd2;transform:translateX(0)}25%{transform:translateX(-3px) skewX(-6deg)}50%{text-shadow:-3px 0 #dc322f,3px 0 #268bd2;transform:translateX(3px)}75%{transform:translateX(-1px) skewX(4deg)}100%{text-shadow:none;transform:none}}
+.cx-stamp{animation:cx-stamp .35s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes cx-stamp{from{transform:scale(1.9) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(-3deg);opacity:1}}
+.cx-flash{animation:cx-flash .9s ease-out both}
+@keyframes cx-flash{0%{opacity:0}12%{opacity:1}100%{opacity:0}}
+.cx-cursor{animation:cx-blink 1s steps(1) infinite}
+@keyframes cx-blink{50%{opacity:0}}
+.cx-dot{animation:cx-blink 1.2s steps(1) infinite}
+@media (prefers-reduced-motion: reduce){.cx-scan::after,.cx-pwn,.cx-packet,.cx-glitch,.cx-stamp,.cx-flash,.cx-cursor,.cx-dot{animation:none!important}}
+.cx-blob{animation-name:cx-blob;animation-timing-function:linear;animation-iteration-count:infinite;transform:translate(-50%,-50%)}
+@keyframes cx-blob{0%{transform:translate(-50%,-50%) rotate(0deg);border-radius:47% 53% 52% 48%/51% 46% 54% 49%}25%{border-radius:53% 47% 45% 55%/46% 54% 47% 53%}50%{transform:translate(-50%,-50%) rotate(180deg);border-radius:49% 51% 56% 44%/54% 49% 51% 46%}75%{border-radius:55% 45% 48% 52%/47% 53% 46% 54%}100%{transform:translate(-50%,-50%) rotate(360deg);border-radius:47% 53% 52% 48%/51% 46% 54% 49%}}
+.cx-in{animation:cx-in 2.9s cubic-bezier(.5,0,.75,0) infinite}
+@keyframes cx-in{0%{transform:translateX(330px);opacity:0}25%{opacity:.9}100%{transform:translateX(18px);opacity:0}}
+@media (prefers-reduced-motion: reduce){.cx-blob,.cx-in{animation:none!important}.cx-in{opacity:0}}
+@media (max-width: 860px){.cx-stage{height:auto!important;display:flex;flex-direction:column}.cx-canvas-wrap{position:relative!important;inset:auto!important;height:420px}.cx-glass{position:relative!important;top:auto!important;right:auto!important;bottom:auto!important;width:auto!important;margin:0 12px 12px;min-height:460px}}
+.cx-fadein{animation:cx-fadein .9s ease both}@keyframes cx-fadein{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="background: #2d2e2e; color: #e4e5e5; font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; line-height: 1.6; min-height: 100vh">
+
+  <header style="max-width: 1200px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; border-bottom: 1px solid #404242">
+    <a href="#top" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #e4e5e5; text-decoration: none; display: flex; gap: 2px; align-items: center"><span style="color: #979899">charemma@</span><span>security</span><span style="color: {{accent}}; font-weight: 500">:~$</span></a>
+    <nav aria-label="Hauptnavigation" style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 28px; font-family: 'IBM Plex Mono', monospace; font-size: 14px">
+      <a href="#leistungen" style="color: #c0c1c1; text-decoration: none; padding: 12px 0">{{t.nav0}}</a>
+      <a href="#fallbeispiel" style="color: #c0c1c1; text-decoration: none; padding: 12px 0">{{t.nav1}}</a>
+      <a href="#ablauf" style="color: #c0c1c1; text-decoration: none; padding: 12px 0">{{t.nav2}}</a>
+      <a href="#wissen" style="color: #c0c1c1; text-decoration: none; padding: 12px 0">{{t.nav3}}</a>
+      <a href="#disclosure" style="color: #c0c1c1; text-decoration: none; padding: 12px 0">{{t.nav4}}</a>
+      <span role="group" aria-label="Sprache / Language / Γλώσσα" style="display: flex; gap: 2px; margin-left: 8px">
+        <sc-for list="{{langs}}" as="lg" hint-placeholder-count="3">
+          <button type="button" onClick="{{lg.pick}}" aria-pressed="{{lg.pressed}}" style="{{lg.style}}">{{lg.code}}</button>
+        </sc-for>
+      </span>
+    </nav>
+  </header>
+
+  <section id="top" style="max-width: 1200px; margin: 0 auto; padding: 120px 24px 96px; display: flex; flex-direction: column; gap: 32px">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #c0c1c1; display: flex; flex-wrap: wrap; gap: 8px 24px">
+      <span><span aria-hidden="true" style="color: {{accent}}">●</span> Charalambos Emmanouilidis · OSCP</span>
+      <span>{{t.focus}}</span>
+      <span>{{t.loc}}</span>
+    </div>
+    <h1 style="margin: 0; font-weight: 300; font-size: clamp(44px, 7vw, 92px); line-height: 1.02; letter-spacing: -0.01em; max-width: 1000px; color: #a4a5a6">{{t.h1a}}<span style="color: {{accent}}; font-weight: 700">{{t.h1b}}</span></h1>
+    <p style="margin: 0; max-width: 680px; font-size: 21px; font-weight: 300; color: #c0c1c1">{{t.lead}}</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px">
+      <a href="mailto:me@charemma.de?subject={{t.mailSubject}}" style="background: {{accent}}; color: #ffffff; font-weight: 700; font-size: 19px; text-decoration: none; padding: 14px 28px; border-radius: 4px; display: inline-flex; align-items: center; min-height: 48px; box-sizing: border-box">{{t.cta1}}</a>
+      <a href="#disclosure" style="background: #3f4040; border: 1px solid #3f4040; color: #e4e5e5; text-decoration: none; padding: 14px 26px; border-radius: 4px; display: inline-flex; align-items: center; min-height: 48px; box-sizing: border-box; font-family: 'IBM Plex Mono', monospace; font-size: 15px">{{t.cta2}}</a>
+    </div>
+  </section>
+
+  <section aria-label="Kurzprofil" style="border-top: 1px solid #404242; border-bottom: 1px solid #404242; background: #282929">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 14px">
+      <div style="display: flex; flex-direction: column; gap: 4px"><span style="color: #979899">{{t.pk0}}</span><span>{{t.pv0}}</span></div>
+      <div style="display: flex; flex-direction: column; gap: 4px"><span style="color: #979899">{{t.pk1}}</span><span>{{t.pv1}}</span></div>
+      <div style="display: flex; flex-direction: column; gap: 4px"><span style="color: #979899">{{t.pk2}}</span><span>{{t.pv2}}</span></div>
+      <div style="display: flex; flex-direction: column; gap: 4px"><span style="color: #979899">{{t.pk3}}</span><span>{{t.pv3}}</span></div>
+    </div>
+  </section>
+
+  <section id="leistungen" style="max-width: 1200px; margin: 0 auto; padding: 120px 24px; display: flex; flex-direction: column; gap: 48px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #c0c1c1; display: flex; gap: 10px; align-items: center"><span aria-hidden="true" style="width: 24px; height: 2px; background: {{accent}}"></span>{{t.s1e}}</span>
+      <h2 style="margin: 0; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; color: #e4e5e5">{{t.s1h}}</h2>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1px; background: #404242; border: 1px solid #404242">
+      <sc-for list="{{services}}" as="s" hint-placeholder-count="6">
+        <article style="background: #2d2e2e; padding: 36px 32px; display: flex; flex-direction: column; gap: 14px">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #979899">{{s.tag}}</span>
+          <h3 style="margin: 0; font-weight: 700; font-size: 24px; line-height: 1.25; color: #e4e5e5">{{s.title}}</h3>
+          <p style="margin: 0; color: #c0c1c1; font-size: 17px">{{s.body}}</p>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="fallbeispiel" style="border-top: 1px solid #404242; background: #292a2a">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 120px 24px 48px; display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: flex-end">
+      <div style="flex: 1 1 480px; display: flex; flex-direction: column; gap: 16px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #c0c1c1; display: flex; gap: 10px; align-items: center"><span aria-hidden="true" style="width: 24px; height: 2px; background: {{accent}}"></span>{{t.ve}}</span>
+        <h2 style="margin: 0; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; color: #e4e5e5">{{t.vh1}}<span style="color: {{accent}}">{{t.vh2}}</span></h2>
+      </div>
+      <div style="flex: 1 1 400px; display: flex; flex-direction: column; gap: 10px">
+        <p style="margin: 0; color: #c0c1c1">{{t.vlead}}</p>
+        <p style="margin: 0; color: #979899; font-size: 15px">{{t.vnote}}</p>
+      </div>
+    </div>
+
+    <div style="background: #1f2020; border-top: 1px solid #404242; border-bottom: 1px solid #404242">
+      <div class="cx-stage" style="position: relative; max-width: 1600px; margin: 0 auto; height: clamp(600px, 50vw, 860px); background: #282929; overflow: hidden; font-family: 'IBM Plex Mono', monospace">
+        <div class="cx-canvas-wrap" onPointerMove="{{onMove}}" onPointerLeave="{{onLeave}}" onPointerDown="{{onDown}}" style="position: absolute; inset: 0; cursor: crosshair; touch-action: pan-y">
+          <canvas ref="{{canvasRef}}" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block"></canvas>
+        </div>
+        <sc-if value="{{flash}}" hint-placeholder-val="{{ false }}">
+          <div aria-hidden="true" class="cx-flash" style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 36% 50%, rgba(220, 50, 47, 0.3), rgba(220, 50, 47, 0.04) 70%)"></div>
+        </sc-if>
+
+        <div class="cx-glass" style="position: absolute; top: 28px; right: 28px; bottom: 28px; width: min(460px, 38%); box-sizing: border-box; display: flex; flex-direction: column; background: rgba(45, 46, 46, 0.16); backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%); border: 1px solid rgba(228, 229, 229, 0.04); border-radius: 18px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.18); overflow: hidden">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; padding: 16px 20px 0; font-size: 12px; color: #979899">
+            <span style="display: flex; gap: 8px; align-items: center"><span aria-hidden="true" class="{{status.dotCls}}" style="{{status.dot}}"></span><span style="color: {{status.labelColor}}; letter-spacing: .06em">{{status.label}}</span></span>
+            <span style="display: flex; gap: 12px; align-items: center">
+              <span style="display: flex; gap: 3px" aria-label="{{netLabel}}" role="img">
+                <sc-for list="{{meter}}" as="m" hint-placeholder-count="8">
+                  <span style="{{m.style}}"></span>
+                </sc-for>
+              </span>
+              <span>{{status.n}}/{{status.total}}</span>
+            </span>
+          </div>
+
+          <div role="log" aria-label="Konsole" style="position: relative; flex: 0 0 auto; height: 150px; margin: 18px 20px 0">
+            <sc-for list="{{prompts}}" as="p" hint-placeholder-count="8">
+              <div style="{{p.style}}">
+                <div style="font-size: clamp(16px, 1.5vw, 19px); color: #e4e5e5; white-space: pre-wrap; overflow-wrap: anywhere"><span style="color: {{accent}}">❯ </span>{{p.cmd}}<sc-if value="{{p.cursor}}" hint-placeholder-val="{{ false }}"><span class="cx-cursor" aria-hidden="true">▌</span></sc-if></div>
+                <span style="{{p.outStyle}}">{{p.out}}</span>
+                <sc-if value="{{p.showHit}}" hint-placeholder-val="{{ false }}">
+                  <span class="cx-fadein" style="{{p.hitStyle}}">{{p.hit}}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="height: 1px; margin: 4px 20px 0; background: rgba(228, 229, 229, 0.04)"></div>
+          <div style="padding: 12px 20px 0; font-size: 12px; color: #7d7e7f">{{t.net}}</div>
+          <div style="position: relative; flex: 1 1 auto; min-height: 200px">
+            <canvas ref="{{netRef}}" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 32px 24px 120px; display: flex; flex-wrap: wrap; gap: 12px 40px; font-size: 17px; color: #c0c1c1; transition: opacity .6s ease; opacity: {{resultOpacity}}">
+      <span><span aria-hidden="true" style="color: {{accent}}">✓</span> {{t.res0}}</span>
+      <span><span aria-hidden="true" style="color: {{accent}}">✓</span> {{t.res1}}</span>
+      <span><span aria-hidden="true" style="color: {{accent}}">✓</span> {{t.res2}}</span>
+    </div>
+  </section>
+
+
+
+  <section id="ablauf" style="background: #ffffff; color: #727272">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 120px 24px; display: flex; flex-direction: column; gap: 56px">
+      <div style="display: flex; flex-direction: column; gap: 12px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #006EC1">{{t.ze}}</span>
+        <h2 style="margin: 0; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; color: #727272">{{t.zh}}</h2>
+      </div>
+      <ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px">
+        <sc-for list="{{steps}}" as="st" hint-placeholder-count="4">
+          <li style="display: flex; flex-direction: column; gap: 12px; border-top: 2px solid {{accent}}; padding-top: 20px">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #006EC1">{{st.n}}</span>
+            <h3 style="margin: 0; font-weight: 700; font-size: 23px; color: #727272">{{st.title}}</h3>
+            <p style="margin: 0; font-size: 17px; color: #727272">{{st.body}}</p>
+          </li>
+        </sc-for>
+      </ol>
+    </div>
+  </section>
+
+  <section aria-labelledby="warum" style="max-width: 1200px; margin: 0 auto; padding: 120px 24px; display: flex; flex-wrap: wrap; gap: 48px">
+    <div style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #c0c1c1; display: flex; gap: 10px; align-items: center"><span aria-hidden="true" style="width: 24px; height: 2px; background: {{accent}}"></span>{{t.we}}</span>
+      <h2 id="warum" style="margin: 0; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; color: #e4e5e5">{{t.wh}}</h2>
+      <p style="margin: 0; color: #c0c1c1">{{t.wp}}</p>
+    </div>
+    <div style="flex: 1 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 0; border-top: 1px solid #404242">
+      <sc-for list="{{toolGroups}}" as="g" hint-placeholder-count="6">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 20px 0; border-bottom: 1px solid #404242">
+          <h3 style="flex: 0 0 170px; margin: 0; padding-top: 7px; font-family: 'IBM Plex Mono', monospace; font-weight: 400; font-size: 14px; color: #979899">{{g.label}}</h3>
+          <ul style="flex: 1 1 300px; min-width: 0; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 14px">
+            <sc-for list="{{g.items}}" as="t" hint-placeholder-count="5">
+              <li style="{{g.chip}}">{{t}}</li>
+            </sc-for>
+          </ul>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section id="wissen" aria-labelledby="wissen-h" style="background: #f8f8f8; color: #727272; border-top: 1px solid #ececec">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 120px 24px; display: flex; flex-direction: column; gap: 56px">
+      <div style="display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: flex-end">
+        <div style="flex: 1 1 480px; display: flex; flex-direction: column; gap: 16px">
+          <span style="display: flex; gap: 12px; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #006EC1">
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1px solid #006EC1; border-radius: 999px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>{{t.wk}}</span>
+            <span>{{t.wie}}</span>
+          </span>
+          <h2 id="wissen-h" style="margin: 0; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; color: #3a3a3a">{{t.wih}}</h2>
+        </div>
+        <p style="flex: 1 1 400px; margin: 0; color: #727272">{{t.wilead}}</p>
+      </div>
+
+      <sc-for list="{{kwGroups}}" as="kg" hint-placeholder-count="2">
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div style="display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; border-bottom: 1px solid #ececec; padding-bottom: 12px">
+            <h3 style="margin: 0; font-weight: 700; font-size: 22px; color: #3a3a3a">{{kg.title}}</h3>
+            <span style="font-size: 15px; color: #727272">{{kg.sub}}</span>
+          </div>
+          <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+            <sc-for list="{{kg.items}}" as="k" hint-placeholder-count="3">
+              <li style="background: #ffffff; border: 1px solid #ececec; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+                <span style="display: flex; justify-content: space-between; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase"><span style="color: #006EC1">{{t.wk}}</span><span style="color: #939393">{{k.id}}</span></span>
+                <h4 style="margin: 0; font-weight: 700; font-size: 19px; line-height: 1.3; color: #3a3a3a">{{k.title}}</h4>
+                <p style="margin: 0; font-size: 16px; color: #727272; flex: 1 1 auto">{{k.body}}</p>
+                <a href="{{k.href}}" aria-label="{{k.aria}}" style="align-self: flex-start; color: #006EC1; font-weight: 700; font-size: 16px; text-decoration: none; padding: 8px 0; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center">{{t.wmore}} →</a>
+              </li>
+            </sc-for>
+          </ul>
+        </div>
+      </sc-for>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; align-items: center; padding-top: 8px">
+        <p style="margin: 0; font-size: 15px; color: #727272">{{t.wnote}}</p>
+        <a href="Wissen.dc.html" style="background: #006EC1; color: #ffffff; font-weight: 700; font-size: 17px; text-decoration: none; padding: 14px 24px; border-radius: 4px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{{t.wall}} →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="disclosure" style="border-top: 1px solid #404242; background: #292a2a">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 120px 24px; display: flex; flex-wrap: wrap; gap: 48px">
+      <div style="flex: 1 1 360px; display: flex; flex-direction: column; gap: 16px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #c0c1c1; display: flex; gap: 10px; align-items: center"><span aria-hidden="true" style="width: 24px; height: 2px; background: {{accent}}"></span>{{t.de}}</span>
+        <h2 style="margin: 0; font-weight: 900; font-size: clamp(32px, 4vw, 50px); line-height: 1.1; color: #e4e5e5">{{t.dh}}</h2>
+        <p style="margin: 0; color: #c0c1c1">{{t.dp}}</p>
+      </div>
+      <dl style="flex: 1 1 480px; min-width: 0; margin: 0; display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 0; font-family: 'IBM Plex Mono', monospace; font-size: 14px; border: 1px solid #404242; border-radius: 4px">
+        <div style="padding: 18px 20px; border-bottom: 1px solid #404242; display: flex; flex-wrap: wrap; gap: 4px 24px"><dt style="color: #979899; min-width: 140px">{{t.dk0}}</dt><dd style="margin: 0"><a href="mailto:me@charemma.de">me@charemma.de</a></dd></div>
+        <div style="padding: 18px 20px; border-bottom: 1px solid #404242; display: flex; flex-wrap: wrap; gap: 4px 24px"><dt style="color: #979899; min-width: 140px">{{t.dk1}}</dt><dd style="margin: 0; word-break: break-all">[XXXX XXXX XXXX XXXX XXXX  XXXX XXXX XXXX XXXX XXXX]</dd></div>
+        <div style="padding: 18px 20px; border-bottom: 1px solid #404242; display: flex; flex-wrap: wrap; gap: 4px 24px"><dt style="color: #979899; min-width: 140px">security.txt</dt><dd style="margin: 0"><a href="https://security.charemma.de/.well-known/security.txt">/.well-known/security.txt</a></dd></div>
+        <div style="padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 4px 24px"><dt style="color: #979899; min-width: 140px">{{t.dk3}}</dt><dd style="margin: 0">de, en, el</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section style="background: {{accent}}; color: #ffffff">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-end">
+      <h2 style="margin: 0; font-weight: 900; font-size: clamp(36px, 5vw, 62px); line-height: 1.05; max-width: 720px; color: #ffffff">{{t.ch}}</h2>
+      <a href="mailto:me@charemma.de?subject={{t.mailSubject}}" style="background: #ffffff; color: #006EC1; text-decoration: none; padding: 16px 28px; border-radius: 4px; display: inline-flex; align-items: center; min-height: 48px; box-sizing: border-box; font-weight: 700; font-size: 18px">{{t.cb}}</a>
+    </div>
+  </section>
+
+  <footer style="max-width: 1200px; margin: 0 auto; padding: 32px 24px; display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #979899">
+    <span>© 2026 Charalambos Emmanouilidis</span>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px 24px">
+      <a href="https://github.com/charemma" style="color: #979899; padding: 12px 0">GitHub</a>
+      <a href="https://charemma.de" style="color: #979899; padding: 12px 0">charemma.de</a>
+      <a href="https://charemma.de/impressum" style="color: #979899; padding: 12px 0">{{t.fi}}</a>
+      <a href="https://charemma.de/datenschutz" style="color: #979899; padding: 12px 0">{{t.fp}}</a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#268bd2","options":["#268bd2","#006EC1"]},"$preview":{"width":1440,"height":6400}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    let lang = 'de';
+    try { const nl = ((typeof navigator !== 'undefined' && navigator.language) || 'de').toLowerCase(); lang = nl.indexOf('el') === 0 ? 'el' : (nl.indexOf('de') === 0 ? 'de' : 'en'); } catch (e) {}
+    try { const saved = window.localStorage.getItem('sec-lang'); if (saved === 'de' || saved === 'en' || saved === 'el') lang = saved; } catch (e) {}
+    this.state = { step: 0, phase: 'think', chars: 0, playing: true, flash: false, lang: lang };
+    this.setLang = (l) => { this.setState({ lang: l }); try { window.localStorage.setItem('sec-lang', l); } catch (e) {} try { document.documentElement.lang = l; } catch (e) {} };
+    this.toggle = () => this.setState({ playing: !this.state.playing });
+    this.setCanvas = (el) => { this.canvas = el; };
+    this.setNet = (el) => { this.net = el; };
+    this.mtrail = [];
+    this.toCanvas = (e) => {
+      if (!this.canvas) return null;
+      const r = this.canvas.getBoundingClientRect();
+      const sx = this.canvas.width / (r.width || 1), sy = this.canvas.height / (r.height || 1);
+      return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy };
+    };
+    this.onMove = (e) => {
+      const p = this.toCanvas(e); if (!p) return;
+      const now = performance.now();
+      this.mouse = { x: p.x, y: p.y, t: now };
+      this.mtrail.push({ x: p.x, y: p.y, t: now });
+      if (this.mtrail.length > 60) this.mtrail.shift();
+    };
+    this.onLeave = () => { this.mouse = null; };
+    this.onDown = (e) => {
+      const p = this.toCanvas(e); if (!p || !this.ripples) return;
+      const now = performance.now();
+      this.ripples.push({ x: p.x, y: p.y, at: now, big: true });
+      if (this.replies) this.replies.push({ x: p.x, y: p.y - 24, at: now, text: 'ping', warm: true });
+    };
+    this.phase = 'think';
+    this.phaseAt = 0;
+  }
+  attackSteps() {
+    const T = this.T();
+    return this.attackStepsBase().map((s, i) => Object.assign({}, s, { depth: T.depth[i], hit: T.hits[i] }));
+  }
+  attackStepsBase() {
+    return [
+      { depth: 'informationsbeschaffung', short: 'info · passiv', agent: true, agentNames: ['osint', 'dns-enum'], mode: 'ai-driven', cmd: 'ai-recon start --scope "*.[redacted].de" --agents osint,dns-enum', log: 'osint: tech stack · public docs · repos   dns-enum: subdomains · records', hit: 'subdomains & technologien erfasst', zone: 'info' },
+      { depth: 'informationsbeschaffung', short: 'info · aktiv', agent: true, agentNames: ['osint', 'dns-enum', 'port-scanning', 'service-discovery'], mode: 'ai-driven', cmd: 'ai-recon add --agents port-scanning,service-discovery', log: 'port-scanning: open ports   service-discovery: banners · versions · tech', hit: 'hosts, ports & dienste kartiert', zone: 'info' },
+      { depth: 'analyse', mode: 'manuell · übernahme', cmd: 'ai-recon brief --to me && nmap -sV -sC -p 8443 $SUSPECT', log: 'findings übernommen · verdächtigen dienst gezielt prüfen', hit: 'verdächtiger dienst', tag: 'vulnerable', zone: 'analyse' },
+      { depth: 'manual testing', mode: 'manuell', cmd: 'burpsuite --project-file=engagement.burp', log: 'auth · inputs · business logic · by hand', hit: 'sql-injection + fehlkonfiguration', tag: 'injected', pwn: true, zone: 'web-app' },
+      { depth: 'exploit', mode: 'manuell', cmd: 'python3 poc.py --target svc.[redacted].de', log: 'custom proof of concept · reproducible', hit: 'remote code execution', tag: 'pwned', pwn: true, zone: 'server' },
+      { depth: 'reporting', agent: true, assist: true, report: true, agentNames: ['report'], mode: 'ai-assisted · human review', cmd: 'ai-report draft --findings ./loot && review', log: 'agent drafts · every finding verified by hand', hit: 'bericht mit fixes übergeben', tag: 'report', zone: 'bericht' }
+    ];
+  }
+  componentDidMount() {
+    const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.reduce = reduce;
+    this.zones = ['*.[redacted].de', 'exponierte dienste', 'web-anwendung', 'datenbank', 'server'];
+    this.clouds = {};
+    this.trans = null;
+    this.impactAt = 0;
+    this.newLayer(this.state.step, performance.now());
+    this.tip = null;
+    if (reduce) { this.setState({ step: 5, phase: 'strike', chars: 999, playing: false }); this.phase = 'strike'; this.newLayer(5, performance.now() - 5000); this.impactAt = performance.now() - 5000; }
+    this.raf = requestAnimationFrame((n) => this.frame(n));
+    if (reduce) return;
+    this.typer = setInterval(() => { if (this.state.playing && this.state.phase !== 'strike') { const s = this.attackSteps()[this.state.step]; if (this.state.chars < s.cmd.length) this.setState({ chars: this.state.chars + 1 }); } }, 55);
+    this.stepAt = performance.now();
+    this.setPhase('think');
+    this.schedule();
+  }
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf); clearInterval(this.typer); clearTimeout(this.timer); clearTimeout(this.flashTimer);
+  }
+  setPhase(p) {
+    this.phase = p;
+    this.phaseAt = performance.now();
+    if (p === 'strike') this.impactAt = this.phaseAt + 600;
+    this.setState({ phase: p });
+  }
+  schedule() {
+    const steps = this.attackSteps();
+    const cur = steps[this.state.step];
+    const last = this.state.step === steps.length - 1;
+    const key = !!cur.tag;
+    const plan = { think: this.state.step === 2 ? 5800 : (this.state.step < 2 ? 5200 : (key ? 3600 : 2900)), work: this.state.step < 2 ? 3400 : (key ? 2800 : 1900), strike: last ? 6000 : (cur.pwn ? 3400 : (key ? 2400 : 1700)) };
+    this.timer = setTimeout(() => {
+      if (!this.state.playing) { this.timer = setTimeout(() => this.schedule(), 250); return; }
+      if (this.phase === 'think') { this.setPhase('work'); }
+      else if (this.phase === 'work') {
+        this.setPhase('strike');
+        this.setState({ chars: 999 });
+        if (cur.pwn) { this.flashTimer = setTimeout(() => { this.setState({ flash: true }); this.flashTimer = setTimeout(() => this.setState({ flash: false }), 1000); }, 600); }
+      } else {
+        const next = last ? 0 : this.state.step + 1;
+        const now = performance.now();
+        this.trans = { from: this.layer, at: now, pwn: !!cur.pwn };
+        this.newLayer(next, now);
+        this.stepAt = now;
+        this.netReset = next === 0;
+        this.setState({ step: next, chars: 0 });
+        this.setPhase('think');
+      }
+      this.schedule();
+    }, plan[this.phase]);
+  }
+  newLayer(step, now) {
+    const blobs = [];
+    const n = 30 + step * 3;
+    for (let k = 0; k < n; k++) {
+      const d = Math.pow(Math.random(), 0.8);
+      blobs.push({ a: Math.random() * Math.PI * 2, d: d * 0.85, r: 0.22 + Math.random() * 0.38, ph: Math.random() * 10, sp: 0.15 + Math.random() * 0.35, ox: 0, oy: 0 });
+    }
+    const base = Math.random() * Math.PI * 2;
+    this.layer = { step: step, blobs: blobs, base: base, born: now, cx: (Math.random() - 0.5) * 0.12, cy: (Math.random() - 0.5) * 0.12 };
+    this.tip = null;
+  }
+  frame(now) {
+    if (this.reduce && (this.nFrames = (this.nFrames || 0) + 1) > 120) return;
+    this.raf = requestAnimationFrame((n) => this.frame(n));
+    this.drawNet(now);
+    const c = this.canvas;
+    if (!c) return;
+    const box = c.getBoundingClientRect();
+    const dpr = c.getBoundingClientRect().width > 900 ? 1 : Math.min(window.devicePixelRatio || 1, 1.25);
+    const dt = Math.min(0.05, Math.max(0.001, (now - (this.lastNow || now - 16)) / 1000));
+    this.lastNow = now;
+    const W = Math.round(box.width * dpr), H = Math.round(box.height * dpr);
+    if (!W || !H) return;
+    if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    const ctx = c.getContext('2d');
+    const S = Math.min(W, H) / 2, u = S / 300;
+    const wide = W > H * 1.2;
+    const wideS = W / H > 1.25;
+    const OX = wideS ? W * 0.36 : W / 2, OY = H * 0.5;
+    const t = now / 1000;
+    const steps = this.attackSteps();
+    const L = this.layer;
+    const cur = steps[L.step];
+    const ph = this.phase;
+    const pt = (now - this.phaseAt) / 1000;
+    const A = [38, 139, 210], R = [220, 50, 47], T = [150, 160, 168];
+    const rgba = (c3, a) => 'rgba(' + c3.map(Math.round).join(',') + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')';
+    const mix = (p, q, k) => [p[0] + (q[0] - p[0]) * k, p[1] + (q[1] - p[1]) * k, p[2] + (q[2] - p[2]) * k];
+    const ease = (x) => (x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3));
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#282929';
+    ctx.fillRect(0, 0, W, H);
+
+    const drawCloud = (layer, scale, alpha, cxp, cyp, infect) => {
+      const cR = S * 0.62 * scale;
+      layer.blobs.forEach((b) => {
+        const wob = 0.07 * Math.sin(t * b.sp * 0.7 + b.ph);
+        const ang = b.a + 0.25 * Math.sin(t * b.sp * 0.6 + b.ph);
+        const x = cxp + Math.cos(ang) * (b.d + wob) * cR + Math.sin(t * 0.4 + b.ph) * 5 * u;
+        const y = cyp + Math.sin(ang) * (b.d + wob) * cR + Math.cos(t * 0.35 + b.ph) * 5 * u;
+        const r = b.r * cR * (1 + 0.12 * Math.sin(t * 0.9 + b.ph * 2));
+        let col = mix(T, [190, 200, 208], layer.step / 9);
+        let k = 0;
+        if (infect) {
+          const dd = Math.hypot(x - infect.x, y - infect.y);
+          k = Math.max(0, Math.min(1, (infect.wave - dd) / (cR * 0.45)));
+          col = mix(col, infect.col, k);
+        }
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, rgba(col, alpha * (0.075 + 0.07 * k)));
+        g.addColorStop(0.55, rgba(col, alpha * (0.035 + 0.04 * k)));
+        g.addColorStop(1, rgba(col, 0));
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      });
+      return cR;
+    };
+
+    ctx.globalCompositeOperation = 'lighter';
+    const cx = OX + L.cx * S, cy = OY + L.cy * S;
+    if (this.trans) {
+      const k = (now - this.trans.at) / 1500;
+      if (k >= 1) this.trans = null;
+      else {
+        const fl = this.trans.from;
+        const zc = mix(fl.inf ? [fl.inf.x, fl.inf.y, 0] : [OX, OY, 0], [OX, OY, 0], ease(k));
+        drawCloud(fl, 1 + ease(k) * 2.4, 1 - ease(k), zc[0], zc[1], fl.inf ? { x: zc[0], y: zc[1], wave: 9999, col: this.trans.pwn ? R : A } : null);
+      }
+    }
+    const grow = ease((now - L.born) / 1500);
+    const impact = this.impactAt && now >= this.impactAt && ph === 'strike';
+    const cR = S * 0.62 * (0.45 + 0.55 * grow);
+    const baseX = OX + Math.cos(L.base) * S * 1.15, baseY = OY + Math.sin(L.base) * S * 1.15;
+    const weakA = L.base;
+    const weakX = cx + Math.cos(weakA) * cR * 0.78, weakY = cy + Math.sin(weakA) * cR * 0.78;
+    let inf = null;
+    if (impact) {
+      const wave = (now - this.impactAt) / 1000 * cR * 1.1;
+      inf = { x: cx + (weakX - cx) * 0.35, y: cy + (weakY - cy) * 0.35, wave: wave, col: cur.pwn ? R : A };
+      L.inf = { x: inf.x, y: inf.y };
+    }
+    drawCloud(L, 0.45 + 0.55 * grow, grow, cx, cy, inf);
+
+    const hot = impact && cur.pwn;
+    const eInOut = (x) => 0.5 - 0.5 * Math.cos(Math.PI * Math.max(0, Math.min(1, x)));
+    const eOut = (x) => { x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3); };
+    const AG = [143, 192, 232];
+    if (!this.ents) {
+      this.ents = [{ id: 'pentester', human: true, idx: 0 }];
+      for (let i = 0; i < 4; i++) this.ents.push({ id: 'agent-' + (i + 1), human: false, idx: i });
+      this.ents.forEach((e, i) => { e.alpha = 0; e.trail = []; e.vx = 0; e.vy = 0; e.knockN = i * 2; e.move = null; e.tempo = e.human ? 1 : [0.82, 1.18, 0.95, 1.32][e.idx]; e.phaseOff = e.human ? 0 : [0, 0.37, 0.71, 0.19][e.idx]; });
+    }
+    if (this.entLayer !== L) {
+      this.entLayer = L;
+      this.ripples = []; this.replies = [];
+      this.ents.forEach((e, i) => {
+        if (e.sx !== undefined) { e.a = Math.atan2(e.sy - cy, e.sx - cx); e.r = Math.max(1.12, Math.hypot(e.sx - cx, e.sy - cy) / cR); }
+        else { e.a = L.base + Math.PI * 0.6 + i * 1.3; e.r = 1.5 + i * 0.05; }
+        e.move = null; e.striking = false; e.wait = now + (e.human ? 0 : 300 + e.phaseOff * 2600 + Math.random() * 700);
+      });
+      const nAg = Math.max(1, (this.attackSteps()[L.step].agentNames || [1, 2, 3, 4]).length);
+      this.ents.forEach((e) => {
+        if (e.human) return;
+        e.home = L.base + Math.PI * 0.35 + e.idx * (Math.PI * 2 / nAg) + (e.idx % 2 ? 0.25 : -0.2);
+        e.dirSign = e.idx % 2 ? 1 : -1;
+        const P0x = this.ents[0];
+        if (e.alpha < 0.2 && this.attackSteps()[L.step].assist && P0x.sx !== undefined) {
+          e.sx = P0x.sx; e.sy = P0x.sy; e.a = Math.atan2(P0x.sy - cy, P0x.sx - cx); e.r = Math.max(1.1, Math.hypot(P0x.sx - cx, P0x.sy - cy) / cR);
+          e.trail = []; e.vx = 0; e.vy = 0;
+        } else if (e.alpha < 0.2) {
+          e.a = e.home; e.r = 1.75;
+          e.sx = cx + Math.cos(e.a) * cR * e.r; e.sy = cy + Math.sin(e.a) * cR * e.r;
+          e.trail = []; e.vx = 0; e.vy = 0;
+        }
+      });
+    }
+    const humanOn = !cur.agent || !!cur.assist;
+    const agentCount = cur.agent ? (cur.agentNames || []).length : 0;
+    const replyHuman = ['denied', 'closed', '403', 'filtered', 'timeout', '401', 'reset', 'refused'];
+    const replyHumanWork = this.T().work;
+    const replyAgent = ['dns', 'cert', 'asn', 'whois', 'mx', 'txt', 'host', 'url', 'header', 'repo', 'title', 'tech'];
+    const P0 = this.ents[0];
+    const briefing = L.step === 2 && ph === 'think' && pt < 3.6;
+    this.briefing = briefing;
+    if (briefing && !this.briefInit) {
+      this.briefInit = true;
+      let sxs = 0, sys = 0, n = 0;
+      this.ents.forEach((e) => { if (!e.human && e.alpha > 0.2 && e.sx !== undefined) { sxs += Math.cos(e.a); sys += Math.sin(e.a); n++; } });
+      this.meetA = n ? Math.atan2(sys, sxs) : L.base + Math.PI * 0.85;
+      const H0 = this.ents[0];
+      if (H0.alpha < 0.2) { H0.a = this.meetA + 0.9; H0.r = 1.95; H0.sx = undefined; H0.trail = []; }
+      H0.move = null;
+    }
+    if (!briefing) this.briefInit = false;
+    const meetA = this.meetA || 0;
+    this.ents.forEach((e) => {
+      const on = e.human ? humanOn : (e.idx < agentCount || briefing);
+      const near = (a) => e.a + Math.atan2(Math.sin(a - e.a), Math.cos(a - e.a));
+      const go = (a, r, dur, onEnd) => { e.move = { a0: e.a, r0: e.r, a1: near(a), r1: r, t0: now, dur: dur * (e.tempo || 1) * (0.85 + Math.random() * 0.3), onEnd: onEnd }; };
+      const knockAt = (a, work) => {
+        const ex = cx + Math.cos(a) * cR * 0.8, ey = cy + Math.sin(a) * cR * 0.8;
+        this.ripples.push({ x: ex, y: ey, at: now, big: work && e.human, agent: !e.human });
+        const role = (cur.agentNames || [])[e.idx] || '';
+        const rolePool = { 'osint': ['repo', 'docs', 'cert', 'people', 'tech', 'jobs'], 'dns-enum': ['mx', 'txt', 'cname', 'ns', 'sub', 'a'], 'port-scanning': ['22/tcp', '443/tcp', '8443', 'open', 'filtered', 'closed'], 'service-discovery': ['banner', 'tls', 'http', 'ssh', 'version', 'title'], 'report': ['finding', 'cvss', 'fix', 'repro'] }[role];
+        const pool = e.human ? (work ? replyHumanWork : replyHuman) : (rolePool || replyAgent);
+        this.replies.push({ x: cx + Math.cos(a) * cR * 1.04, y: cy + Math.sin(a) * cR * 1.04, at: now, text: pool[(e.knockN++ * 5 + e.idx * 3 + L.step) % pool.length], warm: work || !e.human });
+      };
+      const fadeK = 1 - Math.exp(-dt * 2.5);
+      if (briefing) {
+        e.alpha += (1 - e.alpha) * fadeK;
+        if (e.human) {
+          if (!e.move && (Math.abs(Math.atan2(Math.sin(e.a - meetA), Math.cos(e.a - meetA))) > 0.03 || Math.abs(e.r - 1.42) > 0.03)) { const sv = e.tempo; e.tempo = 1; go(meetA, 1.42, 1500, null); e.tempo = sv; }
+        } else if (P0.sx !== undefined) {
+          e.move = null;
+          const ang = e.idx * (Math.PI / 2) + t * 0.35 + 0.4;
+          const rad = (40 + 6 * Math.sin(t * 1.3 + e.idx)) * u;
+          const tx2 = P0.sx + Math.cos(ang) * rad, ty2 = P0.sy + Math.sin(ang) * rad;
+          const ta = Math.atan2(ty2 - cy, tx2 - cx), tr = Math.hypot(tx2 - cx, ty2 - cy) / cR;
+          const k2 = 1 - Math.exp(-dt * (1.4 + e.idx * 0.25));
+          e.a += Math.atan2(Math.sin(ta - e.a), Math.cos(ta - e.a)) * k2; e.r += (tr - e.r) * k2;
+        }
+      } else if (!on) {
+        e.alpha += (0 - e.alpha) * fadeK;
+        if (!e.human && P0.sx !== undefined && e.sx !== undefined) {
+          e.move = null;
+          const pa = Math.atan2(P0.sy - cy, P0.sx - cx), pr = Math.hypot(P0.sx - cx, P0.sy - cy) / cR;
+          e.a += (e.a + Math.atan2(Math.sin(pa - e.a), Math.cos(pa - e.a)) - e.a) * fadeK; e.r += (pr - e.r) * fadeK;
+        }
+      } else if (ph === 'strike') {
+        if (!e.striking && (e.human || now >= this.phaseAt + 150 + e.phaseOff * 1800)) {
+          e.striking = true;
+          if (!e.human && (cur.agentNames || [])[e.idx] === 'osint') go(e.home + 0.3, 1.55, 1800, null);
+          else if (e.human && cur.pwn) go(weakA, 0.32, 650, null);
+          else if (cur.report) go(e.human ? weakA : e.home, 0.55, 1100, null);
+          else { const sa = e.human ? weakA : e.home + Math.atan2(Math.sin(weakA - e.home), Math.cos(weakA - e.home)) * 0.55; go(sa, 0.86, 600, () => { knockAt(e.a, true); go(e.a + (e.human ? 0.2 : (e.dirSign || 1) * 0.25), 1.2, 1100, null); }); }
+        }
+        if (e.human && cur.pwn && pt > 0.65) e.alpha += (0 - e.alpha) * fadeK; else e.alpha += (1 - e.alpha) * fadeK;
+      } else {
+        e.striking = false;
+        e.alpha += (1 - e.alpha) * fadeK;
+        if (!e.move && now >= (e.wait || 0)) {
+          if (!e.human) {
+            const role = (cur.agentNames || [])[e.idx] || 'osint';
+            const dHome = Math.atan2(Math.sin(weakA - e.home), Math.cos(weakA - e.home));
+            const center = ph === 'work' ? e.home + dHome * 0.3 : e.home;
+            const R1 = () => Math.random();
+            if (role === 'osint') {
+              if (R1() < 0.3) {
+                const a = center + (R1() - 0.5) * 1.2;
+                go(a, 1.22, 1600, () => { knockAt(a, false); go(a + e.dirSign * 0.4, 1.6 + R1() * 0.2, 2200, null); });
+              } else {
+                e.dirSign = R1() < 0.5 ? -1 : 1;
+                go(center + e.dirSign * (0.3 + R1() * 0.7), 1.5 + R1() * 0.35, 2600 + R1() * 1400, null);
+              }
+              e.wait = now + 200 + R1() * 1500;
+            } else if (role === 'dns-enum') {
+              e.dirSign = -e.dirSign;
+              const a0 = center + e.dirSign * (0.5 + R1() * 0.3);
+              go(a0, 0.93, 900, () => { go(a0 - e.dirSign * (1.0 + R1() * 0.4), 0.94, 2200 + R1() * 600, () => { go(e.a - e.dirSign * 0.15, 1.18, 900, null); }); });
+              e.wait = now + 300 + R1() * 900;
+            } else if (role === 'port-scanning') {
+              e.portA = (e.portA === undefined ? center - 0.6 : e.portA + 0.19);
+              if (e.portA > center + 0.7) e.portA = center - 0.7;
+              const a = e.portA;
+              go(a, 1.06, 420, () => { go(a, 0.85, 260, () => { knockAt(a, ph === 'work'); go(a, 1.06, 300, null); }); });
+              e.wait = now + 90 + R1() * 120;
+            } else {
+              const a = center + (R1() - 0.5) * 0.9;
+              go(a, 0.9, 1300, () => { knockAt(a, ph === 'work'); e.wait = now + 900 + R1() * 900; go(a + e.dirSign * 0.08, 0.92, 1400, () => { go(a + e.dirSign * 0.3, 1.25, 1200, null); }); });
+              e.wait = now + 400 + R1() * 1200;
+            }
+          } else if (ph === 'think') {
+            const spread = 0;
+            const target = ph === 'work' ? weakA + (e.idx - 1.5) * 0.35 : null;
+            if (e.r > 1.0 && e.knockN % 3 !== 2) {
+              const a = target !== null ? target + (Math.random() - 0.5) * 0.2 : e.a + 0.25 + Math.random() * 0.35;
+              go(a, 0.84, e.human ? 700 : 520, () => { knockAt(a, ph === 'work'); go(a + (e.human ? 0.3 : 0.45), e.human ? 1.24 : 1.18, e.human ? 900 : 700, null); });
+            } else {
+              e.knockN++;
+              const a = target !== null ? target : e.a + 0.7 + Math.random() * 0.5 + spread * 0;
+              go(a, 1.26 + Math.random() * 0.14, e.human ? 1300 : 900, null);
+            }
+            if (!e.human) e.wait = now + 80 + Math.random() * 260;
+          } else {
+            const dd = Math.abs(Math.atan2(Math.sin(e.a - weakA), Math.cos(e.a - weakA)));
+            if (dd > 0.05 || e.r > 1.1) {
+              const d = Math.atan2(Math.sin(weakA - e.a), Math.cos(weakA - e.a));
+              go(e.a + d, 1.05, 700 + Math.abs(d) * 650, null);
+            } else {
+              go(weakA, 0.84, 380, () => { knockAt(weakA, true); go(weakA + 0.02, 1.02, 480, null); });
+            }
+          }
+        }
+      }
+      if (!e.human && on && !briefing && ph !== 'strike' && ((cur.agentNames || [])[e.idx] === 'dns-enum') && e.r < 0.97 && now > (e.nextTap || 0)) {
+        knockAt(e.a, false);
+        e.nextTap = now + 260 + Math.random() * 320;
+      }
+      if (e.move) {
+        const mv = e.move;
+        const k = (now - mv.t0) / mv.dur;
+        const q = eInOut(k);
+        e.a = mv.a0 + (mv.a1 - mv.a0) * q;
+        e.r = mv.r0 + (mv.r1 - mv.r0) * q;
+        if (k >= 1) { e.move = null; if (mv.onEnd) mv.onEnd(); }
+      }
+      const drift = (e.human ? 5 : 8) * u;
+      let ax = cx + Math.cos(e.a) * cR * e.r + Math.sin(t * 0.55 + 1.3 + e.idx) * drift;
+      let ay = cy + Math.sin(e.a) * cR * e.r + Math.cos(t * 0.47 + e.idx * 2) * drift;
+      if (e.human && this.mouse && this.follow > 0.001) { ax += (this.mouse.x - ax) * this.follow; ay += (this.mouse.y - ay) * this.follow; }
+      if (e.sx === undefined) { e.sx = ax; e.sy = ay; }
+      const sm = 1 - Math.exp(-dt * (e.human ? 9 : 11));
+      const nx2 = e.sx + (ax - e.sx) * sm, ny2 = e.sy + (ay - e.sy) * sm;
+      const vs = 1 - Math.exp(-dt * 6);
+      e.vx += ((nx2 - e.sx) - e.vx) * vs; e.vy += ((ny2 - e.sy) - e.vy) * vs;
+      e.sx = nx2; e.sy = ny2;
+      e.trail.push({ x: e.sx, y: e.sy });
+      if (e.trail.length > (e.human ? 34 : 22)) e.trail.shift();
+    });
+    if (this.mouse && ph !== 'strike' && humanOn) {
+      const age = (now - this.mouse.t) / 1000;
+      const inf = age < 2.5 ? 0.6 * (1 - age / 2.5) : 0;
+      this.follow = (this.follow || 0) + (inf - (this.follow || 0)) * (1 - Math.exp(-dt * 3));
+    } else {
+      this.follow = (this.follow || 0) * Math.exp(-dt * 3);
+    }
+
+    this.ripples = this.ripples.filter((r) => now - r.at < 1400);
+    this.ripples.forEach((r) => {
+      const k = eOut((now - r.at) / 1400);
+      const rad = (r.big ? 40 : (r.agent ? 18 : 26)) * u * (0.25 + k);
+      const c3 = r.big ? [200, 220, 240] : (r.agent ? AG : [170, 180, 188]);
+      const g = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, rad);
+      g.addColorStop(0, rgba(c3, 0.3 * (1 - k)));
+      g.addColorStop(1, rgba(T, 0));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(r.x, r.y, rad, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = rgba(r.big ? A : c3, 0.4 * (1 - k)); ctx.lineWidth = 1 * dpr;
+      ctx.beginPath(); ctx.arc(r.x, r.y, rad * 1.15, 0, Math.PI * 2); ctx.stroke();
+    });
+    if (ph === 'work' && humanOn && !cur.agent) {
+      const pulse = 0.5 + 0.5 * Math.sin(t * 3.2);
+      const wx = cx + Math.cos(weakA) * cR * 0.8, wy = cy + Math.sin(weakA) * cR * 0.8;
+      const g = ctx.createRadialGradient(wx, wy, 0, wx, wy, (28 + 12 * pulse) * u);
+      g.addColorStop(0, rgba(A, (0.18 + 0.16 * pulse) * Math.min(1, pt))); g.addColorStop(1, rgba(A, 0));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(wx, wy, (28 + 12 * pulse) * u, 0, Math.PI * 2); ctx.fill();
+    }
+
+    this.mtrail = this.mtrail.filter((q) => now - q.t < 900);
+    if (this.mtrail.length > 1) {
+      ctx.lineCap = 'round';
+      for (let i = 1; i < this.mtrail.length; i++) {
+        const q0 = this.mtrail[i - 1], q1 = this.mtrail[i];
+        const k = 1 - (now - q1.t) / 900;
+        ctx.strokeStyle = rgba(A, 0.55 * k * k);
+        ctx.lineWidth = (1 + 7 * k) * u;
+        ctx.shadowColor = rgba(A, 0.9); ctx.shadowBlur = 16 * k;
+        ctx.beginPath(); ctx.moveTo(q0.x, q0.y); ctx.lineTo(q1.x, q1.y); ctx.stroke();
+      }
+      ctx.shadowBlur = 0;
+    }
+
+    this.ents.forEach((e) => {
+      if (e.alpha < 0.01) return;
+      const col = e.human ? (hot ? R : A) : AG;
+      e.trail.forEach((p, i) => {
+        const k = i / e.trail.length;
+        ctx.fillStyle = rgba(col, (e.human ? 0.07 : 0.06) * k * k * e.alpha);
+        ctx.beginPath(); ctx.arc(p.x, p.y, ((e.human ? 3 : 2) + (e.human ? 8 : 4) * k) * u, 0, Math.PI * 2); ctx.fill();
+      });
+      const sp = Math.min(1, Math.hypot(e.vx, e.vy) / (6 * u));
+      const dir = Math.atan2(e.vy, e.vx);
+      const body = (e.human ? 12 : 6.5) * u;
+      ctx.save();
+      ctx.translate(e.sx, e.sy);
+      ctx.rotate(dir);
+      ctx.scale(1 + sp * 0.35, 1 - sp * 0.18);
+      ctx.beginPath();
+      for (let j = 0; j <= 40; j++) {
+        const th = (j / 40) * Math.PI * 2;
+        const rr = body * (1 + 0.09 * Math.sin(3 * th + t * 1.3 + e.idx) + 0.06 * Math.sin(5 * th - t * 1.7) + 0.035 * Math.sin(7 * th + t * 2.2));
+        const x = Math.cos(th) * rr, y = Math.sin(th) * rr;
+        if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      const bg = ctx.createRadialGradient(0, 0, 0, 0, 0, body * 1.3);
+      bg.addColorStop(0, rgba([235, 242, 250], 0.92 * e.alpha));
+      bg.addColorStop(0.35, rgba(col, 0.7 * e.alpha));
+      bg.addColorStop(1, rgba(col, 0.04 * e.alpha));
+      ctx.fillStyle = bg;
+      ctx.shadowColor = rgba(col, 0.85); ctx.shadowBlur = (e.human ? 24 : 14) * dpr;
+      ctx.fill();
+      ctx.restore();
+      ctx.shadowBlur = 0;
+    });
+    if (briefing && P0.sx !== undefined) {
+      const bk = Math.min(1, Math.max(0, pt - 0.9) / 0.8) * Math.min(1, (3.6 - pt) / 0.6);
+      this.ents.forEach((e) => {
+        if (e.human || e.alpha < 0.05) return;
+        const d = Math.hypot(P0.sx - e.sx, P0.sy - e.sy);
+        if (d > 90 * u) return;
+        ctx.strokeStyle = rgba(AG, 0.35 * bk); ctx.lineWidth = 1 * dpr;
+        ctx.beginPath(); ctx.moveTo(e.sx, e.sy); ctx.lineTo(P0.sx, P0.sy); ctx.stroke();
+        for (let j = 0; j < 3; j++) {
+          const k = ((t * 1.1) + j / 3 + e.idx * 0.13) % 1;
+          const x = e.sx + (P0.sx - e.sx) * k, y = e.sy + (P0.sy - e.sy) * k;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, 5 * u);
+          g.addColorStop(0, rgba([235, 242, 250], 0.9 * bk)); g.addColorStop(1, rgba(AG, 0));
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 5 * u, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+      const g = ctx.createRadialGradient(P0.sx, P0.sy, 0, P0.sx, P0.sy, 40 * u);
+      g.addColorStop(0, rgba(AG, 0.22 * bk * (0.7 + 0.3 * Math.sin(t * 5)))); g.addColorStop(1, rgba(AG, 0));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(P0.sx, P0.sy, 40 * u, 0, Math.PI * 2); ctx.fill();
+    }
+    const wk = { x: cx + Math.cos(weakA) * cR * 0.8, y: cy + Math.sin(weakA) * cR * 0.8 };
+
+    if (impact) {
+      const k = Math.min(1, (now - this.impactAt) / 1200);
+      const g = ctx.createRadialGradient(inf.x, inf.y, 0, inf.x, inf.y, cR * (0.3 + 1.1 * k));
+      g.addColorStop(0, rgba(inf.col, 0.5 * (1 - k) + 0.12));
+      g.addColorStop(1, rgba(inf.col, 0));
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(inf.x, inf.y, cR * (0.3 + 1.1 * k), 0, Math.PI * 2); ctx.fill();
+      if (k < 1) {
+        ctx.strokeStyle = rgba(inf.col, 0.6 * (1 - k)); ctx.lineWidth = 2 * dpr; ctx.shadowColor = rgba(inf.col, 1); ctx.shadowBlur = 18 * dpr;
+        ctx.beginPath(); ctx.arc(inf.x, inf.y, k * S * 1.2, 0, Math.PI * 2); ctx.stroke();
+      }
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.shadowBlur = 0;
+    const fs = Math.round(12 * u * dpr / Math.max(1, dpr * 0.75)) || 12;
+    ctx.font = fs + 'px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = rgba([192, 193, 193], 0.85 * grow);
+    {
+      const sinceS = (now - (this.stepAt || now)) / 1000;
+      const fa = Math.min(1, Math.max(0, sinceS / 0.9));
+      const lx = 36 * u, ly = 40 * u;
+      const st = steps[L.step];
+      const ai = st.agent && !st.assist;
+      ctx.save();
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      try { ctx.letterSpacing = Math.round(3 * u) + 'px'; } catch (e) {}
+      ctx.font = Math.round(11 * u) + 'px "IBM Plex Mono", monospace';
+      ctx.fillStyle = 'rgba(151,152,153,' + (0.9 * fa).toFixed(3) + ')';
+      ctx.fillText('PHASE ' + String(L.step + 1).padStart(2, '0') + ' / ' + String(steps.length).padStart(2, '0'), lx, ly);
+      try { ctx.letterSpacing = Math.round(5 * u) + 'px'; } catch (e) {}
+      ctx.font = '500 ' + Math.round(30 * u) + 'px "IBM Plex Mono", monospace';
+      const title = st.depth.toUpperCase();
+      ctx.fillStyle = 'rgba(228,229,229,' + (0.95 * fa).toFixed(3) + ')';
+      ctx.shadowColor = 'rgba(38,139,210,0.45)'; ctx.shadowBlur = 18 * u * fa;
+      ctx.fillText(title, lx, ly + 40 * u - (1 - fa) * 8 * u);
+      ctx.shadowBlur = 0;
+      const tw = Math.min(ctx.measureText(title).width, W * 0.55);
+      const prog = (L.step + (ph === 'strike' ? 1 : (ph === 'work' ? 0.6 : 0.25))) / steps.length;
+      ctx.fillStyle = 'rgba(228,229,229,0.08)';
+      ctx.fillRect(lx, ly + 54 * u, tw, 2 * u);
+      ctx.fillStyle = rgba(cur.pwn && ph === 'strike' ? R : A, 0.9 * fa);
+      this.phaseBar = (this.phaseBar || 0) + (prog - (this.phaseBar || 0)) * (1 - Math.exp(-dt * 2));
+      ctx.fillRect(lx, ly + 54 * u, tw * this.phaseBar, 2 * u);
+      try { ctx.letterSpacing = Math.round(2 * u) + 'px'; } catch (e) {}
+      ctx.font = Math.round(11 * u) + 'px "IBM Plex Mono", monospace';
+      ctx.fillStyle = ai ? 'rgba(143,192,232,' + (0.9 * fa).toFixed(3) + ')' : 'rgba(151,152,153,' + (0.8 * fa).toFixed(3) + ')';
+      ctx.fillText(ai ? this.T().cv.ai : (st.assist ? this.T().cv.assist : this.T().cv.manual), lx, ly + 76 * u);
+      try { ctx.letterSpacing = '0px'; } catch (e) {}
+      ctx.restore();
+      ctx.textAlign = 'center';
+    }
+    if (cur.agentNames) this.lastNames = cur.agentNames;
+    this.ents.forEach((e) => {
+      if (e.alpha < 0.05) return;
+      ctx.fillStyle = e.human ? rgba(hot ? R : A, 0.95 * e.alpha) : rgba([143, 192, 232], 0.8 * e.alpha);
+      ctx.font = (e.human ? fs : Math.round(fs * 0.85)) + 'px "IBM Plex Mono", monospace';
+      ctx.fillText(e.human ? 'pentester' : ((cur.agentNames || [])[e.idx] || (this.lastNames || [])[e.idx] || 'agent'), e.sx, e.sy - (e.human ? 26 : 16) * u);
+    });
+    ctx.font = fs + 'px "IBM Plex Mono", monospace';
+    if (this.briefing && this.ents[0].sx !== undefined) {
+      ctx.fillStyle = rgba([143, 192, 232], 0.85);
+      ctx.fillText(this.T().cv.handover, this.ents[0].sx, this.ents[0].sy + 30 * u);
+    }
+    this.replies = this.replies.filter((r) => now - r.at < 1300);
+    this.replies.forEach((r) => {
+      const k = (now - r.at) / 1300;
+      ctx.fillStyle = r.warm ? rgba([228, 229, 229], 0.9 * (1 - k)) : rgba([151, 152, 153], 0.85 * (1 - k));
+      ctx.fillText(r.text, r.x, r.y - k * 14 * u);
+    });
+    if (ph === 'work' && !cur.agent) {
+      ctx.fillStyle = rgba([228, 229, 229], 0.9);
+      ctx.fillText(this.T().cv.weak, wk.x, wk.y + 44 * u);
+    }
+  }
+  drawNet(now) {
+    const c = this.net;
+    if (!c) return;
+    const box = c.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = Math.round(box.width * dpr), H = Math.round(box.height * dpr);
+    if (!W || !H) return;
+    if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
+    const ctx = c.getContext('2d');
+    const t = now / 1000;
+    const dt = Math.min(0.05, Math.max(0.001, (now - (this.netLast || now - 16)) / 1000));
+    this.netLast = now;
+    const step = this.state.step;
+    const strike = this.phase === 'strike';
+    const since = (now - (this.stepAt || now)) / 1000;
+    const A = [38, 139, 210], R = [220, 50, 47];
+    const rgba = (c3, a) => 'rgba(' + c3.join(',') + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')';
+    const N = {
+      inet: { x: 0, y: 60, s: -1, o: -1, l: 'internet' },
+      dns: { x: 16, y: 64, s: 0, d: 0.2, o: 0, l: 'dns' },
+      www: { x: 34, y: 18, s: 0, d: 1.2, l: 'www' },
+      mail: { x: 34, y: 42, s: 0, d: 2.6, l: 'mail' },
+      portal: { x: 34, y: 66, s: 0, d: 0.7, o: 0, l: 'portal' },
+      vpn: { x: 34, y: 104, s: 0, d: 3.8, l: 'vpn' },
+      ldap: { x: 120, y: 110, s: 0, d: 5.6, l: 'ldap' },
+      cdn: { x: 56, y: 10, s: 1, d: 0.6, l: 'cdn' },
+      api: { x: 58, y: 38, s: 1, d: 1.7, l: 'api' },
+      host: { x: 58, y: 66, s: 1, d: 2.4, o: 1, l: 'app-host' },
+      sso: { x: 56, y: 110, s: 1, d: 3.2, l: 'sso' },
+      k8s: { x: 128, y: 20, s: 1, d: 4.1, l: 'k8s' },
+      web: { x: 100, y: 74, s: 1, d: 4.9, o: 3, l: 'web-app' },
+      svc: { x: 82, y: 50, s: 1, d: 5.8, o: 2, l: 'svc :8443' },
+      git: { x: 146, y: 70, s: 1, d: 6.6, l: 'git' },
+      ssh: { x: 82, y: 88, s: 1, d: 7.4, l: 'ssh' },
+      db: { x: 122, y: 92, s: 3, d: 0.8, o: 3, hot: 1, l: 'db' },
+      srv: { x: 106, y: 40, s: 4, d: 0.5, o: 4, hot: 1, l: 'server' },
+      u1: { x: 78, y: 8, s: 99 }, u2: { x: 80, y: 112, s: 99 }, u3: { x: 102, y: 16, s: 99 }, u4: { x: 142, y: 36, s: 99 },
+      u5: { x: 144, y: 104, s: 99 }, u6: { x: 166, y: 52, s: 99 }, u7: { x: 170, y: 92, s: 99 }, u8: { x: 188, y: 24, s: 99 },
+      u9: { x: 192, y: 70, s: 99 }, u10: { x: 186, y: 112, s: 99 }, u11: { x: 124, y: 58, s: 99 }
+    };
+    const E = [['inet', 'dns'], ['dns', 'www'], ['dns', 'mail'], ['dns', 'portal'], ['dns', 'vpn'], ['www', 'cdn'], ['mail', 'api'], ['portal', 'api'], ['portal', 'host'], ['vpn', 'sso'],
+      ['cdn', 'u1'], ['u1', 'u3'], ['api', 'u3'], ['u3', 'k8s'], ['host', 'svc'], ['host', 'ssh'], ['host', 'web'], ['sso', 'u2'], ['u2', 'ldap'], ['ssh', 'u2'],
+      ['svc', 'srv'], ['web', 'db'], ['web', 'u11'], ['u11', 'git'], ['k8s', 'u4'], ['srv', 'u4'], ['srv', 'u11'], ['ldap', 'u5'], ['db', 'u5'],
+      ['u4', 'u6'], ['git', 'u6'], ['git', 'u7'], ['u5', 'u7'], ['u6', 'u8'], ['u6', 'u9'], ['u7', 'u9'], ['u7', 'u10']];
+    const revealT = (n) => (n.s < 0 ? -1 : (n.s < step ? -1 : (n.s === step ? n.d || 0 : Infinity)));
+    const known = (n) => n.s < 0 || (n.s < 99 && (n.s < step || (n.s === step && since >= (n.d || 0))));
+    const popK = (n) => { const r = revealT(n); return r >= 0 && r !== Infinity ? Math.max(0, Math.min(1, (since - r) / 0.9)) : (known(n) ? 1 : 0); };
+    const owned = (n) => n.o !== undefined && (n.o < 0 || n.o < step || (n.o === step && strike));
+    const hot = (n) => !!n.hot && owned(n);
+    const info = step <= 1 || step >= 5;
+    let front = 0;
+    Object.keys(N).forEach((k) => { const n = N[k]; if (n.o !== undefined && n.o <= step) front = Math.max(front, n.x); });
+    const tgtW = info ? 204 : 118;
+    const tgtC = info ? 98 : Math.max(tgtW / 2 - 4, front - tgtW * 0.25);
+    if (this.netW === undefined) { this.netW = tgtW; this.netCam = tgtC; }
+    const ck = 1 - Math.exp(-dt * 1.2);
+    this.netW += (tgtW - this.netW) * ck; this.netCam += (tgtC - this.netCam) * ck;
+    const viewW = this.netW;
+    const padX = 22 * dpr, padT = 12 * dpr, padB = 28 * dpr;
+    const sx = (W - padX * 2) / viewW;
+    const P = (n) => ({ x: padX + (n.x - (this.netCam - viewW / 2)) * sx, y: padT + (n.y / 120) * (H - padT - padB) });
+    const edgeFade = (x) => Math.max(0, Math.min(1, Math.min(x, W - x) / (36 * dpr)));
+    const bez = (pa, pb, k) => {
+      const dx = (pb.x - pa.x) * 0.5, u2 = 1 - k;
+      return { x: u2 * u2 * u2 * pa.x + 3 * u2 * u2 * k * (pa.x + dx) + 3 * u2 * k * k * (pb.x - dx) + k * k * k * pb.x, y: u2 * u2 * u2 * pa.y + 3 * u2 * u2 * k * pa.y + 3 * u2 * k * k * pb.y + k * k * k * pb.y };
+    };
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineCap = 'round';
+    E.forEach(([a, b]) => {
+      const na = N[a], nb = N[b], pa = P(na), pb = P(nb);
+      const f = Math.min(edgeFade(pa.x), edgeFade(pb.x));
+      if (f <= 0) return;
+      const both = owned(na) && owned(nb);
+      const frontier = owned(na) && nb.o === step && !owned(nb) && known(nb);
+      const vis = Math.min(popK(na), popK(nb));
+      const dx = (pb.x - pa.x) * 0.5;
+      ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.bezierCurveTo(pa.x + dx, pa.y, pb.x - dx, pb.y, pb.x, pb.y);
+      ctx.lineWidth = (both ? 1.5 : 1) * dpr;
+      if (both) { ctx.strokeStyle = rgba(hot(nb) ? R : A, 0.55 * f); ctx.shadowColor = rgba(hot(nb) ? R : A, 0.8); ctx.shadowBlur = 6 * dpr; }
+      else if (frontier) { ctx.strokeStyle = rgba(A, 0.35 * f); ctx.shadowBlur = 0; }
+      else { ctx.strokeStyle = 'rgba(228,229,229,' + ((0.035 + 0.1 * vis) * f).toFixed(3) + ')'; ctx.shadowBlur = 0; }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      if (frontier) {
+        for (let j = 0; j < 2; j++) {
+          const q = bez(pa, pb, ((t * 0.45) + j * 0.5) % 1);
+          const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, 7 * dpr);
+          g.addColorStop(0, rgba(A, 0.9 * f)); g.addColorStop(1, rgba(A, 0));
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x, q.y, 7 * dpr, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    });
+    ctx.font = Math.round(10.5 * dpr) + 'px "IBM Plex Mono", monospace';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'center';
+    Object.keys(N).forEach((key) => {
+      const n = N[key], p = P(n);
+      const f = edgeFade(p.x);
+      if (f <= 0) return;
+      const o = owned(n), pk = popK(n), h = hot(n), cur = n.o === step && !o;
+      const col = h ? R : A;
+      if (pk <= 0) {
+        ctx.fillStyle = 'rgba(228,229,229,' + (0.12 * f).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.8 * dpr, 0, Math.PI * 2); ctx.fill();
+        return;
+      }
+      if (pk < 1) {
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, (6 + 20 * pk) * dpr);
+        g.addColorStop(0, rgba([143, 192, 232], 0.5 * (1 - pk) * f)); g.addColorStop(1, rgba([143, 192, 232], 0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, (6 + 20 * pk) * dpr, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = rgba([143, 192, 232], 0.6 * (1 - pk) * f); ctx.lineWidth = 1 * dpr;
+        ctx.beginPath(); ctx.arc(p.x, p.y, (4 + 14 * pk) * dpr, 0, Math.PI * 2); ctx.stroke();
+      }
+      if (cur && known(n)) {
+        const pulse = 0.5 + 0.5 * Math.sin(t * 2.4);
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, (12 + 6 * pulse) * dpr);
+        g.addColorStop(0, rgba(A, (0.28 + 0.12 * pulse) * f)); g.addColorStop(1, rgba(A, 0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, (12 + 6 * pulse) * dpr, 0, Math.PI * 2); ctx.fill();
+      }
+      if (o) {
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 11 * dpr);
+        g.addColorStop(0, rgba(col, (h ? 0.45 : 0.3) * f)); g.addColorStop(1, rgba(col, 0));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, 11 * dpr, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = rgba(col, f);
+        ctx.beginPath(); ctx.arc(p.x, p.y, 3.6 * dpr, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.strokeStyle = 'rgba(228,229,229,' + (0.55 * pk * f).toFixed(3) + ')';
+        ctx.lineWidth = 1 * dpr;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 3.4 * pk * dpr, 0, Math.PI * 2); ctx.stroke();
+      }
+      if (n.l) {
+        const la = (o ? 0.9 : 0.72) * pk * f;
+        ctx.fillStyle = o && h ? 'rgba(232,129,125,' + la.toFixed(3) + ')' : (o ? 'rgba(228,229,229,' + la.toFixed(3) + ')' : 'rgba(170,171,172,' + la.toFixed(3) + ')');
+        ctx.fillText(n.l, p.x, p.y + 9 * dpr);
+      }
+    });
+    ctx.textAlign = 'left';
+  }
+  topics() {
+    const base = 'https://security.charemma.de/wissen/ki-sicherheit/';
+    const t = [
+      { g: 'llm', id: 'LLM01', slug: 'prompt-injection',
+        de: ['Prompt Injection', 'Eingaben – direkt oder versteckt in Dokumenten, Webseiten und E-Mails – bringen ein Modell dazu, seine Anweisungen zu ignorieren oder fremde auszuführen.'],
+        en: ['Prompt injection', 'Inputs – typed directly or hidden in documents, web pages and emails – make a model ignore its instructions or follow someone else’s.'],
+        el: ['Prompt injection', 'Είσοδοι – άμεσα ή κρυμμένες σε έγγραφα, ιστοσελίδες και e-mails – κάνουν ένα μοντέλο να αγνοήσει τις οδηγίες του ή να εκτελέσει ξένες.'] },
+      { g: 'llm', id: 'LLM02', slug: 'sensitive-information-disclosure',
+        de: ['Sensitive Information Disclosure', 'Ein Modell gibt vertrauliche Daten preis – aus Trainingsdaten, dem Gesprächskontext oder angebundenen Systemen.'],
+        en: ['Sensitive information disclosure', 'A model reveals confidential data – from its training data, the conversation context or connected systems.'],
+        el: ['Sensitive information disclosure', 'Ένα μοντέλο αποκαλύπτει εμπιστευτικά δεδομένα – από τα δεδομένα εκπαίδευσης, το πλαίσιο της συνομιλίας ή συνδεδεμένα συστήματα.'] },
+      { g: 'llm', id: 'LLM03', slug: 'excessive-agency',
+        de: ['Excessive Agency', 'Ein Agent darf mehr, als seine Aufgabe verlangt: zu viele Werkzeuge, zu weite Rechte, zu wenig menschliche Bestätigung.'],
+        en: ['Excessive agency', 'An agent can do more than its task requires: too many tools, too broad permissions, too little human confirmation.'],
+        el: ['Excessive agency', 'Ένας agent μπορεί να κάνει περισσότερα απ’ όσα χρειάζεται: πάρα πολλά εργαλεία, υπερβολικά δικαιώματα, ελάχιστη ανθρώπινη επιβεβαίωση.'] },
+      { g: 'llm', id: 'LLM04', slug: 'supply-chain',
+        de: ['Supply Chain', 'Risiken, die über Modelle, Datensätze, Plugins und Bibliotheken von Dritten in eine Anwendung gelangen.'],
+        en: ['Supply chain', 'Risks that enter an application through third-party models, datasets, plugins and libraries.'],
+        el: ['Supply chain', 'Κίνδυνοι που μπαίνουν σε μια εφαρμογή μέσω μοντέλων, datasets, plugins και βιβλιοθηκών τρίτων.'] },
+      { g: 'llm', id: 'LLM05', slug: 'data-and-model-poisoning',
+        de: ['Data and Model Poisoning', 'Manipulierte Trainings-, Fine-Tuning- oder Embedding-Daten verändern das Verhalten eines Modells gezielt.'],
+        en: ['Data and model poisoning', 'Manipulated training, fine-tuning or embedding data deliberately change how a model behaves.'],
+        el: ['Data and model poisoning', 'Παραποιημένα δεδομένα εκπαίδευσης, fine-tuning ή embeddings αλλάζουν σκόπιμα τη συμπεριφορά ενός μοντέλου.'] },
+      { g: 'llm', id: 'LLM06', slug: 'unbounded-consumption',
+        de: ['Unbounded Consumption', 'Ungebremste Anfragen treiben Kosten und Last in die Höhe oder erlauben es, ein Modell systematisch abzugreifen.'],
+        en: ['Unbounded consumption', 'Unthrottled requests drive up cost and load, or allow a model to be systematically extracted.'],
+        el: ['Unbounded consumption', 'Ανεξέλεγκτα αιτήματα ανεβάζουν κόστος και φορτίο ή επιτρέπουν τη συστηματική «αντιγραφή» ενός μοντέλου.'] },
+      { g: 'llm', id: 'LLM07', slug: 'misinformation',
+        de: ['Misinformation', 'Überzeugend formulierte, aber falsche Ausgaben, auf die sich Menschen oder nachgelagerte Systeme verlassen.'],
+        en: ['Misinformation', 'Convincingly worded but wrong output that people or downstream systems rely on.'],
+        el: ['Misinformation', 'Πειστικά διατυπωμένες αλλά λανθασμένες απαντήσεις, στις οποίες βασίζονται άνθρωποι ή άλλα συστήματα.'] },
+      { g: 'llm', id: 'LLM08', slug: 'hidden-context-exposure',
+        de: ['Hidden Context Exposure', 'Verborgene Anweisungen und Kontext – etwa System-Prompts – werden sichtbar und verraten Logik, Regeln oder Geheimnisse.'],
+        en: ['Hidden context exposure', 'Hidden instructions and context – such as system prompts – become visible and reveal logic, rules or secrets.'],
+        el: ['Hidden context exposure', 'Κρυφές οδηγίες και πλαίσιο – π.χ. system prompts – γίνονται ορατά και αποκαλύπτουν λογική, κανόνες ή μυστικά.'] },
+      { g: 'llm', id: 'LLM09', slug: 'vector-and-embedding-weaknesses',
+        de: ['Vector and Embedding Weaknesses', 'Schwachstellen in RAG-Systemen: fehlende Zugriffstrennung, manipulierte oder ausgelesene Vektordaten.'],
+        en: ['Vector and embedding weaknesses', 'Weaknesses in RAG systems: missing access separation, manipulated or extracted vector data.'],
+        el: ['Vector and embedding weaknesses', 'Αδυναμίες σε συστήματα RAG: έλλειψη διαχωρισμού πρόσβασης, παραποιημένα ή διαρρέοντα δεδομένα διανυσμάτων.'] },
+      { g: 'llm', id: 'LLM10', slug: 'improper-output-handling',
+        de: ['Improper Output Handling', 'Modellausgaben werden ungeprüft weiterverarbeitet – etwa als HTML, SQL oder Shell-Befehl – und öffnen klassische Lücken.'],
+        en: ['Improper output handling', 'Model output is processed without validation – as HTML, SQL or a shell command – and reopens classic vulnerabilities.'],
+        el: ['Improper output handling', 'Οι έξοδοι του μοντέλου επεξεργάζονται χωρίς έλεγχο – ως HTML, SQL ή εντολή shell – και ανοίγουν κλασικά κενά.'] },
+      { g: 'pipe', id: 'PIPE·01', slug: 'daten-und-rag-ingestion',
+        de: ['Daten & RAG-Ingestion', 'Wer Trainings-, Fine-Tuning- oder Retrieval-Daten einspielen kann, kann das Verhalten des Systems beeinflussen.'],
+        en: ['Data & RAG ingestion', 'Whoever can feed training, fine-tuning or retrieval data can influence how the system behaves.'],
+        el: ['Δεδομένα & RAG ingestion', 'Όποιος μπορεί να εισαγάγει δεδομένα εκπαίδευσης, fine-tuning ή retrieval μπορεί να επηρεάσει τη συμπεριφορά του συστήματος.'] },
+      { g: 'pipe', id: 'PIPE·02', slug: 'modell-lieferkette',
+        de: ['Modell-Lieferkette', 'Herkunft und Integrität von Modellen, Gewichten und Abhängigkeiten – inklusive Registries und unsicherer Dateiformate.'],
+        en: ['Model supply chain', 'Provenance and integrity of models, weights and dependencies – including registries and unsafe file formats.'],
+        el: ['Εφοδιαστική αλυσίδα μοντέλων', 'Προέλευση και ακεραιότητα μοντέλων, βαρών και εξαρτήσεων – μαζί με registries και ανασφαλείς μορφές αρχείων.'] },
+      { g: 'pipe', id: 'PIPE·03', slug: 'agenten-und-tool-anbindung',
+        de: ['Agenten & Tool-Anbindung', 'MCP-Server, Werkzeugrechte und Automatisierung entscheiden, was ein manipulierter Agent tatsächlich anrichten kann.'],
+        en: ['Agents & tool access', 'MCP servers, tool permissions and automation decide what a manipulated agent can actually do.'],
+        el: ['Agents & σύνδεση εργαλείων', 'MCP servers, δικαιώματα εργαλείων και αυτοματοποίηση καθορίζουν τι μπορεί πραγματικά να κάνει ένας χειραγωγημένος agent.'] },
+      { g: 'pipe', id: 'PIPE·04', slug: 'inferenz-infrastruktur',
+        de: ['Inferenz-Infrastruktur', 'Modell-Server und APIs sind Dienste wie andere auch: exponiert, oft schwach isoliert, selten mit Ressourcenlimits.'],
+        en: ['Inference infrastructure', 'Model servers and APIs are services like any other: exposed, often weakly isolated, rarely rate-limited.'],
+        el: ['Υποδομή inference', 'Οι model servers και τα APIs είναι υπηρεσίες όπως όλες: εκτεθειμένες, συχνά με αδύναμη απομόνωση, σπάνια με όρια πόρων.'] },
+      { g: 'pipe', id: 'PIPE·05', slug: 'secrets-und-schluessel',
+        de: ['Secrets & Schlüssel', 'API-Keys von Modellanbietern und Zugangsdaten landen leicht in Prompts, Logs und Pipeline-Variablen.'],
+        en: ['Secrets & keys', 'Model provider API keys and credentials easily end up in prompts, logs and pipeline variables.'],
+        el: ['Secrets & κλειδιά', 'API keys παρόχων μοντέλων και διαπιστευτήρια καταλήγουν εύκολα σε prompts, logs και μεταβλητές pipeline.'] }
+    ];
+    const lang = this.state.lang || 'de';
+    return t.map((x) => ({ g: x.g, id: x.id, slug: x.slug, href: base + x.slug, title: (x[lang] || x.de)[0], body: (x[lang] || x.de)[1] }));
+  }
+  i18n() {
+    const tools = (L) => [
+      { label: L.tg[0], hot: true, items: ['Burp Suite', 'OWASP ZAP', 'mitmproxy', 'nmap', 'sqlmap', 'ffuf', 'nuclei', 'subfinder', 'httpx', 'katana', 'dnsx', 'dalfox', L.ti[0]] },
+      { label: L.tg[1], hot: true, items: ['Claude Code', 'subagents', 'MCP', L.ti[1], 'LangGraph', 'Ollama'] },
+      { label: L.tg[2], items: ['Debian', 'Ubuntu', 'Red Hat', 'NixOS', 'Talos Linux', 'Kali Linux'] },
+      { label: L.tg[3], items: ['systemd', 'auditd', 'OpenSSH', 'nftables', 'WireGuard', 'Tailscale', L.ti[2], 'HashiCorp Vault', 'Ansible', 'Nix Flakes'] },
+      { label: L.tg[4], items: ['Kubernetes', 'k3s', 'OpenShift', 'Docker', 'Podman', 'Helm', 'ArgoCD', 'RBAC', 'NetworkPolicies', 'Sealed Secrets'] },
+      { label: L.tg[5], items: ['Yocto / BitBake', 'NXP i.MX6 / i.MX8', 'QEMU', 'Cross-Builds', L.ti[3]] },
+      { label: L.tg[6], items: ['Trivy', 'SonarQube', 'Renovate', 'SBOM / SPDX', L.ti[4]] }
+    ];
+    const de = {
+      nav: ['Leistungen', 'Vorgehen', 'Zusammenarbeit', 'Wissen', 'Disclosure'],
+      focus: 'Schwerpunkt Linux-Infrastruktur', loc: 'Deutschland · remote',
+      h1a: 'Ich greife Ihre Systeme an, ', h1b: 'bevor es jemand anders tut.',
+      lead: 'Penetrationstests mit Schwerpunkt auf Linux-Infrastrukturen: Server, Container und Kubernetes – und die Webanwendungen, die darauf laufen. KI-gestützte Aufklärung, manuelle Tiefe und ein Bericht, mit dem Ihr Team direkt arbeiten kann.',
+      cta1: 'Pentest anfragen', cta2: 'Schwachstelle melden', mailSubject: 'Penetrationstest%20anfragen',
+      pk: ['zertifikate', 'methodik', 'offensiv_seit', 'berichte'],
+      pv: ['OSCP · SCP Web Application Security', 'BSI IS-Pentest-Leitfaden · OWASP WSTG', '2019 · Bug Bounty, Disclosure, Pentests', 'Deutsch · Englisch'],
+      s1e: '01 / leistungen', s1h: 'Was ich teste',
+      services: [
+        { tag: 'linux · schwerpunkt', title: 'Linux-Server & Infrastruktur', body: 'Exponierte Dienste, SSH, sudo- und Dateirechte, systemd-Units, Firewall-Regeln und Privilege Escalation – vom Angreifer mit Shell bis root.' },
+        { tag: 'linux · container', title: 'Container & Kubernetes', body: 'Container-Ausbrüche, RBAC, NetworkPolicies, Secrets und Images: Wie weit kommt ein Angreifer aus einem kompromittierten Pod?' },
+        { tag: 'web / api', title: 'Web-Application- & API-Pentest', body: 'Manuelle Prüfung nach OWASP WSTG: Authentifizierung, Autorisierung, Eingabevalidierung, Injection und Business-Logik.' },
+        { tag: 'extern', title: 'Externe Angriffsfläche', body: 'Was sieht ein Angreifer von außen? Subdomains, exponierte Dienste und vergessene Systeme – KI-gestützt erfasst, manuell bewertet.' },
+        { tag: 'linux · ci/cd', title: 'Pipeline & Lieferkette', body: 'Build-Runner, Secrets, Berechtigungen, Container-Images und Abhängigkeiten: Wer kann was in Produktion bringen?' },
+        { tag: 'ai', title: 'KI-Anwendungen & -Pipelines', body: 'LLM-Features nach OWASP Top 10 for LLM Applications, Agenten mit Werkzeugzugriff sowie die Daten- und Modell-Pipeline dahinter.' }
+      ],
+      ve: '02 / vorgehen', vh1: 'Agenten kartieren. ', vh2: 'Ich gehe rein.',
+      vlead: 'KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.',
+      vnote: 'Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.', net: 'netzwerk',
+      res: ['Proof of Concept, jederzeit reproduzierbar', 'Für jeden Fund ein konkreter Fix', 'Hilfe beim Schließen der Lücken'],
+      wk: 'Wissen', wie: '05 / ki-sicherheit', wih: 'Mehr als Prompt Injection', wilead: 'KI-Anwendungen erben die Schwächen klassischer Software und bringen eigene mit. Hier erkläre ich die wichtigsten Risiken für LLM-Anwendungen und KI-Pipelines – kurz, verständlich und mit Verweis auf die ausführliche Fachseite.', wmore: 'Weiterlesen', wall: 'Alle Themen zur KI-Sicherheit', wnote: 'Grundlage: OWASP Top 10 for LLM Applications 2026 und eigene Praxis mit Agenten-Workflows.', kg: [['LLM-Anwendungen', 'Risiken in Anwendungen mit Sprachmodellen'], ['KI-Pipelines', 'Von den Daten bis zum Inferenz-Endpunkt']], wov: ['Themenübersicht', 'KI-Sicherheit', 'Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines. Jeder Eintrag erklärt das Thema kurz und führt zur ausführlichen Fachseite.', '← zurück zur Startseite', 'Zur Fachseite', 'Quelle der LLM-Kategorien:'], kie: '03 / ki-sicherheit', kih: 'Mehr als Prompt Injection',
+      kilead: 'KI-Features erben alle Schwächen klassischer Anwendungen – und bringen neue mit: Agenten mit zu vielen Rechten, vergiftete Daten, unsichere Modell-Lieferketten. Ich teste die Anwendung und die Pipeline dahinter.',
+      kia: 'KI-Anwendungen testen', kiap: 'Entlang der OWASP Top 10 for LLM Applications 2026', kib: 'KI-Pipelines absichern', kibp: 'Von den Daten bis zum Inferenz-Endpunkt – meist auf Linux und Kubernetes',
+      pipeline: [
+        { title: 'Daten & RAG-Ingestion', body: 'Wer kann Trainings-, Fine-Tuning- oder Retrieval-Daten einschleusen? Vergiftung, Zugriffsrechte auf Vektordatenbanken.' },
+        { title: 'Modell-Lieferkette', body: 'Herkunft und Integrität von Modellen, Gewichten und Abhängigkeiten; Modell-Registries und unsichere Formate.' },
+        { title: 'Agenten & Tool-Anbindung', body: 'MCP-Server, Werkzeugrechte, Workflow-Automatisierung: Was darf ein Agent tun, wenn er manipuliert wird?' },
+        { title: 'Inferenz-Infrastruktur', body: 'Exponierte Modell-Server und APIs, Isolation auf Linux und Kubernetes, Ressourcenlimits gegen Missbrauch.' },
+        { title: 'Secrets & Schlüssel', body: 'API-Keys von Modellanbietern, Zugangsdaten in Prompts, Logs und Pipeline-Variablen.' }
+      ],
+      ze: '03 / zusammenarbeit', zh: 'Vom Scoping bis zum Retest',
+      steps: [
+        { n: '01', title: 'Scoping', body: 'Ziele, Umfang, Testart (Black-, Grey- oder White-Box) und Zeitfenster schriftlich festgelegt.' },
+        { n: '02', title: 'Test', body: 'KI-gestützte Aufklärung, dann manuelle Prüfung. Kritische Funde melde ich sofort, nicht erst im Bericht.' },
+        { n: '03', title: 'Bericht', body: 'Management-Summary plus technische Findings mit Reproduktionsschritten, PoC und konkreter Behebung.' },
+        { n: '04', title: 'Retest', body: 'Nach Ihren Fixes prüfe ich erneut und bestätige die Behebung schriftlich.' }
+      ],
+      we: '04 / werkzeugkasten', wh: 'Linux von innen kennen, um es von außen anzugreifen',
+      wp: 'Seit 2006 arbeite ich täglich mit Linux – von Embedded-Systemen in Medizin- und Kameratechnik über Build- und Entwicklungsserver bis zum produktiven Kubernetes-Cluster. Ich kenne die Systeme, die ich angreife, von innen: Rechte, Dienste, Konfiguration und die typischen Abkürzungen im Betrieb. Für Aufklärung und Berichte setze ich eigene Agenten-Workflows ein; mein Lab ist reproduzierbar aufgebaut, trainiert wird regelmäßig auf HackTheBox.',
+      tg: ['angriff', 'ki & agenten', 'distributionen', 'betrieb & härtung', 'container & cluster', 'embedded linux', 'pipeline-sicherheit'],
+      ti: ['eigene Exploits & PoCs', 'eigene Agenten', 'eigene PKI / CA', 'Remote-Debugging & Firmware-Updates', 'Secrets-Verwaltung'],
+      de: '06 / responsible disclosure', dh: 'Schwachstelle gefunden?',
+      dp: 'Melden Sie sie bitte verschlüsselt. Ich bestätige den Eingang und halte Sie über die Behebung auf dem Laufenden – ich kenne die andere Seite aus der eigenen Bug-Bounty-Zeit.',
+      dk: ['Kontakt', 'PGP-Fingerprint', 'security.txt', 'Sprachen'],
+      ch: 'Was würde ein Angreifer bei Ihnen finden?', cb: 'Erstgespräch vereinbaren →',
+      fi: 'Impressum', fp: 'Datenschutz',
+      cv: { handover: 'übergabe · findings', weak: 'schwachstelle?', manual: 'MANUELL', assist: 'AI-ASSISTED · HUMAN REVIEW', ai: 'AI-DRIVEN WITH SUBAGENTS' },
+      depth: ['informationsbeschaffung', 'informationsbeschaffung', 'analyse', 'manual testing', 'exploit', 'reporting'],
+      hits: ['subdomains & technologien erfasst', 'hosts, ports & dienste kartiert', 'verdächtiger dienst', 'sql-injection + fehlkonfiguration', 'remote code execution', 'bericht mit fixes übergeben'],
+      work: ['…', 'anomalie', '500', 'unerwartet', 'leak?', 'stacktrace']
+    };
+    const en = {
+      nav: ['Services', 'Approach', 'Process', 'Knowledge', 'Disclosure'],
+      focus: 'Focus: Linux infrastructure', loc: 'Germany · remote',
+      h1a: 'I attack your systems ', h1b: 'before someone else does.',
+      lead: 'Penetration testing with a focus on Linux infrastructure: servers, containers and Kubernetes – and the web applications running on them. AI-assisted reconnaissance, manual depth and a report your team can act on right away.',
+      cta1: 'Request a pentest', cta2: 'Report a vulnerability', mailSubject: 'Pentest%20request',
+      pk: ['certifications', 'methodology', 'offensive_since', 'reports'],
+      pv: ['OSCP · SCP Web Application Security', 'BSI pentest guideline · OWASP WSTG', '2019 · bug bounty, disclosure, pentests', 'German · English'],
+      s1e: '01 / services', s1h: 'What I test',
+      services: [
+        { tag: 'linux · focus', title: 'Linux servers & infrastructure', body: 'Exposed services, SSH, sudo and file permissions, systemd units, firewall rules and privilege escalation – from attacker shell to root.' },
+        { tag: 'linux · container', title: 'Containers & Kubernetes', body: 'Container escapes, RBAC, network policies, secrets and images: how far does an attacker get from a compromised pod?' },
+        { tag: 'web / api', title: 'Web application & API pentest', body: 'Manual testing following OWASP WSTG: authentication, authorization, input validation, injection and business logic.' },
+        { tag: 'external', title: 'External attack surface', body: 'What does an attacker see from the outside? Subdomains, exposed services and forgotten systems – mapped with AI, assessed by hand.' },
+        { tag: 'linux · ci/cd', title: 'Pipeline & supply chain', body: 'Build runners, secrets, permissions, container images and dependencies: who can push what into production?' },
+        { tag: 'ai', title: 'AI applications & pipelines', body: 'LLM features following the OWASP Top 10 for LLM Applications, agents with tool access, and the data and model pipeline behind them.' }
+      ],
+      ve: '02 / approach', vh1: 'Agents map it. ', vh2: 'I go in.',
+      vlead: 'AI agents gather in parallel what is publicly discoverable about your systems. Then I take over: targeted, manual and all the way to a verifiable proof. The result is a report your team can act on right away.',
+      vnote: 'The animation follows a real black-box assessment – simplified and anonymised.', net: 'network',
+      res: ['Proof of concept, reproducible at any time', 'A concrete fix for every finding', 'Help closing the gaps'],
+      wk: 'Knowledge', wie: '05 / ai-security', wih: 'More than prompt injection', wilead: 'AI applications inherit the weaknesses of classic software and add their own. Here I explain the most important risks for LLM applications and AI pipelines – briefly, clearly and with a link to the in-depth article.', wmore: 'Read more', wall: 'All AI security topics', wnote: 'Based on the OWASP Top 10 for LLM Applications 2026 and hands-on work with agent workflows.', kg: [['LLM applications', 'Risks in applications built on language models'], ['AI pipelines', 'From the data to the inference endpoint']], wov: ['Topic overview', 'AI security', 'All knowledge articles on risks in LLM applications and AI pipelines. Each entry explains the topic briefly and links to the in-depth article.', '← back to the homepage', 'Read the article', 'Source of the LLM categories:'], kie: '03 / ai-security', kih: 'More than prompt injection',
+      kilead: 'AI features inherit every weakness of classic applications – and add new ones: over-privileged agents, poisoned data, insecure model supply chains. I test the application and the pipeline behind it.',
+      kia: 'Testing AI applications', kiap: 'Following the OWASP Top 10 for LLM Applications 2026', kib: 'Securing AI pipelines', kibp: 'From the data to the inference endpoint – usually on Linux and Kubernetes',
+      pipeline: [
+        { title: 'Data & RAG ingestion', body: 'Who can inject training, fine-tuning or retrieval data? Poisoning and access rights on vector databases.' },
+        { title: 'Model supply chain', body: 'Provenance and integrity of models, weights and dependencies; model registries and unsafe formats.' },
+        { title: 'Agents & tool access', body: 'MCP servers, tool permissions, workflow automation: what can an agent do once it is manipulated?' },
+        { title: 'Inference infrastructure', body: 'Exposed model servers and APIs, isolation on Linux and Kubernetes, resource limits against abuse.' },
+        { title: 'Secrets & keys', body: 'Model provider API keys, credentials in prompts, logs and pipeline variables.' }
+      ],
+      ze: '03 / process', zh: 'From scoping to retest',
+      steps: [
+        { n: '01', title: 'Scoping', body: 'Goals, scope, test type (black, grey or white box) and time window agreed in writing.' },
+        { n: '02', title: 'Testing', body: 'AI-assisted reconnaissance, then manual testing. Critical findings are reported immediately, not just in the report.' },
+        { n: '03', title: 'Report', body: 'Management summary plus technical findings with reproduction steps, PoC and a concrete fix.' },
+        { n: '04', title: 'Retest', body: 'After your fixes I test again and confirm the remediation in writing.' }
+      ],
+      we: '04 / toolbox', wh: 'Knowing Linux from the inside to attack it from the outside',
+      wp: 'I have worked with Linux every day since 2006 – from embedded systems in medical and camera technology to build and development servers and production Kubernetes clusters. I know the systems I attack from the inside: permissions, services, configuration and the usual shortcuts in operations. For reconnaissance and reporting I use my own agent workflows; my lab is fully reproducible, and I train regularly on HackTheBox.',
+      tg: ['offense', 'ai & agents', 'distributions', 'operations & hardening', 'container & cluster', 'embedded linux', 'pipeline security'],
+      ti: ['custom exploits & PoCs', 'own agents', 'own PKI / CA', 'remote debugging & firmware updates', 'secrets management'],
+      de: '06 / responsible disclosure', dh: 'Found a vulnerability?',
+      dp: 'Please report it encrypted. I will confirm receipt and keep you posted on the fix – I know the other side from my own bug bounty days.',
+      dk: ['Contact', 'PGP fingerprint', 'security.txt', 'Languages'],
+      ch: 'What would an attacker find in your systems?', cb: 'Book an initial call →',
+      fi: 'Legal notice', fp: 'Privacy',
+      cv: { handover: 'handover · findings', weak: 'vulnerability?', manual: 'MANUAL', assist: 'AI-ASSISTED · HUMAN REVIEW', ai: 'AI-DRIVEN WITH SUBAGENTS' },
+      depth: ['information gathering', 'information gathering', 'analysis', 'manual testing', 'exploit', 'reporting'],
+      hits: ['subdomains & technologies captured', 'hosts, ports & services mapped', 'suspicious service', 'sql injection + misconfiguration', 'remote code execution', 'report with fixes delivered'],
+      work: ['…', 'anomaly', '500', 'unexpected', 'leak?', 'stacktrace']
+    };
+    const el = {
+      nav: ['Υπηρεσίες', 'Προσέγγιση', 'Συνεργασία', 'Γνώση', 'Disclosure'],
+      focus: 'Εστίαση: υποδομές Linux', loc: 'Γερμανία · remote',
+      h1a: 'Επιτίθεμαι στα συστήματά σας, ', h1b: 'πριν το κάνει κάποιος άλλος.',
+      lead: 'Penetration tests με εστίαση σε υποδομές Linux: servers, containers και Kubernetes – και τις web εφαρμογές που τρέχουν πάνω τους. Αναγνώριση με τη βοήθεια AI, χειροκίνητο βάθος και μια αναφορά με την οποία η ομάδα σας μπορεί να δουλέψει αμέσως.',
+      cta1: 'Ζητήστε pentest', cta2: 'Αναφέρετε ευπάθεια', mailSubject: 'Pentest',
+      pk: ['πιστοποιήσεις', 'μεθοδολογία', 'offensive_από', 'αναφορές'],
+      pv: ['OSCP · SCP Web Application Security', 'Οδηγός pentest BSI · OWASP WSTG', '2019 · bug bounty, disclosure, pentests', 'Γερμανικά · Αγγλικά'],
+      s1e: '01 / υπηρεσίες', s1h: 'Τι ελέγχω',
+      services: [
+        { tag: 'linux · εστίαση', title: 'Linux servers & υποδομή', body: 'Εκτεθειμένες υπηρεσίες, SSH, δικαιώματα sudo και αρχείων, systemd units, κανόνες firewall και privilege escalation – από το shell του επιτιθέμενου μέχρι το root.' },
+        { tag: 'linux · container', title: 'Containers & Kubernetes', body: 'Container escapes, RBAC, network policies, secrets και images: πόσο μακριά φτάνει ένας επιτιθέμενος από ένα παραβιασμένο pod;' },
+        { tag: 'web / api', title: 'Pentest web εφαρμογών & API', body: 'Χειροκίνητος έλεγχος σύμφωνα με το OWASP WSTG: αυθεντικοποίηση, εξουσιοδότηση, έλεγχος εισόδων, injection και επιχειρησιακή λογική.' },
+        { tag: 'εξωτερικά', title: 'Εξωτερική επιφάνεια επίθεσης', body: 'Τι βλέπει ένας επιτιθέμενος απ’ έξω; Subdomains, εκτεθειμένες υπηρεσίες και ξεχασμένα συστήματα – καταγραφή με AI, αξιολόγηση με το χέρι.' },
+        { tag: 'linux · ci/cd', title: 'Pipeline & εφοδιαστική αλυσίδα', body: 'Build runners, secrets, δικαιώματα, container images και εξαρτήσεις: ποιος μπορεί να φέρει τι στην παραγωγή;' },
+        { tag: 'ai', title: 'Εφαρμογές & pipelines AI', body: 'Λειτουργίες LLM σύμφωνα με το OWASP Top 10 for LLM Applications, agents με πρόσβαση σε εργαλεία και το pipeline δεδομένων και μοντέλων πίσω τους.' }
+      ],
+      ve: '02 / προσέγγιση', vh1: 'Οι agents χαρτογραφούν. ', vh2: 'Εγώ μπαίνω μέσα.',
+      vlead: 'AI agents συγκεντρώνουν παράλληλα ό,τι είναι δημόσια διαθέσιμο για τα συστήματά σας. Μετά αναλαμβάνω εγώ: στοχευμένα, χειροκίνητα και μέχρι την επαληθεύσιμη απόδειξη. Στο τέλος υπάρχει μια αναφορά με την οποία η ομάδα σας μπορεί να δουλέψει αμέσως.',
+      vnote: 'Η κινούμενη απεικόνιση βασίζεται σε πραγματικό black-box assessment – απλοποιημένο και ανωνυμοποιημένο.', net: 'δίκτυο',
+      res: ['Proof of concept, αναπαραγώγιμο ανά πάσα στιγμή', 'Συγκεκριμένη διόρθωση για κάθε εύρημα', 'Βοήθεια στο κλείσιμο των κενών'],
+      wk: 'Γνώση', wie: '05 / ασφάλεια-ai', wih: 'Πέρα από το prompt injection', wilead: 'Οι εφαρμογές AI κληρονομούν τις αδυναμίες του κλασικού λογισμικού και φέρνουν και δικές τους. Εδώ εξηγώ τους σημαντικότερους κινδύνους για εφαρμογές LLM και pipelines AI – σύντομα, κατανοητά και με παραπομπή στο αναλυτικό άρθρο.', wmore: 'Διαβάστε περισσότερα', wall: 'Όλα τα θέματα ασφάλειας AI', wnote: 'Βάση: OWASP Top 10 for LLM Applications 2026 και πρακτική εμπειρία με agent workflows.', kg: [['Εφαρμογές LLM', 'Κίνδυνοι σε εφαρμογές με γλωσσικά μοντέλα'], ['Pipelines AI', 'Από τα δεδομένα μέχρι το inference endpoint']], wov: ['Επισκόπηση θεμάτων', 'Ασφάλεια AI', 'Όλα τα άρθρα γνώσης για κινδύνους σε εφαρμογές LLM και pipelines AI. Κάθε θέμα εξηγείται σύντομα και οδηγεί στο αναλυτικό άρθρο.', '← πίσω στην αρχική', 'Στο άρθρο', 'Πηγή των κατηγοριών LLM:'], kie: '03 / ασφάλεια-ai', kih: 'Πέρα από το prompt injection',
+      kilead: 'Οι λειτουργίες AI κληρονομούν όλες τις αδυναμίες των κλασικών εφαρμογών – και φέρνουν καινούργιες: agents με υπερβολικά δικαιώματα, δηλητηριασμένα δεδομένα, ανασφαλείς αλυσίδες εφοδιασμού μοντέλων. Ελέγχω την εφαρμογή και το pipeline πίσω της.',
+      kia: 'Έλεγχος εφαρμογών AI', kiap: 'Με βάση το OWASP Top 10 for LLM Applications 2026', kib: 'Θωράκιση pipelines AI', kibp: 'Από τα δεδομένα μέχρι το inference endpoint – συνήθως σε Linux και Kubernetes',
+      pipeline: [
+        { title: 'Δεδομένα & RAG ingestion', body: 'Ποιος μπορεί να εισαγάγει δεδομένα εκπαίδευσης, fine-tuning ή retrieval; Δηλητηρίαση και δικαιώματα σε vector databases.' },
+        { title: 'Εφοδιαστική αλυσίδα μοντέλων', body: 'Προέλευση και ακεραιότητα μοντέλων, βαρών και εξαρτήσεων· model registries και ανασφαλείς μορφές αρχείων.' },
+        { title: 'Agents & σύνδεση εργαλείων', body: 'MCP servers, δικαιώματα εργαλείων, αυτοματοποίηση ροών: τι μπορεί να κάνει ένας agent όταν χειραγωγηθεί;' },
+        { title: 'Υποδομή inference', body: 'Εκτεθειμένοι model servers και APIs, απομόνωση σε Linux και Kubernetes, όρια πόρων κατά της κατάχρησης.' },
+        { title: 'Secrets & κλειδιά', body: 'API keys παρόχων μοντέλων, διαπιστευτήρια σε prompts, logs και μεταβλητές pipeline.' }
+      ],
+      ze: '03 / συνεργασία', zh: 'Από το scoping μέχρι το retest',
+      steps: [
+        { n: '01', title: 'Scoping', body: 'Στόχοι, εύρος, τύπος ελέγχου (black, grey ή white box) και χρονικό πλαίσιο, γραπτώς συμφωνημένα.' },
+        { n: '02', title: 'Έλεγχος', body: 'Αναγνώριση με τη βοήθεια AI, μετά χειροκίνητος έλεγχος. Τα κρίσιμα ευρήματα τα αναφέρω αμέσως, όχι μόνο στην αναφορά.' },
+        { n: '03', title: 'Αναφορά', body: 'Management summary και τεχνικά ευρήματα με βήματα αναπαραγωγής, PoC και συγκεκριμένη διόρθωση.' },
+        { n: '04', title: 'Retest', body: 'Μετά τις διορθώσεις σας ελέγχω ξανά και επιβεβαιώνω γραπτώς την αποκατάσταση.' }
+      ],
+      we: '04 / εργαλειοθήκη', wh: 'Γνωρίζω το Linux από μέσα, για να του επιτεθώ απ’ έξω',
+      wp: 'Δουλεύω καθημερινά με Linux από το 2006 – από ενσωματωμένα συστήματα σε ιατρική τεχνολογία και τεχνολογία καμερών, μέχρι build και development servers και παραγωγικά Kubernetes clusters. Γνωρίζω από μέσα τα συστήματα στα οποία επιτίθεμαι: δικαιώματα, υπηρεσίες, ρυθμίσεις και τις συνηθισμένες «συντομεύσεις» στη λειτουργία. Για αναγνώριση και αναφορές χρησιμοποιώ δικά μου agent workflows· το lab μου είναι πλήρως αναπαραγώγιμο και εκπαιδεύομαι τακτικά στο HackTheBox.',
+      tg: ['επίθεση', 'ai & agents', 'διανομές', 'λειτουργία & θωράκιση', 'container & cluster', 'embedded linux', 'ασφάλεια pipeline'],
+      ti: ['δικά μου exploits & PoCs', 'δικοί μου agents', 'δική μου PKI / CA', 'remote debugging & firmware updates', 'διαχείριση secrets'],
+      de: '06 / responsible disclosure', dh: 'Βρήκατε ευπάθεια;',
+      dp: 'Αναφέρετέ την κρυπτογραφημένα. Θα επιβεβαιώσω τη λήψη και θα σας ενημερώνω για τη διόρθωση – γνωρίζω την άλλη πλευρά από τη δική μου εμπειρία στο bug bounty.',
+      dk: ['Επικοινωνία', 'PGP fingerprint', 'security.txt', 'Γλώσσες'],
+      ch: 'Τι θα έβρισκε ένας επιτιθέμενος στα συστήματά σας;', cb: 'Κλείστε μια πρώτη συζήτηση →',
+      fi: 'Νομικές πληροφορίες', fp: 'Απόρρητο',
+      cv: { handover: 'παράδοση · ευρήματα', weak: 'ευπάθεια;', manual: 'ΧΕΙΡΟΚΙΝΗΤΑ', assist: 'AI-ASSISTED · HUMAN REVIEW', ai: 'AI-DRIVEN WITH SUBAGENTS' },
+      depth: ['συλλογή πληροφοριών', 'συλλογή πληροφοριών', 'ανάλυση', 'manual testing', 'exploit', 'reporting'],
+      hits: ['subdomains & τεχνολογίες καταγράφηκαν', 'hosts, ports & υπηρεσίες χαρτογραφήθηκαν', 'ύποπτη υπηρεσία', 'sql injection + λάθος ρύθμιση', 'remote code execution', 'αναφορά με διορθώσεις παραδόθηκε'],
+      work: ['…', 'ανωμαλία', '500', 'απρόσμενο', 'leak?', 'stacktrace']
+    };
+    [de, en, el].forEach((L) => { L.tools = tools(L); });
+    return { de: de, en: en, el: el };
+  }
+  T() {
+    if (!this._i18n) this._i18n = this.i18n();
+    return this._i18n[this.state.lang] || this._i18n.de;
+  }
+  renderVals() {
+    const acc = this.props.accent ?? '#268bd2';
+    const red = '#dc322f';
+    const steps = this.attackSteps();
+    const step = this.state.step;
+    const phase = this.state.phase;
+    const cur = steps[step];
+    const last = step === steps.length - 1;
+    const strike = phase === 'strike';
+    const prompts = steps.map((s, i) => {
+      const active = i === step;
+      const shift = i < step ? '-12px' : '12px';
+      const outVisible = active && phase !== 'think';
+      return {
+        title: String(i + 1).padStart(2, '0') + ' · ' + s.depth,
+        mode: s.mode,
+        modeStyle: 'color: ' + (s.agent ? '#8fc0e8' : '#979899'),
+        agents: s.agentNames && !s.report ? '↳ ' + s.agentNames.join(' · ') : '',
+        cmd: active ? s.cmd.slice(0, this.state.chars) : s.cmd,
+        cursor: active && (this.state.chars < s.cmd.length || phase === 'think'),
+        out: '[*] ' + s.log,
+        outStyle: 'font-size: 13px; color: #979899; overflow-wrap: anywhere; transition: opacity .6s ease, transform .6s ease; ' + (outVisible ? 'opacity: 1; transform: none' : 'opacity: 0; transform: translateY(4px)'),
+        showHit: active && strike,
+        hit: '→ ' + s.hit.toLowerCase(),
+        hitStyle: 'font-size: 13px; color: ' + (s.pwn ? '#e8817d' : (s.tag ? '#8fc0e8' : '#c0c1c1')),
+        style: 'position: absolute; left: 0; right: 0; top: 0; display: flex; flex-direction: column; gap: 10px; transition: opacity .8s ease, transform .8s ease, filter .8s ease; ' + (active ? 'opacity: 1; transform: none; filter: none' : 'opacity: 0; pointer-events: none; filter: blur(6px); transform: translateY(' + shift + ')')
+      };
+    });
+    const meter = steps.map((s, i) => {
+      const lit = i < step || (i === step && strike);
+      const c = lit ? (s.pwn ? red : acc) : (i === step ? 'rgba(38, 139, 210, 0.45)' : 'rgba(228, 229, 229, 0.12)');
+      return { style: 'display: inline-block; width: 14px; height: 4px; border-radius: 2px; transition: background .8s ease; background: ' + c };
+    });
+    let label = cur.agent ? (cur.report ? 'drafting report' : 'agents collecting') : 'scanning';
+    if (step === 2 && phase === 'think') label = 'handover · agents → pentester';
+    if (phase === 'work') label = cur.agent ? (cur.report ? 'human review' : 'agents correlating') : 'probing';
+    if (strike) label = cur.pwn ? 'access granted' : (cur.tag ? 'finding confirmed' : 'intel collected');
+    if (strike && last) label = 'engagement closed · report delivered';
+    const dotColor = strike && cur.pwn ? red : acc;
+    const T = this.T();
+    const t = Object.assign({}, T);
+    ['nav', 'pk', 'pv', 'res', 'dk'].forEach((k) => { (T[k] || []).forEach((v, i) => { t[k + i] = v; }); });
+    const langs = [['de', 'DE'], ['en', 'EN'], ['el', 'EL']].map((l) => ({
+      code: l[1], pressed: this.state.lang === l[0] ? 'true' : 'false', pick: () => this.setLang(l[0]),
+      style: "font-family: 'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer; border-radius: 4px; min-height: 32px; min-width: 40px; padding: 0 8px; " + (this.state.lang === l[0] ? 'background: rgba(38, 139, 210, 0.18); color: #e4e5e5; border: 1px solid rgba(38, 139, 210, 0.6)' : 'background: transparent; color: #979899; border: 1px solid transparent')
+    }));
+    return {
+      t: t,
+      langs: langs,
+      kwGroups: (() => {
+        const all = this.topics();
+        const pick = { llm: ['LLM01', 'LLM03', 'LLM05'], pipe: ['PIPE·03', 'PIPE·02', 'PIPE·04'] };
+        return [['llm', 0], ['pipe', 1]].map((g) => ({
+          title: T.kg[g[1]][0], sub: T.kg[g[1]][1],
+          items: pick[g[0]].map((id) => all.find((x) => x.id === id)).map((x) => Object.assign({}, x, { aria: T.wmore + ': ' + x.title }))
+        }));
+      })(),
+      flash: this.state.flash,
+      toggle: this.toggle,
+      canvasRef: this.setCanvas,
+      netRef: this.setNet,
+      netLabel: 'Eindringtiefe ' + (step + 1) + ' von 8',
+      onMove: this.onMove,
+      onLeave: this.onLeave,
+      onDown: this.onDown,
+      prompts: prompts,
+      meter: meter,
+      playText: this.state.playing ? '❚❚ pause' : '▶ play',
+      playLabel: this.state.playing ? 'Animation pausieren' : 'Animation abspielen',
+      resultOpacity: last && strike ? 1 : 0.25,
+      status: {
+        n: step + 1,
+        total: steps.length,
+        label: label,
+        labelColor: strike && cur.pwn ? '#f2706c' : '#e4e5e5',
+        dotCls: 'cx-dot',
+        dot: 'display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: ' + dotColor + '; box-shadow: 0 0 10px ' + dotColor
+      },
+      accent: acc,
+      services: T.services,
+      llm: [
+        { id: 'LLM01', name: 'Prompt Injection' },
+        { id: 'LLM02', name: 'Sensitive Information Disclosure' },
+        { id: 'LLM03', name: 'Excessive Agency' },
+        { id: 'LLM04', name: 'Supply Chain' },
+        { id: 'LLM05', name: 'Data and Model Poisoning' },
+        { id: 'LLM06', name: 'Unbounded Consumption' },
+        { id: 'LLM07', name: 'Misinformation' },
+        { id: 'LLM08', name: 'Hidden Context Exposure' },
+        { id: 'LLM09', name: 'Vector and Embedding Weaknesses' },
+        { id: 'LLM10', name: 'Improper Output Handling' }
+      ],
+      pipeline: T.pipeline,
+      steps: T.steps,
+      toolGroups: T.tools.map((g) => ({ label: g.label, items: g.items, chip: 'border: 1px solid ' + (g.hot ? acc : '#575859') + '; border-radius: 3px; padding: 6px 12px; color: #e4e5e5' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

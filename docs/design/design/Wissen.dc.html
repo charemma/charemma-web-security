@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Wissen – KI-Sicherheit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f8f8f8}
+a{color:#006EC1}a:hover{color:#268bd2}
+</style>
+</helmet>
+<div style="background: #f8f8f8; color: #727272; font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif; font-size: 18px; line-height: 1.6; min-height: 100vh">
+  <header style="background: #2d2e2e; border-bottom: 1px solid #404242">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 20px 24px; display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: center">
+      <a href="Main.dc.html" style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #e4e5e5; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px"><span style="color: #979899">charemma@</span><span>security</span><span style="color: #268bd2; font-weight: 500">:~$</span></a>
+      <span role="group" aria-label="Sprache / Language / Γλώσσα" style="display: flex; gap: 2px">
+        <sc-for list="{{langs}}" as="lg" hint-placeholder-count="3">
+          <button type="button" onClick="{{lg.pick}}" aria-pressed="{{lg.pressed}}" style="{{lg.style}}">{{lg.code}}</button>
+        </sc-for>
+      </span>
+    </div>
+  </header>
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 120px; display: flex; flex-direction: column; gap: 64px">
+    <div style="display: flex; flex-direction: column; gap: 18px; max-width: 760px">
+      <a href="Main.dc.html#wissen" style="font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #006EC1; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; align-self: flex-start">{{t.back}}</a>
+      <span style="display: flex; gap: 12px; align-items: center; font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: #006EC1">
+        <span style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1px solid #006EC1; border-radius: 999px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>{{t.wk}}</span>
+        <span>{{t.over}}</span>
+      </span>
+      <h1 style="margin: 0; font-weight: 900; font-size: clamp(38px, 5vw, 64px); line-height: 1.05; color: #3a3a3a">{{t.title}}</h1>
+      <p style="margin: 0; font-size: 20px; font-weight: 300">{{t.lead}}</p>
+    </div>
+
+    <sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+      <section style="display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; border-bottom: 1px solid #ececec; padding-bottom: 12px">
+          <h2 style="margin: 0; font-weight: 700; font-size: 26px; color: #3a3a3a">{{g.title}}</h2>
+          <span style="font-size: 16px">{{g.sub}}</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #939393">{{g.count}}</span>
+        </div>
+        <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+          <sc-for list="{{g.items}}" as="k" hint-placeholder-count="5">
+            <li style="background: #ffffff; border: 1px solid #ececec; border-radius: 8px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+              <span style="display: flex; justify-content: space-between; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase"><span style="color: #006EC1">{{t.wk}}</span><span style="color: #939393">{{k.id}}</span></span>
+              <h3 style="margin: 0; font-weight: 700; font-size: 19px; line-height: 1.3; color: #3a3a3a">{{k.title}}</h3>
+              <p style="margin: 0; font-size: 16px; flex: 1 1 auto">{{k.body}}</p>
+              <a href="{{k.href}}" aria-label="{{k.aria}}" style="align-self: flex-start; color: #006EC1; font-weight: 700; font-size: 16px; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center">{{t.more}} →</a>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+    </sc-for>
+
+    <p style="margin: 0; font-size: 15px">{{t.src}} <a href="https://genai.owasp.org/home/resources/owasp-genai-llm-top-10-2026/">OWASP Top 10 for LLM Applications 2026</a></p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2600}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    let lang = 'de';
+    try { const nl = ((typeof navigator !== 'undefined' && navigator.language) || 'de').toLowerCase(); lang = nl.indexOf('el') === 0 ? 'el' : (nl.indexOf('de') === 0 ? 'de' : 'en'); } catch (e) {}
+    try { const saved = window.localStorage.getItem('sec-lang'); if (saved === 'de' || saved === 'en' || saved === 'el') lang = saved; } catch (e) {}
+    this.state = { lang: lang };
+    this.setLang = (l) => { this.setState({ lang: l }); try { window.localStorage.setItem('sec-lang', l); } catch (e) {} try { document.documentElement.lang = l; } catch (e) {} };
+  }
+  topics() {
+    const base = 'https://security.charemma.de/wissen/ki-sicherheit/';
+    const t = [
+      { g: 'llm', id: 'LLM01', slug: 'prompt-injection',
+        de: ['Prompt Injection', 'Eingaben – direkt oder versteckt in Dokumenten, Webseiten und E-Mails – bringen ein Modell dazu, seine Anweisungen zu ignorieren oder fremde auszuführen.'],
+        en: ['Prompt injection', 'Inputs – typed directly or hidden in documents, web pages and emails – make a model ignore its instructions or follow someone else’s.'],
+        el: ['Prompt injection', 'Είσοδοι – άμεσα ή κρυμμένες σε έγγραφα, ιστοσελίδες και e-mails – κάνουν ένα μοντέλο να αγνοήσει τις οδηγίες του ή να εκτελέσει ξένες.'] },
+      { g: 'llm', id: 'LLM02', slug: 'sensitive-information-disclosure',
+        de: ['Sensitive Information Disclosure', 'Ein Modell gibt vertrauliche Daten preis – aus Trainingsdaten, dem Gesprächskontext oder angebundenen Systemen.'],
+        en: ['Sensitive information disclosure', 'A model reveals confidential data – from its training data, the conversation context or connected systems.'],
+        el: ['Sensitive information disclosure', 'Ένα μοντέλο αποκαλύπτει εμπιστευτικά δεδομένα – από τα δεδομένα εκπαίδευσης, το πλαίσιο της συνομιλίας ή συνδεδεμένα συστήματα.'] },
+      { g: 'llm', id: 'LLM03', slug: 'excessive-agency',
+        de: ['Excessive Agency', 'Ein Agent darf mehr, als seine Aufgabe verlangt: zu viele Werkzeuge, zu weite Rechte, zu wenig menschliche Bestätigung.'],
+        en: ['Excessive agency', 'An agent can do more than its task requires: too many tools, too broad permissions, too little human confirmation.'],
+        el: ['Excessive agency', 'Ένας agent μπορεί να κάνει περισσότερα απ’ όσα χρειάζεται: πάρα πολλά εργαλεία, υπερβολικά δικαιώματα, ελάχιστη ανθρώπινη επιβεβαίωση.'] },
+      { g: 'llm', id: 'LLM04', slug: 'supply-chain',
+        de: ['Supply Chain', 'Risiken, die über Modelle, Datensätze, Plugins und Bibliotheken von Dritten in eine Anwendung gelangen.'],
+        en: ['Supply chain', 'Risks that enter an application through third-party models, datasets, plugins and libraries.'],
+        el: ['Supply chain', 'Κίνδυνοι που μπαίνουν σε μια εφαρμογή μέσω μοντέλων, datasets, plugins και βιβλιοθηκών τρίτων.'] },
+      { g: 'llm', id: 'LLM05', slug: 'data-and-model-poisoning',
+        de: ['Data and Model Poisoning', 'Manipulierte Trainings-, Fine-Tuning- oder Embedding-Daten verändern das Verhalten eines Modells gezielt.'],
+        en: ['Data and model poisoning', 'Manipulated training, fine-tuning or embedding data deliberately change how a model behaves.'],
+        el: ['Data and model poisoning', 'Παραποιημένα δεδομένα εκπαίδευσης, fine-tuning ή embeddings αλλάζουν σκόπιμα τη συμπεριφορά ενός μοντέλου.'] },
+      { g: 'llm', id: 'LLM06', slug: 'unbounded-consumption',
+        de: ['Unbounded Consumption', 'Ungebremste Anfragen treiben Kosten und Last in die Höhe oder erlauben es, ein Modell systematisch abzugreifen.'],
+        en: ['Unbounded consumption', 'Unthrottled requests drive up cost and load, or allow a model to be systematically extracted.'],
+        el: ['Unbounded consumption', 'Ανεξέλεγκτα αιτήματα ανεβάζουν κόστος και φορτίο ή επιτρέπουν τη συστηματική «αντιγραφή» ενός μοντέλου.'] },
+      { g: 'llm', id: 'LLM07', slug: 'misinformation',
+        de: ['Misinformation', 'Überzeugend formulierte, aber falsche Ausgaben, auf die sich Menschen oder nachgelagerte Systeme verlassen.'],
+        en: ['Misinformation', 'Convincingly worded but wrong output that people or downstream systems rely on.'],
+        el: ['Misinformation', 'Πειστικά διατυπωμένες αλλά λανθασμένες απαντήσεις, στις οποίες βασίζονται άνθρωποι ή άλλα συστήματα.'] },
+      { g: 'llm', id: 'LLM08', slug: 'hidden-context-exposure',
+        de: ['Hidden Context Exposure', 'Verborgene Anweisungen und Kontext – etwa System-Prompts – werden sichtbar und verraten Logik, Regeln oder Geheimnisse.'],
+        en: ['Hidden context exposure', 'Hidden instructions and context – such as system prompts – become visible and reveal logic, rules or secrets.'],
+        el: ['Hidden context exposure', 'Κρυφές οδηγίες και πλαίσιο – π.χ. system prompts – γίνονται ορατά και αποκαλύπτουν λογική, κανόνες ή μυστικά.'] },
+      { g: 'llm', id: 'LLM09', slug: 'vector-and-embedding-weaknesses',
+        de: ['Vector and Embedding Weaknesses', 'Schwachstellen in RAG-Systemen: fehlende Zugriffstrennung, manipulierte oder ausgelesene Vektordaten.'],
+        en: ['Vector and embedding weaknesses', 'Weaknesses in RAG systems: missing access separation, manipulated or extracted vector data.'],
+        el: ['Vector and embedding weaknesses', 'Αδυναμίες σε συστήματα RAG: έλλειψη διαχωρισμού πρόσβασης, παραποιημένα ή διαρρέοντα δεδομένα διανυσμάτων.'] },
+      { g: 'llm', id: 'LLM10', slug: 'improper-output-handling',
+        de: ['Improper Output Handling', 'Modellausgaben werden ungeprüft weiterverarbeitet – etwa als HTML, SQL oder Shell-Befehl – und öffnen klassische Lücken.'],
+        en: ['Improper output handling', 'Model output is processed without validation – as HTML, SQL or a shell command – and reopens classic vulnerabilities.'],
+        el: ['Improper output handling', 'Οι έξοδοι του μοντέλου επεξεργάζονται χωρίς έλεγχο – ως HTML, SQL ή εντολή shell – και ανοίγουν κλασικά κενά.'] },
+      { g: 'pipe', id: 'PIPE·01', slug: 'daten-und-rag-ingestion',
+        de: ['Daten & RAG-Ingestion', 'Wer Trainings-, Fine-Tuning- oder Retrieval-Daten einspielen kann, kann das Verhalten des Systems beeinflussen.'],
+        en: ['Data & RAG ingestion', 'Whoever can feed training, fine-tuning or retrieval data can influence how the system behaves.'],
+        el: ['Δεδομένα & RAG ingestion', 'Όποιος μπορεί να εισαγάγει δεδομένα εκπαίδευσης, fine-tuning ή retrieval μπορεί να επηρεάσει τη συμπεριφορά του συστήματος.'] },
+      { g: 'pipe', id: 'PIPE·02', slug: 'modell-lieferkette',
+        de: ['Modell-Lieferkette', 'Herkunft und Integrität von Modellen, Gewichten und Abhängigkeiten – inklusive Registries und unsicherer Dateiformate.'],
+        en: ['Model supply chain', 'Provenance and integrity of models, weights and dependencies – including registries and unsafe file formats.'],
+        el: ['Εφοδιαστική αλυσίδα μοντέλων', 'Προέλευση και ακεραιότητα μοντέλων, βαρών και εξαρτήσεων – μαζί με registries και ανασφαλείς μορφές αρχείων.'] },
+      { g: 'pipe', id: 'PIPE·03', slug: 'agenten-und-tool-anbindung',
+        de: ['Agenten & Tool-Anbindung', 'MCP-Server, Werkzeugrechte und Automatisierung entscheiden, was ein manipulierter Agent tatsächlich anrichten kann.'],
+        en: ['Agents & tool access', 'MCP servers, tool permissions and automation decide what a manipulated agent can actually do.'],
+        el: ['Agents & σύνδεση εργαλείων', 'MCP servers, δικαιώματα εργαλείων και αυτοματοποίηση καθορίζουν τι μπορεί πραγματικά να κάνει ένας χειραγωγημένος agent.'] },
+      { g: 'pipe', id: 'PIPE·04', slug: 'inferenz-infrastruktur',
+        de: ['Inferenz-Infrastruktur', 'Modell-Server und APIs sind Dienste wie andere auch: exponiert, oft schwach isoliert, selten mit Ressourcenlimits.'],
+        en: ['Inference infrastructure', 'Model servers and APIs are services like any other: exposed, often weakly isolated, rarely rate-limited.'],
+        el: ['Υποδομή inference', 'Οι model servers και τα APIs είναι υπηρεσίες όπως όλες: εκτεθειμένες, συχνά με αδύναμη απομόνωση, σπάνια με όρια πόρων.'] },
+      { g: 'pipe', id: 'PIPE·05', slug: 'secrets-und-schluessel',
+        de: ['Secrets & Schlüssel', 'API-Keys von Modellanbietern und Zugangsdaten landen leicht in Prompts, Logs und Pipeline-Variablen.'],
+        en: ['Secrets & keys', 'Model provider API keys and credentials easily end up in prompts, logs and pipeline variables.'],
+        el: ['Secrets & κλειδιά', 'API keys παρόχων μοντέλων και διαπιστευτήρια καταλήγουν εύκολα σε prompts, logs και μεταβλητές pipeline.'] }
+    ];
+    const lang = this.state.lang || 'de';
+    return t.map((x) => ({ g: x.g, id: x.id, slug: x.slug, href: base + x.slug, title: (x[lang] || x.de)[0], body: (x[lang] || x.de)[1] }));
+  }
+  texts() {
+    return {
+      de: { wk: 'Wissen', over: 'Themenübersicht', title: 'KI-Sicherheit', lead: 'Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines. Jeder Eintrag erklärt das Thema kurz und führt zur ausführlichen Fachseite.', back: '← zurück zur Startseite', more: 'Zur Fachseite', src: 'Quelle der LLM-Kategorien:', g: [['LLM-Anwendungen', 'Risiken in Anwendungen mit Sprachmodellen'], ['KI-Pipelines', 'Von den Daten bis zum Inferenz-Endpunkt']], n: 'Themen' },
+      en: { wk: 'Knowledge', over: 'Topic overview', title: 'AI security', lead: 'All knowledge articles on risks in LLM applications and AI pipelines. Each entry explains the topic briefly and links to the in-depth article.', back: '← back to the homepage', more: 'Read the article', src: 'Source of the LLM categories:', g: [['LLM applications', 'Risks in applications built on language models'], ['AI pipelines', 'From the data to the inference endpoint']], n: 'topics' },
+      el: { wk: 'Γνώση', over: 'Επισκόπηση θεμάτων', title: 'Ασφάλεια AI', lead: 'Όλα τα άρθρα γνώσης για κινδύνους σε εφαρμογές LLM και pipelines AI. Κάθε θέμα εξηγείται σύντομα και οδηγεί στο αναλυτικό άρθρο.', back: '← πίσω στην αρχική', more: 'Στο άρθρο', src: 'Πηγή των κατηγοριών LLM:', g: [['Εφαρμογές LLM', 'Κίνδυνοι σε εφαρμογές με γλωσσικά μοντέλα'], ['Pipelines AI', 'Από τα δεδομένα μέχρι το inference endpoint']], n: 'θέματα' }
+    };
+  }
+  renderVals() {
+    const T = this.texts()[this.state.lang] || this.texts().de;
+    const all = this.topics();
+    const groups = [['llm', 0], ['pipe', 1]].map((g) => {
+      const items = all.filter((x) => x.g === g[0]).map((x) => Object.assign({}, x, { aria: T.more + ': ' + x.title }));
+      return { title: T.g[g[1]][0], sub: T.g[g[1]][1], count: items.length + ' ' + T.n, items: items };
+    });
+    const langs = [['de', 'DE'], ['en', 'EN'], ['el', 'EL']].map((l) => ({
+      code: l[1], pressed: this.state.lang === l[0] ? 'true' : 'false', pick: () => this.setLang(l[0]),
+      style: "font-family: 'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer; border-radius: 4px; min-height: 32px; min-width: 40px; padding: 0 8px; " + (this.state.lang === l[0] ? 'background: rgba(38, 139, 210, 0.18); color: #e4e5e5; border: 1px solid rgba(38, 139, 210, 0.6)' : 'background: transparent; color: #979899; border: 1px solid transparent')
+    }));
+    return { t: T, groups: groups, langs: langs };
+  }
+}
+</script>
+</body>
+</html>
