@@ -1,0 +1,272 @@
+[
+  {
+    "id": "LLM01",
+    "group": "llm",
+    "slug": "prompt-injection",
+    "published": false,
+    "de": {
+      "title": "Prompt Injection",
+      "body": "Eingaben – direkt oder versteckt in Dokumenten, Webseiten und E-Mails – bringen ein Modell dazu, seine Anweisungen zu ignorieren oder fremde auszuführen."
+    },
+    "en": {
+      "title": "Prompt injection",
+      "body": "Inputs – typed directly or hidden in documents, web pages and emails – make a model ignore its instructions or follow someone else’s."
+    },
+    "el": {
+      "title": "Prompt injection",
+      "body": "Είσοδοι – άμεσα ή κρυμμένες σε έγγραφα, ιστοσελίδες και e-mails – κάνουν ένα μοντέλο να αγνοήσει τις οδηγίες του ή να εκτελέσει ξένες."
+    }
+  },
+  {
+    "id": "LLM02",
+    "group": "llm",
+    "slug": "sensitive-information-disclosure",
+    "published": false,
+    "de": {
+      "title": "Sensitive Information Disclosure",
+      "body": "Ein Modell gibt vertrauliche Daten preis – aus Trainingsdaten, dem Gesprächskontext oder angebundenen Systemen."
+    },
+    "en": {
+      "title": "Sensitive information disclosure",
+      "body": "A model reveals confidential data – from its training data, the conversation context or connected systems."
+    },
+    "el": {
+      "title": "Sensitive information disclosure",
+      "body": "Ένα μοντέλο αποκαλύπτει εμπιστευτικά δεδομένα – από τα δεδομένα εκπαίδευσης, το πλαίσιο της συνομιλίας ή συνδεδεμένα συστήματα."
+    }
+  },
+  {
+    "id": "LLM03",
+    "group": "llm",
+    "slug": "excessive-agency",
+    "published": false,
+    "de": {
+      "title": "Excessive Agency",
+      "body": "Ein Agent darf mehr, als seine Aufgabe verlangt: zu viele Werkzeuge, zu weite Rechte, zu wenig menschliche Bestätigung."
+    },
+    "en": {
+      "title": "Excessive agency",
+      "body": "An agent can do more than its task requires: too many tools, too broad permissions, too little human confirmation."
+    },
+    "el": {
+      "title": "Excessive agency",
+      "body": "Ένας agent μπορεί να κάνει περισσότερα απ’ όσα χρειάζεται: πάρα πολλά εργαλεία, υπερβολικά δικαιώματα, ελάχιστη ανθρώπινη επιβεβαίωση."
+    }
+  },
+  {
+    "id": "LLM04",
+    "group": "llm",
+    "slug": "supply-chain",
+    "published": false,
+    "de": {
+      "title": "Supply Chain",
+      "body": "Risiken, die über Modelle, Datensätze, Plugins und Bibliotheken von Dritten in eine Anwendung gelangen."
+    },
+    "en": {
+      "title": "Supply chain",
+      "body": "Risks that enter an application through third-party models, datasets, plugins and libraries."
+    },
+    "el": {
+      "title": "Supply chain",
+      "body": "Κίνδυνοι που μπαίνουν σε μια εφαρμογή μέσω μοντέλων, datasets, plugins και βιβλιοθηκών τρίτων."
+    }
+  },
+  {
+    "id": "LLM05",
+    "group": "llm",
+    "slug": "data-and-model-poisoning",
+    "published": false,
+    "de": {
+      "title": "Data and Model Poisoning",
+      "body": "Manipulierte Trainings-, Fine-Tuning- oder Embedding-Daten verändern das Verhalten eines Modells gezielt."
+    },
+    "en": {
+      "title": "Data and model poisoning",
+      "body": "Manipulated training, fine-tuning or embedding data deliberately change how a model behaves."
+    },
+    "el": {
+      "title": "Data and model poisoning",
+      "body": "Παραποιημένα δεδομένα εκπαίδευσης, fine-tuning ή embeddings αλλάζουν σκόπιμα τη συμπεριφορά ενός μοντέλου."
+    }
+  },
+  {
+    "id": "LLM06",
+    "group": "llm",
+    "slug": "unbounded-consumption",
+    "published": false,
+    "de": {
+      "title": "Unbounded Consumption",
+      "body": "Ungebremste Anfragen treiben Kosten und Last in die Höhe oder erlauben es, ein Modell systematisch abzugreifen."
+    },
+    "en": {
+      "title": "Unbounded consumption",
+      "body": "Unthrottled requests drive up cost and load, or allow a model to be systematically extracted."
+    },
+    "el": {
+      "title": "Unbounded consumption",
+      "body": "Ανεξέλεγκτα αιτήματα ανεβάζουν κόστος και φορτίο ή επιτρέπουν τη συστηματική «αντιγραφή» ενός μοντέλου."
+    }
+  },
+  {
+    "id": "LLM07",
+    "group": "llm",
+    "slug": "misinformation",
+    "published": false,
+    "de": {
+      "title": "Misinformation",
+      "body": "Überzeugend formulierte, aber falsche Ausgaben, auf die sich Menschen oder nachgelagerte Systeme verlassen."
+    },
+    "en": {
+      "title": "Misinformation",
+      "body": "Convincingly worded but wrong output that people or downstream systems rely on."
+    },
+    "el": {
+      "title": "Misinformation",
+      "body": "Πειστικά διατυπωμένες αλλά λανθασμένες απαντήσεις, στις οποίες βασίζονται άνθρωποι ή άλλα συστήματα."
+    }
+  },
+  {
+    "id": "LLM08",
+    "group": "llm",
+    "slug": "hidden-context-exposure",
+    "published": false,
+    "de": {
+      "title": "Hidden Context Exposure",
+      "body": "Verborgene Anweisungen und Kontext – etwa System-Prompts – werden sichtbar und verraten Logik, Regeln oder Geheimnisse."
+    },
+    "en": {
+      "title": "Hidden context exposure",
+      "body": "Hidden instructions and context – such as system prompts – become visible and reveal logic, rules or secrets."
+    },
+    "el": {
+      "title": "Hidden context exposure",
+      "body": "Κρυφές οδηγίες και πλαίσιο – π.χ. system prompts – γίνονται ορατά και αποκαλύπτουν λογική, κανόνες ή μυστικά."
+    }
+  },
+  {
+    "id": "LLM09",
+    "group": "llm",
+    "slug": "vector-and-embedding-weaknesses",
+    "published": false,
+    "de": {
+      "title": "Vector and Embedding Weaknesses",
+      "body": "Schwachstellen in RAG-Systemen: fehlende Zugriffstrennung, manipulierte oder ausgelesene Vektordaten."
+    },
+    "en": {
+      "title": "Vector and embedding weaknesses",
+      "body": "Weaknesses in RAG systems: missing access separation, manipulated or extracted vector data."
+    },
+    "el": {
+      "title": "Vector and embedding weaknesses",
+      "body": "Αδυναμίες σε συστήματα RAG: έλλειψη διαχωρισμού πρόσβασης, παραποιημένα ή διαρρέοντα δεδομένα διανυσμάτων."
+    }
+  },
+  {
+    "id": "LLM10",
+    "group": "llm",
+    "slug": "improper-output-handling",
+    "published": false,
+    "de": {
+      "title": "Improper Output Handling",
+      "body": "Modellausgaben werden ungeprüft weiterverarbeitet – etwa als HTML, SQL oder Shell-Befehl – und öffnen klassische Lücken."
+    },
+    "en": {
+      "title": "Improper output handling",
+      "body": "Model output is processed without validation – as HTML, SQL or a shell command – and reopens classic vulnerabilities."
+    },
+    "el": {
+      "title": "Improper output handling",
+      "body": "Οι έξοδοι του μοντέλου επεξεργάζονται χωρίς έλεγχο – ως HTML, SQL ή εντολή shell – και ανοίγουν κλασικά κενά."
+    }
+  },
+  {
+    "id": "PIPE·01",
+    "group": "pipe",
+    "slug": "daten-und-rag-ingestion",
+    "published": false,
+    "de": {
+      "title": "Daten & RAG-Ingestion",
+      "body": "Wer Trainings-, Fine-Tuning- oder Retrieval-Daten einspielen kann, kann das Verhalten des Systems beeinflussen."
+    },
+    "en": {
+      "title": "Data & RAG ingestion",
+      "body": "Whoever can feed training, fine-tuning or retrieval data can influence how the system behaves."
+    },
+    "el": {
+      "title": "Δεδομένα & RAG ingestion",
+      "body": "Όποιος μπορεί να εισαγάγει δεδομένα εκπαίδευσης, fine-tuning ή retrieval μπορεί να επηρεάσει τη συμπεριφορά του συστήματος."
+    }
+  },
+  {
+    "id": "PIPE·02",
+    "group": "pipe",
+    "slug": "modell-lieferkette",
+    "published": false,
+    "de": {
+      "title": "Modell-Lieferkette",
+      "body": "Herkunft und Integrität von Modellen, Gewichten und Abhängigkeiten – inklusive Registries und unsicherer Dateiformate."
+    },
+    "en": {
+      "title": "Model supply chain",
+      "body": "Provenance and integrity of models, weights and dependencies – including registries and unsafe file formats."
+    },
+    "el": {
+      "title": "Εφοδιαστική αλυσίδα μοντέλων",
+      "body": "Προέλευση και ακεραιότητα μοντέλων, βαρών και εξαρτήσεων – μαζί με registries και ανασφαλείς μορφές αρχείων."
+    }
+  },
+  {
+    "id": "PIPE·03",
+    "group": "pipe",
+    "slug": "agenten-und-tool-anbindung",
+    "published": false,
+    "de": {
+      "title": "Agenten & Tool-Anbindung",
+      "body": "MCP-Server, Werkzeugrechte und Automatisierung entscheiden, was ein manipulierter Agent tatsächlich anrichten kann."
+    },
+    "en": {
+      "title": "Agents & tool access",
+      "body": "MCP servers, tool permissions and automation decide what a manipulated agent can actually do."
+    },
+    "el": {
+      "title": "Agents & σύνδεση εργαλείων",
+      "body": "MCP servers, δικαιώματα εργαλείων και αυτοματοποίηση καθορίζουν τι μπορεί πραγματικά να κάνει ένας χειραγωγημένος agent."
+    }
+  },
+  {
+    "id": "PIPE·04",
+    "group": "pipe",
+    "slug": "inferenz-infrastruktur",
+    "published": false,
+    "de": {
+      "title": "Inferenz-Infrastruktur",
+      "body": "Modell-Server und APIs sind Dienste wie andere auch: exponiert, oft schwach isoliert, selten mit Ressourcenlimits."
+    },
+    "en": {
+      "title": "Inference infrastructure",
+      "body": "Model servers and APIs are services like any other: exposed, often weakly isolated, rarely rate-limited."
+    },
+    "el": {
+      "title": "Υποδομή inference",
+      "body": "Οι model servers και τα APIs είναι υπηρεσίες όπως όλες: εκτεθειμένες, συχνά με αδύναμη απομόνωση, σπάνια με όρια πόρων."
+    }
+  },
+  {
+    "id": "PIPE·05",
+    "group": "pipe",
+    "slug": "secrets-und-schluessel",
+    "published": false,
+    "de": {
+      "title": "Secrets & Schlüssel",
+      "body": "API-Keys von Modellanbietern und Zugangsdaten landen leicht in Prompts, Logs und Pipeline-Variablen."
+    },
+    "en": {
+      "title": "Secrets & keys",
+      "body": "Model provider API keys and credentials easily end up in prompts, logs and pipeline variables."
+    },
+    "el": {
+      "title": "Secrets & κλειδιά",
+      "body": "API keys παρόχων μοντέλων και διαπιστευτήρια καταλήγουν εύκολα σε prompts, logs και μεταβλητές pipeline."
+    }
+  }
+]

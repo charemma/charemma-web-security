@@ -1,0 +1,44 @@
+{% extends "base.html.j2" %}
+{% block title %}{{ t.meta.overview_title }}{% endblock %}
+{% block description %}{{ t.meta.overview_description }}{% endblock %}
+{% block body_class %}page-light{% endblock %}
+{% block nav_links %}{% endblock %}
+{% block main %}
+    <div class="overview container">
+      <div class="overview__head">
+        <a class="overview__back" href="{{ home_href }}#wissen">{{ t.overview.back }}</a>
+        <span class="knowledge__eyebrow">
+          <span class="pill">{% include "book-icon.svg.j2" %}{{ t.knowledge.badge }}</span>
+          <span>{{ t.overview.eyebrow }}</span>
+        </span>
+        <h1 class="overview__title">{{ t.overview.title }}</h1>
+        <p class="overview__lead">{{ t.overview.lead }}</p>
+      </div>
+
+      {%- for group in knowledge_groups %}
+      <section class="overview__group">
+        <div class="topic-group__head">
+          <h2 class="topic-group__title topic-group__title--lg">{{ group.title }}</h2>
+          <span class="topic-group__sub">{{ group.sub }}</span>
+          <span class="topic-group__count">{{ group["items"] | length }} {{ t.overview.count }}</span>
+        </div>
+        <ul class="topic-grid">
+          {%- for topic in group["items"] %}
+          <li class="topic-card" id="{{ topic.slug }}">
+            <span class="topic-card__meta"><span class="topic-card__badge">{{ t.knowledge.badge }}</span><span class="topic-card__id">{{ topic.id }}</span></span>
+            <h3 class="topic-card__title">{{ topic.title }}</h3>
+            <p class="topic-card__body">{{ topic.body }}</p>
+            {%- if topic.published %}
+            <a class="topic-card__link" href="{{ topic.href }}" aria-label="{{ t.overview.more }}: {{ topic.title }}">{{ t.overview.more }} →</a>
+            {%- else %}
+            <span class="topic-card__upcoming">{{ t.overview.upcoming }}</span>
+            {%- endif %}
+          </li>
+          {%- endfor %}
+        </ul>
+      </section>
+      {%- endfor %}
+
+      <p class="overview__source">{{ t.overview.source }} <a href="{{ site.knowledge.source.url }}">{{ site.knowledge.source.label }}</a></p>
+    </div>
+{% endblock %}

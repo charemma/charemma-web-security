@@ -1,0 +1,58 @@
+{
+  "steps": [
+    {
+      "mode": "ai-driven",
+      "cmd": "ai-recon start --scope \"*.[redacted].de\" --agents osint,dns-enum",
+      "log": "osint: tech stack · public docs · repos   dns-enum: subdomains · records",
+      "agent": true,
+      "agentNames": [
+        "osint",
+        "dns-enum"
+      ]
+    },
+    {
+      "mode": "ai-driven",
+      "cmd": "ai-recon add --agents port-scanning,service-discovery",
+      "log": "port-scanning: open ports   service-discovery: banners · versions · tech",
+      "agent": true,
+      "agentNames": [
+        "osint",
+        "dns-enum",
+        "port-scanning",
+        "service-discovery"
+      ]
+    },
+    {
+      "mode": "manuell · übernahme",
+      "cmd": "ai-recon brief --to me && nmap -sV -sC -p 8443 $SUSPECT",
+      "log": "findings übernommen · verdächtigen dienst gezielt prüfen",
+      "tag": "vulnerable"
+    },
+    {
+      "mode": "manuell",
+      "cmd": "burpsuite --project-file=engagement.burp",
+      "log": "auth · inputs · business logic · by hand",
+      "pwn": true,
+      "tag": "injected"
+    },
+    {
+      "mode": "manuell",
+      "cmd": "python3 poc.py --target svc.[redacted].de",
+      "log": "custom proof of concept · reproducible",
+      "pwn": true,
+      "tag": "pwned"
+    },
+    {
+      "mode": "ai-assisted · human review",
+      "cmd": "ai-report draft --findings ./loot && review",
+      "log": "agent drafts · every finding verified by hand",
+      "agent": true,
+      "assist": true,
+      "report": true,
+      "tag": "report",
+      "agentNames": [
+        "report"
+      ]
+    }
+  ]
+}

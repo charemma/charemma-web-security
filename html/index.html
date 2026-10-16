@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penetrationstests für Linux-Infrastruktur · Charalambos Emmanouilidis</title>
+  <meta name="description" content="Penetrationstests mit Schwerpunkt auf Linux-Infrastrukturen: Server, Container und Kubernetes, dazu die Webanwendungen, die darauf laufen.">
+  <link rel="canonical" href="https://security.charemma.de/">
+  <link rel="alternate" hreflang="de" href="https://security.charemma.de/">
+  <link rel="alternate" hreflang="x-default" href="https://security.charemma.de/">
+  <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js"></script>
+  <script type="module" src="/assets/js/engagement.js"></script>
+</head>
+<body class="page-dark">
+  <div class="site-header-bar">
+    <header class="site-header">
+      <a class="brand" href="/#top"><span class="brand__user">charemma@</span><span>security</span><span class="brand__prompt">:~$</span></a>
+      <nav class="site-nav" aria-label="Hauptnavigation">
+        <a href="/#leistungen">Leistungen</a>
+        <a href="/#fallbeispiel">Vorgehen</a>
+        <a href="/#ablauf">Zusammenarbeit</a>
+        <a href="/#wissen">Wissen</a>
+        <span class="lang-switch" role="group" aria-label="Sprache / Language / Γλώσσα">
+          <a href="/" hreflang="de" lang="de" data-lang="de" aria-current="true">DE</a>
+        </span>
+      </nav>
+    </header>
+  </div>
+
+  <main>
+    <section id="top" class="hero container">
+      <div class="hero__meta mono">
+        <span><span class="accent" aria-hidden="true">●</span> Charalambos Emmanouilidis · OSCP</span>
+        <span>Schwerpunkt Linux-Infrastruktur</span>
+        <span>Deutschland · remote</span>
+      </div>
+      <h1 class="hero__title">Ich greife Ihre Systeme an, <span class="hero__title-accent">bevor es jemand anders tut.</span></h1>
+      <p class="hero__lead">Penetrationstests mit Schwerpunkt auf Linux-Infrastrukturen: Server, Container und Kubernetes – und die Webanwendungen, die darauf laufen. KI-gestützte Aufklärung, manuelle Tiefe und ein Bericht, mit dem Ihr Team direkt arbeiten kann.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Penetrationstest%20anfragen">Pentest anfragen</a>
+      </div>
+    </section>
+
+    <section class="profile" aria-label="Kurzprofil">
+      <dl class="profile__grid container mono">
+        <div class="profile__item"><dt>zertifikate</dt><dd>OSCP · SCP Web Application Security</dd></div>
+        <div class="profile__item"><dt>methodik</dt><dd>BSI IS-Pentest-Leitfaden · OWASP WSTG</dd></div>
+        <div class="profile__item"><dt>offensiv_seit</dt><dd>2019 · Bug Bounty, Disclosure, Pentests</dd></div>
+        <div class="profile__item"><dt>berichte</dt><dd>Deutsch · Englisch</dd></div>
+      </dl>
+    </section>
+
+    <section id="leistungen" class="services container">
+      <div class="section-head">
+        <span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>01 / leistungen</span>
+        <h2 class="section-title">Was ich teste</h2>
+      </div>
+      <div class="services__grid">
+        <article class="service">
+          <span class="service__tag">linux · schwerpunkt</span>
+          <h3 class="service__title">Linux-Server &amp; Infrastruktur</h3>
+          <p class="service__body">Exponierte Dienste, SSH, sudo- und Dateirechte, systemd-Units, Firewall-Regeln und Privilege Escalation – vom Angreifer mit Shell bis root.</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">linux · container</span>
+          <h3 class="service__title">Container &amp; Kubernetes</h3>
+          <p class="service__body">Container-Ausbrüche, RBAC, NetworkPolicies, Secrets und Images: Wie weit kommt ein Angreifer aus einem kompromittierten Pod?</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">web / api</span>
+          <h3 class="service__title">Web-Application- &amp; API-Pentest</h3>
+          <p class="service__body">Manuelle Prüfung nach OWASP WSTG: Authentifizierung, Autorisierung, Eingabevalidierung, Injection und Business-Logik.</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">extern</span>
+          <h3 class="service__title">Externe Angriffsfläche</h3>
+          <p class="service__body">Was sieht ein Angreifer von außen? Subdomains, exponierte Dienste und vergessene Systeme – KI-gestützt erfasst, manuell bewertet.</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">linux · ci/cd</span>
+          <h3 class="service__title">Pipeline &amp; Lieferkette</h3>
+          <p class="service__body">Build-Runner, Secrets, Berechtigungen, Container-Images und Abhängigkeiten: Wer kann was in Produktion bringen?</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">ai</span>
+          <h3 class="service__title">KI-Anwendungen &amp; -Pipelines</h3>
+          <p class="service__body">LLM-Features nach OWASP Top 10 for LLM Applications, Agenten mit Werkzeugzugriff sowie die Daten- und Modell-Pipeline dahinter.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fallbeispiel" class="approach">
+      <div class="approach__intro container">
+        <div class="approach__head">
+          <span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>02 / vorgehen</span>
+          <h2 class="section-title">Agenten kartieren. <span class="accent">Ich gehe rein.</span></h2>
+        </div>
+        <div class="approach__text">
+          <p class="approach__lead">KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.</p>
+          <p class="approach__note">Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.</p>
+        </div>
+      </div>
+
+      <div class="cx-band">
+        <div class="cx-stage" data-engagement>
+          <script type="application/json" data-engagement-data>{"steps": [{"agent": true, "agentNames": ["osint", "dns-enum"], "cmd": "ai-recon start --scope \"*.[redacted].de\" --agents osint,dns-enum", "depth": "informationsbeschaffung", "hit": "subdomains \u0026 technologien erfasst", "log": "osint: tech stack \u00b7 public docs \u00b7 repos   dns-enum: subdomains \u00b7 records", "mode": "ai-driven"}, {"agent": true, "agentNames": ["osint", "dns-enum", "port-scanning", "service-discovery"], "cmd": "ai-recon add --agents port-scanning,service-discovery", "depth": "informationsbeschaffung", "hit": "hosts, ports \u0026 dienste kartiert", "log": "port-scanning: open ports   service-discovery: banners \u00b7 versions \u00b7 tech", "mode": "ai-driven"}, {"cmd": "ai-recon brief --to me \u0026\u0026 nmap -sV -sC -p 8443 $SUSPECT", "depth": "analyse", "hit": "verd\u00e4chtiger dienst", "log": "findings \u00fcbernommen \u00b7 verd\u00e4chtigen dienst gezielt pr\u00fcfen", "mode": "manuell \u00b7 \u00fcbernahme", "tag": "vulnerable"}, {"cmd": "burpsuite --project-file=engagement.burp", "depth": "manual testing", "hit": "sql-injection + fehlkonfiguration", "log": "auth \u00b7 inputs \u00b7 business logic \u00b7 by hand", "mode": "manuell", "pwn": true, "tag": "injected"}, {"cmd": "python3 poc.py --target svc.[redacted].de", "depth": "exploit", "hit": "remote code execution", "log": "custom proof of concept \u00b7 reproducible", "mode": "manuell", "pwn": true, "tag": "pwned"}, {"agent": true, "agentNames": ["report"], "assist": true, "cmd": "ai-report draft --findings ./loot \u0026\u0026 review", "depth": "reporting", "hit": "bericht mit fixes \u00fcbergeben", "log": "agent drafts \u00b7 every finding verified by hand", "mode": "ai-assisted \u00b7 human review", "report": true, "tag": "report"}], "texts": {"cv": {"ai": "AI-DRIVEN WITH SUBAGENTS", "assist": "AI-ASSISTED \u00b7 HUMAN REVIEW", "handover": "\u00fcbergabe \u00b7 findings", "manual": "MANUELL", "weak": "schwachstelle?"}, "meter_label": "Phase {n} von {total}", "work": ["\u2026", "anomalie", "500", "unerwartet", "leak?", "stacktrace"]}}</script>
+          <div class="cx-canvas-wrap" data-canvas-wrap>
+            <canvas class="cx-canvas" data-canvas aria-hidden="true"></canvas>
+          </div>
+          <div class="cx-flash" data-flash aria-hidden="true" hidden></div>
+
+          <div class="cx-glass">
+            <div class="cx-status">
+              <span class="cx-status__label"><span class="cx-dot" data-status-dot aria-hidden="true"></span><span data-status-label>agents collecting</span></span>
+              <span class="cx-status__progress">
+                <span class="cx-meter" role="img" data-meter aria-label="Phase 1 von 6">
+                  <span class="cx-meter__seg is-current" data-meter-seg></span>
+                  <span class="cx-meter__seg" data-meter-seg></span>
+                  <span class="cx-meter__seg" data-meter-seg></span>
+                  <span class="cx-meter__seg" data-meter-seg></span>
+                  <span class="cx-meter__seg" data-meter-seg></span>
+                  <span class="cx-meter__seg" data-meter-seg></span>
+                </span>
+                <span data-status-count>1/6</span>
+              </span>
+            </div>
+
+            <div class="cx-console" role="log" aria-label="Konsole">
+              <div class="cx-prompt is-active" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon start --scope &#34;*.[redacted].de&#34; --agents osint,dns-enum</span><span class="cx-cursor" data-cursor aria-hidden="true">▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] osint: tech stack · public docs · repos   dns-enum: subdomains · records</span>
+                <span class="cx-prompt__hit" data-hit hidden>→ subdomains &amp; technologien erfasst</span>
+              </div>
+              <div class="cx-prompt" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon add --agents port-scanning,service-discovery</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] port-scanning: open ports   service-discovery: banners · versions · tech</span>
+                <span class="cx-prompt__hit" data-hit hidden>→ hosts, ports &amp; dienste kartiert</span>
+              </div>
+              <div class="cx-prompt" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon brief --to me &amp;&amp; nmap -sV -sC -p 8443 $SUSPECT</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] findings übernommen · verdächtigen dienst gezielt prüfen</span>
+                <span class="cx-prompt__hit is-tag" data-hit hidden>→ verdächtiger dienst</span>
+              </div>
+              <div class="cx-prompt" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>burpsuite --project-file=engagement.burp</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] auth · inputs · business logic · by hand</span>
+                <span class="cx-prompt__hit is-pwn" data-hit hidden>→ sql-injection + fehlkonfiguration</span>
+              </div>
+              <div class="cx-prompt" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>python3 poc.py --target svc.[redacted].de</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] custom proof of concept · reproducible</span>
+                <span class="cx-prompt__hit is-pwn" data-hit hidden>→ remote code execution</span>
+              </div>
+              <div class="cx-prompt" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-report draft --findings ./loot &amp;&amp; review</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] agent drafts · every finding verified by hand</span>
+                <span class="cx-prompt__hit is-tag" data-hit hidden>→ bericht mit fixes übergeben</span>
+              </div>
+            </div>
+
+            <div class="cx-divider"></div>
+            <div class="cx-net-label">netzwerk</div>
+            <div class="cx-net">
+              <canvas class="cx-canvas" data-net aria-hidden="true"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="approach__results container" data-results>
+        <span><span class="accent" aria-hidden="true">✓</span> Proof of Concept, jederzeit reproduzierbar</span>
+        <span><span class="accent" aria-hidden="true">✓</span> Für jeden Fund ein konkreter Fix</span>
+        <span><span class="accent" aria-hidden="true">✓</span> Hilfe beim Schließen der Lücken</span>
+      </div>
+    </section>
+
+    <section id="ablauf" class="process">
+      <div class="process__inner container">
+        <div class="section-head">
+          <span class="eyebrow eyebrow--light">03 / zusammenarbeit</span>
+          <h2 class="section-title section-title--light">Vom Scoping bis zum Retest</h2>
+        </div>
+        <ol class="process__steps">
+          <li class="process__step">
+            <span class="process__n">01</span>
+            <h3 class="process__title">Scoping</h3>
+            <p class="process__body">Ziele, Umfang, Testart (Black-, Grey- oder White-Box) und Zeitfenster schriftlich festgelegt.</p>
+          </li>
+          <li class="process__step">
+            <span class="process__n">02</span>
+            <h3 class="process__title">Test</h3>
+            <p class="process__body">KI-gestützte Aufklärung, dann manuelle Prüfung. Kritische Funde melde ich sofort, nicht erst im Bericht.</p>
+          </li>
+          <li class="process__step">
+            <span class="process__n">03</span>
+            <h3 class="process__title">Bericht</h3>
+            <p class="process__body">Management-Summary plus technische Findings mit Reproduktionsschritten, PoC und konkreter Behebung.</p>
+          </li>
+          <li class="process__step">
+            <span class="process__n">04</span>
+            <h3 class="process__title">Retest</h3>
+            <p class="process__body">Nach Ihren Fixes prüfe ich erneut und bestätige die Behebung schriftlich.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="toolbox container" aria-labelledby="warum">
+      <div class="toolbox__intro">
+        <span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>04 / werkzeugkasten</span>
+        <h2 id="warum" class="section-title">Linux von innen kennen, um es von außen anzugreifen</h2>
+        <p class="toolbox__lead">Seit 2006 arbeite ich täglich mit Linux – von Embedded-Systemen in Medizin- und Kameratechnik über Build- und Entwicklungsserver bis zum produktiven Kubernetes-Cluster. Ich kenne die Systeme, die ich angreife, von innen: Rechte, Dienste, Konfiguration und die typischen Abkürzungen im Betrieb. Für Aufklärung und Berichte setze ich eigene Agenten-Workflows ein; mein Lab ist reproduzierbar aufgebaut, trainiert wird regelmäßig auf HackTheBox.</p>
+      </div>
+      <div class="toolbox__groups">
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">angriff</h3>
+          <ul class="toolbox__items">
+            <li class="chip chip--hot">Burp Suite</li>
+            <li class="chip chip--hot">OWASP ZAP</li>
+            <li class="chip chip--hot">mitmproxy</li>
+            <li class="chip chip--hot">nmap</li>
+            <li class="chip chip--hot">sqlmap</li>
+            <li class="chip chip--hot">ffuf</li>
+            <li class="chip chip--hot">nuclei</li>
+            <li class="chip chip--hot">subfinder</li>
+            <li class="chip chip--hot">httpx</li>
+            <li class="chip chip--hot">katana</li>
+            <li class="chip chip--hot">dnsx</li>
+            <li class="chip chip--hot">dalfox</li>
+            <li class="chip chip--hot">eigene Exploits &amp; PoCs</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">ki &amp; agenten</h3>
+          <ul class="toolbox__items">
+            <li class="chip chip--hot">Claude Code</li>
+            <li class="chip chip--hot">subagents</li>
+            <li class="chip chip--hot">MCP</li>
+            <li class="chip chip--hot">eigene Agenten</li>
+            <li class="chip chip--hot">LangGraph</li>
+            <li class="chip chip--hot">Ollama</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">distributionen</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Debian</li>
+            <li class="chip">Ubuntu</li>
+            <li class="chip">Red Hat</li>
+            <li class="chip">NixOS</li>
+            <li class="chip">Talos Linux</li>
+            <li class="chip">Kali Linux</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">betrieb &amp; härtung</h3>
+          <ul class="toolbox__items">
+            <li class="chip">systemd</li>
+            <li class="chip">auditd</li>
+            <li class="chip">OpenSSH</li>
+            <li class="chip">nftables</li>
+            <li class="chip">WireGuard</li>
+            <li class="chip">Tailscale</li>
+            <li class="chip">eigene PKI / CA</li>
+            <li class="chip">HashiCorp Vault</li>
+            <li class="chip">Ansible</li>
+            <li class="chip">Nix Flakes</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">container &amp; cluster</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Kubernetes</li>
+            <li class="chip">k3s</li>
+            <li class="chip">OpenShift</li>
+            <li class="chip">Docker</li>
+            <li class="chip">Podman</li>
+            <li class="chip">Helm</li>
+            <li class="chip">ArgoCD</li>
+            <li class="chip">RBAC</li>
+            <li class="chip">NetworkPolicies</li>
+            <li class="chip">Sealed Secrets</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">embedded linux</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Yocto / BitBake</li>
+            <li class="chip">NXP i.MX6 / i.MX8</li>
+            <li class="chip">QEMU</li>
+            <li class="chip">Cross-Builds</li>
+            <li class="chip">Remote-Debugging &amp; Firmware-Updates</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">pipeline-sicherheit</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Trivy</li>
+            <li class="chip">SonarQube</li>
+            <li class="chip">Renovate</li>
+            <li class="chip">SBOM / SPDX</li>
+            <li class="chip">Secrets-Verwaltung</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="wissen" class="knowledge" aria-labelledby="wissen-h">
+      <div class="knowledge__inner container">
+        <div class="knowledge__head">
+          <div class="knowledge__title-block">
+            <span class="knowledge__eyebrow">
+              <span class="pill"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>
+Wissen</span>
+              <span>05 / ki-sicherheit</span>
+            </span>
+            <h2 id="wissen-h" class="section-title section-title--dark">Mehr als Prompt Injection</h2>
+          </div>
+          <p class="knowledge__lead">KI-Anwendungen erben die Schwächen klassischer Software und bringen eigene mit. Hier erkläre ich die wichtigsten Risiken für LLM-Anwendungen und KI-Pipelines – kurz, verständlich und mit Verweis auf die ausführliche Fachseite.</p>
+        </div>
+        <div class="topic-group">
+          <div class="topic-group__head">
+            <h3 class="topic-group__title">LLM-Anwendungen</h3>
+            <span class="topic-group__sub">Risiken in Anwendungen mit Sprachmodellen</span>
+          </div>
+          <ul class="topic-grid topic-grid--home">
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Wissen</span><span class="topic-card__id">LLM01</span></span>
+  <h4 class="topic-card__title">Prompt Injection</h4>
+  <p class="topic-card__body">Eingaben – direkt oder versteckt in Dokumenten, Webseiten und E-Mails – bringen ein Modell dazu, seine Anweisungen zu ignorieren oder fremde auszuführen.</p>
+  <a class="topic-card__link" href="/wissen/ki-sicherheit/#prompt-injection" aria-label="Weiterlesen: Prompt Injection">Weiterlesen →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Wissen</span><span class="topic-card__id">LLM03</span></span>
+  <h4 class="topic-card__title">Excessive Agency</h4>
+  <p class="topic-card__body">Ein Agent darf mehr, als seine Aufgabe verlangt: zu viele Werkzeuge, zu weite Rechte, zu wenig menschliche Bestätigung.</p>
+  <a class="topic-card__link" href="/wissen/ki-sicherheit/#excessive-agency" aria-label="Weiterlesen: Excessive Agency">Weiterlesen →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Wissen</span><span class="topic-card__id">LLM05</span></span>
+  <h4 class="topic-card__title">Data and Model Poisoning</h4>
+  <p class="topic-card__body">Manipulierte Trainings-, Fine-Tuning- oder Embedding-Daten verändern das Verhalten eines Modells gezielt.</p>
+  <a class="topic-card__link" href="/wissen/ki-sicherheit/#data-and-model-poisoning" aria-label="Weiterlesen: Data and Model Poisoning">Weiterlesen →</a>
+</li>
+          </ul>
+        </div>
+        <div class="topic-group">
+          <div class="topic-group__head">
+            <h3 class="topic-group__title">KI-Pipelines</h3>
+            <span class="topic-group__sub">Von den Daten bis zum Inferenz-Endpunkt</span>
+          </div>
+          <ul class="topic-grid topic-grid--home">
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Wissen</span><span class="topic-card__id">PIPE·03</span></span>
+  <h4 class="topic-card__title">Agenten &amp; Tool-Anbindung</h4>
+  <p class="topic-card__body">MCP-Server, Werkzeugrechte und Automatisierung entscheiden, was ein manipulierter Agent tatsächlich anrichten kann.</p>
+  <a class="topic-card__link" href="/wissen/ki-sicherheit/#agenten-und-tool-anbindung" aria-label="Weiterlesen: Agenten &amp; Tool-Anbindung">Weiterlesen →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Wissen</span><span class="topic-card__id">PIPE·02</span></span>
+  <h4 class="topic-card__title">Modell-Lieferkette</h4>
+  <p class="topic-card__body">Herkunft und Integrität von Modellen, Gewichten und Abhängigkeiten – inklusive Registries und unsicherer Dateiformate.</p>
+  <a class="topic-card__link" href="/wissen/ki-sicherheit/#modell-lieferkette" aria-label="Weiterlesen: Modell-Lieferkette">Weiterlesen →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Wissen</span><span class="topic-card__id">PIPE·04</span></span>
+  <h4 class="topic-card__title">Inferenz-Infrastruktur</h4>
+  <p class="topic-card__body">Modell-Server und APIs sind Dienste wie andere auch: exponiert, oft schwach isoliert, selten mit Ressourcenlimits.</p>
+  <a class="topic-card__link" href="/wissen/ki-sicherheit/#inferenz-infrastruktur" aria-label="Weiterlesen: Inferenz-Infrastruktur">Weiterlesen →</a>
+</li>
+          </ul>
+        </div>
+
+        <div class="knowledge__footer">
+          <p class="knowledge__note">Grundlage: OWASP Top 10 for LLM Applications 2026 und eigene Praxis mit Agenten-Workflows.</p>
+          <a class="btn btn--light" href="/wissen/ki-sicherheit/">Alle Themen zur KI-Sicherheit →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta__inner container">
+        <h2 class="cta__title">Was würde ein Angreifer bei Ihnen finden?</h2>
+        <a class="btn btn--inverse" href="mailto:me@charemma.de?subject=Penetrationstest%20anfragen">Erstgespräch vereinbaren →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="site-footer-bar">
+    <footer class="site-footer">
+      <span>© 2026 Charalambos Emmanouilidis</span>
+      <div class="site-footer__links">
+        <a href="https://github.com/charemma">GitHub</a>
+        <a href="https://charemma.de">charemma.de</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

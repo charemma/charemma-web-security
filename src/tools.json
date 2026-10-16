@@ -1,0 +1,39 @@
+[
+  {
+    "label": { "de": "angriff", "en": "offense", "el": "επίθεση" },
+    "hot": true,
+    "items": ["Burp Suite", "OWASP ZAP", "mitmproxy", "nmap", "sqlmap", "ffuf", "nuclei", "subfinder", "httpx", "katana", "dnsx", "dalfox",
+      { "de": "eigene Exploits & PoCs", "en": "custom exploits & PoCs", "el": "δικά μου exploits & PoCs" }]
+  },
+  {
+    "label": { "de": "ki & agenten", "en": "ai & agents", "el": "ai & agents" },
+    "hot": true,
+    "items": ["Claude Code", "subagents", "MCP",
+      { "de": "eigene Agenten", "en": "own agents", "el": "δικοί μου agents" },
+      "LangGraph", "Ollama"]
+  },
+  {
+    "label": { "de": "distributionen", "en": "distributions", "el": "διανομές" },
+    "items": ["Debian", "Ubuntu", "Red Hat", "NixOS", "Talos Linux", "Kali Linux"]
+  },
+  {
+    "label": { "de": "betrieb & härtung", "en": "operations & hardening", "el": "λειτουργία & θωράκιση" },
+    "items": ["systemd", "auditd", "OpenSSH", "nftables", "WireGuard", "Tailscale",
+      { "de": "eigene PKI / CA", "en": "own PKI / CA", "el": "δική μου PKI / CA" },
+      "HashiCorp Vault", "Ansible", "Nix Flakes"]
+  },
+  {
+    "label": { "de": "container & cluster", "en": "container & cluster", "el": "container & cluster" },
+    "items": ["Kubernetes", "k3s", "OpenShift", "Docker", "Podman", "Helm", "ArgoCD", "RBAC", "NetworkPolicies", "Sealed Secrets"]
+  },
+  {
+    "label": { "de": "embedded linux", "en": "embedded linux", "el": "embedded linux" },
+    "items": ["Yocto / BitBake", "NXP i.MX6 / i.MX8", "QEMU", "Cross-Builds",
+      { "de": "Remote-Debugging & Firmware-Updates", "en": "remote debugging & firmware updates", "el": "remote debugging & firmware updates" }]
+  },
+  {
+    "label": { "de": "pipeline-sicherheit", "en": "pipeline security", "el": "ασφάλεια pipeline" },
+    "items": ["Trivy", "SonarQube", "Renovate", "SBOM / SPDX",
+      { "de": "Secrets-Verwaltung", "en": "secrets management", "el": "διαχείριση secrets" }]
+  }
+]

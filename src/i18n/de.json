@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "title": "Penetrationstests für Linux-Infrastruktur · Charalambos Emmanouilidis",
+    "description": "Penetrationstests mit Schwerpunkt auf Linux-Infrastrukturen: Server, Container und Kubernetes, dazu die Webanwendungen, die darauf laufen.",
+    "overview_title": "KI-Sicherheit · Themenübersicht · security.charemma.de",
+    "overview_description": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines."
+  },
+  "a11y": {
+    "nav": "Hauptnavigation",
+    "lang": "Sprache / Language / Γλώσσα",
+    "profile": "Kurzprofil",
+    "console": "Konsole"
+  },
+  "nav": [
+    { "id": "leistungen", "label": "Leistungen" },
+    { "id": "fallbeispiel", "label": "Vorgehen" },
+    { "id": "ablauf", "label": "Zusammenarbeit" },
+    { "id": "wissen", "label": "Wissen" }
+  ],
+  "hero": {
+    "focus": "Schwerpunkt Linux-Infrastruktur",
+    "loc": "Deutschland · remote",
+    "h1a": "Ich greife Ihre Systeme an, ",
+    "h1b": "bevor es jemand anders tut.",
+    "lead": "Penetrationstests mit Schwerpunkt auf Linux-Infrastrukturen: Server, Container und Kubernetes – und die Webanwendungen, die darauf laufen. KI-gestützte Aufklärung, manuelle Tiefe und ein Bericht, mit dem Ihr Team direkt arbeiten kann.",
+    "cta": "Pentest anfragen",
+    "mail_subject": "Penetrationstest anfragen"
+  },
+  "profile": [
+    { "key": "zertifikate", "value": "OSCP · SCP Web Application Security" },
+    { "key": "methodik", "value": "BSI IS-Pentest-Leitfaden · OWASP WSTG" },
+    { "key": "offensiv_seit", "value": "2019 · Bug Bounty, Disclosure, Pentests" },
+    { "key": "berichte", "value": "Deutsch · Englisch" }
+  ],
+  "services": {
+    "eyebrow": "01 / leistungen",
+    "title": "Was ich teste",
+    "items": [
+      { "tag": "linux · schwerpunkt", "title": "Linux-Server & Infrastruktur", "body": "Exponierte Dienste, SSH, sudo- und Dateirechte, systemd-Units, Firewall-Regeln und Privilege Escalation – vom Angreifer mit Shell bis root." },
+      { "tag": "linux · container", "title": "Container & Kubernetes", "body": "Container-Ausbrüche, RBAC, NetworkPolicies, Secrets und Images: Wie weit kommt ein Angreifer aus einem kompromittierten Pod?" },
+      { "tag": "web / api", "title": "Web-Application- & API-Pentest", "body": "Manuelle Prüfung nach OWASP WSTG: Authentifizierung, Autorisierung, Eingabevalidierung, Injection und Business-Logik." },
+      { "tag": "extern", "title": "Externe Angriffsfläche", "body": "Was sieht ein Angreifer von außen? Subdomains, exponierte Dienste und vergessene Systeme – KI-gestützt erfasst, manuell bewertet." },
+      { "tag": "linux · ci/cd", "title": "Pipeline & Lieferkette", "body": "Build-Runner, Secrets, Berechtigungen, Container-Images und Abhängigkeiten: Wer kann was in Produktion bringen?" },
+      { "tag": "ai", "title": "KI-Anwendungen & -Pipelines", "body": "LLM-Features nach OWASP Top 10 for LLM Applications, Agenten mit Werkzeugzugriff sowie die Daten- und Modell-Pipeline dahinter." }
+    ]
+  },
+  "approach": {
+    "eyebrow": "02 / vorgehen",
+    "title_a": "Agenten kartieren. ",
+    "title_b": "Ich gehe rein.",
+    "lead": "KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.",
+    "note": "Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.",
+    "net": "netzwerk",
+    "results": ["Proof of Concept, jederzeit reproduzierbar", "Für jeden Fund ein konkreter Fix", "Hilfe beim Schließen der Lücken"]
+  },
+  "engagement": {
+    "meter_label": "Phase {n} von {total}",
+    "cv": { "handover": "übergabe · findings", "weak": "schwachstelle?", "manual": "MANUELL", "assist": "AI-ASSISTED · HUMAN REVIEW", "ai": "AI-DRIVEN WITH SUBAGENTS" },
+    "depth": ["informationsbeschaffung", "informationsbeschaffung", "analyse", "manual testing", "exploit", "reporting"],
+    "hits": ["subdomains & technologien erfasst", "hosts, ports & dienste kartiert", "verdächtiger dienst", "sql-injection + fehlkonfiguration", "remote code execution", "bericht mit fixes übergeben"],
+    "work": ["…", "anomalie", "500", "unerwartet", "leak?", "stacktrace"]
+  },
+  "process": {
+    "eyebrow": "03 / zusammenarbeit",
+    "title": "Vom Scoping bis zum Retest",
+    "steps": [
+      { "n": "01", "title": "Scoping", "body": "Ziele, Umfang, Testart (Black-, Grey- oder White-Box) und Zeitfenster schriftlich festgelegt." },
+      { "n": "02", "title": "Test", "body": "KI-gestützte Aufklärung, dann manuelle Prüfung. Kritische Funde melde ich sofort, nicht erst im Bericht." },
+      { "n": "03", "title": "Bericht", "body": "Management-Summary plus technische Findings mit Reproduktionsschritten, PoC und konkreter Behebung." },
+      { "n": "04", "title": "Retest", "body": "Nach Ihren Fixes prüfe ich erneut und bestätige die Behebung schriftlich." }
+    ]
+  },
+  "toolbox": {
+    "eyebrow": "04 / werkzeugkasten",
+    "title": "Linux von innen kennen, um es von außen anzugreifen",
+    "lead": "Seit 2006 arbeite ich täglich mit Linux – von Embedded-Systemen in Medizin- und Kameratechnik über Build- und Entwicklungsserver bis zum produktiven Kubernetes-Cluster. Ich kenne die Systeme, die ich angreife, von innen: Rechte, Dienste, Konfiguration und die typischen Abkürzungen im Betrieb. Für Aufklärung und Berichte setze ich eigene Agenten-Workflows ein; mein Lab ist reproduzierbar aufgebaut, trainiert wird regelmäßig auf HackTheBox."
+  },
+  "knowledge": {
+    "badge": "Wissen",
+    "eyebrow": "05 / ki-sicherheit",
+    "title": "Mehr als Prompt Injection",
+    "lead": "KI-Anwendungen erben die Schwächen klassischer Software und bringen eigene mit. Hier erkläre ich die wichtigsten Risiken für LLM-Anwendungen und KI-Pipelines – kurz, verständlich und mit Verweis auf die ausführliche Fachseite.",
+    "more": "Weiterlesen",
+    "all": "Alle Themen zur KI-Sicherheit",
+    "note": "Grundlage: OWASP Top 10 for LLM Applications 2026 und eigene Praxis mit Agenten-Workflows.",
+    "groups": {
+      "llm": { "title": "LLM-Anwendungen", "sub": "Risiken in Anwendungen mit Sprachmodellen" },
+      "pipe": { "title": "KI-Pipelines", "sub": "Von den Daten bis zum Inferenz-Endpunkt" }
+    }
+  },
+  "overview": {
+    "eyebrow": "Themenübersicht",
+    "title": "KI-Sicherheit",
+    "lead": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines. Jeder Eintrag erklärt das Thema kurz und führt zur ausführlichen Fachseite.",
+    "back": "← zurück zur Startseite",
+    "more": "Zur Fachseite",
+    "upcoming": "Fachseite folgt",
+    "source": "Quelle der LLM-Kategorien:",
+    "count": "Themen"
+  },
+  "cta": {
+    "title": "Was würde ein Angreifer bei Ihnen finden?",
+    "button": "Erstgespräch vereinbaren →"
+  },
+  "not_found": {
+    "title": "Seite nicht gefunden",
+    "body": "Unter dieser Adresse gibt es nichts.",
+    "back": "Zur Startseite"
+  }
+}

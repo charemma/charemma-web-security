@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ t.meta.title }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ t.meta.description }}{% endblock %}">
+  {%- block robots %}{% endblock %}
+  {%- if canonical %}
+  <link rel="canonical" href="{{ canonical }}">
+  {%- for alt in alternates %}
+  <link rel="alternate" hreflang="{{ alt.hreflang }}" href="{{ alt.href }}">
+  {%- endfor %}
+  {%- endif %}
+  <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js"></script>
+  {%- block scripts %}{% endblock %}
+</head>
+<body class="{% block body_class %}page-dark{% endblock %}">
+  <div class="site-header-bar">
+    <header class="site-header">
+      <a class="brand" href="{{ home_href }}#top"><span class="brand__user">charemma@</span><span>security</span><span class="brand__prompt">:~$</span></a>
+      <nav class="site-nav" aria-label="{{ t.a11y.nav }}">
+        {%- block nav_links %}
+        {%- for item in t.nav %}
+        <a href="{{ home_href }}#{{ item.id }}">{{ item.label }}</a>
+        {%- endfor %}
+        {%- endblock %}
+        <span class="lang-switch" role="group" aria-label="{{ t.a11y.lang }}">
+          {%- for alt in lang_links %}
+          <a href="{{ alt.path }}" hreflang="{{ alt.code }}" lang="{{ alt.code }}" data-lang="{{ alt.code }}"{% if alt.code == lang %} aria-current="true"{% endif %}>{{ alt.label }}</a>
+          {%- endfor %}
+        </span>
+      </nav>
+    </header>
+  </div>
+
+  <main>
+    {%- block main %}{% endblock %}
+  </main>
+
+  <div class="site-footer-bar">
+    <footer class="site-footer">
+      <span>© {{ site.copyright_year }} Charalambos Emmanouilidis</span>
+      <div class="site-footer__links">
+        <a href="{{ site.links.github }}">GitHub</a>
+        <a href="{{ site.links.main_site }}">charemma.de</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

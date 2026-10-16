@@ -1,0 +1,191 @@
+{% extends "base.html.j2" %}
+{% macro eyebrow(text) -%}
+<span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>{{ text }}</span>
+{%- endmacro %}
+{% macro topic_card(topic, label, more) -%}
+<li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">{{ label }}</span><span class="topic-card__id">{{ topic.id }}</span></span>
+  <h4 class="topic-card__title">{{ topic.title }}</h4>
+  <p class="topic-card__body">{{ topic.body }}</p>
+  <a class="topic-card__link" href="{{ topic.href }}" aria-label="{{ more }}: {{ topic.title }}">{{ more }} →</a>
+</li>
+{%- endmacro %}
+{% block scripts %}
+  <script type="module" src="/assets/js/engagement.js"></script>
+{%- endblock %}
+{% block main %}
+    <section id="top" class="hero container">
+      <div class="hero__meta mono">
+        <span><span class="accent" aria-hidden="true">●</span> Charalambos Emmanouilidis · OSCP</span>
+        <span>{{ t.hero.focus }}</span>
+        <span>{{ t.hero.loc }}</span>
+      </div>
+      <h1 class="hero__title">{{ t.hero.h1a }}<span class="hero__title-accent">{{ t.hero.h1b }}</span></h1>
+      <p class="hero__lead">{{ t.hero.lead }}</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="mailto:{{ site.contact_email }}?subject={{ t.hero.mail_subject | urlencode }}">{{ t.hero.cta }}</a>
+      </div>
+    </section>
+
+    <section class="profile" aria-label="{{ t.a11y.profile }}">
+      <dl class="profile__grid container mono">
+        {%- for item in t.profile %}
+        <div class="profile__item"><dt>{{ item.key }}</dt><dd>{{ item.value }}</dd></div>
+        {%- endfor %}
+      </dl>
+    </section>
+
+    <section id="leistungen" class="services container">
+      <div class="section-head">
+        {{ eyebrow(t.services.eyebrow) }}
+        <h2 class="section-title">{{ t.services.title }}</h2>
+      </div>
+      <div class="services__grid">
+        {%- for s in t.services["items"] %}
+        <article class="service">
+          <span class="service__tag">{{ s.tag }}</span>
+          <h3 class="service__title">{{ s.title }}</h3>
+          <p class="service__body">{{ s.body }}</p>
+        </article>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <section id="fallbeispiel" class="approach">
+      <div class="approach__intro container">
+        <div class="approach__head">
+          {{ eyebrow(t.approach.eyebrow) }}
+          <h2 class="section-title">{{ t.approach.title_a }}<span class="accent">{{ t.approach.title_b }}</span></h2>
+        </div>
+        <div class="approach__text">
+          <p class="approach__lead">{{ t.approach.lead }}</p>
+          <p class="approach__note">{{ t.approach.note }}</p>
+        </div>
+      </div>
+
+      <div class="cx-band">
+        <div class="cx-stage" data-engagement>
+          <script type="application/json" data-engagement-data>{{ engagement | tojson }}</script>
+          <div class="cx-canvas-wrap" data-canvas-wrap>
+            <canvas class="cx-canvas" data-canvas aria-hidden="true"></canvas>
+          </div>
+          <div class="cx-flash" data-flash aria-hidden="true" hidden></div>
+
+          <div class="cx-glass">
+            <div class="cx-status">
+              <span class="cx-status__label"><span class="cx-dot" data-status-dot aria-hidden="true"></span><span data-status-label>agents collecting</span></span>
+              <span class="cx-status__progress">
+                <span class="cx-meter" role="img" data-meter aria-label="{{ t.engagement.meter_label | replace('{n}', 1) | replace('{total}', engagement.steps | length) }}">
+                  {%- for step in engagement.steps %}
+                  <span class="cx-meter__seg{% if loop.first %} is-current{% endif %}" data-meter-seg></span>
+                  {%- endfor %}
+                </span>
+                <span data-status-count>1/{{ engagement.steps | length }}</span>
+              </span>
+            </div>
+
+            <div class="cx-console" role="log" aria-label="{{ t.a11y.console }}">
+              {%- for step in engagement.steps %}
+              <div class="cx-prompt{% if loop.first %} is-active{% endif %}" data-prompt>
+                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>{{ step.cmd }}</span><span class="cx-cursor" data-cursor aria-hidden="true"{% if not loop.first %} hidden{% endif %}>▌</span></div>
+                <span class="cx-prompt__out" data-out>[*] {{ step.log }}</span>
+                <span class="cx-prompt__hit{% if step.get('pwn') %} is-pwn{% elif step.get('tag') %} is-tag{% endif %}" data-hit hidden>→ {{ step.hit | lower }}</span>
+              </div>
+              {%- endfor %}
+            </div>
+
+            <div class="cx-divider"></div>
+            <div class="cx-net-label">{{ t.approach.net }}</div>
+            <div class="cx-net">
+              <canvas class="cx-canvas" data-net aria-hidden="true"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="approach__results container" data-results>
+        {%- for r in t.approach.results %}
+        <span><span class="accent" aria-hidden="true">✓</span> {{ r }}</span>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <section id="ablauf" class="process">
+      <div class="process__inner container">
+        <div class="section-head">
+          <span class="eyebrow eyebrow--light">{{ t.process.eyebrow }}</span>
+          <h2 class="section-title section-title--light">{{ t.process.title }}</h2>
+        </div>
+        <ol class="process__steps">
+          {%- for st in t.process.steps %}
+          <li class="process__step">
+            <span class="process__n">{{ st.n }}</span>
+            <h3 class="process__title">{{ st.title }}</h3>
+            <p class="process__body">{{ st.body }}</p>
+          </li>
+          {%- endfor %}
+        </ol>
+      </div>
+    </section>
+
+    <section class="toolbox container" aria-labelledby="warum">
+      <div class="toolbox__intro">
+        {{ eyebrow(t.toolbox.eyebrow) }}
+        <h2 id="warum" class="section-title">{{ t.toolbox.title }}</h2>
+        <p class="toolbox__lead">{{ t.toolbox.lead }}</p>
+      </div>
+      <div class="toolbox__groups">
+        {%- for g in tools %}
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">{{ g.label }}</h3>
+          <ul class="toolbox__items">
+            {%- for item in g["items"] %}
+            <li class="chip{% if g.hot %} chip--hot{% endif %}">{{ item }}</li>
+            {%- endfor %}
+          </ul>
+        </div>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <section id="wissen" class="knowledge" aria-labelledby="wissen-h">
+      <div class="knowledge__inner container">
+        <div class="knowledge__head">
+          <div class="knowledge__title-block">
+            <span class="knowledge__eyebrow">
+              <span class="pill">{% include "book-icon.svg.j2" %}{{ t.knowledge.badge }}</span>
+              <span>{{ t.knowledge.eyebrow }}</span>
+            </span>
+            <h2 id="wissen-h" class="section-title section-title--dark">{{ t.knowledge.title }}</h2>
+          </div>
+          <p class="knowledge__lead">{{ t.knowledge.lead }}</p>
+        </div>
+
+        {%- for group in featured_groups %}
+        <div class="topic-group">
+          <div class="topic-group__head">
+            <h3 class="topic-group__title">{{ group.title }}</h3>
+            <span class="topic-group__sub">{{ group.sub }}</span>
+          </div>
+          <ul class="topic-grid topic-grid--home">
+            {%- for topic in group["items"] %}
+            {{ topic_card(topic, t.knowledge.badge, t.knowledge.more) }}
+            {%- endfor %}
+          </ul>
+        </div>
+        {%- endfor %}
+
+        <div class="knowledge__footer">
+          <p class="knowledge__note">{{ t.knowledge.note }}</p>
+          <a class="btn btn--light" href="{{ overview_href }}">{{ t.knowledge.all }} →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta__inner container">
+        <h2 class="cta__title">{{ t.cta.title }}</h2>
+        <a class="btn btn--inverse" href="mailto:{{ site.contact_email }}?subject={{ t.hero.mail_subject | urlencode }}">{{ t.cta.button }}</a>
+      </div>
+    </section>
+{% endblock %}
