@@ -123,6 +123,9 @@ The Type column carries a categorical label describing what the file is. The set
   - When writing or changing a spec on a topic another spec already covers, the existing spec MUST be followed; do not fall back to the `design` files for that topic.
   - When it is unclear whether a spec covers a topic, AI MUST ask the user instead of choosing a source.
   - Files of type `design` MUST NOT be used as a source for `generated` or `spec-maintained` files; derive `generated` files from their Dependencies and Instructions only, derive changes to `spec-maintained` files from their Dependencies only, and close design gaps with a spec first.
+- `content`: a data or text file the user maintains by hand and `build.py` reads as input (topic lists, interface texts per language, step and tool lists); not program logic and not generator configuration.
+  - Files of type `content` MUST carry the `editable` protocol.
+  - Changes by AI to a file of type `content` MUST follow an explicit user instruction naming the change; do not derive such changes from specs or `design` files.
 
 AI MAY propose new types; AI MUST NOT introduce them silently. Adding a type requires explicit user approval and an entry here.
 
