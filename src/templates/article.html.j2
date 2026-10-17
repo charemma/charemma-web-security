@@ -1,0 +1,32 @@
+{% extends "base.html.j2" %}
+{% block title %}{{ topic.title }} · {{ t.overview.title }} · {{ site_host }}{% endblock %}
+{% block description %}{{ article.lead }}{% endblock %}
+{% block body_class %}page-light{% endblock %}
+{% block nav_links %}{% endblock %}
+{% block main %}
+    <article class="article container">
+      <div class="article__head">
+        <a class="overview__back" href="{{ overview_href }}">{{ t.article.back }}</a>
+        <span class="knowledge__eyebrow">
+          <span class="pill">{% include "book-icon.svg.j2" %}{{ t.knowledge.badge }}</span>
+          <span>{{ group_title }} · {{ topic.id }}</span>
+        </span>
+        <h1 class="overview__title">{{ topic.title }}</h1>
+        <p class="overview__lead">{{ article.lead }}</p>
+        <p class="article__updated">{{ t.article.updated }} <time datetime="{{ article.updated }}">{{ article.updated }}</time></p>
+      </div>
+      <div class="article__body">
+{{ article.body_html | safe }}      </div>
+      {%- if article.sources %}
+      <section class="article__sources">
+        <h2>{{ t.article.sources }}</h2>
+        <ol>
+          {%- for source in article.sources %}
+          <li>{% if "url" in source %}<a href="{{ source.url }}">{{ source.label }}</a>{% else %}{{ source.label }}{% endif %}</li>
+          {%- endfor %}
+        </ol>
+      </section>
+      {%- endif %}
+    </article>
+{% include "cta.html.j2" %}
+{%- endblock %}

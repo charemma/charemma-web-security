@@ -3,7 +3,6 @@
     "id": "LLM01:2026",
     "group": "llm",
     "slug": "prompt-injection",
-    "published": false,
     "de": {
       "title": "Prompt Injection",
       "body": "Eingaben – direkt oder versteckt in Dokumenten, Webseiten und E-Mails – bringen ein Modell dazu, seine Anweisungen zu ignorieren oder fremde auszuführen."
@@ -21,7 +20,6 @@
     "id": "LLM02:2026",
     "group": "llm",
     "slug": "sensitive-information-disclosure",
-    "published": false,
     "de": {
       "title": "Sensitive Information Disclosure",
       "body": "Ein Modell gibt vertrauliche Daten preis – aus Trainingsdaten, dem Gesprächskontext oder angebundenen Systemen."
@@ -39,7 +37,6 @@
     "id": "LLM03:2026",
     "group": "llm",
     "slug": "excessive-agency",
-    "published": false,
     "de": {
       "title": "Excessive Agency",
       "body": "Ein Agent darf mehr, als seine Aufgabe verlangt: zu viele Werkzeuge, zu weite Rechte, zu wenig menschliche Bestätigung."
@@ -57,7 +54,6 @@
     "id": "LLM04:2026",
     "group": "llm",
     "slug": "supply-chain",
-    "published": false,
     "de": {
       "title": "Supply Chain",
       "body": "Risiken, die über Modelle, Gewichte, Datensätze, Plugins und Bibliotheken von Dritten in eine Anwendung gelangen – inklusive Registries und unsicherer Dateiformate."
@@ -75,7 +71,6 @@
     "id": "LLM05:2026",
     "group": "llm",
     "slug": "data-and-model-poisoning",
-    "published": false,
     "de": {
       "title": "Data and Model Poisoning",
       "body": "Manipulierte Trainings-, Fine-Tuning- oder Embedding-Daten verändern das Verhalten eines Modells gezielt."
@@ -93,7 +88,6 @@
     "id": "LLM06:2026",
     "group": "llm",
     "slug": "unbounded-consumption",
-    "published": false,
     "de": {
       "title": "Unbounded Consumption",
       "body": "Ungebremste Anfragen treiben Kosten und Last in die Höhe oder erlauben es, ein Modell systematisch abzugreifen."
@@ -111,7 +105,6 @@
     "id": "LLM07:2026",
     "group": "llm",
     "slug": "misinformation",
-    "published": false,
     "de": {
       "title": "Misinformation",
       "body": "Überzeugend formulierte, aber falsche Ausgaben, auf die sich Menschen oder nachgelagerte Systeme verlassen."
@@ -129,7 +122,6 @@
     "id": "LLM08:2026",
     "group": "llm",
     "slug": "hidden-context-exposure",
-    "published": false,
     "de": {
       "title": "Hidden Context Exposure",
       "body": "Verborgene Anweisungen und Kontext – etwa System-Prompts – werden sichtbar und verraten Logik, Regeln oder Geheimnisse."
@@ -147,7 +139,6 @@
     "id": "LLM09:2026",
     "group": "llm",
     "slug": "vector-and-embedding-weaknesses",
-    "published": false,
     "de": {
       "title": "Vector and Embedding Weaknesses",
       "body": "Schwachstellen in RAG-Systemen: fehlende Zugriffstrennung, manipulierte oder ausgelesene Vektordaten."
@@ -165,7 +156,6 @@
     "id": "LLM10:2026",
     "group": "llm",
     "slug": "improper-output-handling",
-    "published": false,
     "de": {
       "title": "Improper Output Handling",
       "body": "Modellausgaben werden ungeprüft weiterverarbeitet – etwa als HTML, SQL oder Shell-Befehl – und öffnen klassische Lücken."
@@ -183,7 +173,6 @@
     "id": "PIPE·01",
     "group": "pipe",
     "slug": "mlops-pipeline-und-registry",
-    "published": false,
     "de": {
       "title": "MLOps-Pipeline & Registry",
       "body": "Training-Jobs, CI/CD für Modelle und die Registry entscheiden, welches Artefakt in Produktion geht – und wer es unterwegs austauschen kann."
@@ -201,7 +190,6 @@
     "id": "PIPE·02",
     "group": "pipe",
     "slug": "inferenz-infrastruktur",
-    "published": false,
     "de": {
       "title": "Inferenz-Infrastruktur",
       "body": "Modell-Server, Container, GPUs und Mandantentrennung: Dienste wie andere auch – exponiert, oft schwach isoliert, selten mit Ressourcenlimits."
@@ -219,7 +207,6 @@
     "id": "PIPE·03",
     "group": "pipe",
     "slug": "agenten-und-tool-anbindung",
-    "published": false,
     "de": {
       "title": "Agenten & Tool-Anbindung",
       "body": "MCP- und Tool-Server als Prüfobjekt: Authentifizierung, Netzreichweite, Sandboxing der Ausführung und die Identitäten, mit denen sie handeln."
@@ -237,7 +224,6 @@
     "id": "PIPE·04",
     "group": "pipe",
     "slug": "secrets-und-schluessel",
-    "published": false,
     "de": {
       "title": "Secrets & Schlüssel",
       "body": "API-Keys von Modellanbietern und Zugangsdaten landen leicht in Prompts, Logs und Pipeline-Variablen."
@@ -255,7 +241,6 @@
     "id": "PIPE·05",
     "group": "pipe",
     "slug": "protokollierung-und-nachvollziehbarkeit",
-    "published": false,
     "de": {
       "title": "Protokollierung & Nachvollziehbarkeit",
       "body": "Welche Prompts, Tool-Aufrufe und Modellantworten protokolliert werden, entscheidet, ob sich ein Vorfall rekonstruieren lässt – oft gar nicht."

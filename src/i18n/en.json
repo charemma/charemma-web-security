@@ -94,9 +94,13 @@
     "lead": "All knowledge articles on risks in LLM applications and AI pipelines. Each entry explains the topic briefly and links to the in-depth article.",
     "back": "← back to the homepage",
     "more": "Read the article",
-    "upcoming": "Article coming soon",
     "source": "Source of the LLM categories:",
     "count": "topics"
+  },
+  "article": {
+    "back": "← back to the topic overview",
+    "updated": "Last updated",
+    "sources": "Sources"
   },
   "cta": {
     "title": "What would an attacker find in your systems?",

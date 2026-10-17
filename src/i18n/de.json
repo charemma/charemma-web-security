@@ -94,9 +94,13 @@
     "lead": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines. Jeder Eintrag erklärt das Thema kurz und führt zur ausführlichen Fachseite.",
     "back": "← zurück zur Startseite",
     "more": "Zur Fachseite",
-    "upcoming": "Fachseite folgt",
     "source": "Quelle der LLM-Kategorien:",
     "count": "Themen"
+  },
+  "article": {
+    "back": "← zur Themenübersicht",
+    "updated": "Stand",
+    "sources": "Quellen"
   },
   "cta": {
     "title": "Was würde ein Angreifer bei Ihnen finden?",

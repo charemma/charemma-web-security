@@ -30,8 +30,6 @@
             <p class="topic-card__body">{{ topic.body }}</p>
             {%- if topic.published %}
             <a class="topic-card__link" href="{{ topic.href }}" aria-label="{{ t.overview.more }}: {{ topic.title }}">{{ t.overview.more }} →</a>
-            {%- else %}
-            <span class="topic-card__upcoming">{{ t.overview.upcoming }}</span>
             {%- endif %}
           </li>
           {%- endfor %}
