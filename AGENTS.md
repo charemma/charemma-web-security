@@ -286,12 +286,17 @@ The use of this column — whether a file requires it, and what the referenced f
 | `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
 | `nginx` | `default.conf` | code | spec-maintained | `001-version-display.md` |  | Web server configuration: how requests are routed and which content types and cache rules apply. |
 | `src/templates` | `base.html.j2` | code | spec-maintained | `001-version-display.md` |  | Page skeleton template: the markup shared by every page (head, header, footer) that the page templates extend. |
+| `src/templates` | `index.html.j2` | code | spec-maintained | `003-knowledge-articles.md` |  | Start page template: the markup of the landing page sections, built on the page skeleton. |
+| `src/templates` | `wissen.html.j2` | code | spec-maintained | `003-knowledge-articles.md` |  | Knowledge overview template: the markup of the topic overview page, built on the page skeleton. |
+| `src/templates` | `article.html.j2` | code | spec-maintained | `003-knowledge-articles.md` |  | Article page template: the markup of one knowledge article page, built on the page skeleton. |
+| `src/templates` | `cta.html.j2` | code | spec-maintained | `003-knowledge-articles.md` |  | Call-to-action fragment: the contact block included by the pages that end with it. |
 | `src` | `site.json` | code | spec-maintained | `001-version-display.md`, `002-knowledge-topics.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
-| `src` | `build.py` | code | spec-maintained | `001-version-display.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
-| `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
+| `src` | `build.py` | code | spec-maintained | `001-version-display.md`, `003-knowledge-articles.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
+| `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md`, `003-knowledge-articles.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
 | `src` | `topics.json` | content | editable |  |  | Knowledge topic list: which topics the knowledge section offers, in which group, under which identifier and address, with their short texts per language. |
 | `src/i18n` | `de.json` | content | editable |  |  | Interface texts, German: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
 | `src/i18n` | `en.json` | content | editable |  |  | Interface texts, English: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
 | `src/i18n` | `el.json` | content | editable |  |  | Interface texts, Greek: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
 | `src` | `engagement.json` | content | editable |  |  | Engagement walkthrough steps: the sequence of animated terminal steps on the start page, each with its mode, command, log line and agent set. |
 | `src` | `tools.json` | content | editable |  |  | Tool list: the tool groups shown on the start page, each with its label per language, emphasis flag and tool names. |
+| `src/articles` | `prompt-injection-de.md` | content | editable |  |  | Knowledge article text, German, for the topic prompt-injection. |
