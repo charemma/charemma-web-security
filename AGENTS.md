@@ -276,7 +276,7 @@ The use of this column — whether a file requires it, and what the referenced f
 | `docs/design` | `HANDOFF.md` | design | read-only |  |  | Design handoff guidance: how the design sources are meant to be turned into the site. _Tool-imposed name; see Design-tool exemption rule._ |
 | `docs/design` | `themes.security.dark.css` | design | read-only |  |  | Theme values as CSS rules: the colors the theme applies to page elements, in machine-readable form. _Tool-imposed name; see Design-tool exemption rule._ |
 | `docs/design/design` | `Main.dc.html` | design | read-only |  |  | Design component for the start page: reference layout, styles, texts and behavior of the landing page sections. _Tool-imposed name; see Design-tool exemption rule._ |
-| `docs/design/design` | `Wissen.dc.html` | design | read-only |  |  | Design component for the knowledge section: reference layout and texts of the AI-security topic overview, and the source for the topic list. _Tool-imposed name; see Design-tool exemption rule._ |
+| `docs/design/design` | `Wissen.dc.html` | design | read-only |  |  | Design component for the knowledge section: reference layout and texts of the AI-security topic overview. _Tool-imposed name; see Design-tool exemption rule._ |
 | `docs/design/design` | `Theme.dc.html` | design | read-only |  |  | Design component for the color roles: which role each theme color plays, as a visual reference sheet. _Tool-imposed name; see Design-tool exemption rule._ |
 | `specs` | `001-version-display.md` | spec | editable |  |  | Spec for the deployed-version display: intended behavior of the version identifier on pages and at the version endpoint, and the reasons for it. |
 |  | `Dockerfile` | code | spec-maintained | `001-version-display.md` |  | Container image recipe: how the delivered site is packaged into the web server image and which build-time values it takes. _Tool-imposed name; see Build-tool exemption rule._ |
@@ -287,3 +287,7 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src` | `site.json` | code | spec-maintained | `001-version-display.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
 | `src` | `build.py` | code | spec-maintained | `001-version-display.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
 | `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
+| `src` | `topics.json` | content | editable |  |  | Knowledge topic list: which topics the knowledge section offers, in which group, under which identifier and address, with their short texts per language. |
+| `src/i18n` | `de.json` | content | editable |  |  | Interface texts, German: all page copy outside the topic list, keyed for the templates. |
+| `src/i18n` | `en.json` | content | editable |  |  | Interface texts, English: all page copy outside the topic list, keyed for the templates. |
+| `src/i18n` | `el.json` | content | editable |  |  | Interface texts, Greek: all page copy outside the topic list, keyed for the templates. |
