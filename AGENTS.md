@@ -279,12 +279,13 @@ The use of this column — whether a file requires it, and what the referenced f
 | `docs/design/design` | `Wissen.dc.html` | design | read-only |  |  | Design component for the knowledge section: reference layout and texts of the AI-security topic overview. _Tool-imposed name; see Design-tool exemption rule._ |
 | `docs/design/design` | `Theme.dc.html` | design | read-only |  |  | Design component for the color roles: which role each theme color plays, as a visual reference sheet. _Tool-imposed name; see Design-tool exemption rule._ |
 | `specs` | `001-version-display.md` | spec | editable |  |  | Spec for the deployed-version display: intended behavior of the version identifier on pages and at the version endpoint, and the reasons for it. |
+| `specs` | `002-knowledge-topics.md` | spec | editable |  |  | Spec for the knowledge topic list: identifiers, grouping, order and start page selection of the topics, and the reasons for them. |
 |  | `Dockerfile` | code | spec-maintained | `001-version-display.md` |  | Container image recipe: how the delivered site is packaged into the web server image and which build-time values it takes. _Tool-imposed name; see Build-tool exemption rule._ |
 |  | `justfile` | code | spec-maintained | `001-version-display.md` |  | Task runner recipes: the local and CI entry points for rendering, checking, stamping, serving and building the site. _Tool-imposed name; see Build-tool exemption rule._ |
 | `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
 | `nginx` | `default.conf` | code | spec-maintained | `001-version-display.md` |  | Web server configuration: how requests are routed and which content types and cache rules apply. |
 | `src/templates` | `base.html.j2` | code | spec-maintained | `001-version-display.md` |  | Page skeleton template: the markup shared by every page (head, header, footer) that the page templates extend. |
-| `src` | `site.json` | code | spec-maintained | `001-version-display.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
+| `src` | `site.json` | code | spec-maintained | `001-version-display.md`, `002-knowledge-topics.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
 | `src` | `build.py` | code | spec-maintained | `001-version-display.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
 | `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
 | `src` | `topics.json` | content | editable |  |  | Knowledge topic list: which topics the knowledge section offers, in which group, under which identifier and address, with their short texts per language. |
