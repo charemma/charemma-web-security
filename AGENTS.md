@@ -173,6 +173,7 @@ The set of permitted extensions is closed. Only the following extensions are all
 - `.json`
 - `.yml`
 - `.conf`
+- `.py`
 
 AI MAY propose new extensions; AI MUST NOT introduce them silently. Adding an extension requires explicit user approval and an entry here.
 
@@ -246,6 +247,10 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Ignore-pattern scope. Patterns in `.gitignore` MUST cover only transient paths created by tools (virtual environments, bytecode, tool caches) and `.tmp/`; do not add a pattern to keep a file out of the File Registry, register the file instead. A pattern in `.gitignore` is not a reference in the sense of the Scratch Directory rules.
 
+- Generator-output exemption. Files written by `build.py` are exempt from the **Inventory change**, **Name uniqueness** and **Unregistered-file edits** rules and are not registered individually; the set of exempt files is derived from the writes in `build.py`, not from a path pattern. Files under `html/` that the generator does not write remain registered individually.
+
+- Generator-output edits. AI MUST NOT edit a file written by `build.py` by hand; change the files the generator reads and run the generator instead.
+
 - Description abstraction. A Description MUST state what kind of information the file holds and what role that kind plays in the project. A Description MUST NOT summarize, paraphrase, or restate the file's current contents; it MUST describe the file by category, not by content snapshot. When a proposed Description summarizes content, AI MUST rewrite it to name the kind of information instead and present the rewrite to the user before the registry change proceeds.
 
 - Description non-overlap. No two Descriptions in the File Registry MAY cover overlapping kinds of information. When a proposed Description's scope intersects an existing Description's scope, AI MUST flag the overlap, identify the overlapping rows, and offer resolution options - narrow the proposed Description, narrow the existing Description, narrow both descriptions, or consolidate the files under one Description - before the registry change proceeds.
@@ -277,4 +282,5 @@ The use of this column — whether a file requires it, and what the referenced f
 | `nginx` | `default.conf` | code | spec-maintained | `001-version-display.md` |  | Web server configuration: how requests are routed and which content types and cache rules apply. |
 | `src/templates` | `base.html.j2` | code | spec-maintained | `001-version-display.md` |  | Page skeleton template: the markup shared by every page (head, header, footer) that the page templates extend. |
 | `src` | `site.json` | code | spec-maintained | `001-version-display.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
+| `src` | `build.py` | code | spec-maintained | `001-version-display.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
 | `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
