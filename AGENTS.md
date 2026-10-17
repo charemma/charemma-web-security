@@ -113,7 +113,7 @@ The Type column carries a categorical label describing what the file is. The set
   - A new spec MUST take the number following the highest number ever assigned to a spec in the git history of `main` or of the current branch, including specs since removed; do not reuse a freed number.
   - The number of an existing spec MUST NOT change; when renaming a spec, change only the `<name>` part.
 - `code`: a source, test, or build-configuration file of the implementation.
-  - Files of type `code` MUST carry the `generated` protocol.
+  - Files of type `code` MUST carry the `generated` or the `spec-maintained` protocol.
 - `config`: a file configuring a development tool for the repository itself, not for the implementation.
 - `glossary`: a file defining project terms, each with its meaning and anti-meaning.
 - `docs`: a file for human readers explaining the project, its purpose and provenance; not rules, specs, or glossary entries.
@@ -122,7 +122,7 @@ The Type column carries a categorical label describing what the file is. The set
   - When writing or changing a spec on a topic no other spec covers, the `design` files MUST be treated as the ground truth for that topic's layout, colors and texts.
   - When writing or changing a spec on a topic another spec already covers, the existing spec MUST be followed; do not fall back to the `design` files for that topic.
   - When it is unclear whether a spec covers a topic, AI MUST ask the user instead of choosing a source.
-  - Files of type `design` MUST NOT be used as a source for `generated` files; derive `generated` files from their Dependencies and Instructions only, and close design gaps with a spec first.
+  - Files of type `design` MUST NOT be used as a source for `generated` or `spec-maintained` files; derive `generated` files from their Dependencies and Instructions only, derive changes to `spec-maintained` files from their Dependencies only, and close design gaps with a spec first.
 
 AI MAY propose new types; AI MUST NOT introduce them silently. Adding a type requires explicit user approval and an entry here.
 
@@ -140,6 +140,14 @@ The Protocol column carries a behavioral discipline applied to the file. The set
   - The Dependencies column MUST list at least one registered file: the specs the file implements and any other `generated` files whose interfaces it uses.
   - The Instructions column MUST name a registered `rules` file holding the generation instructions.
   - When a file listed in Dependencies or Instructions changes, AI MUST flag the dependent `generated` files as stale and regenerate them only after user approval.
+- `spec-maintained`: the file is implementation code written before the spec process, whose behavior is not yet fully specified; it is kept current by targeted edits that implement approved specs.
+  - AI MUST NOT change a `spec-maintained` file except to implement an approved spec; for any other change, write or change a spec first.
+  - AI MUST apply such changes as targeted edits to the existing content; do not regenerate the file.
+  - Every change to a `spec-maintained` file MUST be traceable to a spec listed in its Dependencies column.
+  - The Dependencies column MUST list every registered spec that concerns the file; it MAY be empty while no spec concerns the file.
+  - The Instructions column MUST name the registered `rules` file holding the generation instructions once that file exists; it MUST be left empty until then.
+  - When a spec listed in Dependencies changes, AI MUST flag the `spec-maintained` file as out of date and edit it only after user approval.
+  - A `spec-maintained` file MUST switch to the `generated` protocol only when its entire behavior is specified, and only after explicit user approval.
 
 Every registered file MUST carry an explicit protocol value. AI MAY propose new protocols; AI MUST NOT introduce them silently. Adding a protocol requires explicit user approval and an entry here.
 
