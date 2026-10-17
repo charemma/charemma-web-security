@@ -48,6 +48,11 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/prompt-injection/"/>
   </url>
   <url>
+    <loc>https://security.charemma.de/wissen/ki-sicherheit/sensitive-information-disclosure/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/sensitive-information-disclosure/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/sensitive-information-disclosure/"/>
+  </url>
+  <url>
     <loc>https://security.charemma.de/wissen/ki-sicherheit/excessive-agency/</loc>
     <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/excessive-agency/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/excessive-agency/"/>
