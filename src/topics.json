@@ -1,6 +1,6 @@
 [
   {
-    "id": "LLM01",
+    "id": "LLM01:2026",
     "group": "llm",
     "slug": "prompt-injection",
     "published": false,
@@ -18,7 +18,7 @@
     }
   },
   {
-    "id": "LLM02",
+    "id": "LLM02:2026",
     "group": "llm",
     "slug": "sensitive-information-disclosure",
     "published": false,
@@ -36,7 +36,7 @@
     }
   },
   {
-    "id": "LLM03",
+    "id": "LLM03:2026",
     "group": "llm",
     "slug": "excessive-agency",
     "published": false,
@@ -54,25 +54,25 @@
     }
   },
   {
-    "id": "LLM04",
+    "id": "LLM04:2026",
     "group": "llm",
     "slug": "supply-chain",
     "published": false,
     "de": {
       "title": "Supply Chain",
-      "body": "Risiken, die über Modelle, Datensätze, Plugins und Bibliotheken von Dritten in eine Anwendung gelangen."
+      "body": "Risiken, die über Modelle, Gewichte, Datensätze, Plugins und Bibliotheken von Dritten in eine Anwendung gelangen – inklusive Registries und unsicherer Dateiformate."
     },
     "en": {
       "title": "Supply chain",
-      "body": "Risks that enter an application through third-party models, datasets, plugins and libraries."
+      "body": "Risks that enter an application through third-party models, weights, datasets, plugins and libraries, including registries and unsafe file formats."
     },
     "el": {
       "title": "Supply chain",
-      "body": "Κίνδυνοι που εισάγονται σε μια εφαρμογή μέσω μοντέλων, datasets, plugins και βιβλιοθηκών τρίτων."
+      "body": "Κίνδυνοι που εισάγονται σε μια εφαρμογή μέσω μοντέλων, βαρών, datasets, plugins και βιβλιοθηκών τρίτων – συμπεριλαμβανομένων των registries και των μη ασφαλών μορφών αρχείων."
     }
   },
   {
-    "id": "LLM05",
+    "id": "LLM05:2026",
     "group": "llm",
     "slug": "data-and-model-poisoning",
     "published": false,
@@ -90,7 +90,7 @@
     }
   },
   {
-    "id": "LLM06",
+    "id": "LLM06:2026",
     "group": "llm",
     "slug": "unbounded-consumption",
     "published": false,
@@ -108,7 +108,7 @@
     }
   },
   {
-    "id": "LLM07",
+    "id": "LLM07:2026",
     "group": "llm",
     "slug": "misinformation",
     "published": false,
@@ -126,7 +126,7 @@
     }
   },
   {
-    "id": "LLM08",
+    "id": "LLM08:2026",
     "group": "llm",
     "slug": "hidden-context-exposure",
     "published": false,
@@ -144,7 +144,7 @@
     }
   },
   {
-    "id": "LLM09",
+    "id": "LLM09:2026",
     "group": "llm",
     "slug": "vector-and-embedding-weaknesses",
     "published": false,
@@ -162,7 +162,7 @@
     }
   },
   {
-    "id": "LLM10",
+    "id": "LLM10:2026",
     "group": "llm",
     "slug": "improper-output-handling",
     "published": false,
@@ -182,37 +182,37 @@
   {
     "id": "PIPE·01",
     "group": "pipe",
-    "slug": "daten-und-rag-ingestion",
+    "slug": "mlops-pipeline-und-registry",
     "published": false,
     "de": {
-      "title": "Daten & RAG-Ingestion",
-      "body": "Wer Trainings-, Fine-Tuning- oder Retrieval-Daten einspielen kann, kann das Verhalten des Systems beeinflussen."
+      "title": "MLOps-Pipeline & Registry",
+      "body": "Training-Jobs, CI/CD für Modelle und die Registry entscheiden, welches Artefakt in Produktion geht – und wer es unterwegs austauschen kann."
     },
     "en": {
-      "title": "Data & RAG ingestion",
-      "body": "Whoever can feed training, fine-tuning or retrieval data can influence how the system behaves."
+      "title": "MLOps pipeline & registry",
+      "body": "Training jobs, CI/CD for models and the registry decide which artifact reaches production, and who can swap it on the way."
     },
     "el": {
-      "title": "Δεδομένα & RAG ingestion",
-      "body": "Όποιος μπορεί να εισαγάγει δεδομένα εκπαίδευσης, fine-tuning ή retrieval μπορεί να επηρεάσει τη συμπεριφορά του συστήματος."
+      "title": "MLOps pipeline & registry",
+      "body": "Τα training jobs, το CI/CD για μοντέλα και το registry καθορίζουν ποιο artifact φτάνει στην παραγωγή – και ποιος μπορεί να το αντικαταστήσει στη διαδρομή."
     }
   },
   {
     "id": "PIPE·02",
     "group": "pipe",
-    "slug": "modell-lieferkette",
+    "slug": "inferenz-infrastruktur",
     "published": false,
     "de": {
-      "title": "Modell-Lieferkette",
-      "body": "Herkunft und Integrität von Modellen, Gewichten und Abhängigkeiten – inklusive Registries und unsicherer Dateiformate."
+      "title": "Inferenz-Infrastruktur",
+      "body": "Modell-Server, Container, GPUs und Mandantentrennung: Dienste wie andere auch – exponiert, oft schwach isoliert, selten mit Ressourcenlimits."
     },
     "en": {
-      "title": "Model supply chain",
-      "body": "Provenance and integrity of models, weights and dependencies – including registries and unsafe file formats."
+      "title": "Inference infrastructure",
+      "body": "Model servers, containers, GPUs and tenant separation: services like any other – exposed, often weakly isolated, rarely rate-limited."
     },
     "el": {
-      "title": "Εφοδιαστική αλυσίδα μοντέλων",
-      "body": "Προέλευση και ακεραιότητα μοντέλων, βαρών και εξαρτήσεων – συμπεριλαμβανομένων των registries και των μη ασφαλών μορφών αρχείων."
+      "title": "Υποδομή inference",
+      "body": "Model servers, containers, GPUs και διαχωρισμός tenants: υπηρεσίες όπως όλες οι άλλες – εκτεθειμένες, συχνά με αδύναμη απομόνωση, σπάνια με όρια πόρων."
     }
   },
   {
@@ -222,37 +222,19 @@
     "published": false,
     "de": {
       "title": "Agenten & Tool-Anbindung",
-      "body": "MCP-Server, Werkzeugrechte und Automatisierung entscheiden, was ein manipulierter Agent tatsächlich anrichten kann."
+      "body": "MCP- und Tool-Server als Prüfobjekt: Authentifizierung, Netzreichweite, Sandboxing der Ausführung und die Identitäten, mit denen sie handeln."
     },
     "en": {
       "title": "Agents & tool access",
-      "body": "MCP servers, tool permissions and automation decide what a manipulated agent can actually do."
+      "body": "MCP and tool servers as the test object: authentication, network reach, sandboxing of execution and the identities they act with."
     },
     "el": {
       "title": "Agents & πρόσβαση σε εργαλεία",
-      "body": "MCP servers, δικαιώματα εργαλείων και αυτοματοποίηση καθορίζουν τι μπορεί πραγματικά να κάνει ένας χειραγωγημένος agent."
+      "body": "MCP και tool servers ως αντικείμενο ελέγχου: αυθεντικοποίηση, εμβέλεια δικτύου, sandboxing της εκτέλεσης και οι ταυτότητες με τις οποίες ενεργούν."
     }
   },
   {
     "id": "PIPE·04",
-    "group": "pipe",
-    "slug": "inferenz-infrastruktur",
-    "published": false,
-    "de": {
-      "title": "Inferenz-Infrastruktur",
-      "body": "Modell-Server und APIs sind Dienste wie andere auch: exponiert, oft schwach isoliert, selten mit Ressourcenlimits."
-    },
-    "en": {
-      "title": "Inference infrastructure",
-      "body": "Model servers and APIs are services like any other: exposed, often weakly isolated, rarely rate-limited."
-    },
-    "el": {
-      "title": "Υποδομή inference",
-      "body": "Οι model servers και τα APIs είναι υπηρεσίες όπως όλες οι άλλες: εκτεθειμένες, συχνά με αδύναμη απομόνωση, σπάνια με όρια πόρων."
-    }
-  },
-  {
-    "id": "PIPE·05",
     "group": "pipe",
     "slug": "secrets-und-schluessel",
     "published": false,
@@ -267,6 +249,24 @@
     "el": {
       "title": "Secrets & κλειδιά",
       "body": "API keys παρόχων μοντέλων και διαπιστευτήρια καταλήγουν εύκολα σε prompts, logs και μεταβλητές pipeline."
+    }
+  },
+  {
+    "id": "PIPE·05",
+    "group": "pipe",
+    "slug": "protokollierung-und-nachvollziehbarkeit",
+    "published": false,
+    "de": {
+      "title": "Protokollierung & Nachvollziehbarkeit",
+      "body": "Welche Prompts, Tool-Aufrufe und Modellantworten protokolliert werden, entscheidet, ob sich ein Vorfall rekonstruieren lässt – oft gar nicht."
+    },
+    "en": {
+      "title": "Logging & traceability",
+      "body": "Which prompts, tool calls and model responses get logged decides whether an incident can be reconstructed – often it cannot."
+    },
+    "el": {
+      "title": "Καταγραφή & ιχνηλασιμότητα",
+      "body": "Το ποια prompts, κλήσεις εργαλείων και αποκρίσεις μοντέλου καταγράφονται καθορίζει αν ένα περιστατικό μπορεί να ανασυσταθεί – συχνά δεν μπορεί."
     }
   }
 ]

@@ -14,8 +14,8 @@
     "path": "wissen/ki-sicherheit/",
     "groups": ["llm", "pipe"],
     "featured": {
-      "llm": ["LLM01", "LLM03", "LLM05"],
-      "pipe": ["PIPE·03", "PIPE·02", "PIPE·04"]
+      "llm": ["LLM01:2026", "LLM03:2026", "LLM05:2026"],
+      "pipe": ["PIPE·03", "PIPE·01", "PIPE·02"]
     },
     "source": {
       "label": "OWASP Top 10 for LLM Applications 2026",
