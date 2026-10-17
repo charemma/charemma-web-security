@@ -126,6 +126,7 @@ The Type column carries a categorical label describing what the file is. The set
 - `content`: a data or text file the user maintains by hand and `build.py` reads as input (topic lists, interface texts per language, step and tool lists); not program logic and not generator configuration.
   - Files of type `content` MUST carry the `editable` protocol.
   - Changes by AI to a file of type `content` MUST follow an explicit user instruction naming the change; do not derive such changes from specs or `design` files.
+  - Files under `src/articles/` MUST be written and revised per `article-writing.md`.
 
 AI MAY propose new types; AI MUST NOT introduce them silently. Adding a type requires explicit user approval and an entry here.
 
@@ -269,6 +270,7 @@ The use of this column — whether a file requires it, and what the referenced f
 |                                              | `AGENTS.md`                 | rules | editable    |              |              | Durable project rules and the index of all project files. \_Agent-imposed name and location (AGENTS.md convention, read by Claude Code and other coding agents); see Agent-imposed exemption rule.\_ |
 | `.ai`                                        | `rule-analysis.md`          | rules | editable    |              |              | Rule analysis protocol — applies when creating or editing durable rules                                                                                 |
 | `.ai`                                        | `rule-conflict-protocol.md` | rules | editable    |              |              | Runtime rule conflict procedure — applies when a conflict is detected during request processing                                                         |
+| `.ai` | `article-writing.md` | rules | editable |  |  | Article writing rules: apply when writing or revising a knowledge article text under `src/articles/` (structure, voice, permitted sources, rewrite pass, commit workflow) |
 | `.ai`                                        | `glossary.md`               | glossary | editable |              |              | Project vocabulary: meaning and anti-meaning of terms used in rules, specs and conversation; normative definitions stay in the defining file, which each entry names. |
 |                                              | `.gitignore`                | config | editable   |              |              | Version control ignore patterns: declare which tool-managed transient paths stay out of git and out of the File Registry.                              |
 | `.ai/logs`                                   | `rule-conflict-log.md`      | log   | append-only |              |              | Audit log of runtime rule conflicts and their resolutions                                                                                               |
