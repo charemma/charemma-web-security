@@ -680,3 +680,4 @@ body.page-light { background: var(--light-bg-alt); color: var(--light-text); }
 .site-footer__links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .site-footer__links a { color: var(--text-muted); padding: 12px 0; }
 .site-footer__links a:hover, .site-footer__links a:focus { color: var(--accent); }
+.site-footer__version { white-space: nowrap; }
