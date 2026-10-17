@@ -4,9 +4,9 @@ updated: 2026-10-17
 sources:
   - label: "OWASP Top 10 for LLM Applications 2026, LLM03:2026 Excessive Agency"
     url: "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/"
-  - label: "Steve Wilson: The Developer's Playbook for Large Language Model Security, Kapitel 7 „Trust No One“, Abschnitt „Watch for Excessive Agency“"
-  - label: "Kris Kimmerle, David Okeyode: AI Under Attack, Kapitel 10 „Agent Exploitation Techniques“ und Kapitel 18 „Securing AI Agents with Zero Trust Architecture“"
-  - label: "Harriet Farlow: Practical AI Security, Kapitel 5 „Defenses, Controls, and Mitigations“, Abschnitt „Agent-Specification Considerations“"
+  - label: "Steve Wilson: The Developer's Playbook for Large Language Model Security"
+  - label: "Kris Kimmerle, David Okeyode: AI Under Attack"
+  - label: "Harriet Farlow: Practical AI Security"
 ---
 
 ## Worum es geht

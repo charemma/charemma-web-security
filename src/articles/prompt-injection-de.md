@@ -4,8 +4,8 @@ updated: 2026-10-17
 sources:
   - label: "OWASP Top 10 for LLM Applications 2026, LLM01:2026 Prompt Injection"
     url: "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/"
-  - label: "Steve Wilson: The Developer's Playbook for Large Language Model Security, Kapitel 4 „Prompt Injection“"
-  - label: "Kris Kimmerle, David Okeyode: AI Under Attack, Kapitel 6 „Prompt Injection and Jailbreaking“"
+  - label: "Steve Wilson: The Developer's Playbook for Large Language Model Security"
+  - label: "Kris Kimmerle, David Okeyode: AI Under Attack"
 ---
 
 ## Worum es geht
