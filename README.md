@@ -20,19 +20,37 @@ k8s/            Kustomize manifests, image tag managed by ArgoCD Image Updater
 docs/design/    design handoff and source components
 ```
 
-The generated HTML in `html/` is committed, so the image build needs nothing
-but `COPY`. CI fails when `html/` is out of date with `src/`.
+The generated HTML in `html/` is committed and independent of the commit it
+sits in. CI fails when `html/` is out of date with `src/`. The image build
+copies it and stamps the version identifier in (see below).
 
 ## Local dev
 
 ```
-just dev      # render and serve on http://localhost:8090 (just dev 9000 for another port)
+just dev      # render, stamp and serve on http://localhost:8090 (just dev 9000 for another port)
 just build    # render only
 just image    # build the container image
 ```
 
-`just dev` uses Python's http.server, so the nginx headers (CSP etc.) are not
-applied locally. Needs `uv` for the generator.
+`just dev` serves a stamped copy of `html/` from `dist/` with Python's
+http.server, so the nginx headers (CSP etc.) are not applied locally. Needs
+`uv` for the generator.
+
+## Version identifier
+
+Every page names the commit it was built from in the footer, as
+`git:(<hash>)` linking to the commit on GitHub, and `/version` returns the
+same identifier as plain text:
+
+```
+test "$(curl -s https://security.charemma.de/version)" = "$(git rev-parse --short origin/main)"
+```
+
+The committed pages carry placeholders; the identifier is stamped in when
+the deliverable is built. CI passes the short commit hash as `SITE_VERSION`
+to the image build, which matches the `sha-` image tag. `just image` and
+`just dev` use `<branch>@<hash>`, with `-dirty` appended while the tree has
+uncommitted changes. An image built without the build arg shows `unknown`.
 
 ## Languages
 
