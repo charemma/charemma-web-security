@@ -42,4 +42,9 @@
     <xhtml:link rel="alternate" hreflang="el" href="https://security.charemma.de/el/wissen/ki-sicherheit/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/"/>
   </url>
+  <url>
+    <loc>https://security.charemma.de/wissen/ki-sicherheit/prompt-injection/</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/prompt-injection/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/prompt-injection/"/>
+  </url>
 </urlset>
