@@ -224,6 +224,8 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Type-discipline lookup. Before reading or writing a registered file, AI MUST consult the file's Type and Protocol entries and apply the discipline they carry.
 
+- Unregistered-file edits. AI MUST NOT modify an unregistered file; propose its registry row per the **Inventory change** rule first and change the file only after the row is approved. Reading an unregistered file remains allowed, so that a Description can be proposed. Files in `.tmp/` and paths matched by a pattern in `.gitignore` are exempt per the **Scratch exemption** and **Ignored-path exemption** rules.
+
 - Reference resolution. When a rule references a file by name, AI MUST resolve the reference against the File Registry's file rows. AI MUST NOT check disk presence for the purposes of reference resolution. Unresolved file references MUST trigger the **Undefined References** rule.
 
 - Agent-imposed exemption. The file `AGENTS.md` is exempt from the Naming Convention, Name Uniqueness, Path Discipline, and Subfolder Convention rules — its name and location are dictated by the AI agent. The registry's Description field for `AGENTS.md` MUST note this agent-imposed nature.
