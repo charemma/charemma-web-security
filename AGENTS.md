@@ -289,6 +289,8 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src` | `build.py` | code | spec-maintained | `001-version-display.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
 | `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
 | `src` | `topics.json` | content | editable |  |  | Knowledge topic list: which topics the knowledge section offers, in which group, under which identifier and address, with their short texts per language. |
-| `src/i18n` | `de.json` | content | editable |  |  | Interface texts, German: all page copy outside the topic list, keyed for the templates. |
-| `src/i18n` | `en.json` | content | editable |  |  | Interface texts, English: all page copy outside the topic list, keyed for the templates. |
-| `src/i18n` | `el.json` | content | editable |  |  | Interface texts, Greek: all page copy outside the topic list, keyed for the templates. |
+| `src/i18n` | `de.json` | content | editable |  |  | Interface texts, German: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
+| `src/i18n` | `en.json` | content | editable |  |  | Interface texts, English: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
+| `src/i18n` | `el.json` | content | editable |  |  | Interface texts, Greek: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
+| `src` | `engagement.json` | content | editable |  |  | Engagement walkthrough steps: the sequence of animated terminal steps on the start page, each with its mode, command, log line and agent set. |
+| `src` | `tools.json` | content | editable |  |  | Tool list: the tool groups shown on the start page, each with its label per language, emphasis flag and tool names. |
