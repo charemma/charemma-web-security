@@ -300,3 +300,4 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src` | `engagement.json` | content | editable |  |  | Engagement walkthrough steps: the sequence of animated terminal steps on the start page, each with its mode, command, log line and agent set. |
 | `src` | `tools.json` | content | editable |  |  | Tool list: the tool groups shown on the start page, each with its label per language, emphasis flag and tool names. |
 | `src/articles` | `prompt-injection-de.md` | content | editable |  |  | Knowledge article text, German, for the topic prompt-injection. |
+| `src/articles` | `excessive-agency-de.md` | content | editable |  |  | Knowledge article text, German, for the topic excessive-agency. |
