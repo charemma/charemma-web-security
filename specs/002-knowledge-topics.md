@@ -19,8 +19,10 @@ ambiguous to anyone who knows an earlier edition.
 ### Source of the list
 
 `topics.json` is the only source of the topic list. Every topic appears there
-once, with its identifier, group, slug, publication state and the title and
-summary in German, English and Greek. No other file repeats a title or summary.
+once, with its identifier, group, slug and the title and summary in German,
+English and Greek. Whether a topic has an article in a language follows from
+the article files (spec 003), not from a field in the list. No other file
+repeats a title or summary.
 
 ### Identifiers
 
