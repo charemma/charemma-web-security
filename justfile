@@ -14,10 +14,32 @@ check-generated: build
 check-security-txt:
     python3 src/check_security_txt.py
 
-# Build the container image locally
-image:
-    docker build -t charemma-web-security:dev .
+# Print the local version identifier: <branch>@<short hash>, plus -dirty for uncommitted changes
+version-id:
+    @printf '%s@%s%s\n' "$(git rev-parse --abbrev-ref HEAD)" "$(git rev-parse --short=7 HEAD)" "$(test -z "$(git status --porcelain)" || echo -dirty)"
 
-# Render and serve on http://localhost:<port>
-dev port="8090": build
-    python3 -m http.server {{port}} --directory html
+# Copy html/ to dist/ with the local version identifier stamped in (same steps as the Dockerfile)
+stamp: build
+    #!/usr/bin/env sh
+    set -eu
+    id="$(just version-id)"
+    commit="${id##*@}"; commit="${commit%-dirty}"
+    rm -rf dist && cp -R html dist
+    find dist -name '*.html' | while read -r f; do
+        sed -e "s|__SITE_VERSION__|$id|g" -e "s|__SITE_COMMIT__|$commit|g" "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+    done
+    printf '%s\n' "$id" > dist/version
+
+# Build the container image locally, stamped with the local version identifier
+image:
+    docker build --build-arg SITE_VERSION="$(just version-id)" -t charemma-web-security:dev .
+
+# Render, stamp and serve on http://localhost:<port>
+dev port="8090": stamp
+    #!/usr/bin/env python3
+    # http.server would serve /version (no extension) as a download; nginx serves it as text/plain
+    from functools import partial
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+    SimpleHTTPRequestHandler.extensions_map[""] = "text/plain; charset=utf-8"
+    print("Serving dist/ on http://localhost:{{port}}")
+    ThreadingHTTPServer(("", {{port}}), partial(SimpleHTTPRequestHandler, directory="dist")).serve_forever()
