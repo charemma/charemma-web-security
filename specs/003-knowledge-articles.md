@@ -102,6 +102,27 @@ light page style, same header, same footer with the version entry from spec
 No table of contents, no reading time, no previous and next links. The back
 link and the header are the navigation.
 
+#### Presentation
+
+The head stacks five text styles: back link, eyebrow, title, lead and
+revision date. With one uniform gap between them the head looks compressed,
+and the revision date reads as a sixth element of equal weight although it
+is metadata of the lead. The lead and the body inherit the overview's text
+color, which was chosen for short card texts next to a dark title. At
+article length and reading size it is pale: 4.5:1 against the light
+background, and the lead's light weight thins it further. These rules apply
+to every article page:
+
+- The revision date sits directly under the lead as its metadata, with half
+  the gap that separates the other head elements.
+- The gap between the head and the body is larger than any gap inside the
+  head, so the body reads as a new block.
+- Lead and body text are darker than the card text of the overview: at
+  least 7:1 contrast against the light page background. The lead uses the
+  normal font weight.
+- Overview and start page keep their current spacing, colors and weights;
+  the changes are scoped to the article page.
+
 ### Language switcher
 
 The switcher in the header lists all languages, as on every page. For a
