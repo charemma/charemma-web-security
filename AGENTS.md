@@ -169,6 +169,10 @@ The set of permitted extensions is closed. Only the following extensions are all
 - `.docx`
 - `.pptx`
 - `.css`
+- `.j2`
+- `.json`
+- `.yml`
+- `.conf`
 
 AI MAY propose new extensions; AI MUST NOT introduce them silently. Adding an extension requires explicit user approval and an entry here.
 
@@ -228,6 +232,8 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Platform-imposed note. The registry's Description field for `README.md` MUST note its platform-imposed name.
 
+- Build-tool exemption. The files `Dockerfile` and `justfile` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; their names are dictated by the build tools that read them. The registry's Description field for both MUST note this tool-imposed nature.
+
 - Design-tool exemption. Files of type `design` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; keep the names the design tool assigned, because the handoff refers to the files by those names. Their extension is derived per the **Extension** section (e.g. `.html` for `Main.dc.html`) and MUST be a permitted extension.
 
 - Design-tool note. The registry's Description field for every file of type `design` MUST note its tool-imposed name.
@@ -263,3 +269,10 @@ The use of this column — whether a file requires it, and what the referenced f
 | `docs/design/design` | `Wissen.dc.html` | design | read-only |  |  | Design component for the knowledge section: reference layout and texts of the AI-security topic overview, and the source for the topic list. _Tool-imposed name; see Design-tool exemption rule._ |
 | `docs/design/design` | `Theme.dc.html` | design | read-only |  |  | Design component for the color roles: which role each theme color plays, as a visual reference sheet. _Tool-imposed name; see Design-tool exemption rule._ |
 | `specs` | `001-version-display.md` | spec | editable |  |  | Spec for the deployed-version display: intended behavior of the version identifier on pages and at the version endpoint, and the reasons for it. |
+|  | `Dockerfile` | code | spec-maintained | `001-version-display.md` |  | Container image recipe: how the delivered site is packaged into the web server image and which build-time values it takes. _Tool-imposed name; see Build-tool exemption rule._ |
+|  | `justfile` | code | spec-maintained | `001-version-display.md` |  | Task runner recipes: the local and CI entry points for rendering, checking, stamping, serving and building the site. _Tool-imposed name; see Build-tool exemption rule._ |
+| `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
+| `nginx` | `default.conf` | code | spec-maintained | `001-version-display.md` |  | Web server configuration: how requests are routed and which content types and cache rules apply. |
+| `src/templates` | `base.html.j2` | code | spec-maintained | `001-version-display.md` |  | Page skeleton template: the markup shared by every page (head, header, footer) that the page templates extend. |
+| `src` | `site.json` | code | spec-maintained | `001-version-display.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
+| `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
