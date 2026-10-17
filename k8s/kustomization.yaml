@@ -7,4 +7,4 @@ resources:
 images:
   - name: ghcr.io/charemma/charemma-web-security
     newName: ghcr.io/charemma/charemma-web-security
-    newTag: sha-ea97e48
+    newTag: sha-715f55e
