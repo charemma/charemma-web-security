@@ -655,8 +655,11 @@ body.page-light { background: var(--light-bg-alt); color: var(--light-text); }
 .overview__source { margin: 0; font-size: 15px; }
 
 /* Knowledge article */
-.article { padding-top: 72px; padding-bottom: 120px; display: flex; flex-direction: column; gap: 48px; }
-.article__head { display: flex; flex-direction: column; gap: 18px; max-width: 760px; }
+.article { --article-text: #4f4f4f; padding-top: 72px; padding-bottom: 120px; display: flex; flex-direction: column; gap: 64px; }
+.article__head { display: flex; flex-direction: column; gap: 0; max-width: 760px; }
+.article__head > * + * { margin-top: 20px; }
+.article__head > .article__updated { margin-top: 10px; }
+.article__head .overview__lead { font-weight: 400; color: var(--article-text); }
 .article__updated {
   margin: 0;
   font-family: var(--font-mono);
@@ -665,7 +668,7 @@ body.page-light { background: var(--light-bg-alt); color: var(--light-text); }
   text-transform: uppercase;
   color: #939393;
 }
-.article__body, .article__sources { max-width: 760px; font-size: 18px; line-height: 1.6; color: var(--light-text); }
+.article__body, .article__sources { max-width: 760px; font-size: 18px; line-height: 1.6; color: var(--article-text); }
 .article__body h2, .article__sources h2 { margin: 40px 0 12px; font-weight: 700; font-size: 26px; line-height: 1.25; color: var(--light-heading); }
 .article__body > h2:first-child, .article__sources h2 { margin-top: 0; }
 .article__body h3 { margin: 28px 0 8px; font-weight: 700; font-size: 20px; line-height: 1.3; color: var(--light-heading); }
