@@ -303,3 +303,4 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src` | `tools.json` | content | editable |  |  | Tool list: the tool groups shown on the start page, each with its label per language, emphasis flag and tool names. |
 | `src/articles` | `prompt-injection-de.md` | content | editable |  |  | Knowledge article text, German, for the topic prompt-injection. |
 | `src/articles` | `excessive-agency-de.md` | content | editable |  |  | Knowledge article text, German, for the topic excessive-agency. |
+| `src/articles` | `sensitive-information-disclosure-de.md` | content | editable |  |  | Knowledge article text, German, for the topic sensitive-information-disclosure. |
