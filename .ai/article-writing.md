@@ -1,6 +1,6 @@
 # Article Writing Rules
 
-This file states the rules for writing and revising knowledge articles under `src/articles/`. It applies whenever a user instruction asks for a new article or a change to an existing one. The page structure, the publication logic and the front matter fields are defined in `003-knowledge-articles.md`; this file governs the text.
+This file states the rules for writing and revising knowledge articles under `src/articles/`. It applies whenever a user instruction asks for a new article or a change to an existing one, and whenever a file of type `article` is written or regenerated from its spec. The page structure, the publication logic and the front matter fields are defined in `003-knowledge-articles.md`; this file governs the text.
 
 ## File and Front Matter
 
