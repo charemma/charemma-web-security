@@ -170,8 +170,8 @@
     }
   },
   {
-    "id": "PIPE·01",
-    "group": "pipe",
+    "id": "INFRA·01",
+    "group": "infra",
     "slug": "mlops-pipeline-und-registry",
     "de": {
       "title": "MLOps-Pipeline & Registry",
@@ -187,8 +187,8 @@
     }
   },
   {
-    "id": "PIPE·02",
-    "group": "pipe",
+    "id": "INFRA·02",
+    "group": "infra",
     "slug": "inferenz-infrastruktur",
     "de": {
       "title": "Inferenz-Infrastruktur",
@@ -204,8 +204,8 @@
     }
   },
   {
-    "id": "PIPE·03",
-    "group": "pipe",
+    "id": "INFRA·03",
+    "group": "infra",
     "slug": "agenten-und-tool-anbindung",
     "de": {
       "title": "Agenten & Tool-Anbindung",
@@ -221,8 +221,8 @@
     }
   },
   {
-    "id": "PIPE·04",
-    "group": "pipe",
+    "id": "INFRA·04",
+    "group": "infra",
     "slug": "secrets-und-schluessel",
     "de": {
       "title": "Secrets & Schlüssel",
@@ -238,8 +238,8 @@
     }
   },
   {
-    "id": "PIPE·05",
-    "group": "pipe",
+    "id": "INFRA·05",
+    "group": "infra",
     "slug": "protokollierung-und-nachvollziehbarkeit",
     "de": {
       "title": "Protokollierung & Nachvollziehbarkeit",

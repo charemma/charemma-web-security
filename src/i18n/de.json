@@ -3,7 +3,7 @@
     "title": "Penetrationstests für Linux-Infrastruktur · Charalambos Emmanouilidis",
     "description": "Penetrationstests mit Schwerpunkt auf Linux-Infrastrukturen: Server, Container und Kubernetes, dazu die Webanwendungen, die darauf laufen.",
     "overview_title": "KI-Sicherheit · Themenübersicht · security.charemma.de",
-    "overview_description": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines."
+    "overview_description": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Infrastruktur."
   },
   "a11y": {
     "nav": "Hauptnavigation",
@@ -79,19 +79,19 @@
     "badge": "Wissen",
     "eyebrow": "05 / ki-sicherheit",
     "title": "Mehr als Prompt Injection",
-    "lead": "KI-Anwendungen erben die Schwächen klassischer Software und bringen eigene mit. Hier erkläre ich die wichtigsten Risiken für LLM-Anwendungen und KI-Pipelines – kurz, verständlich und mit Verweis auf die ausführliche Fachseite.",
+    "lead": "KI-Anwendungen erben die Schwächen klassischer Software und bringen eigene mit. Hier erkläre ich die wichtigsten Risiken für LLM-Anwendungen und KI-Infrastruktur – kurz, verständlich und mit Verweis auf die ausführliche Fachseite.",
     "more": "Weiterlesen",
     "all": "Alle Themen zur KI-Sicherheit",
     "note": "Grundlage: OWASP Top 10 for LLM Applications 2026 und eigene Praxis mit Agenten-Workflows.",
     "groups": {
       "llm": { "title": "LLM-Anwendungen", "sub": "Risiken in Anwendungen mit Sprachmodellen" },
-      "pipe": { "title": "KI-Pipelines", "sub": "Von den Daten bis zum Inferenz-Endpunkt" }
+      "infra": { "title": "KI-Infrastruktur", "sub": "Betrieb, Hosts und Zugänge rund um das Modell" }
     }
   },
   "overview": {
     "eyebrow": "Themenübersicht",
     "title": "KI-Sicherheit",
-    "lead": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Pipelines. Jeder Eintrag erklärt das Thema kurz und führt zur ausführlichen Fachseite.",
+    "lead": "Alle Wissensartikel zu Risiken in LLM-Anwendungen und KI-Infrastruktur. Jeder Eintrag erklärt das Thema kurz und führt zur ausführlichen Fachseite.",
     "back": "← zurück zur Startseite",
     "more": "Zur Fachseite",
     "source": "Quelle der LLM-Kategorien:",
