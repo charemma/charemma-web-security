@@ -312,6 +312,6 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src/i18n` | `el.json` | content | editable |  |  | Interface texts, Greek: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
 | `src` | `engagement.json` | content | editable |  |  | Engagement walkthrough steps: the sequence of animated terminal steps on the start page, each with its mode, command, log line and agent set. |
 | `src` | `tools.json` | content | editable |  |  | Tool list: the tool groups shown on the start page, each with its label per language, emphasis flag and tool names. |
-| `src/articles` | `prompt-injection-de.md` | content | editable |  |  | Knowledge article text, German, for the topic prompt-injection. |
+| `src/articles` | `prompt-injection-de.md` | article | generated | `005-article-prompt-injection.md` | `article-writing.md` | Knowledge article text, German, for the topic prompt-injection. |
 | `src/articles` | `excessive-agency-de.md` | content | editable |  |  | Knowledge article text, German, for the topic excessive-agency. |
 | `src/articles` | `sensitive-information-disclosure-de.md` | content | editable |  |  | Knowledge article text, German, for the topic sensitive-information-disclosure. |
