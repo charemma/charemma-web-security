@@ -21,8 +21,9 @@ is simply a teaser there until the translation lands.
 One article is one Markdown file per topic and language, named
 `<slug>-<lang>.md` after the topic slug from `topics.json` and the language
 code from `site.json`, placed in `src/articles/`. `prompt-injection-de.md` is
-the German article on LLM01. The files are content and are registered like
-the other content files.
+the German article on LLM01. A file whose topic a spec covers is registered
+as `article` and written from that spec; a file without such a spec is
+registered as `content` like the other content files.
 
 A file whose slug matches no topic fails the build, like a dangling
 identifier in the start page selection. A topic without any article file is
