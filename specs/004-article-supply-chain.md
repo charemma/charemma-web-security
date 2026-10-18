@@ -8,7 +8,7 @@ LLM04:2026 Supply Chain is the OWASP entry closest to the site's focus. A
 model is a file that a process on a Linux host loads, that a pipeline pulls
 from a registry over the network and that a container image packages. Most
 of what applies to packages and images applies to models, adapters and
-datasets too, plus a few things that do not. The `pipe` group dropped its own
+datasets too, plus a few things that do not. The `infra` group dropped its own
 model supply chain topic as a duplicate of LLM04 when spec 002 was reviewed,
 so this article is the only place on the site that carries the
 infrastructure view of the model supply chain.
@@ -117,11 +117,11 @@ be named by their mechanism, not as reports.
 - LLM05:2026 Data and Model Poisoning owns what is inside an artifact:
   poisoned data, backdoored weights. This article owns how the artifact
   reaches the system. OWASP draws the line the same way.
-- PIPE·01 MLOps-Pipeline & Registry owns the internal half: the registry,
+- INFRA·01 MLOps-Pipeline & Registry owns the internal half: the registry,
   the promotion gate, signing of the organisation's own artifacts. This
   article says that a gate is needed and what it checks; how to build it is
-  PIPE·01.
-- PIPE·03 Agenten & Tool-Anbindung owns MCP servers and tool registries,
+  INFRA·01.
+- INFRA·03 Agenten & Tool-Anbindung owns MCP servers and tool registries,
   which OWASP delegates to the agentic list. The article names them as the
   agentic branch of the same problem, in one sentence.
 - LLM03:2026 Excessive Agency owns the rights a tampered adapter or plugin
@@ -131,7 +131,7 @@ A neighbour is linked as a relative link only when it has a published
 article in the article's language at the time of writing; otherwise it is
 named by identifier and title without a link, as the LLM02 article does. At
 the time of writing that means a link to `../excessive-agency/` and none to
-LLM05, PIPE·01 or PIPE·03.
+LLM05, INFRA·01 or INFRA·03.
 
 ### Pentest checks
 
@@ -221,8 +221,8 @@ uses her; her passage on supply chain risk is short and may be left out.
    before filters.
 3. The `torchtriton` incident is the only incident told as a report, and the
    sentence names OWASP.
-4. `../excessive-agency/` is the only neighbour link; LLM05, PIPE·01 and
-   PIPE·03 are named without a link, unless a German article on them exists
+4. `../excessive-agency/` is the only neighbour link; LLM05, INFRA·01 and
+   INFRA·03 are named without a link, unless a German article on them exists
    by then.
 5. The sources list holds OWASP LLM04:2026 with the resource page URL,
    Wilson, Kimmerle and Okeyode, and Farlow only if the text uses her; no
