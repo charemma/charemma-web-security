@@ -1,6 +1,6 @@
 # 003 Knowledge articles
 
-Status: approved 2026-10-17
+Status: approved 2026-10-17, amended 2026-10-19
 
 ## Why
 
@@ -94,7 +94,8 @@ light page style, same header, same footer with the version entry from spec
    label, the date itself in ISO form in every language.
 6. The rendered body: headings, paragraphs, lists, code blocks and tables in
    the light page's type and colors; links in the accent color like the
-   other links on light pages.
+   other links on light pages. An article with a step animation per spec
+   006 shows it inside the body, at the position its marker names.
 7. The source list under a localized heading, one entry per source, the
    label linked when a `url` is given. Omitted when `sources` is empty.
 8. The call to action from the start page, unchanged: same title, same
@@ -164,7 +165,9 @@ pages without a change to this spec.
 - The generated pages in `html/` stay committed; article pages are
   generator output like the other pages and are not registered individually.
 - Rendering needs no network access and no JavaScript on the reader's side
-  beyond what every page already loads.
+  beyond what every page already loads. The one exception is the step
+  animation of spec 006: an article that has one loads its player, and
+  reads completely without it.
 - Slugs of published articles do not change (spec 002); the article file is
   renamed only together with the slug, before the first publication.
 - The committed `html/` must not depend on the build machine: Markdown
@@ -178,7 +181,7 @@ pages without a change to this spec.
   previous and next links, an RSS feed and search. Each is a later spec if
   wanted.
 - Images and diagrams inside articles. Until a spec covers them, articles
-  are text, code and tables.
+  are text, code and tables, plus the step animation that spec 006 defines.
 - The third topic group itself.
 
 ## Acceptance
