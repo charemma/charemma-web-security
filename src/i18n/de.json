@@ -100,7 +100,17 @@
   "article": {
     "back": "← zur Themenübersicht",
     "updated": "Stand",
-    "sources": "Quellen"
+    "sources": "Quellen",
+    "animation": {
+      "play": "Abspielen",
+      "pause": "Pause",
+      "replay": "Noch einmal abspielen",
+      "chapters": "Kapitel",
+      "variants": "Variante",
+      "illustration": "Illustration",
+      "raw_show": "Rohtext anzeigen",
+      "raw_hide": "Rohtext ausblenden"
+    }
   },
   "cta": {
     "title": "Was würde ein Angreifer bei Ihnen finden?",

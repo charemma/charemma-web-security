@@ -100,7 +100,17 @@
   "article": {
     "back": "← back to the topic overview",
     "updated": "Last updated",
-    "sources": "Sources"
+    "sources": "Sources",
+    "animation": {
+      "play": "Play",
+      "pause": "Pause",
+      "replay": "Play again",
+      "chapters": "Chapters",
+      "variants": "Variant",
+      "illustration": "Illustration",
+      "raw_show": "Show raw text",
+      "raw_hide": "Hide raw text"
+    }
   },
   "cta": {
     "title": "What would an attacker find in your systems?",
