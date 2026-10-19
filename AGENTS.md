@@ -191,6 +191,7 @@ The set of permitted extensions is closed. Only the following extensions are all
 - `.yml`
 - `.conf`
 - `.py`
+- `.js`
 
 AI MAY propose new extensions; AI MUST NOT introduce them silently. Adding an extension requires explicit user approval and an entry here.
 
@@ -313,6 +314,10 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src` | `site.json` | code | spec-maintained | `001-version-display.md`, `002-knowledge-topics.md` |  | Site configuration: languages, pages, base URL and external links the generator renders from. |
 | `src` | `build.py` | code | spec-maintained | `001-version-display.md`, `003-knowledge-articles.md`, `006-article-animation.md` |  | Site generator: the program that renders the committed pages and the sitemap from the sources in `src/`. |
 | `html/assets/css` | `main.css` | code | spec-maintained | `001-version-display.md`, `003-knowledge-articles.md`, `006-article-animation.md` |  | Stylesheet: the visual rules for all pages, in the form the browser loads. |
+| `html/assets/js` | `engagement.js` | code | spec-maintained |  |  | Engagement walkthrough player: the browser script that types the start page's terminal steps and draws the network map reacting to them. |
+| `html/assets/js` | `lang.js` | code | spec-maintained | `003-knowledge-articles.md` |  | Language memory script: the browser script that stores the language picked in the switcher and sends returning visitors to it. |
+| `html/assets/js` | `player.js` | code | spec-maintained | `006-article-animation.md` |  | Article animation player: the browser script that turns an article's storyboard into the chaptered stage with its controls, cues, lens and switch. |
+| `src/templates` | `player.html.j2` | code | spec-maintained | `006-article-animation.md` |  | Player template: the macros that give an article scene its figure chrome (frame, caption, switch, interactive moment), rendered by the generator together with the scene. |
 | `src` | `topics.json` | content | editable |  |  | Knowledge topic list: which topics the knowledge section offers, in which group, under which identifier and address, with their short texts per language. |
 | `src/i18n` | `de.json` | content | editable |  |  | Interface texts, German: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
 | `src/i18n` | `en.json` | content | editable |  |  | Interface texts, English: all page copy outside the topic list, the walkthrough steps and the tool list, keyed for the templates. |
