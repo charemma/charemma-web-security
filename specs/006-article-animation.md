@@ -1,7 +1,8 @@
 # 006 Article animation
 
 Status: approved 2026-10-19, amended 2026-10-19 (chapter player), amended
-2026-10-19 (kinds of interactive moment)
+2026-10-19 (kinds of interactive moment), amended 2026-10-19 (mail client
+and assistant chat surfaces)
 
 History: the first version of this spec put a list of steps into the
 article's front matter and played it as boxes and arrows. Branch
@@ -573,6 +574,16 @@ texts the article spec fixes:
 - Prompt surface: a label line that names the surface as the prompt to
   the model, and one block per origin, each with a small uppercase label
   naming where the block comes from.
+- Mail client: a folder column with the inbox selected, the message list
+  with sender, subject and relative time per row and the selected row
+  marked, and a reading pane with the `Von`, `An` and `Betreff` lines above
+  the body.
+- Assistant chat: a header line naming the assistant and the signed-in
+  account, the conversation with the user's message and the assistant's
+  answer, a sources bar under the answer listing each retrieved item with
+  its origin, and the input field with its send button at the bottom. Where
+  a chapter shows how the client treats external content, a configuration
+  line and a status strip stand between the answer and the input field.
 
 A new kind of surface adds its list here with the spec change that
 introduces it.
