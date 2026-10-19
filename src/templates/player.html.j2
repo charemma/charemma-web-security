@@ -1,0 +1,48 @@
+{#
+  Player template for article animations, spec 006.
+  A scene file imports these macros and calls them to build its figure; the
+  macros add the chrome (frame, chapter sections, captions, switch, lens) so a
+  scene writes only its surfaces and texts. The markup here is the contract
+  the build checks and the player script rely on. Import with context so the
+  macros can read the interface texts in `t`:
+
+    {% from "player.html.j2" import scene, switch, chapter, panel, caption, lens, raw with context %}
+#}
+
+{%- macro scene(aria_label) -%}
+<figure data-animation aria-label="{{ aria_label }}">
+{{ caller() }}
+</figure>
+{%- endmacro -%}
+
+{%- macro switch(variants) -%}
+<div data-switch>{% for v in variants %}<span data-variant="{{ v.id }}">{{ v.label }}</span>{% endfor %}</div>
+{%- endmacro -%}
+
+{%- macro chapter(label, duration, address) -%}
+<section data-chapter data-label="{{ label }}" data-duration="{{ duration }}" data-address="{{ address }}">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">{{ address }}</span><span class="anim-chrome__illus">{{ t.article.animation.illustration }}</span></div>
+{{ caller() }}
+</section>
+{%- endmacro -%}
+
+{%- macro panel(variant=none, harm=false) -%}
+<div data-panel{% if variant %} data-variant="{{ variant.id }}"{% endif %}{% if harm %} data-harm{% endif %}>
+{%- if variant %}<p class="anim-variant-label" data-variant-label>{{ variant.label }}</p>{% endif -%}
+{{ caller() }}
+</div>
+{%- endmacro -%}
+
+{%- macro caption(variant=none, scenario=none) -%}
+<p data-caption{% if variant %} data-variant="{{ variant.id }}"{% endif %}>{% if scenario %}<span data-scenario>{{ scenario }}</span>{% endif %}{{ caller() }}</p>
+{%- endmacro -%}
+
+{%- macro lens(at, dur) -%}
+<div data-aha="lens" data-at="{{ at }}" data-for="{{ dur }}">
+{{ caller() }}
+</div>
+{%- endmacro -%}
+
+{%- macro raw() -%}
+<div data-raw>{{ caller() }}</div>
+{%- endmacro -%}

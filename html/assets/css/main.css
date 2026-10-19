@@ -29,6 +29,7 @@
   --accent: #268bd2;
   --accent-light-bg: #006ec1;
   --alert: #dc322f;
+  --alert-tint: color-mix(in srgb, var(--alert) 12%, #ffffff);
   --button-surface: #3f4040;
   --chip-line: #575859;
 
@@ -40,6 +41,7 @@
 
   --font-sans: "Lato", "Helvetica Neue", Helvetica, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   --container: 1200px;
   --gutter: 24px;
@@ -721,3 +723,522 @@ body.page-light { background: var(--light-bg-alt); color: var(--light-text); }
 .site-footer__links a { color: var(--text-muted); padding: 12px 0; }
 .site-footer__links a:hover, .site-footer__links a:focus { color: var(--accent); }
 .site-footer__version { white-space: nowrap; }
+
+/* Article animation (spec 006): storyboard and surfaces.
+   Storyboard rules are scoped to figures without the player's .anim--js class,
+   so the player takes over once it enhances the figure. */
+figure[data-animation] {
+  counter-reset: anim-ch;
+  width: 100%;
+  max-width: 760px;
+  margin: 48px 0;
+  font-family: var(--font-sans);
+  color: var(--article-text);
+}
+figure[data-animation] [data-chapter] { counter-increment: anim-ch; }
+/* The switch markup serves the player; the storyboard shows the variants
+   through the label before each panel instead. */
+figure[data-animation]:not(.anim--js) [data-switch] { display: none; }
+
+/* Window chrome of a storyboard frame */
+.anim-chrome {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  background: #f1f1f1;
+  border: 1px solid var(--light-line);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #6a6a6a;
+}
+.anim-chrome__dots { display: inline-flex; gap: 6px; }
+.anim-chrome__dots i { width: 11px; height: 11px; border-radius: 50%; background: #d4d4d4; }
+.anim-chrome__addr {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 4px 12px;
+  background: #ffffff;
+  border: 1px solid var(--light-line);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.anim-chrome__illus {
+  flex: 0 0 auto;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+/* Variant label above a panel (storyboard) */
+.anim-variant-label {
+  margin: 20px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+/* Captions */
+figure[data-animation] [data-caption] {
+  max-width: 680px;
+  margin: 14px auto 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--article-text);
+}
+figure[data-animation] [data-caption] strong { color: var(--light-heading); }
+figure[data-animation] [data-scenario] {
+  display: block;
+  margin-bottom: 4px;
+  font-style: italic;
+  color: #8a8a8a;
+}
+figure[data-animation]:not(.anim--js) [data-caption] {
+  position: relative;
+  padding-left: 36px;
+}
+figure[data-animation]:not(.anim--js) [data-caption]::before {
+  content: counter(anim-ch);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent-light-bg);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The panel stage: a framed surface under the chrome bar (storyboard) */
+figure[data-animation]:not(.anim--js) [data-panel] {
+  border: 1px solid var(--light-line);
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+figure[data-animation]:not(.anim--js) [data-panel] + [data-caption] { margin-bottom: 8px; }
+
+/* Shared surface shell: the chrome of a rebuilt screen is in the system UI
+   font so it looks like the reader's own windows; a code host's greys and
+   greens, a log's dark ground. Each surface is a column that fills its panel. */
+.surface {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.surface--issue-edit, .surface--issue, .surface--prompt { background: #ffffff; color: #1f2328; }
+.surface strong { color: #1f2328; font-weight: 600; }
+
+/* Issue editor */
+.surface__edithead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; padding: 14px 18px 10px; }
+.surface__editheading { font-size: 18px; font-weight: 600; white-space: nowrap; }
+.surface__account { font-size: 13px; color: #59636e; }
+.surface__field--title { margin: 0 18px 10px; padding: 8px 12px; border: 1px solid #d8dee4; border-radius: 6px; font-weight: 600; }
+.surface__editor { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; margin: 0 18px; border: 1px solid #d8dee4; border-radius: 6px; overflow: hidden; }
+.surface__tabs { display: flex; gap: 4px; padding: 6px 8px 0; background: #f6f8fa; border-bottom: 1px solid #d8dee4; font-size: 13px; }
+.surface__tab { padding: 5px 12px; color: #59636e; }
+.surface__tab--active { margin-bottom: -1px; background: #ffffff; border: 1px solid #d8dee4; border-bottom-color: #ffffff; border-radius: 6px 6px 0 0; color: #1f2328; }
+.surface__field--body { flex: 1 1 auto; min-height: 96px; padding: 12px 14px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: #1f2328; white-space: pre-wrap; overflow-wrap: anywhere; }
+.surface__actions { padding: 12px 18px 16px; display: flex; justify-content: flex-end; }
+.surface__btn { font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 6px; border: 1px solid #d8dee4; }
+.surface__btn--primary { background: #1f883d; border-color: #1f883d; color: #ffffff; }
+
+/* Rendered issue page */
+.surface__issuehead { padding: 16px 18px 12px; border-bottom: 1px solid #d8dee4; }
+.surface__issuetitle { display: block; font-size: 20px; font-weight: 600; line-height: 1.3; }
+.surface__issueno { color: #59636e; font-weight: 400; }
+.surface__issuemeta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 8px; font-size: 13px; color: #59636e; }
+.surface__badge { display: inline-flex; align-items: center; padding: 3px 12px; border-radius: 999px; background: #1f883d; color: #ffffff; font-weight: 600; }
+.surface__comment { display: flex; gap: 12px; padding: 16px 18px; }
+.surface__avatar { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 50%; background: #8250df; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+.surface__commentbox { flex: 1 1 auto; min-width: 0; border: 1px solid #d8dee4; border-radius: 8px; }
+.surface__commenthead { padding: 8px 14px; background: #f6f8fa; border-bottom: 1px solid #d8dee4; border-radius: 7px 7px 0 0; font-size: 13px; color: #59636e; }
+.surface__issuebody { padding: 14px; font-size: 15px; line-height: 1.6; }
+.surface__issuebody p { margin: 0; }
+.surface__issuebody .surface__note { margin-top: 8px; padding: 6px 10px; border: 1px dashed #d8dee4; border-radius: 6px; font-size: 12px; font-style: italic; color: #59636e; }
+
+/* The injected comment: malicious, so red; hidden on the rendered page */
+.anim-mark { color: var(--alert); font-family: var(--font-mono); }
+/* In the raw layer the hidden part is a block of its own, so the reader sees
+   code laid bare rather than red words on the cream ground */
+.anim-mark--block { display: block; margin: 4px 0; padding: 2px 6px; border-radius: 4px; background: var(--alert-tint); }
+
+/* Lens: the raw layer is the comment body as source text */
+[data-aha="lens"] { position: relative; }
+.anim-lens__rawtext { margin: 0; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+figure[data-animation]:not(.anim--js) [data-aha="lens"] .anim-lens__rendered { display: none; }
+figure[data-animation]:not(.anim--js) [data-aha="lens"] [data-raw] { padding: 14px; background: #fff8f0; }
+
+/* Prompt surface: a labelled sheet where two blocks merge into one */
+.surface--prompt { align-items: center; justify-content: center; gap: 14px; padding: 18px; background: #f6f8fa; }
+.surface__promptlabel { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #59636e; }
+.surface__merge { width: min(640px, 100%); display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 1px solid #d8dee4; border-radius: 12px; background: #ffffff; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08); }
+.surface__block { padding: 10px 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.surface__block--intended { background: rgba(0, 110, 193, 0.08); border-left: 3px solid var(--accent-light-bg); color: #0b4f8a; }
+.surface__block--data { background: #f6f8fa; border-left: 3px solid #8c959f; }
+.surface__blocklabel { display: block; margin-bottom: 6px; font-family: var(--font-ui); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #59636e; }
+
+/* Agent log (dark): a header with the agent and its state, the identity
+   line of the switch, then timestamped lines */
+.surface--log { background: #1f2020; color: #c9caca; font-family: var(--font-mono); font-size: 13px; }
+.surface__loghead { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding: 10px 16px; background: #2a2b2b; border-bottom: 1px solid #3a3b3b; font-family: var(--font-ui); font-size: 13px; color: #a9abab; }
+.surface__loghead strong { color: #e6edf3; white-space: nowrap; }
+.surface__logdot { width: 10px; height: 10px; border-radius: 50%; }
+.surface__logdot--running { background: #d29922; box-shadow: 0 0 0 3px rgba(210, 153, 34, 0.25); }
+.surface__logdot--done { background: #1f883d; }
+.surface__logid { margin: 14px 16px 0; padding: 6px 10px; border-radius: 6px; font-size: 12px; }
+.surface__logid--exposed { background: rgba(220, 50, 47, 0.14); color: #f0938f; }
+.surface__logid--protected { background: rgba(38, 139, 210, 0.16); color: #7fc0ec; }
+.surface__loglines { display: flex; flex-direction: column; gap: 6px; padding: 12px 16px 0; }
+.surface__logline { display: flex; gap: 14px; color: #a9abab; overflow-wrap: anywhere; }
+.surface__logline--harm { color: #f0938f; }
+.surface__logts { flex: 0 0 auto; color: #6e7070; }
+.surface__out { margin: 14px 16px 0; padding: 10px 0 14px; border-top: 1px solid #333; color: #8a8c8c; font-size: 12px; }
+.surface__out--harm { color: #f0938f; }
+
+/* Cue end states without the player: elements that end hidden stay hidden,
+   a swap shows its second child. */
+figure[data-animation]:not(.anim--js) [data-cue="hide"] { display: none; }
+figure[data-animation]:not(.anim--js) [data-cue="show"][data-for] { display: none; }
+figure[data-animation]:not(.anim--js) [data-cue="swap"] > :first-child { display: none; }
+
+@media (max-width: 720px) {
+  .surface__logts { display: none; }
+}
+
+/* Article animation: the player's stage, built by player.js once it enhances
+   the figure. */
+figure[data-animation].anim--js {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+figure[data-animation].anim--js .anim-chrome,
+figure[data-animation].anim--js [data-caption],
+figure[data-animation].anim--js .anim-variant-label,
+figure[data-animation].anim--js [data-switch] { display: none; }
+
+.anim-frame {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--light-line);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+.anim-frame__bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 16px;
+  background: #f4f4f4;
+  border-bottom: 1px solid var(--light-line);
+  font-size: 13px;
+  color: #6a6a6a;
+}
+.anim-frame__dots { display: inline-flex; gap: 6px; flex: 0 0 auto; }
+.anim-frame__dots i { width: 11px; height: 11px; border-radius: 50%; background: #d4d4d4; }
+.anim-frame__addr {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 4px 12px;
+  background: #ffffff;
+  border: 1px solid var(--light-line);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.anim-frame__illus {
+  flex: 0 0 auto;
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+/* The stage: the current chapter's panel area, a fixed height the surface
+   fills; a surface taller than the stage scrolls inside it. */
+.anim-frame [data-chapter] {
+  display: flex;
+  flex-direction: column;
+  height: clamp(440px, 50vw, 500px);
+  padding: 20px;
+  background: var(--light-bg-alt);
+}
+.anim-frame [data-chapter][hidden] { display: none; }
+.anim-frame [data-panel] { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.anim-frame [data-panel][hidden] { display: none; }
+.anim-frame .surface {
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid var(--light-line);
+  border-radius: 8px;
+  overflow: auto;
+}
+.anim-frame .surface--log { border: none; }
+
+/* Control bar */
+.anim-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: #f4f4f4;
+  border-top: 1px solid var(--light-line);
+}
+.anim-play {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--light-line);
+  background: #ffffff;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+.anim-play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+}
+.anim-play.is-play::before, .anim-play.is-replay::before {
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 7px 0 7px 12px;
+  border-color: transparent transparent transparent var(--accent-light-bg);
+  transform: translateX(1px);
+}
+.anim-play.is-pause::before {
+  width: 10px; height: 12px;
+  border-left: 3px solid var(--accent-light-bg);
+  border-right: 3px solid var(--accent-light-bg);
+}
+.anim-play.is-replay { border-color: var(--accent-light-bg); }
+
+/* The chapter bar gives every chapter the room of its label and never
+   shrinks below it; what does not fit beside it wraps to the next line. */
+.anim-chapters {
+  flex: 1 0 auto;
+  display: flex;
+  gap: 8px;
+}
+.anim-chapter {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px 4px;
+  min-height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+.anim-chapter__head {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #8a8a8a;
+  min-width: 0;
+}
+.anim-chapter__n { flex: 0 0 auto; }
+.anim-chapter__label { white-space: nowrap; }
+.anim-chapter[aria-current] .anim-chapter__head { color: var(--light-heading); }
+.anim-chapter__track { height: 3px; border-radius: 2px; background: #dcdcdc; overflow: hidden; }
+.anim-chapter__fill { display: block; height: 100%; width: 0; background: var(--accent-light-bg); }
+.anim-chapter__fill.is-harm { background: var(--alert); }
+
+/* Caption under the frame */
+.anim-caption {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 680px;
+  margin: 18px auto 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--article-text);
+}
+.anim-caption__n {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--accent-light-bg);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.anim-caption__text { margin: 0; }
+.anim-caption__text strong { color: var(--light-heading); }
+
+/* Lens defaults under the player: show the rendered layer, hide the raw one
+   until the lens reveals it. */
+figure[data-animation].anim--js [data-aha="lens"] .anim-lens__rendered { display: block; }
+figure[data-animation].anim--js [data-aha="lens"] [data-raw] { display: none; }
+
+@media (max-width: 720px) {
+  .anim-chapters { min-width: 0; }
+  .anim-chapter { flex: 1 1 0; min-width: 0; }
+  .anim-chapter__label { overflow: hidden; text-overflow: ellipsis; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-chapter__fill { transition: none; }
+}
+
+/* Article animation: cue states driven by the player. */
+figure[data-animation].anim--js .anim-off { opacity: 0; transition: opacity .4s ease; }
+figure[data-animation].anim--js :not(.anim-off) { transition: opacity .4s ease; }
+
+.anim-caret::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: anim-blink 1s steps(1) infinite;
+}
+@keyframes anim-blink { 50% { opacity: 0; } }
+
+figure[data-animation].anim--js .anim-pending { opacity: 0; }
+figure[data-animation].anim--js .surface__logline,
+figure[data-animation].anim--js [data-cue="lines"] > * { transition: opacity .3s ease; }
+
+/* Swap: the two surfaces share one cell and cross-fade */
+figure[data-animation].anim--js .anim-swap { display: grid; flex: 1 1 auto; min-height: 0; }
+figure[data-animation].anim--js .anim-swap > * {
+  grid-area: 1 / 1;
+  transition: opacity .4s ease;
+}
+figure[data-animation].anim--js .anim-swap > :first-child { opacity: 1; }
+figure[data-animation].anim--js .anim-swap > :last-child { opacity: 0; }
+figure[data-animation].anim--js .anim-swap.anim-swapped > :first-child { opacity: 0; }
+figure[data-animation].anim--js .anim-swap.anim-swapped > :last-child { opacity: 1; }
+
+/* Merge: the two blocks start apart and settle together */
+figure[data-animation].anim--js .surface__merge > .surface__block { transition: transform .5s ease, opacity .5s ease; }
+figure[data-animation].anim--js .surface__merge.anim-apart > .surface__block:first-child { transform: translateY(-14px); opacity: .55; }
+figure[data-animation].anim--js .surface__merge.anim-apart > .surface__block:last-child { transform: translateY(14px); opacity: .55; }
+
+/* Press: the button shows its pressed state for a moment */
+figure[data-animation].anim--js .surface__btn { transition: transform .15s ease, filter .15s ease; }
+figure[data-animation].anim--js .surface__btn.is-pressed { transform: translateY(1px) scale(.97); filter: brightness(.9); }
+
+@media (prefers-reduced-motion: reduce) {
+  figure[data-animation].anim--js .anim-off,
+  figure[data-animation].anim--js :not(.anim-off),
+  figure[data-animation].anim--js .anim-swap > *,
+  figure[data-animation].anim--js .surface__merge > .surface__block,
+  figure[data-animation].anim--js .surface__btn { transition: none; }
+  .anim-caret::after { animation: none; }
+}
+
+/* Article animation: the lens (interactive moment). Both layers share one
+   grid cell, so the element is as tall as the taller layer and the raw text
+   is never cut off; the raw layer is clipped to the lens circle, which the
+   player moves. The ring is the lens itself: a translucent accent border with
+   a soft glow and a light shadow, so it reads as glass, not as a drawn circle. */
+figure[data-animation].anim--js [data-aha="lens"] {
+  position: relative;
+  display: grid;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+figure[data-animation].anim--js [data-aha="lens"] .anim-lens__rendered { display: block; grid-area: 1 / 1; }
+figure[data-animation].anim--js [data-aha="lens"] [data-raw] {
+  display: block;
+  grid-area: 1 / 1;
+  margin: 0;
+  padding: 14px;
+  background: #fff8f0;
+  clip-path: circle(0px at 0px 0px);
+}
+.anim-lens__ring {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(0, 110, 193, 0.7);
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(0, 110, 193, 0.12), 0 8px 24px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+.anim-aha {
+  max-width: 680px;
+  margin: 10px auto 0;
+  padding-left: 38px;
+}
+.anim-aha__btn {
+  min-height: 44px;
+  padding: 8px 14px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--accent-light-bg);
+  background: #ffffff;
+  border: 1px solid var(--light-line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.anim-aha__btn:hover, .anim-aha__btn:focus { border-color: var(--accent-light-bg); }
+
+/* Article animation: the switch (two variant buttons in the control bar).
+   It sits at the right end of the bar and, when the chapters leave no room,
+   wraps into a line of its own under them. */
+.anim-controls { flex-wrap: wrap; }
+.anim-switch {
+  flex: 0 0 auto;
+  margin-left: auto;
+  display: flex;
+  border: 1px solid var(--light-line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #ffffff;
+}
+.anim-switch__btn {
+  min-height: 44px;
+  padding: 0 14px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: #6a6a6a;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.anim-switch__btn[aria-pressed="true"] { font-weight: 700; }
+.anim-switch__btn--0[aria-pressed="true"] { background: rgba(220, 50, 47, 0.12); color: var(--alert); }
+.anim-switch__btn--1[aria-pressed="true"] { background: rgba(0, 110, 193, 0.12); color: var(--accent-light-bg); }
+
+@media (max-width: 720px) {
+  .anim-chapters { order: 3; flex-basis: 100%; }
+}

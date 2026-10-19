@@ -3,6 +3,11 @@
 {% block description %}{{ article.lead }}{% endblock %}
 {% block body_class %}page-light{% endblock %}
 {% block nav_links %}{% endblock %}
+{%- block scripts %}
+{%- if article.has_scene %}
+  <script type="module" src="/assets/js/player.js"></script>
+{%- endif %}
+{%- endblock %}
 {% block main %}
     <article class="article container">
       <div class="article__head">
@@ -17,6 +22,17 @@
       </div>
       <div class="article__body">
 {{ article.body_html | safe }}      </div>
+      {%- if article.has_scene %}
+      <div class="anim-i18n" hidden
+        data-play="{{ t.article.animation.play }}"
+        data-pause="{{ t.article.animation.pause }}"
+        data-replay="{{ t.article.animation.replay }}"
+        data-chapters="{{ t.article.animation.chapters }}"
+        data-variants="{{ t.article.animation.variants }}"
+        data-illustration="{{ t.article.animation.illustration }}"
+        data-raw-show="{{ t.article.animation.raw_show }}"
+        data-raw-hide="{{ t.article.animation.raw_hide }}"></div>
+      {%- endif %}
       {%- if article.sources %}
       <section class="article__sources">
         <h2>{{ t.article.sources }}</h2>
