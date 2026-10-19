@@ -1,6 +1,7 @@
 # 006 Article animation
 
-Status: approved 2026-10-19, amended 2026-10-19
+Status: approved 2026-10-19, amended 2026-10-19 (chapter player), amended
+2026-10-19 (kinds of interactive moment)
 
 History: the first version of this spec put a list of steps into the
 article's front matter and played it as boxes and arrows. Branch
@@ -31,7 +32,9 @@ An article animation is therefore a short, chaptered replay on surfaces
 that look like the real thing. The reader controls the pace: a chapter bar,
 play and pause, a stop at the end. Movement is rare and tells cause and
 effect. One caption under the stage carries the text. One interactive
-moment lets the reader see what the model sees. One switch shows the same
+moment lets the reader discover by hand what the surface hides or what
+differs between two states of it; the prompt injection scene uses it to
+show what the model sees. One switch shows the same
 scene with a countermeasure, so the reader sees which configuration
 changed and what it changed. The case is documented or marked as
 constructed, the names are generic, and the protection is shown with its
@@ -66,6 +69,11 @@ only the format and the mechanics.
 - Chapter: one unit of the animation: a surface, the cues that change it,
   and one caption.
 - Cue: one movement within a chapter, declared on the element it moves.
+- Interactive moment: the one place in a scene where the reader discovers
+  something by hand; it has a kind, which fixes what the reader does and
+  what the player demonstrates.
+- Kind: one of the closed list of interactive moments this spec defines
+  (`lens`, `compare`, `reveal`), named in `data-aha`.
 - Variant: one of the two states of the switch; the scene shows the attack
   without the countermeasure in the first variant and with it in the
   second.
@@ -190,13 +198,45 @@ state. The player takes them from the document and never carries a copy.
 ### The interactive moment
 
 Every scene has exactly one interactive moment, in which the reader
-discovers something by hand. This spec defines one kind, the lens: what
-the reader sees against what the model sees. One element in one panel
-carries `data-aha="lens"`, `data-at` and `data-for`. It contains the
-rendered content as the surface shows it and a child with `data-raw`
-that holds the same content as raw text, in the monospace font, with the
-part the surface hides marked up as a block of its own, as the design
-section describes it, so that the reader recognises it as code laid bare.
+discovers something by hand. The moment has a kind, chosen by the article
+spec after what the scene wants to reveal or compare, from the closed list
+below and no other. One element in one panel carries `data-aha` with the
+kind's name as its value, `data-at` and `data-for`, and the children the
+kind requires. The list is closed in the sense of the types and protocols
+of `AGENTS.md`: AI may propose a kind, and a new kind enters this list
+through a spec change with explicit approval, never silently with a scene.
+
+| Kind | Use it when | The reader | The demonstration |
+| ---- | ----------- | ---------- | ----------------- |
+| `lens` | a hidden part sits at one spot inside visible content and the point is where it is | moves a round lens over the element | the lens travels across the element and widens until the raw layer is fully revealed |
+| `compare` | the same surface has two complete states that differ and the point is the difference | flips the element between the two states | the element flips to the second state, back, and to the second again, where it stays |
+| `reveal` | a surface has a second surface under a cover and the point is that something lies underneath | uncovers and covers the element | the cover dissolves over `data-for` and the covered layer stands |
+
+Rules common to every kind. The demonstration starts at `data-at` and
+lasts `data-for`; it runs only the first time the chapter plays within one
+playback and counts as a cue for the overlap rule, so nothing else moves
+while it runs. When the reader selects the chapter again from the chapter
+bar after it has played, the player shows the element in its end state and
+waits, paused. Replay starts a new playback and with it the demonstration.
+As soon as the reader takes the element (the pointer over the lens, a flip,
+an uncovering), the demonstration stops and does not resume, the player
+pauses on this chapter, the play button shows the paused state, and the
+chapter never continues on its own: the reader presses play to go on. The
+element takes the height of the taller of its layers, so no layer is ever
+cut off. A button under the caption, created by the player, is the fallback
+for keyboard and screen reader for every kind; it takes the player to the
+moment's chapter, paused, and toggles the element's end state. Without
+JavaScript the fallback does not exist and the element stands in its end
+state, as the storyboard section says. A scene has no second interactive
+element: nothing else reacts to hover, pointer, click or touch, and no
+interaction is hover-only.
+
+**The lens** (`data-aha="lens"`): what the reader sees against what the
+model sees. The element contains the rendered content as the surface shows
+it and a child with `data-raw` that holds the same content as raw text, in
+the monospace font, with the part the surface hides marked up as a block
+of its own, as the design section describes it, so that the reader
+recognises it as code laid bare.
 
 During playback the lens is first shown automatically: at `data-at` a
 round lens appears at the left edge of the element, at the height of the
@@ -205,38 +245,56 @@ across the full width of the element, like a gaze reading the line,
 revealing the raw layer inside its circle; only then does it widen until
 the raw layer is fully revealed. As a guide, the travel takes two thirds
 of `data-for` and the widening the remaining third; a short move to the
-spot that then stands still is not the demonstration. The demonstration
-runs only the first time the chapter plays within one playback. When the
-reader selects the chapter again from the chapter bar after it has
-played, the player shows the raw layer fully and waits, paused. Replay
-starts a new playback, and with it the demonstration. The lens is the
-only movement of its chapter while it runs; the automatic demonstration
-counts as a cue for the overlap rule. The element takes the height of the
-taller of its two layers, so the raw layer is never cut off: the box
-grows with the raw text.
+spot that then stands still is not the demonstration. The lens is the
+only movement of its chapter while it runs. The box grows with the raw
+text, so the raw layer is never cut off.
 
 The pointer takes precedence. As soon as the mouse or a finger is over
 the element, from the start of the chapter and also while the
 demonstration runs, the lens follows the pointer; the demonstration stops
 there and does not resume. Moving the lens pauses the player on this
-chapter, so the chapter does not change under the pointer, and the play
-button shows that the player is paused. When the pointer leaves the
-element, the raw layer stays fully revealed, as after the demonstration,
-and the player stays paused: the reader presses play to go on. The
-chapter never continues on its own once the reader has taken the lens.
-On touch, one finger on the element moves the lens and the page still
-scrolls vertically.
+chapter, so the chapter does not change under the pointer. When the
+pointer leaves the element, the raw layer stays fully revealed, as after
+the demonstration, and the player stays paused. On touch, one finger on
+the element moves the lens and the page still scrolls vertically.
 
-A button under the caption is the fallback for keyboard and screen
-reader: it shows the raw layer fully in place of the rendered content and
-takes the player to that chapter, paused, and a second press hides it
-again. Its labels come from the interface texts. The button is created
-by the player, so the fallback does not exist without JavaScript; without
-JavaScript the raw layer is visible as the end state of its chapter, as
-the next section states.
+The fallback button shows the raw layer fully in place of the rendered
+content, and a second press hides it again. Its labels come from the
+interface texts. End state: the raw layer fully revealed.
 
-A scene has no second interactive element: nothing else reacts to hover,
-pointer or touch, and no interaction is hover-only.
+**The comparison** (`data-aha="compare"`): the same surface in two states.
+The element holds exactly two children `<div data-state>`, each with the
+state's identifier as the attribute value, a short English word such as
+`reported` and `actual`, and `data-label` with the label in the language
+of the article, such as `Was der Agent meldet` and `Was wirklich passiert
+ist`. Both children show the same region of the same surface in two
+states: what the agent reports against what happened, the rendered answer
+against its raw form. The first state is the one the surface shows at
+first.
+
+During playback the player flips the element to the second state at
+`data-at`, back to the first at the midpoint of `data-for`, and to the
+second again at the end of `data-for`, where it stays; each flip is a
+crossfade of the half second of `swap`, so `data-for` is at least 4000 ms
+and the reader sees both states twice. A click or tap on the element flips
+it; the control under the caption is a group of two real buttons with the
+states' labels, the shown state pressed, and flips it too. There is no
+pointer movement and nothing on hover. End state: the second state. The
+storyboard shows both states one after the other, each preceded by its
+label as a short muted line, like the variants of a switched chapter.
+
+**The uncovering** (`data-aha="reveal"`): a surface with a second surface
+under a cover. The element holds the surface as the reader first sees it,
+with the cover as part of it (a redaction bar, a collapsed row, a "3 lines
+hidden" fold, a masked field), and one child `<div data-covered>` with the
+same region as it is under the cover.
+
+During playback the cover dissolves at `data-at`: the covering layer fades
+out and the covered layer fades in over `data-for`, 1000 to 2000 ms, slow
+enough to be read as lifting, not as a cut. A click or tap on the element
+toggles between cover and covered layer; the button under the caption
+toggles too, with labels from the interface texts. There is no travelling
+lens and nothing on hover. End state: the covered layer visible.
 
 ### The switch
 
@@ -315,7 +373,10 @@ without any script. From top to bottom:
 1. For each chapter, in order: a frame with the address of the chapter
    and the illustration label, and inside it the panel of the chapter in
    its end state: every cue's element as its end state column above
-   says, the raw layer of the lens fully visible. A chapter the switch
+   says, the interactive moment's element in the end state of its kind:
+   the raw layer of the lens fully visible, both states of a comparison
+   one after the other with their labels, the covered layer of an
+   uncovering uncovered. A chapter the switch
    changes shows both panels one after the other, each preceded by the
    label of its variant as a short muted line.
 2. Under each frame, the caption of the chapter with the chapter number in
@@ -340,8 +401,9 @@ A module `player.js` next to `engagement.js` under `html/assets/js/`
 plays the figure. The article template loads it through the page
 skeleton's scripts block only when the article has a scene; pages without
 one load nothing new. The player reads the figure from the document, not
-from data of its own, and adds the frame, the controls and the lens; the
-texts stay where the storyboard put them.
+from data of its own, and adds the frame, the controls and the chrome of
+the interactive moment (the lens ring, the state buttons, the fallback
+button); the texts stay where the storyboard put them.
 
 With JavaScript, the player turns the storyboard into the stage:
 
@@ -378,21 +440,22 @@ States and transitions:
   to their start states. After the last chapter the player stops: the
   last end state stays, the chapter bar is full and the play button
   becomes the replay button. Nothing loops; replay starts the first
-  chapter from the beginning and a new playback, so the lens's
-  demonstration runs again.
+  chapter from the beginning and a new playback, so the interactive
+  moment's demonstration runs again.
 - Pause freezes the current chapter where it is; play resumes it.
 - A click on a chapter starts that chapter from its beginning and plays,
-  with one exception: the lens's chapter, once its demonstration has run
-  in this playback, is shown with the raw layer fully revealed and the
-  player paused, as the interactive moment section says. A click on a
+  with one exception: the interactive moment's chapter, once its
+  demonstration has run in this playback, is shown in its end state and
+  the player paused, as the interactive moment section says. A click on a
   variant selects it and starts the first chapter with variant-specific
   content, as the switch section says.
-- A pointer over the lens's element takes the lens and pauses the player
-  on that chapter; the player stays paused when the pointer leaves, and
-  play resumes the chapter where it stands.
-- A press on the fallback button of the lens takes the player to the
-  lens's chapter, paused, with the raw layer fully shown; a second press
-  hides the raw layer and leaves the player paused there.
+- Taking the interactive moment (a pointer over the lens, a flip of a
+  comparison, an uncovering) pauses the player on that chapter; the player
+  stays paused when the reader lets go, and play resumes the chapter where
+  it stands.
+- A press on the fallback button takes the player to the moment's
+  chapter, paused, in the end state of its kind; a second press returns
+  the element to its start state and leaves the player paused there.
 
 There is no usage hint anywhere: no text that explains the controls. If
 the controls need an explanation, they are wrong.
@@ -405,13 +468,14 @@ builds the frame and the controls, but:
 - nothing plays on its own: no autoplay, and the figure's scrolling into
   view changes nothing;
 - the stage shows the end state of the current chapter at once, and a
-  click on a chapter shows that chapter's end state; the raw layer of the
-  lens is fully shown in its chapter, and the fallback button toggles it;
+  click on a chapter shows that chapter's end state; the interactive
+  moment stands in its end state in its chapter, and the fallback button
+  toggles it;
 - play steps through the chapters' end states at the chapter durations
   without running any cue, so the reader who presses play gets a slide
   show, not a film;
-- the lens does not follow the pointer; the fallback button is the
-  interaction.
+- the element does not react to pointer, click or touch; the fallback
+  button is the interaction.
 
 Without JavaScript nothing moves anyway: the storyboard is the reduced
 version of itself.
@@ -473,6 +537,14 @@ own: on a line of its own, with the light alarm tint as background, the
 text in the alarm colour, a small padding and rounded corners, as the
 design component shows it. Red text alone on the cream ground does not
 read as revealed code.
+
+The state buttons of a comparison use the pill shape of the switch in
+neutral colours, the pressed state white, with no red or blue: both
+states are the same surface, neither is the attack. The cover of an
+uncovering is drawn as the real surface draws it, a black bar on a
+document, a fold line in a log, a masked field in a form, so the reader
+recognises that something is covered before anything moves. The fallback
+button of every kind shares one style.
 
 The chapter bar, the play button, the switch and the fallback button are
 in the control style of the design: light grey bar, round white play
@@ -536,8 +608,13 @@ introduces it.
   for the same variant, or a caption does not start with a `<strong>`,
   allowing one `<span data-scenario>` before it in the captions of the
   first chapter only;
-- the scene has no element with `data-aha` or more than one, or the lens
-  has no `data-raw` child or lacks `data-at` or `data-for`;
+- the scene has no element with `data-aha` or more than one, or its value
+  is not one of `lens`, `compare` and `reveal`, or the element lacks
+  `data-at` or `data-for`;
+- a `lens` has no `data-raw` child; a `compare` does not have exactly two
+  `data-state` children, or one of them lacks `data-label`, or its
+  `data-for` is below 4000; a `reveal` has no `data-covered` child, or its
+  `data-for` is outside 1000 to 2000;
 - the scene has a switch without exactly two variants, or a
   `data-variant` value that is not one of them, or `data-variant` values
   without a switch;
@@ -581,9 +658,11 @@ player comes into being with the first scene:
    as the committed page shows it without JavaScript. It is checked for
    whether the sequence is understood without movement before any cue is
    written.
-3. Animation: the cues, the lens and the switch are added to the
-   confirmed storyboard; for the first scene, the player, its template
-   and the styles are written with it. The storyboard stays the fallback.
+3. Animation: the cues, the interactive moment and the switch are added
+   to the confirmed storyboard; for the first scene, the player, its
+   template and the styles are written with it, and a kind the player
+   does not yet implement is implemented with the first scene that uses
+   it. The storyboard stays the fallback.
 4. Review: the finished animation is checked against the review checklist
    of `ANIMATION.md`, ideally by someone who does not know the attack. The
    checklist reaches the project's rules through a rule change after this
@@ -611,6 +690,9 @@ player comes into being with the first scene:
   article are fixed by its article spec, as the case from practice is;
   this spec fixes only the format and the mechanics. An article file
   without a spec gets no scene until its spec exists.
+- The player implements a kind when the first scene uses it, not ahead
+  of it; until then the kind exists in this spec and in the build checks
+  only. The lens is implemented with the prompt injection scene.
 - The rules for authors this spec implies (what a caption says, how the
   article text relates to the animation, the review checklist, the
   sources of a scene) belong in `article-writing.md` and reach it through
@@ -621,7 +703,8 @@ player comes into being with the first scene:
 
 - Animations on the overview or on the start page; the walkthrough is a
   different thing with its own data and player.
-- A second kind of interactive moment, a further effect, a switch with
+- A kind of interactive moment outside the list of three, a further
+  effect, a switch with
   more than two variants, more than one animation per article, sound,
   images, and a figure position other than the `[animation]` line. Each
   is a later change to this spec if wanted.
@@ -665,13 +748,15 @@ player comes into being with the first scene:
    into view resumes it.
 5. A click on a chapter button starts that chapter; a click on a variant
    starts the first variant-specific chapter in that variant and shows
-   its panel and caption; the lens moves across its element on its own,
-   widens to the full raw layer, and afterwards follows the mouse and the
-   finger; the fallback button shows and hides the raw layer and takes the
-   player to that chapter, paused.
+   its panel and caption; the interactive moment demonstrates itself as
+   its kind says (for the lens: it moves across its element on its own
+   and widens to the full raw layer) and afterwards obeys the reader (the
+   lens follows the mouse and the finger); the fallback button toggles the
+   end state and takes the player to that chapter, paused.
 6. With reduced motion requested, nothing plays on its own; chapter
-   buttons show end states; play steps through end states; the raw layer
-   is shown and the fallback button toggles it. With JavaScript disabled
+   buttons show end states; play steps through end states; the
+   interactive moment stands in its end state and the fallback button
+   toggles it. With JavaScript disabled
    the storyboard of acceptance 1 is what the reader sees.
 7. Every control is a `<button>` with a touch target of at least 44 px
    and an accessible name; the figure carries the scene's `aria-label`;
@@ -687,8 +772,8 @@ player comes into being with the first scene:
 11. At 760 px viewport width and above no chapter label is truncated;
     where the switch does not fit beside the chapters it stands in a line
     of its own under them.
-12. The lens is a circle with a 2 px accent ring at 70 percent opacity, a
-    soft glow around it and a shadow, the raw layer on its cream ground
+12. In a scene whose interactive moment is the lens, the lens is a circle
+    with a 2 px accent ring at 70 percent opacity, a soft glow around it and a shadow, the raw layer on its cream ground
     inside it and the rendered layer outside; in the raw layer the hidden
     part stands as a block of its own with the light alarm tint, the alarm
     colour and rounded corners; the demonstration travels across the full
@@ -700,7 +785,8 @@ player comes into being with the first scene:
     least three seconds; a typed text over 180 characters fails the
     build; a typed line break renders as a break without leading
     indentation.
-15. In the lens's chapter, moving the mouse or a finger over the element
+15. In a scene whose interactive moment is the lens, in the lens's
+    chapter, moving the mouse or a finger over the element
     while the demonstration runs takes the lens over at once and the
     demonstration does not resume; moving the lens pauses the player on
     that chapter and the play button shows the paused state; after the
@@ -708,19 +794,30 @@ player comes into being with the first scene:
     paused until play is pressed; selecting the chapter again from the
     chapter bar after it has played shows the raw layer fully without a
     new demonstration, and replay runs the demonstration again.
+16. In the first scene that uses `compare`, the element flips to the
+    second state, back and to the second again during `data-for`, a click
+    or tap and the state buttons flip it, the shown state is pressed, and
+    flipping pauses the player; in the first scene that uses `reveal`,
+    the cover dissolves over `data-for`, a click or tap and the fallback
+    button toggle it, and uncovering pauses the player. Before such a
+    scene exists, acceptance 2 is the acceptance of these kinds.
 
 ## Touches
 
 Orientation for the implementation, not an instruction: the generator
 (`build.py`: find the scene file, split the body at the line, render the
-scene through the player's macros, run the checks), the article template
+scene through the player's macros, run the checks, including the checks on
+the kind of the interactive moment and its children), the article template
 (the figure and the scripts block), a new player template with the macros
 next to the other templates, the stylesheet (frame, control bar, chapter
 bar, caption, lens, cue states, and the surface styles of the first
 scene), a new player module under `html/assets/js/`, the interface texts
 (play, pause, replay, chapter list label, variant group label,
-illustration label, the two labels of the fallback button; content files,
-changed on explicit instruction), `article-writing.md` (author rules and
+illustration label, the two labels of the lens's fallback button and,
+with the first scene that uses `reveal`, the two labels of its button;
+content files, changed on explicit instruction), the player's macros for
+`compare` and `reveal` with their styles and player code, written with the
+first scene that uses them, `article-writing.md` (author rules and
 checklist, a rule change under `rule-analysis.md`), spec 003 (wording of
 its references to this spec) and the registry: the `.js` extension, a row
 for the player module, a row for the player template and, with the first
