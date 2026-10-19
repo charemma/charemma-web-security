@@ -1,6 +1,6 @@
 # Article Writing Rules
 
-This file states the rules for writing and revising knowledge articles under `src/articles/`. It applies whenever a user instruction asks for a new article or a change to an existing one, and whenever a file of type `article` is written or regenerated from its spec. The page structure, the publication logic and the front matter fields are defined in `003-knowledge-articles.md`; this file governs the text.
+This file states the rules for writing and revising knowledge articles under `src/articles/`. It applies whenever a user instruction asks for a new article or a change to an existing one, and whenever a file of type `article` is written or regenerated from its spec. The page structure, the publication logic and the front matter fields are defined in `003-knowledge-articles.md`; this file governs the text of the article and of its animation scene; the format and mechanics of the scene are defined in `006-article-animation.md`.
 
 ## File and Front Matter
 
@@ -53,6 +53,30 @@ This file states the rules for writing and revising knowledge articles under `sr
 - A source entry MUST NOT name a chapter, a section, a year or, for a book, the publisher.
 - The body MUST NOT use footnotes; a statement that rests on one source names that source in the sentence.
 
+## Animation
+
+- A caption MUST open with the core statement in bold and continue with one or two sentences; do not add a third sentence or a second caption, and leave what the caption cannot say in that space to the prose.
+- The article text around the animation MUST NOT repeat the chapters; it MUST order the animation into the article: what the reader is about to see, and what follows from it.
+- A scene that shows a documented case MUST name the source of the case in the article text next to the figure and list it in `sources` with its `url`; do not name the source only in a caption or only in the sources list.
+
+## Scene Review
+
+- Before a scene file is committed, the rendered animation MUST be checked against the review checklist below, and the result per item MUST be reported to the user before the commit; an item that fails MUST be fixed before the commit or named as an open point in the report.
+- An item that cannot be checked from the markup and the built pages (keyboard, phone, reduced motion in a browser) MUST be reported as unchecked, not as passed; it stays with the user.
+
+Review checklist:
+
+1. Does someone without prior knowledge see within three seconds where the scene takes place?
+2. Is every panel a realistic, familiar surface?
+3. Does the reader set the pace: chapters, pause, no loop, no scroll synchronisation?
+4. Does only what the current caption describes move?
+5. Is there exactly one interactive moment, with a button fallback?
+6. One caption per chapter, no side panel, no operating hint needed?
+7. Red only for the malicious and its consequences? Text in reading size, monospace only for code?
+8. Is the countermeasure a switch on the same scene, technically correct, with the residual risk named?
+9. Is the source of the case named in the article? Secrets masked, no invented data?
+10. Does it work without movement, with the keyboard, on the phone?
+
 ## Rewrite Pass
 
 - Before the article is committed, the text MUST go through one rewrite pass along the principles of William Zinsser's _On Writing Well_: check the lead, check the unity of point, pronoun, tense and tone, and cut clutter.
@@ -65,3 +89,9 @@ This file states the rules for writing and revising knowledge articles under `sr
 - After writing or changing an article, `just build` MUST be run and the generated pages committed together with the article.
 - A new article MUST be committed in two commits: `chore(registry)` for the registry row, `feat(articles)` for the article and the generated pages.
 - A correction to an article not yet on `main` MUST be committed with `git commit --fixup=<commit>`; do not create a standalone fix commit.
+- An article MUST be created on the instruction IMPLEMENT THE SPEC, naming the spec, and in the two commits above; do not create an article on REVISE THE ARTICLE.
+- The instruction REVISE THE ARTICLE, naming the article file, MUST be applied only to a file of type `article` whose `feat(articles)` commit is on the current branch and not on `main`; for any other article, change or write its spec first and apply IMPLEMENT THE SPEC on a new branch.
+- A revision MUST change only the article text and the pages `just build` regenerates from it; do not change the spec, the File Registry, code, templates or the scene file as part of a revision, and name such a change to the user as a separate step instead.
+- A revision is a regeneration of the changed passages from the spec and this file: it MUST stay within the spec in the article's Dependencies and MUST NOT add a statement the spec does not carry; a change that needs such a statement MUST be named to the user as a spec change instead of being written.
+- A revision MUST be committed with `git commit --fixup=<commit>` on the article's `feat(articles)` commit, holding the article and the regenerated pages and nothing else.
+- A revision MUST end with the **Rewrite Pass** section: the pass over the revised text, and the two weakest passages named to the user with the reason.
