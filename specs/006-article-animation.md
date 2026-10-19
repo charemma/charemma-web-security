@@ -1,6 +1,6 @@
 # 006 Article animation
 
-Status: approved 2026-10-19
+Status: approved 2026-10-19, amended 2026-10-19
 
 History: the first version of this spec put a list of steps into the
 article's front matter and played it as boxes and arrows. Branch
@@ -173,10 +173,16 @@ movement outside this table needs a change to this spec first.
 Within a chapter and a variant, the cues run one after another: the busy
 interval of one cue (its start to its end, `data-for` or the half second)
 does not overlap another's, so at no moment two things move. The last cue
-of a chapter ends at least one second before the chapter does, so the end
-state stands still before the next chapter begins. Only what the caption
-of the chapter speaks about moves; the article spec checks this, the
-build cannot.
+of a chapter ends at least three seconds before the chapter does, so the
+reader can read what was typed or revealed before the next chapter
+begins. Only what the caption of the chapter speaks about moves; the
+article spec checks this, the build cannot.
+
+For `type`, the typed text is at most 180 characters, so it is read in the
+time the chapter leaves. A line break in the typed text renders as a line
+break; whitespace at the start of a line that stems from the template's
+indentation is stripped when the scene is rendered, so the storyboard and
+the player show the same text without indentation.
 
 The texts a cue types or reveals stand in the markup once, in their end
 state. The player takes them from the document and never carries a copy.
@@ -189,17 +195,37 @@ the reader sees against what the model sees. One element in one panel
 carries `data-aha="lens"`, `data-at` and `data-for`. It contains the
 rendered content as the surface shows it and a child with `data-raw`
 that holds the same content as raw text, in the monospace font, with the
-part the surface hides marked up so that it stands out.
+part the surface hides marked up as a block of its own, as the design
+section describes it, so that the reader recognises it as code laid bare.
 
 During playback the lens is first shown automatically: at `data-at` a
-round lens appears over the element and moves across it over `data-for`,
-revealing the raw layer inside its circle, and then widens until the raw
-layer is fully revealed. From then on, and after the chapter has played,
-the reader moves the lens with the mouse or with a finger: the lens
-follows the pointer while it is over the element, and the page still
-scrolls vertically on touch. The lens is the only movement of its chapter
-while it runs; the automatic demonstration counts as a cue for the
-overlap rule.
+round lens appears at the left edge of the element, at the height of the
+part the surface hides, and travels in a flat arc from left to right
+across the full width of the element, like a gaze reading the line,
+revealing the raw layer inside its circle; only then does it widen until
+the raw layer is fully revealed. As a guide, the travel takes two thirds
+of `data-for` and the widening the remaining third; a short move to the
+spot that then stands still is not the demonstration. The demonstration
+runs only the first time the chapter plays within one playback. When the
+reader selects the chapter again from the chapter bar after it has
+played, the player shows the raw layer fully and waits, paused. Replay
+starts a new playback, and with it the demonstration. The lens is the
+only movement of its chapter while it runs; the automatic demonstration
+counts as a cue for the overlap rule. The element takes the height of the
+taller of its two layers, so the raw layer is never cut off: the box
+grows with the raw text.
+
+The pointer takes precedence. As soon as the mouse or a finger is over
+the element, from the start of the chapter and also while the
+demonstration runs, the lens follows the pointer; the demonstration stops
+there and does not resume. Moving the lens pauses the player on this
+chapter, so the chapter does not change under the pointer, and the play
+button shows that the player is paused. When the pointer leaves the
+element, the raw layer stays fully revealed, as after the demonstration,
+and the player stays paused: the reader presses play to go on. The
+chapter never continues on its own once the reader has taken the lens.
+On touch, one finger on the element moves the lens and the page still
+scrolls vertically.
 
 A button under the caption is the fallback for keyboard and screen
 reader: it shows the raw layer fully in place of the rendered content and
@@ -297,8 +323,11 @@ without any script. From top to bottom:
    of each variant under its panel.
 
 Elements that end hidden (`hide`, `show` with `data-for`) are hidden by
-the stylesheet on their attributes, not by script. The switch and the
-controls do not exist without JavaScript; there is nothing to control.
+the stylesheet on their attributes, not by script. The controls do not
+exist without JavaScript; there is nothing to control. The switch's markup
+stands in the figure for the player, but the stylesheet hides it without
+JavaScript: its variant labels never appear as loose text, the variant
+label before each panel is what the storyboard shows of the variants.
 The figure carries no script tag, no JSON copy of its texts and no
 control in the committed markup. A reader with JavaScript off, a search
 engine and a screen reader without the player all read the storyboard,
@@ -349,11 +378,18 @@ States and transitions:
   to their start states. After the last chapter the player stops: the
   last end state stays, the chapter bar is full and the play button
   becomes the replay button. Nothing loops; replay starts the first
-  chapter from the beginning.
+  chapter from the beginning and a new playback, so the lens's
+  demonstration runs again.
 - Pause freezes the current chapter where it is; play resumes it.
-- A click on a chapter starts that chapter from its beginning and plays.
-  A click on a variant selects it and starts the first chapter with
-  variant-specific content, as the switch section says.
+- A click on a chapter starts that chapter from its beginning and plays,
+  with one exception: the lens's chapter, once its demonstration has run
+  in this playback, is shown with the raw layer fully revealed and the
+  player paused, as the interactive moment section says. A click on a
+  variant selects it and starts the first chapter with variant-specific
+  content, as the switch section says.
+- A pointer over the lens's element takes the lens and pauses the player
+  on that chapter; the player stays paused when the pointer leaves, and
+  play resumes the chapter where it stands.
 - A press on the fallback button of the lens takes the player to the
   lens's chapter, paused, with the raw layer fully shown; a second press
   hides the raw layer and leaves the player paused there.
@@ -388,14 +424,28 @@ labels and buttons, the accent of the light pages for the chosen and the
 intended. The dark organic look of the start page is not used.
 
 The frame is white with a thin light border and rounded corners and
-casts a soft shadow, as `PromptInjectionPlayer.dc.html` shows it. It is up
-to 860 px wide and centred on the reading column, so it extends beyond
-the text on both sides on wide screens and takes the full content width on
-narrow ones. The stage is between 440 and 500 px high, scaled with the
-viewport width in between. On phones the surfaces reflow inside the stage
-(a log drops its timestamp column, an issue page stacks), the chapter
-labels truncate with an ellipsis, and the chapter bar stays operable;
-there is no separate mobile logic.
+casts a soft shadow, as `PromptInjectionPlayer.dc.html` shows it. It is
+exactly as wide as the article's text column, the 760 px of the article
+body per spec 003, never wider, and takes the full content width on
+narrow viewports. The stage is between 440 and 500 px high, scaled with
+the viewport width in between. The surface of a chapter fills the stage in
+height: an editor stretches its body field, an issue page and a log fill
+the area, so no empty band remains under a surface. Where a surface's
+content is taller than the stage, the surface scrolls inside the stage;
+the stage does not grow.
+
+The illustration label from the interface texts stands at the right edge
+of the address bar in both renderings, the storyboard's frames and the
+player's frame; a frame without it is a defect.
+
+The chapter bar gives every chapter the room of its label: at 760 px
+viewport width and above no label is truncated. When the chapters and
+the switch do not fit in one line, the switch moves to a line of its own
+under the chapters; the chapters never shrink to make room for it. On
+phones the surfaces reflow inside the stage (a log drops its timestamp
+column, an issue page stacks), the chapter labels may truncate with an
+ellipsis, and the chapter bar stays operable; there is no separate mobile
+logic.
 
 Colours follow one semantics: red only for what is malicious and for its
 effects (the smuggled instruction, the attacker's lines in the log, the
@@ -410,6 +460,20 @@ gives it. The caption and every text the reader must read outside the
 surfaces are in the sans font at reading size, 16 px or more. Monospace
 is used only for code, logs and raw text.
 
+The lens is a circle of 140 to 180 px diameter. Its ring is a 2 px
+border in the accent colour at 70 percent opacity, with a soft glow of
+6 px outside it in the accent colour at low opacity and a light shadow,
+as `PromptInjectionPlayer.dc.html` shows it; a fully opaque 3 px border
+reads as a drawn circle, not as glass. Inside the circle the raw layer is
+visible on its cream ground, clipped to the circle; outside it the
+rendered layer remains. Two thin arcs without a face are not a lens.
+
+In the raw layer the part the surface hides stands as a block of its
+own: on a line of its own, with the light alarm tint as background, the
+text in the alarm colour, a small padding and rounded corners, as the
+design component shows it. Red text alone on the cream ground does not
+read as revealed code.
+
 The chapter bar, the play button, the switch and the fallback button are
 in the control style of the design: light grey bar, round white play
 button, pill-shaped switch with the chosen variant white and coloured by
@@ -417,6 +481,29 @@ its meaning (red for the exposed variant, blue for the protected one),
 monospace chapter labels. The surface styles live in the stylesheet,
 named by the kind of surface (issue page, CI log), so a later scene on the
 same kind of surface reuses them and a new kind adds its styles once.
+
+A surface is recognised by the elements the real page has. Each kind
+carries at least these, in the language of the article, with generic
+texts the article spec fixes:
+
+- Issue editor: a heading ("Neues Issue"), the line with the signed-in
+  account, the title field, the tabs for writing and preview with the
+  writing tab active, a body field that takes the remaining height, and
+  the green submit button at the bottom right.
+- Rendered issue page: the title with the issue number, the green "open"
+  badge, the line saying who opened the issue and when, an avatar circle
+  with initials, and the comment box with its header line (account,
+  "commented" and a relative time) above the body.
+- Log, CI or agent: a header line with the name of the job or agent and
+  its state or identity, below it the lines in monospace on a dark
+  ground, each with a line number or a generic timestamp column that
+  drops on phones.
+- Prompt surface: a label line that names the surface as the prompt to
+  the model, and one block per origin, each with a small uppercase label
+  naming where the block comes from.
+
+A new kind of surface adds its list here with the spec change that
+introduces it.
 
 ### Accessibility
 
@@ -456,7 +543,9 @@ same kind of surface reuses them and a new kind adds its styles once.
   without a switch;
 - a cue has an unknown effect, lacks `data-at`, lacks `data-for` where
   the effect needs it, overlaps another cue of the same chapter and
-  variant, or ends later than one second before the chapter's duration;
+  variant, or ends later than three seconds before the chapter's
+  duration;
+- a `type` element's text exceeds 180 characters;
 - the scene contains `<script>`, `<style>`, a `style` attribute,
   `<canvas>` or `<img>`.
 
@@ -554,8 +643,9 @@ player comes into being with the first scene:
    its end state, the numbered caption under each frame, both variants of
    a switched chapter one after the other with their variant labels, for
    a constructed scenario the marker sentence as the first line of the
-   first caption, no control and no script in the figure's markup, and
-   the Markdown before and after the line rendered as before.
+   first caption, no control and no script in the figure's markup, no
+   visible text of the switch, and the Markdown before and after the line
+   rendered as before.
 2. `just build` fails for each condition in the checks section, with a
    scene that violates exactly that condition.
 3. An article without a scene file renders exactly as before: no figure,
@@ -563,7 +653,10 @@ player comes into being with the first scene:
    articles.
 4. In a browser with JavaScript and without reduced motion, the figure
    shows one frame with address, illustration label, stage and control
-   bar, the caption under it; the first chapter stands at its start when
+   bar, the caption under it; the frame is as wide as the article's text
+   column and shows the illustration label at the right edge of its
+   address bar; each surface fills the stage in height; the first chapter
+   stands at its start when
    the page loads; once a third of the figure is in view the chapters
    play one after another with their cues at their times, the progress
    fills, the caption changes with the chapter; after the last chapter
@@ -591,6 +684,30 @@ player comes into being with the first scene:
    a scene are identical to those of the same article without one.
 10. Spec 003 names the animation as the exception to its JavaScript
     constraint and to its "text, code and tables".
+11. At 760 px viewport width and above no chapter label is truncated;
+    where the switch does not fit beside the chapters it stands in a line
+    of its own under them.
+12. The lens is a circle with a 2 px accent ring at 70 percent opacity, a
+    soft glow around it and a shadow, the raw layer on its cream ground
+    inside it and the rendered layer outside; in the raw layer the hidden
+    part stands as a block of its own with the light alarm tint, the alarm
+    colour and rounded corners; the demonstration travels across the full
+    width of the element at the height of the hidden part before it
+    widens; the raw layer is never cut off when fully revealed.
+13. Every surface shows the required elements of its kind as the design
+    section lists them.
+14. After the last cue of each chapter the surface stands still for at
+    least three seconds; a typed text over 180 characters fails the
+    build; a typed line break renders as a break without leading
+    indentation.
+15. In the lens's chapter, moving the mouse or a finger over the element
+    while the demonstration runs takes the lens over at once and the
+    demonstration does not resume; moving the lens pauses the player on
+    that chapter and the play button shows the paused state; after the
+    pointer leaves, the raw layer is fully revealed and the player stays
+    paused until play is pressed; selecting the chapter again from the
+    chapter bar after it has played shows the raw layer fully without a
+    new demonstration, and replay runs the demonstration again.
 
 ## Touches
 
