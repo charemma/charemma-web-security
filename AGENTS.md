@@ -133,6 +133,13 @@ The Type column carries a categorical label describing what the file is. The set
   - The Instructions column of a file of type `article` MUST name `article-writing.md`.
   - The text of a file of type `article` MUST be derived from the spec in its Dependencies and from the sources `article-writing.md` permits; do not use other sources.
   - An article file under `src/articles/` whose topic no spec covers MUST carry type `content` until a spec for it exists; do not register it as `article` ahead of the spec.
+- `scene`: a knowledge article's animation scene fragment under `src/articles/`, the markup of one article's animation in one language, rendered by `build.py` through the player of spec `006-article-animation.md`.
+  - Files of type `scene` MUST carry the `generated` protocol.
+  - Files of type `scene` MUST be named `<slug>-<lang>-scene.j2`, where `<slug>` is a topic slug from `topics.json` and `<lang>` a language code from `site.json`.
+  - The Dependencies column of a file of type `scene` MUST list the article spec that specifies the animation and `006-article-animation.md`.
+  - The Instructions column of a file of type `scene` MUST name `article-writing.md`.
+  - The markup of a file of type `scene` MUST be derived from the article spec in its Dependencies and follow the format of `006-article-animation.md`; do not use other sources.
+  - A scene file whose article has no spec that specifies an animation MUST NOT be registered until that spec exists.
 
 AI MAY propose new types; AI MUST NOT introduce them silently. Adding a type requires explicit user approval and an entry here.
 
@@ -292,8 +299,8 @@ The use of this column — whether a file requires it, and what the referenced f
 | `specs` | `002-knowledge-topics.md` | spec | editable |  |  | Spec for the knowledge topic list: identifiers, grouping, order and start page selection of the topics, and the reasons for them. |
 | `specs` | `003-knowledge-articles.md` | spec | editable |  |  | Spec for the knowledge articles: how an article file becomes a page per language, the page structure and what overview, sitemap and language links derive from it, and the reasons for it. |
 | `specs` | `004-article-supply-chain.md` | spec | editable |  |  | Spec for the supply chain article: the angle, forms, incident, neighbours, checks and countermeasures the knowledge article on LLM04:2026 presents, and the reasons for them. |
-| `specs` | `005-article-prompt-injection.md` | spec | editable |  |  | Spec for the prompt injection article: the angle, opening scene, forms, case, neighbours, checks and countermeasures the knowledge article on LLM01:2026 presents, and the reasons for them. |
-| `specs` | `006-article-animation.md` | spec | editable |  |  | Spec for the article step animation: how a sequence of steps in an article's front matter becomes a readable list and a replayable animation, its limits and source rules, and the reasons for them. |
+| `specs` | `005-article-prompt-injection.md` | spec | editable |  |  | Spec for the prompt injection article: the angle, opening scene, forms, case, neighbours, checks, countermeasures and the animation scene the knowledge article on LLM01:2026 presents, and the reasons for them. |
+| `specs` | `006-article-animation.md` | spec | editable |  |  | Spec for the article animation: how an article's scene file becomes a chaptered player on realistic surfaces, its chapters, cues, interactive moment and switch, the storyboard fallback and the source rules, and the reasons for them. |
 |  | `Dockerfile` | code | spec-maintained | `001-version-display.md` |  | Container image recipe: how the delivered site is packaged into the web server image and which build-time values it takes. _Tool-imposed name; see Build-tool exemption rule._ |
 |  | `justfile` | code | spec-maintained | `001-version-display.md` |  | Task runner recipes: the local and CI entry points for rendering, checking, stamping, serving and building the site. _Tool-imposed name; see Build-tool exemption rule._ |
 | `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
@@ -313,5 +320,6 @@ The use of this column — whether a file requires it, and what the referenced f
 | `src` | `engagement.json` | content | editable |  |  | Engagement walkthrough steps: the sequence of animated terminal steps on the start page, each with its mode, command, log line and agent set. |
 | `src` | `tools.json` | content | editable |  |  | Tool list: the tool groups shown on the start page, each with its label per language, emphasis flag and tool names. |
 | `src/articles` | `prompt-injection-de.md` | article | generated | `005-article-prompt-injection.md` | `article-writing.md` | Knowledge article text, German, for the topic prompt-injection. |
+| `src/articles` | `prompt-injection-de-scene.j2` | scene | generated | `005-article-prompt-injection.md`, `006-article-animation.md` | `article-writing.md` | Knowledge article animation scene, German, for the topic prompt-injection: the surfaces, chapters, captions, interactive moment and switch of its animation. |
 | `src/articles` | `excessive-agency-de.md` | content | editable |  |  | Knowledge article text, German, for the topic excessive-agency. |
 | `src/articles` | `sensitive-information-disclosure-de.md` | content | editable |  |  | Knowledge article text, German, for the topic sensitive-information-disclosure. |
