@@ -124,6 +124,10 @@ to every article page:
   normal font weight.
 - Overview and start page keep their current spacing, colors and weights;
   the changes are scoped to the article page.
+- Paragraphs, lists and inline code in the body break long words that have
+  no break opportunity, such as URLs, hashes or Base64 strings, so that no
+  article page scrolls horizontally at a 390 px viewport; code blocks and
+  tables keep their own horizontal scroll.
 
 ### Language switcher
 
@@ -210,6 +214,9 @@ pages without a change to this spec.
    fail.
 8. `topics.json` has no `published` field, and `just check-generated`
    passes.
+9. At a 390 px viewport, `document.documentElement.scrollWidth` is 390 on
+   every article page, including the paragraph with the Base64 string in
+   the prompt injection article.
 
 ## Touches
 
