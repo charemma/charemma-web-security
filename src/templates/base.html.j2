@@ -14,10 +14,10 @@
   {%- endif %}
   <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="{{ asset_url('/assets/css/main.css') }}">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <script type="module" src="/assets/js/lang.js"></script>
+  <script type="module" src="{{ asset_url('/assets/js/lang.js') }}"></script>
   {%- block scripts %}{% endblock %}
 </head>
 <body class="{% block body_class %}page-dark{% endblock %}">

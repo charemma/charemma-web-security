@@ -5,7 +5,7 @@
 {% block nav_links %}{% endblock %}
 {%- block scripts %}
 {%- if article.has_scene %}
-  <script type="module" src="/assets/js/player.js"></script>
+  <script type="module" src="{{ asset_url('/assets/js/player.js') }}"></script>
 {%- endif %}
 {%- endblock %}
 {% block main %}
