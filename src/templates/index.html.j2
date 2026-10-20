@@ -59,55 +59,36 @@
         </div>
         <div class="approach__text">
           <p class="approach__lead">{{ t.approach.lead }}</p>
-          <p class="approach__note">{{ t.approach.note }}</p>
         </div>
       </div>
 
-      <div class="cx-band">
-        <div class="cx-stage" data-engagement>
-          <script type="application/json" data-engagement-data>{{ engagement | tojson }}</script>
-          <div class="cx-canvas-wrap" data-canvas-wrap>
-            <canvas class="cx-canvas" data-canvas aria-hidden="true"></canvas>
+      {#- Without JavaScript the stage shows phase 1 with its full command, spec 010 #}
+      {%- set first = engagement.steps[0] %}
+      {%- set phase_total = '%02d' % (engagement.steps | length) %}
+      <div class="walk" data-engagement>
+        <script type="application/json" data-engagement-data>{{ engagement | tojson }}</script>
+        <canvas class="walk__canvas" data-canvas role="img" aria-label="{{ t.engagement.aria }}"></canvas>
+        <div class="walk__over">
+          <span class="walk__phase"><span data-phase-no>{{ t.engagement.phase }} 01 / {{ phase_total }}</span><span class="walk__mode walk__mode--{{ first.mode }}" data-mode>{{ t.engagement.modes[first.mode] }}</span></span>
+          <div class="walk__titles">
+            <span class="walk__title" data-title>{{ first.title }}</span>
+            <span class="walk__hit" data-hit>{{ first.hit }}</span>
           </div>
-          <div class="cx-flash" data-flash aria-hidden="true" hidden></div>
-
-          <div class="cx-glass">
-            <div class="cx-status">
-              <span class="cx-status__label"><span class="cx-dot" data-status-dot aria-hidden="true"></span><span data-status-label>agents collecting</span></span>
-              <span class="cx-status__progress">
-                <span class="cx-meter" role="img" data-meter aria-label="{{ t.engagement.meter_label | replace('{n}', 1) | replace('{total}', engagement.steps | length) }}">
-                  {%- for step in engagement.steps %}
-                  <span class="cx-meter__seg{% if loop.first %} is-current{% endif %}" data-meter-seg></span>
-                  {%- endfor %}
-                </span>
-                <span data-status-count>1/{{ engagement.steps | length }}</span>
-              </span>
-            </div>
-
-            <div class="cx-console" role="log" aria-label="{{ t.a11y.console }}">
-              {%- for step in engagement.steps %}
-              <div class="cx-prompt{% if loop.first %} is-active{% endif %}" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>{{ step.cmd }}</span><span class="cx-cursor" data-cursor aria-hidden="true"{% if not loop.first %} hidden{% endif %}>▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] {{ step.log }}</span>
-                <span class="cx-prompt__hit{% if step.get('pwn') %} is-pwn{% elif step.get('tag') %} is-tag{% endif %}" data-hit hidden>→ {{ step.hit | lower }}</span>
-              </div>
-              {%- endfor %}
-            </div>
-
-            <div class="cx-divider"></div>
-            <div class="cx-net-label">{{ t.approach.net }}</div>
-            <div class="cx-net">
-              <canvas class="cx-canvas" data-net aria-hidden="true"></canvas>
-            </div>
-          </div>
+          <div class="walk__cmd"><span class="accent">❯ </span><span data-cmd>{{ first.cmd }}</span><span class="walk__cursor" aria-hidden="true">▌</span></div>
         </div>
+        <ol class="walk__rail" aria-label="{{ t.engagement.phases_label }}">
+          {%- for step in engagement.steps %}
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="{{ t.engagement.phase }} {{ loop.index }}: {{ step.rail }}"{% if loop.first %} aria-current="step"{% endif %}>
+              <span class="walk__track"><span class="walk__fill walk__fill--{{ step.mode }}" data-fill></span></span>
+              <span class="walk__rail-label">{{ step.rail }}</span>
+            </button>
+          </li>
+          {%- endfor %}
+        </ol>
       </div>
 
-      <div class="approach__results container" data-results>
-        {%- for r in t.approach.results %}
-        <span><span class="accent" aria-hidden="true">✓</span> {{ r }}</span>
-        {%- endfor %}
-      </div>
+      <div class="approach__note container">{{ t.approach.note }}</div>
     </section>
 
     <section id="ablauf" class="process">

@@ -10,10 +10,10 @@
   <link rel="alternate" hreflang="x-default" href="https://security.charemma.de/">
   <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main.css?v=ff80421ca8">
+  <link rel="stylesheet" href="/assets/css/main.css?v=c9d9e6d2c7">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <script type="module" src="/assets/js/engagement.js?v=5375ac29ad"></script>
+  <script type="module" src="/assets/js/engagement.js?v=bd42420e05"></script>
 </head>
 <body class="page-dark">
   <div class="site-header-bar">
@@ -98,81 +98,60 @@
         </div>
         <div class="approach__text">
           <p class="approach__lead">KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.</p>
-          <p class="approach__note">Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.</p>
         </div>
       </div>
-
-      <div class="cx-band">
-        <div class="cx-stage" data-engagement>
-          <script type="application/json" data-engagement-data>{"steps": [{"agent": true, "agentNames": ["osint", "dns-enum"], "cmd": "ai-recon start --scope \"*.[redacted].de\" --agents osint,dns-enum", "depth": "informationsbeschaffung", "hit": "subdomains \u0026 technologien erfasst", "log": "osint: tech stack \u00b7 public docs \u00b7 repos   dns-enum: subdomains \u00b7 records", "mode": "ai-driven"}, {"agent": true, "agentNames": ["osint", "dns-enum", "port-scanning", "service-discovery"], "cmd": "ai-recon add --agents port-scanning,service-discovery", "depth": "informationsbeschaffung", "hit": "hosts, ports \u0026 dienste kartiert", "log": "port-scanning: open ports   service-discovery: banners \u00b7 versions \u00b7 tech", "mode": "ai-driven"}, {"cmd": "ai-recon brief --to me \u0026\u0026 nmap -sV -sC -p 8443 $SUSPECT", "depth": "analyse", "hit": "verd\u00e4chtiger dienst", "log": "findings \u00fcbernommen \u00b7 verd\u00e4chtigen dienst gezielt pr\u00fcfen", "mode": "manuell \u00b7 \u00fcbernahme", "tag": "vulnerable"}, {"cmd": "burpsuite --project-file=engagement.burp", "depth": "manual testing", "hit": "sql-injection + fehlkonfiguration", "log": "auth \u00b7 inputs \u00b7 business logic \u00b7 by hand", "mode": "manuell", "pwn": true, "tag": "injected"}, {"cmd": "python3 poc.py --target svc.[redacted].de", "depth": "exploit", "hit": "remote code execution", "log": "custom proof of concept \u00b7 reproducible", "mode": "manuell", "pwn": true, "tag": "pwned"}, {"agent": true, "agentNames": ["report"], "assist": true, "cmd": "ai-report draft --findings ./loot \u0026\u0026 review", "depth": "reporting", "hit": "bericht mit fixes \u00fcbergeben", "log": "agent drafts \u00b7 every finding verified by hand", "mode": "ai-assisted \u00b7 human review", "report": true, "tag": "report"}], "texts": {"cv": {"ai": "AI-DRIVEN WITH SUBAGENTS", "assist": "AI-ASSISTED \u00b7 HUMAN REVIEW", "handover": "\u00fcbergabe \u00b7 findings", "manual": "MANUELL", "weak": "schwachstelle?"}, "meter_label": "Phase {n} von {total}", "work": ["\u2026", "anomalie", "500", "unerwartet", "leak?", "stacktrace"]}}</script>
-          <div class="cx-canvas-wrap" data-canvas-wrap>
-            <canvas class="cx-canvas" data-canvas aria-hidden="true"></canvas>
+      <div class="walk" data-engagement>
+        <script type="application/json" data-engagement-data>{"steps": [{"cmd": "ai-recon start --scope \"*.[redacted].de\" --agents osint,dns-enum", "hit": "Subdomains \u0026 Technologien erfasst", "mode": "ai", "rail": "info \u00b7 passiv", "title": "Informationsbeschaffung"}, {"cmd": "ai-recon add --agents port-scanning,service-discovery", "hit": "Hosts, Ports \u0026 Dienste kartiert", "mode": "ai", "rail": "info \u00b7 aktiv", "title": "Informationsbeschaffung"}, {"cmd": "ai-recon brief --to me \u0026\u0026 nmap -sV -sC -p 8443 $SUSPECT", "hit": "Verd\u00e4chtiger Dienst", "mode": "manual", "rail": "analyse", "title": "Analyse"}, {"cmd": "burpsuite --project-file=engagement.burp", "hit": "SQL-Injection + Fehlkonfiguration", "mode": "manual", "rail": "manual testing", "title": "Manual Testing"}, {"cmd": "python3 poc.py --target svc.[redacted].de", "hit": "Remote Code Execution", "mode": "manual", "rail": "exploit", "title": "Exploit"}, {"cmd": "ai-report draft --findings ./loot \u0026\u0026 review", "hit": "Bericht mit Fixes \u00fcbergeben", "mode": "assist", "rail": "reporting", "title": "Reporting"}], "texts": {"labels": {"me": "pentester", "review": "human review", "suspect": "verd\u00e4chtig"}, "modes": {"ai": "AI-DRIVEN WITH SUBAGENTS", "assist": "AI-ASSISTED \u00b7 HUMAN REVIEW", "manual": "MANUELL"}, "phase": "PHASE", "report": {"cols": ["ID", "SCHWERE", "BEFUND"], "conf": "VERTRAULICH", "foot": "Jeder Fund mit PoC, Risiko und konkretem Fix.", "meta": "Scope: *.[redacted].de \u00b7 Black-Box \u00b7 Okt 2026", "rows": [["KRITISCH", "RCE \u00b7 svc :8443"], ["KRITISCH", "SQL-Injection \u00b7 /login"], ["HOCH", "k8s-Ingress offen"], ["MITTEL", "TLS veraltet \u00b7 vpn"], ["NIEDRIG", "Header fehlen \u00b7 www"]], "title": "PENTEST-BERICHT"}}}</script>
+        <canvas class="walk__canvas" data-canvas role="img" aria-label="Animation: Ein Partikelschwarm formt nacheinander Netzwerkkarte, Ziel, Angriffspfad und Bericht eines Penetrationstests."></canvas>
+        <div class="walk__over">
+          <span class="walk__phase"><span data-phase-no>PHASE 01 / 06</span><span class="walk__mode walk__mode--ai" data-mode>AI-DRIVEN WITH SUBAGENTS</span></span>
+          <div class="walk__titles">
+            <span class="walk__title" data-title>Informationsbeschaffung</span>
+            <span class="walk__hit" data-hit>Subdomains &amp; Technologien erfasst</span>
           </div>
-          <div class="cx-flash" data-flash aria-hidden="true" hidden></div>
-
-          <div class="cx-glass">
-            <div class="cx-status">
-              <span class="cx-status__label"><span class="cx-dot" data-status-dot aria-hidden="true"></span><span data-status-label>agents collecting</span></span>
-              <span class="cx-status__progress">
-                <span class="cx-meter" role="img" data-meter aria-label="Phase 1 von 6">
-                  <span class="cx-meter__seg is-current" data-meter-seg></span>
-                  <span class="cx-meter__seg" data-meter-seg></span>
-                  <span class="cx-meter__seg" data-meter-seg></span>
-                  <span class="cx-meter__seg" data-meter-seg></span>
-                  <span class="cx-meter__seg" data-meter-seg></span>
-                  <span class="cx-meter__seg" data-meter-seg></span>
-                </span>
-                <span data-status-count>1/6</span>
-              </span>
-            </div>
-
-            <div class="cx-console" role="log" aria-label="Konsole">
-              <div class="cx-prompt is-active" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon start --scope &#34;*.[redacted].de&#34; --agents osint,dns-enum</span><span class="cx-cursor" data-cursor aria-hidden="true">▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] osint: tech stack · public docs · repos   dns-enum: subdomains · records</span>
-                <span class="cx-prompt__hit" data-hit hidden>→ subdomains &amp; technologien erfasst</span>
-              </div>
-              <div class="cx-prompt" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon add --agents port-scanning,service-discovery</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] port-scanning: open ports   service-discovery: banners · versions · tech</span>
-                <span class="cx-prompt__hit" data-hit hidden>→ hosts, ports &amp; dienste kartiert</span>
-              </div>
-              <div class="cx-prompt" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon brief --to me &amp;&amp; nmap -sV -sC -p 8443 $SUSPECT</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] findings übernommen · verdächtigen dienst gezielt prüfen</span>
-                <span class="cx-prompt__hit is-tag" data-hit hidden>→ verdächtiger dienst</span>
-              </div>
-              <div class="cx-prompt" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>burpsuite --project-file=engagement.burp</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] auth · inputs · business logic · by hand</span>
-                <span class="cx-prompt__hit is-pwn" data-hit hidden>→ sql-injection + fehlkonfiguration</span>
-              </div>
-              <div class="cx-prompt" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>python3 poc.py --target svc.[redacted].de</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] custom proof of concept · reproducible</span>
-                <span class="cx-prompt__hit is-pwn" data-hit hidden>→ remote code execution</span>
-              </div>
-              <div class="cx-prompt" data-prompt>
-                <div class="cx-prompt__cmd"><span class="accent">❯ </span><span data-cmd>ai-report draft --findings ./loot &amp;&amp; review</span><span class="cx-cursor" data-cursor aria-hidden="true" hidden>▌</span></div>
-                <span class="cx-prompt__out" data-out>[*] agent drafts · every finding verified by hand</span>
-                <span class="cx-prompt__hit is-tag" data-hit hidden>→ bericht mit fixes übergeben</span>
-              </div>
-            </div>
-
-            <div class="cx-divider"></div>
-            <div class="cx-net-label">netzwerk</div>
-            <div class="cx-net">
-              <canvas class="cx-canvas" data-net aria-hidden="true"></canvas>
-            </div>
-          </div>
+          <div class="walk__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon start --scope &#34;*.[redacted].de&#34; --agents osint,dns-enum</span><span class="walk__cursor" aria-hidden="true">▌</span></div>
         </div>
+        <ol class="walk__rail" aria-label="Phasen">
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 1: info · passiv" aria-current="step">
+              <span class="walk__track"><span class="walk__fill walk__fill--ai" data-fill></span></span>
+              <span class="walk__rail-label">info · passiv</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 2: info · aktiv">
+              <span class="walk__track"><span class="walk__fill walk__fill--ai" data-fill></span></span>
+              <span class="walk__rail-label">info · aktiv</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 3: analyse">
+              <span class="walk__track"><span class="walk__fill walk__fill--manual" data-fill></span></span>
+              <span class="walk__rail-label">analyse</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 4: manual testing">
+              <span class="walk__track"><span class="walk__fill walk__fill--manual" data-fill></span></span>
+              <span class="walk__rail-label">manual testing</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 5: exploit">
+              <span class="walk__track"><span class="walk__fill walk__fill--manual" data-fill></span></span>
+              <span class="walk__rail-label">exploit</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 6: reporting">
+              <span class="walk__track"><span class="walk__fill walk__fill--assist" data-fill></span></span>
+              <span class="walk__rail-label">reporting</span>
+            </button>
+          </li>
+        </ol>
       </div>
 
-      <div class="approach__results container" data-results>
-        <span><span class="accent" aria-hidden="true">✓</span> Proof of Concept, jederzeit reproduzierbar</span>
-        <span><span class="accent" aria-hidden="true">✓</span> Für jeden Fund ein konkreter Fix</span>
-        <span><span class="accent" aria-hidden="true">✓</span> Hilfe beim Schließen der Lücken</span>
-      </div>
+      <div class="approach__note container">Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.</div>
     </section>
 
     <section id="ablauf" class="process">

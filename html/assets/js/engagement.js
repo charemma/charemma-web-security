@@ -1,801 +1,866 @@
-// Engagement animation for the "02 / approach" section: a stylised black-box
-// assessment. Agents map the target, the pentester takes over, exploits it and
-// hands over a report. setPhase, schedule, newLayer, frame and drawNet are
-// ported 1:1 from docs/design/design/Main.dc.html; only the component
-// plumbing (state, DOM updates, event wiring) is new.
+// Approach walkthrough for the "02 / vorgehen" section, spec 010: a particle
+// swarm forms each phase of a black-box assessment (map, target, attack path,
+// report), and the particles of every line dissolve into a drawn stroke once
+// the picture stands. Values and formulas follow spec 010 one to one.
 
-const TYPE_INTERVAL_MS = 55;
-const ACCENT = '#268bd2';
-const ALERT = '#dc322f';
-const ALERT_LABEL = '#f2706c';
-const LABEL = '#e4e5e5';
-const METER_CURRENT = 'rgba(38, 139, 210, 0.45)';
-const METER_IDLE = 'rgba(228, 229, 229, 0.12)';
+const DURATION_MS = [7600, 8200, 6800, 7600, 7400, 13000];
+const INTRO_MS = 1600;
+const FORM_MS = 2400;
+const TYPE_INTERVAL_MS = 42;
+const PROGRESS_INTERVAL_MS = 120;
+const VISIBLE_FALLBACK_MS = 1200;
+const VISIBLE_RATIO = 0.25;
+const RESIZE_CHECK_MS = 600;
+const LABEL_DELAY_MS = 1500;
+const LABEL_FADE_MS = 700;
+const GLASS_FADE_MS = 1600;
+const EXPLOIT_STEP = 4;
+const REPORT_FORM = 6;
+const BUCKETS = 50;
+const DEPTH = 4.2;
+const MAX_PIXELS = 9e6;
+const DEFAULT_REVEAL_S = 7.2;
+const AGENT_LABEL = '#8fc0e8';
+const MONO = '"IBM Plex Mono", monospace';
 
-// Merge a state patch and redraw the glass panel (replaces setState).
+// Palette: haze, agents, accent, alert, light
+const PAL = [[112, 132, 150], [143, 192, 232], [38, 139, 210], [220, 50, 47], [228, 229, 229]];
+
+/* ---------- maths ---------- */
+
+// mulberry32
+function rng(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const clamp01 = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+const smooth = (v) => v * v * (3 - 2 * v);
+
+function cr(p0, p1, p2, p3, t) {
+  const t2 = t * t, t3 = t2 * t;
+  return [
+    0.5 * (2 * p1[0] + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+    0.5 * (2 * p1[1] + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
+  ];
+}
+
+// Control point of the quadratic curve from a to b
+function ctrl(a, b) {
+  const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, dx = b[0] - a[0], dy = b[1] - a[1];
+  const L = Math.hypot(dx, dy) || 1, sg = dy >= 0 ? 1 : -1;
+  return [mx - (dy / L) * L * 0.14 * sg, my + (dx / L) * L * 0.14 * sg];
+}
+
+// Middle of the edge from a to b
+function mid(a, b) {
+  const q = ctrl(a, b);
+  return [0.25 * a[0] + 0.5 * q[0] + 0.25 * b[0], 0.25 * a[1] + 0.5 * q[1] + 0.25 * b[1]];
+}
+
+function smoothPath(P) {
+  const poly = [];
+  for (let i = 0; i < P.length - 1; i++) {
+    const p0 = P[Math.max(0, i - 1)], p1 = P[i], p2 = P[i + 1], p3 = P[Math.min(P.length - 1, i + 2)];
+    for (let j = 0; j < 24; j++) { const q = cr(p0, p1, p2, p3, j / 24); poly.push([q[0], q[1], q[2] || 0]); }
+  }
+  const e = P[P.length - 1]; poly.push([e[0], e[1], e[2] || 0]);
+  const cum = [0];
+  for (let i = 1; i < poly.length; i++) cum.push(cum[i - 1] + Math.hypot(poly[i][0] - poly[i - 1][0], poly[i][1] - poly[i - 1][1], poly[i][2] - poly[i - 1][2]));
+  return { poly, cum, len: cum[cum.length - 1] };
+}
+
+function pathAt(pa, f) {
+  const d = clamp01(f) * pa.len;
+  let i = 1;
+  while (i < pa.cum.length - 1 && pa.cum[i] < d) i++;
+  const a = pa.poly[i - 1], b = pa.poly[i], seg = pa.cum[i] - pa.cum[i - 1] || 1, u = (d - pa.cum[i - 1]) / seg;
+  return [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u];
+}
+
+// Share of the path length at the path point nearest to (x, y, z)
+function pathFrac(pa, x, y, z) {
+  let best = 1e9, bi = 0;
+  for (let i = 0; i < pa.poly.length; i++) {
+    const p = pa.poly[i];
+    const dd = (p[0] - x) ** 2 + (p[1] - y) ** 2 + (p[2] - (z || 0)) ** 2;
+    if (dd < best) { best = dd; bi = i; }
+  }
+  return pa.cum[bi] / pa.len;
+}
+
+/* ---------- network layout (units) ---------- */
+
+function buildNet() {
+  const n = {
+    R: [-1.5, 0],
+    S: [[-0.72, -0.8], [-0.72, -0.27], [-0.72, 0.27], [-0.72, 0.8]],
+    H: [[0.12, -0.9], [0.12, -0.32], [0.12, 0.3], [0.12, 0.88]],
+    D: [[0.95, -0.6], [0.95, 0.04], [0.95, 0.64]],
+    X: [[1.7, -0.22], [1.66, 0.62]],
+    P: [-1.55, -0.95],
+  };
+  n.T = n.H[2];
+  n.edgesRS = n.S.map((p) => [n.R, p]);
+  n.edgesSH = [[n.S[0], n.H[0]], [n.S[1], n.H[1]], [n.S[1], n.H[2]], [n.S[3], n.H[2]], [n.S[2], n.H[3]]];
+  n.edgesHD = [[n.H[0], n.D[0]], [n.H[1], n.D[1]], [n.H[2], n.D[1]], [n.H[3], n.D[2]]];
+  return n;
+}
+
+/* ---------- report ---------- */
+
+function prepTokens(RP) {
+  // split every line into tokens (words, numbers, symbols) and number them in reading order
+  const re = /[A-Za-z0-9ÄÖÜäöüßΑ-Ωα-ωά-ώ]+|\s+|./g, groups = {};
+  RP.lines.forEach((ln) => { (groups[ln.li] = groups[ln.li] || []).push(ln); });
+  let k = 0; RP.start = []; RP.cnt = [];
+  Object.keys(groups).map(Number).sort((a, b) => a - b).forEach((li) => {
+    RP.start[li] = k;
+    groups[li].sort((a, b) => a.x - b.x).forEach((ln) => {
+      ln.toks = []; let m, ci = 0; re.lastIndex = 0;
+      while ((m = re.exec(ln.text))) {
+        const tx = m[0]; ci += tx.length;
+        if (/\S/.test(tx)) { ln.toks.push({ start: ci - tx.length, end: ci, k }); k++; }
+      }
+    });
+    RP.cnt[li] = k - RP.start[li];
+  });
+  RP.T = k;
+  return RP;
+}
+
+function reportLayout(texts) {
+  const P = texts.report, L = texts.labels;
+  const x0 = -0.36, x1 = x0 + 1.48, y0 = -0.98, y1 = 0.98, L0 = x0 + 0.12;
+  const sevC = (i) => (i < 2 ? ['#dc322f', 3] : (i < 4 ? ['#268bd2', 2] : ['#979899', 0]));
+  const lines = [], W = (t, sz) => t.length * sz * 0.6;
+  const T = (li, x, y, size, w, text, col, ci) => lines.push({ li, x, y, size, w, text, col, ci });
+  T(0, L0, -0.8, 0.075, 700, P.title, '#e4e5e5', 4);
+  T(0, x1 - 0.12 - W(P.conf, 0.034), -0.8, 0.034, 500, P.conf, '#dc322f', 3);
+  T(1, L0, -0.68, 0.038, 400, P.meta, '#979899', 0);
+  // severity summary
+  const groups = [];
+  P.rows.forEach((r, i) => { const g = groups.find((q) => q.n === r[0]); if (g) g.c++; else groups.push({ n: r[0], c: 1, i }); });
+  let gx = L0;
+  groups.forEach((g) => { const c = sevC(g.i), t = '■ ' + g.c + ' ' + g.n; T(2, gx, -0.48, 0.04, 500, t, c[0], c[1]); gx += W(t, 0.04) + 0.07; });
+  T(3, L0, -0.3, 0.036, 500, P.cols[0], '#7d7e7f', 0);
+  T(3, L0 + 0.2, -0.3, 0.036, 500, P.cols[1], '#7d7e7f', 0);
+  T(3, L0 + 0.52, -0.3, 0.036, 500, P.cols[2], '#7d7e7f', 0);
+  P.rows.forEach((r, i) => {
+    const y = -0.14 + i * 0.17, c = sevC(i);
+    T(4 + i, L0, y, 0.038, 400, 'F-0' + (i + 1), '#979899', 0);
+    T(4 + i, L0 + 0.2, y, 0.038, 700, r[0], c[0], c[1]);
+    T(4 + i, L0 + 0.52, y, 0.05, 400, r[1], '#e4e5e5', 4);
+  });
+  T(9, L0, 0.76, 0.038, 400, P.foot, '#979899', 0);
+  T(10, L0, 0.88, 0.04, 500, '✓ ' + L.review, '#268bd2', 2);
+  const rules = [{ li: 1.6, y: -0.6 }, { li: 3.5, y: -0.235 }, { li: 8.7, y: 0.665 }];
+  return prepTokens({ x0, x1, y0, y1, L0, span: 1.25, nL: 11, lines, rules });
+}
+
+// Draw every line on an offscreen canvas and pick points inside the letters
+function sampleText(RP, budget, R) {
+  const PX = 520, W = Math.ceil(1.6 * PX), H = 48, out = [];
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d', { willReadFrequently: true });
+  RP.lines.forEach((ln) => {
+    g.clearRect(0, 0, W, H); g.fillStyle = '#fff'; g.textBaseline = 'middle';
+    g.font = ln.w + ' ' + Math.round(ln.size * PX) + 'px ' + MONO;
+    g.fillText(ln.text, 0, H / 2);
+    const data = g.getImageData(0, 0, W, H).data;
+    for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) if (data[(y * W + x) * 4 + 3] > 140) {
+      out.push([ln.x + x / PX, ln.y + (y - H / 2) / PX, (RP.start[ln.li] + R() * RP.cnt[ln.li]) / RP.T * 0.92, ln.ci]);
+    }
+  });
+  for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); const t = out[i]; out[i] = out[j]; out[j] = t; }
+  return out.slice(0, budget);
+}
+
+const repTok = (s, RP) => Math.max(0, s.tSince / s.RV / 0.92 * RP.T);
+
+function repDone(s) {
+  if (!s.F || !s.F.report) return 0;
+  return smooth(clamp01((s.tSince - 0.97 * s.RV - 0.2) / 0.9));
+}
+
+// Position (units) of the token currently being written
+function repHeadAt(RP, pt) {
+  const k = Math.min(RP.T - 1, Math.max(0, Math.floor(pt)));
+  for (const ln of RP.lines) {
+    if (!ln.toks) continue;
+    for (const tk of ln.toks) if (tk.k === k) {
+      const cw = ln.size * 0.6;
+      return [ln.x + (tk.start + (tk.end - tk.start) * Math.min(1, pt - k)) * cw, ln.y];
+    }
+  }
+  return [RP.L0, RP.y0 + 0.2];
+}
+
+/* ---------- formations ---------- */
+
+function build(s, k) {
+  const N = s.N, d = N / 2600, n = s.net;
+  const R = rng(100 + k * 17);
+  const gauss = () => (R() + R() + R() - 1.5) / 1.5;
+  const slots = [], strokes = [];
+  let reveal = null;
+  const add = (x, y, z, c, a, role, par, sm) => {
+    if (reveal && !role) { role = 7; par = reveal(x, y, z); }
+    slots.push([x, y, z, c, a, role || 0, par || 0, sm || 1, 0]);
+  };
+  // everything drawn with these helpers later turns into a smooth stroke; its particles are flagged so they can dissolve into it
+  const asLine = (fn, st) => {
+    const k0 = slots.length; fn();
+    for (let i = k0; i < slots.length; i++) slots[i][8] = 1;
+    if (reveal) st.rev = reveal(st.m[0], st.m[1], 0);
+    strokes.push(st);
+  };
+  const node0 = (p, c, a, r) => {
+    const m = Math.round(26 * d), q = Math.round(9 * d);
+    for (let i = 0; i < m; i++) { const t = (i / m) * 6.283 + R() * 0.1; add(p[0] + Math.cos(t) * r, p[1] + Math.sin(t) * r, gauss() * 0.02, c, a); }
+    for (let i = 0; i < q; i++) add(p[0] + gauss() * 0.018, p[1] + gauss() * 0.018, gauss() * 0.02, c, a);
+  };
+  const node = (p, c, a, r = 0.055) => asLine(() => node0(p, c, a, r), { t: 'n', p, r, c, a, m: p });
+  const ghost = (p) => {
+    const m = Math.round(12 * d);
+    for (let i = 0; i < m; i++) { const t = R() * 6.283, r = 0.03 + R() * 0.05; add(p[0] + Math.cos(t) * r, p[1] + Math.sin(t) * r, gauss() * 0.15, 0, 0.22); }
+  };
+  const edge0 = (a, b, c, al, dens) => {
+    const L = Math.hypot(b[0] - a[0], b[1] - a[1]), q = ctrl(a, b);
+    const m = Math.max(3, Math.round(L * (dens || 46) * d));
+    for (let i = 0; i < m; i++) {
+      const t = 0.08 + 0.84 * ((i + R() * 0.6) / m), u = 1 - t, fade = Math.sin(Math.PI * t);
+      add(u * u * a[0] + 2 * u * t * q[0] + t * t * b[0] + gauss() * 0.004, u * u * a[1] + 2 * u * t * q[1] + t * t * b[1] + gauss() * 0.004, gauss() * 0.008, c, Math.min(1, al * 1.25) * (0.6 + 0.4 * fade), 0, 0, 0.62);
+    }
+  };
+  const edge = (a, b, c, al, dens) => asLine(() => edge0(a, b, c, al, dens), { t: 'e', a, b, q: ctrl(a, b), c, a2: al, m: mid(a, b) });
+  const ring0 = (p, r, c, al, m) => {
+    m = Math.round(m * d);
+    for (let i = 0; i < m; i++) { const t = (i / m) * 6.283; add(p[0] + Math.cos(t) * r, p[1] + Math.sin(t) * r, gauss() * 0.01, c, al, 0, 0, 0.75); }
+  };
+  const ring = (p, r, c, al, m) => asLine(() => ring0(p, r, c, al, m), { t: 'c', p, r, c, a: al, m: p });
+  const line0 = (a, b, c, al, m) => {
+    m = Math.max(2, Math.round(m * d));
+    for (let i = 0; i < m; i++) { const t = i / (m - 1); add(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, gauss() * 0.01, c, al, 0, 0, 0.7); }
+  };
+  const line = (a, b, c, al, m) => asLine(() => line0(a, b, c, al, m), { t: 'l', a, b, c, a2: al, m: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2] });
+  const swarm = (role, c, m) => {
+    m = Math.round(m * d);
+    for (let i = 0; i < m; i++) add(gauss() * 0.012, gauss() * 0.012, gauss() * 0.012, c, 0.6 + R() * 0.4, role, 0, 0.75);
+  };
+  const agent = (role, c) => swarm(role, c, 78);
+  const loop = (p, r) => [0, 1, 2, 3, 4, 5].map((j) => {
+    const a = j / 6 * 6.283;
+    return [p[0] + Math.cos(a) * r, p[1] + Math.sin(a) * r * 0.8, (p[2] || 0) + Math.sin(a * 2) * r * 0.5];
+  });
+  const me = (sc = 1) => {
+    const m = Math.round(110 * sc * d);
+    for (let i = 0; i < m; i++) add(gauss() * 0.01, gauss() * 0.01, gauss() * 0.01, 2, 0.7 + R() * 0.3, 5, 0, 0.85);
+  };
+  const dimNet = (upto) => {
+    node(n.R, 0, 0.45); n.S.forEach((p) => node(p, 0, 0.45)); n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.28));
+    n.H.forEach((p) => node(p, 0, 0.45)); n.edgesSH.forEach((e) => edge(e[0], e[1], 0, 0.28));
+    node(n.D[1], 0, 0.4); ghost(n.D[0]); ghost(n.D[2]); n.edgesHD.forEach((e) => edge(e[0], e[1], 0, 0.2, 30));
+    if (upto) node(n.X[0], 0, 0.35); else ghost(n.X[0]);
+    ghost(n.X[1]);
+  };
+  const F = { drift: 0.008, agents: [], labels: [] };
+
+  if (k === 0) {
+    for (let i = 0; i < N; i++) add((R() - 0.5) * 6.6, (R() - 0.5) * 4.0, (R() - 0.5) * 4.2, R() < 0.09 ? 2 : 0, 0.3 + R() * 0.6);
+    F.drift = 0.05;
+  }
+  if (k === 1) {
+    node(n.R, 4, 0.95, 0.07); n.S.forEach((p) => node(p, 4, 0.9));
+    n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.55));
+    n.H.forEach(ghost); n.D.forEach(ghost); n.X.forEach(ghost);
+    agent(1, 1); agent(2, 1);
+    F.agents = [
+      { name: 'osint', pts: [n.R, n.S[0], [-1.1, -0.5], n.S[3], [-1.1, 0.45], n.S[1]], o: 0 },
+      { name: 'dns-enum', pts: [n.S[0], n.S[1], n.S[2], n.S[3], n.S[2], n.S[1]], o: 0.5 },
+    ];
+    F.labels = [{ p: n.R, t: '*.[redacted].de', dx: -0.02, dy: 0.13, c: '#c0c1c1', al: 'center' }]
+      .concat(['www', 'api', 'vpn', 'git'].map((t, i) => ({ p: n.S[i], t, dx: -0.1, dy: 0.012, c: '#979899', al: 'right' })));
+  }
+  if (k === 2) {
+    node(n.R, 4, 0.9, 0.07); n.S.forEach((p) => node(p, 4, 0.85)); n.H.forEach((p) => node(p, 4, 0.9));
+    n.H.forEach((p) => ring(p, 0.11, 4, 0.45, 7));
+    node(n.D[1], 4, 0.75); ghost(n.D[0]); ghost(n.D[2]); n.X.forEach(ghost);
+    n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.5)); n.edgesSH.forEach((e) => edge(e[0], e[1], 0, 0.5));
+    edge(n.H[1], n.D[1], 0, 0.35, 30); edge(n.H[2], n.D[1], 0, 0.35, 30);
+    agent(1, 1); agent(2, 1); agent(3, 1); agent(4, 1);
+    F.agents = [
+      { name: 'osint', pts: [n.R, n.S[0], n.S[3], [-1.1, 0.4]], o: 0 },
+      { name: 'dns-enum', pts: [n.S[1], n.S[2], n.S[3], n.S[0]], o: 0.3 },
+      { name: 'port-scanning', pts: [n.H[0], n.H[1], n.H[2], n.H[3], n.H[2]], o: 0.6 },
+      { name: 'service-discovery', pts: [n.H[3], n.H[1], n.D[1], n.H[0], n.H[2]], o: 0.15 },
+    ];
+    F.labels = ['web-app', 'k8s', 'svc :8443', 'ssh'].map((t, i) => ({ p: n.H[i], t, dx: 0.15, dy: 0.012, c: '#c0c1c1', al: 'left' }))
+      .concat([
+        { p: n.D[1], t: 'db', dx: 0.1, dy: 0.012, c: '#979899', al: 'left' },
+        { p: n.D[0], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' },
+        { p: n.D[2], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' },
+      ]);
+  }
+  if (k === 3) {
+    dimNet(false);
+    ring(n.T, 0.17, 2, 0.95, 70); ring(n.T, 0.1, 2, 0.6, 34);
+    [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach((v) => line([n.T[0] + v[0] * 0.21, n.T[1] + v[1] * 0.21], [n.T[0] + v[0] * 0.32, n.T[1] + v[1] * 0.32], 2, 0.95, 9));
+    node(n.T, 4, 0.95); me();
+    F.labels = [
+      { p: n.T, dx: 0.36, dy: 0.012, c: '#268bd2', al: 'left', key: 'suspect' },
+      { p: n.P, dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' },
+    ];
+  }
+  if (k === 4) {
+    dimNet(false);
+    ring(n.T, 0.13, 3, 0.95, 54); ring(n.T, 0.2, 2, 0.35, 40); node(n.T, 4, 0.9);
+    me(0.55); swarm(1, 2, 210);
+    F.agents = [{ name: '', pts: loop(n.T, 0.17), o: 0, hop: 0.85 }];
+    F.labels = [
+      { p: n.T, t: 'sql-injection', dx: 0.25, dy: 0.012, c: '#dc322f', al: 'left' },
+      { p: n.P, dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' },
+    ];
+  }
+  if (k === 5) {
+    // the pentester drives the exploit: the swarm leaves P, pushes through svc -> db -> server,
+    // and the path only turns red where it has passed
+    const path = smoothPath([n.P, n.T, mid(n.T, n.D[1]), n.D[1], mid(n.D[1], n.X[0]), n.X[0]]);
+    dimNet(true); me(0.55);
+    reveal = (x, y, z) => Math.min(0.95, pathFrac(path, x, y, z) * 0.92);
+    ring(n.T, 0.13, 3, 0.8, 44); node(n.T, 3, 0.9);
+    edge(n.T, n.D[1], 3, 0.85, 70); edge(n.D[1], n.X[0], 3, 0.85, 70);
+    node(n.D[1], 3, 0.8); ring(n.X[0], 0.17, 3, 0.95, 70); ring(n.X[0], 0.3, 3, 0.3, 55); node(n.X[0], 3, 0.95, 0.075);
+    reveal = null;
+    swarm(1, 2, 200);
+    F.rv = 4.6; F.haze = 0.1;
+    F.agents = [{ name: '', o: 0, lag: 0.08, fn: (ts, t) => {
+      const pr = (ts - 0.3) / (s.RV * 0.92 - 0.3);
+      if (pr < 0) return pathAt(path, 0);
+      if (pr < 1) {
+        const e = pr < 0.5 ? 2 * pr * pr : 1 - Math.pow(-2 * pr + 2, 2) / 2;
+        const q = pathAt(path, e);
+        return [q[0] + Math.sin(t * 5.1) * 0.025, q[1] + Math.cos(t * 4.3) * 0.025, q[2]];
+      }
+      const X = n.X[0], a = t * 1.9;
+      return [X[0] + Math.cos(a) * 0.17, X[1] + Math.sin(a) * 0.13, Math.sin(a * 2) * 0.08];
+    } }];
+    F.labels = [
+      { p: n.X[0], t: 'uid=0(root)', dx: 0, dy: -0.38, c: '#dc322f', al: 'center', key: 'root' },
+      { p: n.T, t: 'svc :8443', dx: -0.17, dy: 0.012, c: '#979899', al: 'right' },
+      { p: n.P, dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' },
+    ];
+  }
+  if (k === 6) {
+    // glass panel; the swarm swirls over it and the report appears token by token where it has been
+    const RP = reportLayout(s.texts);
+    sampleText(RP, Math.round(1250 * d), R).forEach((q) => add(q[0], q[1], 0, q[3], 0.45, 7, q[2], 0.5));
+    // a big swarm, like the opening chaos, buzzing over the whole panel
+    const m = Math.round(1000 * d);
+    for (let i = 0; i < m; i++) add(RP.x0 - 0.4 + R() * (RP.x1 - RP.x0 + 0.8), RP.y0 - 0.22 + R() * (RP.y1 - RP.y0 + 0.44), (R() - 0.5) * 0.5, R() < 0.7 ? 1 : 4, 0.45 + R() * 0.5, 8, 0, 0.7);
+    F.report = RP;
+    F.rv = 8;
+  }
+
+  // background haze (the rest of the swarm)
+  if (k !== 0) while (slots.length < N) add((R() - 0.5) * 6.8, (R() - 0.5) * 4.2, -0.6 - R() * 2.2, R() < 0.05 ? 2 : 0, 0.1 + R() * 0.22);
+  if (slots.length > N) slots.length = N;
+  // shuffle so that particles cross the stage when the picture changes
+  for (let i = slots.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); const t = slots[i]; slots[i] = slots[j]; slots[j] = t; }
+  F.pos = new Float32Array(3 * N); F.col = new Uint8Array(N); F.al = new Float32Array(N); F.role = new Uint8Array(N);
+  F.par = new Float32Array(N); F.sm = new Float32Array(N); F.lf = new Uint8Array(N); F.strokes = strokes;
+  for (let i = 0; i < N; i++) {
+    const q = slots[i];
+    F.pos[3 * i] = q[0]; F.pos[3 * i + 1] = q[1]; F.pos[3 * i + 2] = q[2];
+    F.col[i] = q[3]; F.al[i] = q[4]; F.role[i] = q[5]; F.par[i] = q[6]; F.sm[i] = q[7]; F.lf[i] = q[8];
+  }
+  return F;
+}
+
+/* ---------- setup ---------- */
+
+function init(s) {
+  const w = s.root.clientWidth || 1280;
+  const N = w < 700 ? 1300 : (w < 1100 ? 2000 : 2600);
+  s.N = N;
+  const R = rng(7);
+  s.cur = new Float32Array(3 * N); s.from = new Float32Array(3 * N);
+  s.sz = new Float32Array(N); s.ph = new Float32Array(N); s.delay = new Float32Array(N);
+  s.cFrom = new Uint8Array(N); s.cTo = new Uint8Array(N);
+  s.aFrom = new Float32Array(N); s.aCur = new Float32Array(N);
+  s.lfFrom = new Uint8Array(N); s.lastE = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const r = R(); s.sz[i] = 0.55 + Math.pow(r, 6) * 2.6; s.ph[i] = R() * 6.283; }
+  // per-particle swarm behaviour: orbit radius, angular speed, tilt, lag
+  s.oR = new Float32Array(N); s.oW = new Float32Array(N); s.oT = new Float32Array(N); s.oL = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const r = 0.008 + Math.pow(R(), 2.2) * 0.09;
+    s.oR[i] = r;
+    s.oW[i] = (R() < 0.5 ? -1 : 1) * (1.6 + R() * 3.4) / (1 + r * 8);
+    s.oT[i] = (R() - 0.5) * 3.1;
+    s.oL[i] = Math.pow(R(), 1.4) * 0.5;
+  }
+  s.smFrom = new Float32Array(N); s.smCur = new Float32Array(N).fill(1);
+  s.bk = []; s.bk2 = [];
+  for (let b = 0; b < BUCKETS; b++) { s.bk.push([]); s.bk2.push([]); }
+  s.sprites = PAL.map((c) => {
+    const sp = document.createElement('canvas'); sp.width = sp.height = 64;
+    const g = sp.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(' + c + ',0.55)'); gr.addColorStop(0.3, 'rgba(' + c + ',0.18)'); gr.addColorStop(1, 'rgba(' + c + ',0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+    return sp;
+  });
+  s.net = buildNet();
+  s.forms = [0, 1, 2, 3, 4, 5, 6].map((k) => build(s, k));
+  if (document.fonts) document.fonts.load('400 40px "IBM Plex Mono"').then(() => rebuildReport(s)).catch(() => {});
+  resize(s);
+}
+
+function rebuildReport(s) {
+  s.forms[REPORT_FORM] = build(s, REPORT_FORM);
+  if (s.k === REPORT_FORM) s.F = s.forms[REPORT_FORM];
+}
+
+function resize(s) {
+  const w = s.root.clientWidth, h = s.root.clientHeight;
+  const rect = s.root.getBoundingClientRect();
+  const zoom = w ? Math.max(1, rect.width / w) : 1;
+  s.zoom = rect.width / (w || 1);
+  let dpr = Math.min(3, (window.devicePixelRatio || 1) * zoom);
+  if (w * h * dpr * dpr > MAX_PIXELS) dpr = Math.sqrt(MAX_PIXELS / (w * h));
+  s.cv.width = Math.round(w * dpr); s.cv.height = Math.round(h * dpr);
+  s.W = w; s.H = h; s.dpr = dpr;
+  const wide = w > 860;
+  s.S = wide ? Math.min(w / 4.3, h / 2.9) : Math.min(w / 3.5, h / 3.6);
+  s.cx = wide ? w * 0.6 : w * 0.5;
+  s.cy = wide ? h * 0.42 : h * 0.34;
+}
+
+/* ---------- phase control ---------- */
+
+const cShow = (s, i) => (s.lastE[i] > 0.5 ? s.cTo[i] : s.cFrom[i]);
+
+function setForm(s, k, instant) {
+  const N = s.N, F = s.forms[k], now = performance.now(), prev = s.F;
+  for (let i = 0; i < N; i++) {
+    s.from[3 * i] = s.cur[3 * i]; s.from[3 * i + 1] = s.cur[3 * i + 1]; s.from[3 * i + 2] = s.cur[3 * i + 2];
+    s.cFrom[i] = prev ? cShow(s, i) : F.col[i];
+    s.aFrom[i] = prev ? s.aCur[i] : F.al[i];
+    s.smFrom[i] = prev ? s.smCur[i] : F.sm[i];
+    s.delay[i] = Math.random() * 0.5;
+  }
+  if (instant || !prev) {
+    for (let i = 0; i < 3 * N; i++) { s.from[i] = F.pos[i]; s.cur[i] = F.pos[i]; }
+    for (let i = 0; i < N; i++) { s.cFrom[i] = F.col[i]; s.aFrom[i] = F.al[i]; s.aCur[i] = F.al[i]; s.smFrom[i] = F.sm[i]; s.smCur[i] = F.sm[i]; }
+  }
+  for (let i = 0; i < N; i++) s.lfFrom[i] = prev ? prev.lf[i] : 0;
+  s.prevF = prev; s.F = F; s.k = k;
+  s.t0 = instant ? now - 10000 : now;
+}
+
+function toStep(s, i, instant) {
+  s.intro = false;
+  setForm(s, i + 1, instant);
+  s.stepAt = performance.now();
+  update(s, { step: i, chars: instant ? s.steps[i].cmd.length : 0, prog: instant ? 1 : 0 });
+}
+
+function restartIntro(s, now) {
+  setForm(s, 0);
+  s.intro = true;
+  s.stepAt = now;
+  update(s, { step: 0, chars: 0, prog: 0 });
+}
+
+// Resume after a pause: shift the phase's and the formation's start by the time spent hidden
+function wake(s) {
+  if (s.visible) return;
+  if (s.pausedAt) { const dt = performance.now() - s.pausedAt; s.stepAt += dt; s.t0 += dt; s.pausedAt = 0; }
+  s.visible = true;
+}
+
+/* ---------- overlay and rail ---------- */
+
 function update(s, patch) {
   Object.assign(s, patch);
-  renderPanel(s);
+  render(s);
 }
 
-function statusLabel(s, cur, last) {
-  const strike = s.phase === 'strike';
-  let label = cur.agent ? (cur.report ? 'drafting report' : 'agents collecting') : 'scanning';
-  if (s.step === 2 && s.phase === 'think') label = 'handover · agents → pentester';
-  if (s.phase === 'work') label = cur.agent ? (cur.report ? 'human review' : 'agents correlating') : 'probing';
-  if (strike) label = cur.pwn ? 'access granted' : (cur.tag ? 'finding confirmed' : 'intel collected');
-  if (strike && last) label = 'engagement closed · report delivered';
-  return label;
-}
-
-function renderPrompts(s) {
-  s.dom.prompts.forEach((p, i) => {
-    const st = s.steps[i];
-    const active = i === s.step;
-    p.el.classList.toggle('is-active', active);
-    p.el.classList.toggle('is-past', i < s.step);
-    p.cmd.textContent = active ? st.cmd.slice(0, s.chars) : st.cmd;
-    p.cursor.hidden = !(active && (s.chars < st.cmd.length || s.phase === 'think'));
-    p.out.classList.toggle('is-visible', active && s.phase !== 'think');
-    p.hit.hidden = !(active && s.phase === 'strike');
+function render(s) {
+  const st = s.steps[s.step], dom = s.dom, total = String(s.steps.length).padStart(2, '0');
+  dom.phaseNo.textContent = s.texts.phase + ' ' + String(s.step + 1).padStart(2, '0') + ' / ' + total;
+  dom.mode.textContent = s.texts.modes[st.mode];
+  dom.mode.className = 'walk__mode walk__mode--' + st.mode;
+  dom.title.textContent = st.title;
+  dom.hit.textContent = st.hit;
+  dom.cmd.textContent = st.cmd.slice(0, s.chars);
+  dom.rail.forEach((btn, i) => {
+    const done = i < s.step, cur = i === s.step;
+    if (cur) btn.setAttribute('aria-current', 'step'); else btn.removeAttribute('aria-current');
+    btn.classList.toggle('is-done', done);
+    const fill = dom.fills[i];
+    fill.style.width = (done ? 100 : (cur ? Math.round(s.prog * 100) : 0)) + '%';
+    fill.classList.toggle('is-alert', i === EXPLOIT_STEP && (cur || done));
   });
 }
 
-function renderMeter(s) {
-  const strike = s.phase === 'strike';
-  s.dom.meter.forEach((seg, i) => {
-    const lit = i < s.step || (i === s.step && strike);
-    seg.style.background = lit ? (s.steps[i].pwn ? ALERT : ACCENT) : (i === s.step ? METER_CURRENT : METER_IDLE);
-  });
-  const label = s.T.meter_label.replace('{n}', s.step + 1).replace('{total}', s.steps.length);
-  s.dom.meterGroup.setAttribute('aria-label', label);
-}
+/* ---------- drawing ---------- */
 
-function renderStatus(s) {
-  const cur = s.steps[s.step];
-  const last = s.step === s.steps.length - 1;
-  const alarm = s.phase === 'strike' && cur.pwn;
-  const dot = alarm ? ALERT : ACCENT;
-  s.dom.statusDot.style.background = dot;
-  s.dom.statusDot.style.boxShadow = '0 0 10px ' + dot;
-  s.dom.statusLabel.textContent = statusLabel(s, cur, last);
-  s.dom.statusLabel.style.color = alarm ? ALERT_LABEL : LABEL;
-  s.dom.statusCount.textContent = (s.step + 1) + '/' + s.steps.length;
-  s.dom.results.classList.toggle('is-done', last && s.phase === 'strike');
-  s.dom.flash.hidden = !s.flash;
-}
-
-function renderPanel(s) {
-  renderPrompts(s);
-  renderMeter(s);
-  renderStatus(s);
-}
-
-function setPhase(s, p) {
-  s.phase = p;
-  s.phaseAt = performance.now();
-  if (p === 'strike') s.impactAt = s.phaseAt + 600;
-  update(s, { phase: p });
-}
-function schedule(s) {
-  const steps = s.steps;
-  const cur = steps[s.step];
-  const last = s.step === steps.length - 1;
-  const key = !!cur.tag;
-  const plan = { think: s.step === 2 ? 5800 : (s.step < 2 ? 5200 : (key ? 3600 : 2900)), work: s.step < 2 ? 3400 : (key ? 2800 : 1900), strike: last ? 6000 : (cur.pwn ? 3400 : (key ? 2400 : 1700)) };
-  s.timer = setTimeout(() => {
-    if (!s.playing) { s.timer = setTimeout(() => schedule(s), 250); return; }
-    if (s.phase === 'think') { setPhase(s, 'work'); }
-    else if (s.phase === 'work') {
-      setPhase(s, 'strike');
-      update(s, { chars: 999 });
-      if (cur.pwn) { s.flashTimer = setTimeout(() => { update(s, { flash: true }); s.flashTimer = setTimeout(() => update(s, { flash: false }), 1000); }, 600); }
-    } else {
-      const next = last ? 0 : s.step + 1;
-      const now = performance.now();
-      s.trans = { from: s.layer, at: now, pwn: !!cur.pwn };
-      newLayer(s, next, now);
-      s.stepAt = now;
-      s.netReset = next === 0;
-      update(s, { step: next, chars: 0 });
-      setPhase(s, 'think');
-    }
-    schedule(s);
-  }, plan[s.phase]);
-}
-function newLayer(s, step, now) {
-  const blobs = [];
-  const n = 30 + step * 3;
-  for (let k = 0; k < n; k++) {
-    const d = Math.pow(Math.random(), 0.8);
-    blobs.push({ a: Math.random() * Math.PI * 2, d: d * 0.85, r: 0.22 + Math.random() * 0.38, ph: Math.random() * 10, sp: 0.15 + Math.random() * 0.35, ox: 0, oy: 0 });
-  }
-  const base = Math.random() * Math.PI * 2;
-  s.layer = { step: step, blobs: blobs, base: base, born: now, cx: (Math.random() - 0.5) * 0.12, cy: (Math.random() - 0.5) * 0.12 };
-  s.tip = null;
-}
-function frame(s, now) {
-  if (s.reduce && (s.nFrames = (s.nFrames || 0) + 1) > 120) return;
-  if (!s.reduce && !s.playing) { s.raf = null; return; }
-  s.raf = requestAnimationFrame((n) => frame(s, n));
-  drawNet(s, now);
-  const c = s.canvas;
-  if (!c) return;
-  const box = c.getBoundingClientRect();
-  const dpr = c.getBoundingClientRect().width > 900 ? 1 : Math.min(window.devicePixelRatio || 1, 1.25);
-  const dt = Math.min(0.05, Math.max(0.001, (now - (s.lastNow || now - 16)) / 1000));
-  s.lastNow = now;
-  const W = Math.round(box.width * dpr), H = Math.round(box.height * dpr);
-  if (!W || !H) return;
-  if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
-  const ctx = c.getContext('2d');
-  const S = Math.min(W, H) / 2, u = S / 300;
-  const wide = W > H * 1.2;
-  const wideS = W / H > 1.25;
-  const OX = wideS ? W * 0.36 : W / 2, OY = H * 0.5;
-  const t = now / 1000;
-  const steps = s.steps;
-  const L = s.layer;
-  const cur = steps[L.step];
-  const ph = s.phase;
-  const pt = (now - s.phaseAt) / 1000;
-  const A = [38, 139, 210], R = [220, 50, 47], T = [150, 160, 168];
-  const rgba = (c3, a) => 'rgba(' + c3.map(Math.round).join(',') + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')';
-  const mix = (p, q, k) => [p[0] + (q[0] - p[0]) * k, p[1] + (q[1] - p[1]) * k, p[2] + (q[2] - p[2]) * k];
-  const ease = (x) => (x < 0 ? 0 : x > 1 ? 1 : 1 - Math.pow(1 - x, 3));
-
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = '#282929';
-  ctx.fillRect(0, 0, W, H);
-
-  const drawCloud = (layer, scale, alpha, cxp, cyp, infect) => {
-    const cR = S * 0.62 * scale;
-    layer.blobs.forEach((b) => {
-      const wob = 0.07 * Math.sin(t * b.sp * 0.7 + b.ph);
-      const ang = b.a + 0.25 * Math.sin(t * b.sp * 0.6 + b.ph);
-      const x = cxp + Math.cos(ang) * (b.d + wob) * cR + Math.sin(t * 0.4 + b.ph) * 5 * u;
-      const y = cyp + Math.sin(ang) * (b.d + wob) * cR + Math.cos(t * 0.35 + b.ph) * 5 * u;
-      const r = b.r * cR * (1 + 0.12 * Math.sin(t * 0.9 + b.ph * 2));
-      let col = mix(T, [190, 200, 208], layer.step / 9);
-      let k = 0;
-      if (infect) {
-        const dd = Math.hypot(x - infect.x, y - infect.y);
-        k = Math.max(0, Math.min(1, (infect.wave - dd) / (cR * 0.45)));
-        col = mix(col, infect.col, k);
-      }
-      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-      g.addColorStop(0, rgba(col, alpha * (0.075 + 0.07 * k)));
-      g.addColorStop(0.55, rgba(col, alpha * (0.035 + 0.04 * k)));
-      g.addColorStop(1, rgba(col, 0));
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
-    });
-    return cR;
+function drawGlass(s, ctx, RP, proj, alpha) {
+  if (alpha <= 0) return;
+  const c = [proj([RP.x0, RP.y0, 0]), proj([RP.x1, RP.y0, 0]), proj([RP.x1, RP.y1, 0]), proj([RP.x0, RP.y1, 0])];
+  const path = () => {
+    ctx.beginPath(); ctx.moveTo((c[0][0] + c[1][0]) / 2, (c[0][1] + c[1][1]) / 2);
+    for (let i = 1; i <= 4; i++) ctx.arcTo(c[i % 4][0], c[i % 4][1], c[(i + 1) % 4][0], c[(i + 1) % 4][1], 16);
+    ctx.closePath();
   };
-
-  ctx.globalCompositeOperation = 'lighter';
-  const cx = OX + L.cx * S, cy = OY + L.cy * S;
-  if (s.trans) {
-    const k = (now - s.trans.at) / 1500;
-    if (k >= 1) s.trans = null;
-    else {
-      const fl = s.trans.from;
-      const zc = mix(fl.inf ? [fl.inf.x, fl.inf.y, 0] : [OX, OY, 0], [OX, OY, 0], ease(k));
-      drawCloud(fl, 1 + ease(k) * 2.4, 1 - ease(k), zc[0], zc[1], fl.inf ? { x: zc[0], y: zc[1], wave: 9999, col: s.trans.pwn ? R : A } : null);
-    }
-  }
-  const grow = ease((now - L.born) / 1500);
-  const impact = s.impactAt && now >= s.impactAt && ph === 'strike';
-  const cR = S * 0.62 * (0.45 + 0.55 * grow);
-  const baseX = OX + Math.cos(L.base) * S * 1.15, baseY = OY + Math.sin(L.base) * S * 1.15;
-  const weakA = L.base;
-  const weakX = cx + Math.cos(weakA) * cR * 0.78, weakY = cy + Math.sin(weakA) * cR * 0.78;
-  let inf = null;
-  if (impact) {
-    const wave = (now - s.impactAt) / 1000 * cR * 1.1;
-    inf = { x: cx + (weakX - cx) * 0.35, y: cy + (weakY - cy) * 0.35, wave: wave, col: cur.pwn ? R : A };
-    L.inf = { x: inf.x, y: inf.y };
-  }
-  drawCloud(L, 0.45 + 0.55 * grow, grow, cx, cy, inf);
-
-  const hot = impact && cur.pwn;
-  const eInOut = (x) => 0.5 - 0.5 * Math.cos(Math.PI * Math.max(0, Math.min(1, x)));
-  const eOut = (x) => { x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3); };
-  const AG = [143, 192, 232];
-  if (!s.ents) {
-    s.ents = [{ id: 'pentester', human: true, idx: 0 }];
-    for (let i = 0; i < 4; i++) s.ents.push({ id: 'agent-' + (i + 1), human: false, idx: i });
-    s.ents.forEach((e, i) => { e.alpha = 0; e.trail = []; e.vx = 0; e.vy = 0; e.knockN = i * 2; e.move = null; e.tempo = e.human ? 1 : [0.82, 1.18, 0.95, 1.32][e.idx]; e.phaseOff = e.human ? 0 : [0, 0.37, 0.71, 0.19][e.idx]; });
-  }
-  if (s.entLayer !== L) {
-    s.entLayer = L;
-    s.ripples = []; s.replies = [];
-    s.ents.forEach((e, i) => {
-      if (e.sx !== undefined) { e.a = Math.atan2(e.sy - cy, e.sx - cx); e.r = Math.max(1.12, Math.hypot(e.sx - cx, e.sy - cy) / cR); }
-      else { e.a = L.base + Math.PI * 0.6 + i * 1.3; e.r = 1.5 + i * 0.05; }
-      e.move = null; e.striking = false; e.wait = now + (e.human ? 0 : 300 + e.phaseOff * 2600 + Math.random() * 700);
-    });
-    const nAg = Math.max(1, (s.steps[L.step].agentNames || [1, 2, 3, 4]).length);
-    s.ents.forEach((e) => {
-      if (e.human) return;
-      e.home = L.base + Math.PI * 0.35 + e.idx * (Math.PI * 2 / nAg) + (e.idx % 2 ? 0.25 : -0.2);
-      e.dirSign = e.idx % 2 ? 1 : -1;
-      const P0x = s.ents[0];
-      if (e.alpha < 0.2 && s.steps[L.step].assist && P0x.sx !== undefined) {
-        e.sx = P0x.sx; e.sy = P0x.sy; e.a = Math.atan2(P0x.sy - cy, P0x.sx - cx); e.r = Math.max(1.1, Math.hypot(P0x.sx - cx, P0x.sy - cy) / cR);
-        e.trail = []; e.vx = 0; e.vy = 0;
-      } else if (e.alpha < 0.2) {
-        e.a = e.home; e.r = 1.75;
-        e.sx = cx + Math.cos(e.a) * cR * e.r; e.sy = cy + Math.sin(e.a) * cR * e.r;
-        e.trail = []; e.vx = 0; e.vy = 0;
-      }
-    });
-  }
-  const humanOn = !cur.agent || !!cur.assist;
-  const agentCount = cur.agent ? (cur.agentNames || []).length : 0;
-  const replyHuman = ['denied', 'closed', '403', 'filtered', 'timeout', '401', 'reset', 'refused'];
-  const replyHumanWork = s.T.work;
-  const replyAgent = ['dns', 'cert', 'asn', 'whois', 'mx', 'txt', 'host', 'url', 'header', 'repo', 'title', 'tech'];
-  const P0 = s.ents[0];
-  const briefing = L.step === 2 && ph === 'think' && pt < 3.6;
-  s.briefing = briefing;
-  if (briefing && !s.briefInit) {
-    s.briefInit = true;
-    let sxs = 0, sys = 0, n = 0;
-    s.ents.forEach((e) => { if (!e.human && e.alpha > 0.2 && e.sx !== undefined) { sxs += Math.cos(e.a); sys += Math.sin(e.a); n++; } });
-    s.meetA = n ? Math.atan2(sys, sxs) : L.base + Math.PI * 0.85;
-    const H0 = s.ents[0];
-    if (H0.alpha < 0.2) { H0.a = s.meetA + 0.9; H0.r = 1.95; H0.sx = undefined; H0.trail = []; }
-    H0.move = null;
-  }
-  if (!briefing) s.briefInit = false;
-  const meetA = s.meetA || 0;
-  s.ents.forEach((e) => {
-    const on = e.human ? humanOn : (e.idx < agentCount || briefing);
-    const near = (a) => e.a + Math.atan2(Math.sin(a - e.a), Math.cos(a - e.a));
-    const go = (a, r, dur, onEnd) => { e.move = { a0: e.a, r0: e.r, a1: near(a), r1: r, t0: now, dur: dur * (e.tempo || 1) * (0.85 + Math.random() * 0.3), onEnd: onEnd }; };
-    const knockAt = (a, work) => {
-      const ex = cx + Math.cos(a) * cR * 0.8, ey = cy + Math.sin(a) * cR * 0.8;
-      s.ripples.push({ x: ex, y: ey, at: now, big: work && e.human, agent: !e.human });
-      const role = (cur.agentNames || [])[e.idx] || '';
-      const rolePool = { 'osint': ['repo', 'docs', 'cert', 'people', 'tech', 'jobs'], 'dns-enum': ['mx', 'txt', 'cname', 'ns', 'sub', 'a'], 'port-scanning': ['22/tcp', '443/tcp', '8443', 'open', 'filtered', 'closed'], 'service-discovery': ['banner', 'tls', 'http', 'ssh', 'version', 'title'], 'report': ['finding', 'cvss', 'fix', 'repro'] }[role];
-      const pool = e.human ? (work ? replyHumanWork : replyHuman) : (rolePool || replyAgent);
-      s.replies.push({ x: cx + Math.cos(a) * cR * 1.04, y: cy + Math.sin(a) * cR * 1.04, at: now, text: pool[(e.knockN++ * 5 + e.idx * 3 + L.step) % pool.length], warm: work || !e.human });
-    };
-    const fadeK = 1 - Math.exp(-dt * 2.5);
-    if (briefing) {
-      e.alpha += (1 - e.alpha) * fadeK;
-      if (e.human) {
-        if (!e.move && (Math.abs(Math.atan2(Math.sin(e.a - meetA), Math.cos(e.a - meetA))) > 0.03 || Math.abs(e.r - 1.42) > 0.03)) { const sv = e.tempo; e.tempo = 1; go(meetA, 1.42, 1500, null); e.tempo = sv; }
-      } else if (P0.sx !== undefined) {
-        e.move = null;
-        const ang = e.idx * (Math.PI / 2) + t * 0.35 + 0.4;
-        const rad = (40 + 6 * Math.sin(t * 1.3 + e.idx)) * u;
-        const tx2 = P0.sx + Math.cos(ang) * rad, ty2 = P0.sy + Math.sin(ang) * rad;
-        const ta = Math.atan2(ty2 - cy, tx2 - cx), tr = Math.hypot(tx2 - cx, ty2 - cy) / cR;
-        const k2 = 1 - Math.exp(-dt * (1.4 + e.idx * 0.25));
-        e.a += Math.atan2(Math.sin(ta - e.a), Math.cos(ta - e.a)) * k2; e.r += (tr - e.r) * k2;
-      }
-    } else if (!on) {
-      e.alpha += (0 - e.alpha) * fadeK;
-      if (!e.human && P0.sx !== undefined && e.sx !== undefined) {
-        e.move = null;
-        const pa = Math.atan2(P0.sy - cy, P0.sx - cx), pr = Math.hypot(P0.sx - cx, P0.sy - cy) / cR;
-        e.a += (e.a + Math.atan2(Math.sin(pa - e.a), Math.cos(pa - e.a)) - e.a) * fadeK; e.r += (pr - e.r) * fadeK;
-      }
-    } else if (ph === 'strike') {
-      if (!e.striking && (e.human || now >= s.phaseAt + 150 + e.phaseOff * 1800)) {
-        e.striking = true;
-        if (!e.human && (cur.agentNames || [])[e.idx] === 'osint') go(e.home + 0.3, 1.55, 1800, null);
-        else if (e.human && cur.pwn) go(weakA, 0.32, 650, null);
-        else if (cur.report) go(e.human ? weakA : e.home, 0.55, 1100, null);
-        else { const sa = e.human ? weakA : e.home + Math.atan2(Math.sin(weakA - e.home), Math.cos(weakA - e.home)) * 0.55; go(sa, 0.86, 600, () => { knockAt(e.a, true); go(e.a + (e.human ? 0.2 : (e.dirSign || 1) * 0.25), 1.2, 1100, null); }); }
-      }
-      if (e.human && cur.pwn && pt > 0.65) e.alpha += (0 - e.alpha) * fadeK; else e.alpha += (1 - e.alpha) * fadeK;
-    } else {
-      e.striking = false;
-      e.alpha += (1 - e.alpha) * fadeK;
-      if (!e.move && now >= (e.wait || 0)) {
-        if (!e.human) {
-          const role = (cur.agentNames || [])[e.idx] || 'osint';
-          const dHome = Math.atan2(Math.sin(weakA - e.home), Math.cos(weakA - e.home));
-          const center = ph === 'work' ? e.home + dHome * 0.3 : e.home;
-          const R1 = () => Math.random();
-          if (role === 'osint') {
-            if (R1() < 0.3) {
-              const a = center + (R1() - 0.5) * 1.2;
-              go(a, 1.22, 1600, () => { knockAt(a, false); go(a + e.dirSign * 0.4, 1.6 + R1() * 0.2, 2200, null); });
-            } else {
-              e.dirSign = R1() < 0.5 ? -1 : 1;
-              go(center + e.dirSign * (0.3 + R1() * 0.7), 1.5 + R1() * 0.35, 2600 + R1() * 1400, null);
-            }
-            e.wait = now + 200 + R1() * 1500;
-          } else if (role === 'dns-enum') {
-            e.dirSign = -e.dirSign;
-            const a0 = center + e.dirSign * (0.5 + R1() * 0.3);
-            go(a0, 0.93, 900, () => { go(a0 - e.dirSign * (1.0 + R1() * 0.4), 0.94, 2200 + R1() * 600, () => { go(e.a - e.dirSign * 0.15, 1.18, 900, null); }); });
-            e.wait = now + 300 + R1() * 900;
-          } else if (role === 'port-scanning') {
-            e.portA = (e.portA === undefined ? center - 0.6 : e.portA + 0.19);
-            if (e.portA > center + 0.7) e.portA = center - 0.7;
-            const a = e.portA;
-            go(a, 1.06, 420, () => { go(a, 0.85, 260, () => { knockAt(a, ph === 'work'); go(a, 1.06, 300, null); }); });
-            e.wait = now + 90 + R1() * 120;
-          } else {
-            const a = center + (R1() - 0.5) * 0.9;
-            go(a, 0.9, 1300, () => { knockAt(a, ph === 'work'); e.wait = now + 900 + R1() * 900; go(a + e.dirSign * 0.08, 0.92, 1400, () => { go(a + e.dirSign * 0.3, 1.25, 1200, null); }); });
-            e.wait = now + 400 + R1() * 1200;
-          }
-        } else if (ph === 'think') {
-          const spread = 0;
-          const target = ph === 'work' ? weakA + (e.idx - 1.5) * 0.35 : null;
-          if (e.r > 1.0 && e.knockN % 3 !== 2) {
-            const a = target !== null ? target + (Math.random() - 0.5) * 0.2 : e.a + 0.25 + Math.random() * 0.35;
-            go(a, 0.84, e.human ? 700 : 520, () => { knockAt(a, ph === 'work'); go(a + (e.human ? 0.3 : 0.45), e.human ? 1.24 : 1.18, e.human ? 900 : 700, null); });
-          } else {
-            e.knockN++;
-            const a = target !== null ? target : e.a + 0.7 + Math.random() * 0.5 + spread * 0;
-            go(a, 1.26 + Math.random() * 0.14, e.human ? 1300 : 900, null);
-          }
-          if (!e.human) e.wait = now + 80 + Math.random() * 260;
-        } else {
-          const dd = Math.abs(Math.atan2(Math.sin(e.a - weakA), Math.cos(e.a - weakA)));
-          if (dd > 0.05 || e.r > 1.1) {
-            const d = Math.atan2(Math.sin(weakA - e.a), Math.cos(weakA - e.a));
-            go(e.a + d, 1.05, 700 + Math.abs(d) * 650, null);
-          } else {
-            go(weakA, 0.84, 380, () => { knockAt(weakA, true); go(weakA + 0.02, 1.02, 480, null); });
-          }
-        }
-      }
-    }
-    if (!e.human && on && !briefing && ph !== 'strike' && ((cur.agentNames || [])[e.idx] === 'dns-enum') && e.r < 0.97 && now > (e.nextTap || 0)) {
-      knockAt(e.a, false);
-      e.nextTap = now + 260 + Math.random() * 320;
-    }
-    if (e.move) {
-      const mv = e.move;
-      const k = (now - mv.t0) / mv.dur;
-      const q = eInOut(k);
-      e.a = mv.a0 + (mv.a1 - mv.a0) * q;
-      e.r = mv.r0 + (mv.r1 - mv.r0) * q;
-      if (k >= 1) { e.move = null; if (mv.onEnd) mv.onEnd(); }
-    }
-    const drift = (e.human ? 5 : 8) * u;
-    let ax = cx + Math.cos(e.a) * cR * e.r + Math.sin(t * 0.55 + 1.3 + e.idx) * drift;
-    let ay = cy + Math.sin(e.a) * cR * e.r + Math.cos(t * 0.47 + e.idx * 2) * drift;
-    if (e.human && s.mouse && s.follow > 0.001) { ax += (s.mouse.x - ax) * s.follow; ay += (s.mouse.y - ay) * s.follow; }
-    if (e.sx === undefined) { e.sx = ax; e.sy = ay; }
-    const sm = 1 - Math.exp(-dt * (e.human ? 9 : 11));
-    const nx2 = e.sx + (ax - e.sx) * sm, ny2 = e.sy + (ay - e.sy) * sm;
-    const vs = 1 - Math.exp(-dt * 6);
-    e.vx += ((nx2 - e.sx) - e.vx) * vs; e.vy += ((ny2 - e.sy) - e.vy) * vs;
-    e.sx = nx2; e.sy = ny2;
-    e.trail.push({ x: e.sx, y: e.sy });
-    if (e.trail.length > (e.human ? 34 : 22)) e.trail.shift();
-  });
-  if (s.mouse && ph !== 'strike' && humanOn) {
-    const age = (now - s.mouse.t) / 1000;
-    const inf = age < 2.5 ? 0.6 * (1 - age / 2.5) : 0;
-    s.follow = (s.follow || 0) + (inf - (s.follow || 0)) * (1 - Math.exp(-dt * 3));
-  } else {
-    s.follow = (s.follow || 0) * Math.exp(-dt * 3);
-  }
-
-  s.ripples = s.ripples.filter((r) => now - r.at < 1400);
-  s.ripples.forEach((r) => {
-    const k = eOut((now - r.at) / 1400);
-    const rad = (r.big ? 40 : (r.agent ? 18 : 26)) * u * (0.25 + k);
-    const c3 = r.big ? [200, 220, 240] : (r.agent ? AG : [170, 180, 188]);
-    const g = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, rad);
-    g.addColorStop(0, rgba(c3, 0.3 * (1 - k)));
-    g.addColorStop(1, rgba(T, 0));
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(r.x, r.y, rad, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = rgba(r.big ? A : c3, 0.4 * (1 - k)); ctx.lineWidth = 1 * dpr;
-    ctx.beginPath(); ctx.arc(r.x, r.y, rad * 1.15, 0, Math.PI * 2); ctx.stroke();
-  });
-  if (ph === 'work' && humanOn && !cur.agent) {
-    const pulse = 0.5 + 0.5 * Math.sin(t * 3.2);
-    const wx = cx + Math.cos(weakA) * cR * 0.8, wy = cy + Math.sin(weakA) * cR * 0.8;
-    const g = ctx.createRadialGradient(wx, wy, 0, wx, wy, (28 + 12 * pulse) * u);
-    g.addColorStop(0, rgba(A, (0.18 + 0.16 * pulse) * Math.min(1, pt))); g.addColorStop(1, rgba(A, 0));
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(wx, wy, (28 + 12 * pulse) * u, 0, Math.PI * 2); ctx.fill();
-  }
-
-  s.mtrail = s.mtrail.filter((q) => now - q.t < 900);
-  if (s.mtrail.length > 1) {
-    ctx.lineCap = 'round';
-    for (let i = 1; i < s.mtrail.length; i++) {
-      const q0 = s.mtrail[i - 1], q1 = s.mtrail[i];
-      const k = 1 - (now - q1.t) / 900;
-      ctx.strokeStyle = rgba(A, 0.55 * k * k);
-      ctx.lineWidth = (1 + 7 * k) * u;
-      ctx.shadowColor = rgba(A, 0.9); ctx.shadowBlur = 16 * k;
-      ctx.beginPath(); ctx.moveTo(q0.x, q0.y); ctx.lineTo(q1.x, q1.y); ctx.stroke();
-    }
-    ctx.shadowBlur = 0;
-  }
-
-  s.ents.forEach((e) => {
-    if (e.alpha < 0.01) return;
-    const col = e.human ? (hot ? R : A) : AG;
-    e.trail.forEach((p, i) => {
-      const k = i / e.trail.length;
-      ctx.fillStyle = rgba(col, (e.human ? 0.07 : 0.06) * k * k * e.alpha);
-      ctx.beginPath(); ctx.arc(p.x, p.y, ((e.human ? 3 : 2) + (e.human ? 8 : 4) * k) * u, 0, Math.PI * 2); ctx.fill();
-    });
-    const sp = Math.min(1, Math.hypot(e.vx, e.vy) / (6 * u));
-    const dir = Math.atan2(e.vy, e.vx);
-    const body = (e.human ? 12 : 6.5) * u;
-    ctx.save();
-    ctx.translate(e.sx, e.sy);
-    ctx.rotate(dir);
-    ctx.scale(1 + sp * 0.35, 1 - sp * 0.18);
-    ctx.beginPath();
-    for (let j = 0; j <= 40; j++) {
-      const th = (j / 40) * Math.PI * 2;
-      const rr = body * (1 + 0.09 * Math.sin(3 * th + t * 1.3 + e.idx) + 0.06 * Math.sin(5 * th - t * 1.7) + 0.035 * Math.sin(7 * th + t * 2.2));
-      const x = Math.cos(th) * rr, y = Math.sin(th) * rr;
-      if (j === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    const bg = ctx.createRadialGradient(0, 0, 0, 0, 0, body * 1.3);
-    bg.addColorStop(0, rgba([235, 242, 250], 0.92 * e.alpha));
-    bg.addColorStop(0.35, rgba(col, 0.7 * e.alpha));
-    bg.addColorStop(1, rgba(col, 0.04 * e.alpha));
-    ctx.fillStyle = bg;
-    ctx.shadowColor = rgba(col, 0.85); ctx.shadowBlur = (e.human ? 24 : 14) * dpr;
-    ctx.fill();
-    ctx.restore();
-    ctx.shadowBlur = 0;
-  });
-  if (briefing && P0.sx !== undefined) {
-    const bk = Math.min(1, Math.max(0, pt - 0.9) / 0.8) * Math.min(1, (3.6 - pt) / 0.6);
-    s.ents.forEach((e) => {
-      if (e.human || e.alpha < 0.05) return;
-      const d = Math.hypot(P0.sx - e.sx, P0.sy - e.sy);
-      if (d > 90 * u) return;
-      ctx.strokeStyle = rgba(AG, 0.35 * bk); ctx.lineWidth = 1 * dpr;
-      ctx.beginPath(); ctx.moveTo(e.sx, e.sy); ctx.lineTo(P0.sx, P0.sy); ctx.stroke();
-      for (let j = 0; j < 3; j++) {
-        const k = ((t * 1.1) + j / 3 + e.idx * 0.13) % 1;
-        const x = e.sx + (P0.sx - e.sx) * k, y = e.sy + (P0.sy - e.sy) * k;
-        const g = ctx.createRadialGradient(x, y, 0, x, y, 5 * u);
-        g.addColorStop(0, rgba([235, 242, 250], 0.9 * bk)); g.addColorStop(1, rgba(AG, 0));
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 5 * u, 0, Math.PI * 2); ctx.fill();
-      }
-    });
-    const g = ctx.createRadialGradient(P0.sx, P0.sy, 0, P0.sx, P0.sy, 40 * u);
-    g.addColorStop(0, rgba(AG, 0.22 * bk * (0.7 + 0.3 * Math.sin(t * 5)))); g.addColorStop(1, rgba(AG, 0));
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(P0.sx, P0.sy, 40 * u, 0, Math.PI * 2); ctx.fill();
-  }
-  const wk = { x: cx + Math.cos(weakA) * cR * 0.8, y: cy + Math.sin(weakA) * cR * 0.8 };
-
-  if (impact) {
-    const k = Math.min(1, (now - s.impactAt) / 1200);
-    const g = ctx.createRadialGradient(inf.x, inf.y, 0, inf.x, inf.y, cR * (0.3 + 1.1 * k));
-    g.addColorStop(0, rgba(inf.col, 0.5 * (1 - k) + 0.12));
-    g.addColorStop(1, rgba(inf.col, 0));
-    ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(inf.x, inf.y, cR * (0.3 + 1.1 * k), 0, Math.PI * 2); ctx.fill();
-    if (k < 1) {
-      ctx.strokeStyle = rgba(inf.col, 0.6 * (1 - k)); ctx.lineWidth = 2 * dpr; ctx.shadowColor = rgba(inf.col, 1); ctx.shadowBlur = 18 * dpr;
-      ctx.beginPath(); ctx.arc(inf.x, inf.y, k * S * 1.2, 0, Math.PI * 2); ctx.stroke();
-    }
-  }
-
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.shadowBlur = 0;
-  const fs = Math.round(12 * u * dpr / Math.max(1, dpr * 0.75)) || 12;
-  ctx.font = fs + 'px "IBM Plex Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillStyle = rgba([192, 193, 193], 0.85 * grow);
-  {
-    const sinceS = (now - (s.stepAt || now)) / 1000;
-    const fa = Math.min(1, Math.max(0, sinceS / 0.9));
-    const lx = 36 * u, ly = 40 * u;
-    const st = steps[L.step];
-    const ai = st.agent && !st.assist;
-    ctx.save();
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'alphabetic';
-    try { ctx.letterSpacing = Math.round(3 * u) + 'px'; } catch (e) {}
-    ctx.font = Math.round(11 * u) + 'px "IBM Plex Mono", monospace';
-    ctx.fillStyle = 'rgba(151,152,153,' + (0.9 * fa).toFixed(3) + ')';
-    ctx.fillText('PHASE ' + String(L.step + 1).padStart(2, '0') + ' / ' + String(steps.length).padStart(2, '0'), lx, ly);
-    try { ctx.letterSpacing = Math.round(5 * u) + 'px'; } catch (e) {}
-    ctx.font = '500 ' + Math.round(30 * u) + 'px "IBM Plex Mono", monospace';
-    const title = st.depth.toUpperCase();
-    ctx.fillStyle = 'rgba(228,229,229,' + (0.95 * fa).toFixed(3) + ')';
-    ctx.shadowColor = 'rgba(38,139,210,0.45)'; ctx.shadowBlur = 18 * u * fa;
-    ctx.fillText(title, lx, ly + 40 * u - (1 - fa) * 8 * u);
-    ctx.shadowBlur = 0;
-    const tw = Math.min(ctx.measureText(title).width, W * 0.55);
-    const prog = (L.step + (ph === 'strike' ? 1 : (ph === 'work' ? 0.6 : 0.25))) / steps.length;
-    ctx.fillStyle = 'rgba(228,229,229,0.08)';
-    ctx.fillRect(lx, ly + 54 * u, tw, 2 * u);
-    ctx.fillStyle = rgba(cur.pwn && ph === 'strike' ? R : A, 0.9 * fa);
-    s.phaseBar = (s.phaseBar || 0) + (prog - (s.phaseBar || 0)) * (1 - Math.exp(-dt * 2));
-    ctx.fillRect(lx, ly + 54 * u, tw * s.phaseBar, 2 * u);
-    try { ctx.letterSpacing = Math.round(2 * u) + 'px'; } catch (e) {}
-    ctx.font = Math.round(11 * u) + 'px "IBM Plex Mono", monospace';
-    ctx.fillStyle = ai ? 'rgba(143,192,232,' + (0.9 * fa).toFixed(3) + ')' : 'rgba(151,152,153,' + (0.8 * fa).toFixed(3) + ')';
-    ctx.fillText(ai ? s.T.cv.ai : (st.assist ? s.T.cv.assist : s.T.cv.manual), lx, ly + 76 * u);
-    try { ctx.letterSpacing = '0px'; } catch (e) {}
-    ctx.restore();
-    ctx.textAlign = 'center';
-  }
-  if (cur.agentNames) s.lastNames = cur.agentNames;
-  s.ents.forEach((e) => {
-    if (e.alpha < 0.05) return;
-    ctx.fillStyle = e.human ? rgba(hot ? R : A, 0.95 * e.alpha) : rgba([143, 192, 232], 0.8 * e.alpha);
-    ctx.font = (e.human ? fs : Math.round(fs * 0.85)) + 'px "IBM Plex Mono", monospace';
-    ctx.fillText(e.human ? 'pentester' : ((cur.agentNames || [])[e.idx] || (s.lastNames || [])[e.idx] || 'agent'), e.sx, e.sy - (e.human ? 26 : 16) * u);
-  });
-  ctx.font = fs + 'px "IBM Plex Mono", monospace';
-  if (s.briefing && s.ents[0].sx !== undefined) {
-    ctx.fillStyle = rgba([143, 192, 232], 0.85);
-    ctx.fillText(s.T.cv.handover, s.ents[0].sx, s.ents[0].sy + 30 * u);
-  }
-  s.replies = s.replies.filter((r) => now - r.at < 1300);
-  s.replies.forEach((r) => {
-    const k = (now - r.at) / 1300;
-    ctx.fillStyle = r.warm ? rgba([228, 229, 229], 0.9 * (1 - k)) : rgba([151, 152, 153], 0.85 * (1 - k));
-    ctx.fillText(r.text, r.x, r.y - k * 14 * u);
-  });
-  if (ph === 'work' && !cur.agent) {
-    ctx.fillStyle = rgba([228, 229, 229], 0.9);
-    ctx.fillText(s.T.cv.weak, wk.x, wk.y + 44 * u);
-  }
+  ctx.save(); path(); ctx.clip();
+  ctx.globalAlpha = alpha; ctx.filter = 'blur(9px)';
+  ctx.drawImage(s.cv, 0, 0, s.cv.width, s.cv.height, 0, 0, s.W, s.H);
+  ctx.filter = 'none';
+  const g = ctx.createLinearGradient(c[0][0], c[0][1], c[2][0], c[2][1]);
+  g.addColorStop(0, 'rgba(70,72,72,0.30)'); g.addColorStop(1, 'rgba(36,37,37,0.34)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, s.W, s.H);
+  ctx.restore();
+  ctx.save(); ctx.globalAlpha = alpha; path(); ctx.strokeStyle = 'rgba(228,229,229,0.09)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(c[0][0] + 18, c[0][1] + 0.5); ctx.lineTo(c[1][0] - 18, c[1][1] + 0.5);
+  ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.stroke(); ctx.restore();
 }
-function drawNet(s, now) {
-  const c = s.net;
-  if (!c) return;
-  const box = c.getBoundingClientRect();
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const W = Math.round(box.width * dpr), H = Math.round(box.height * dpr);
-  if (!W || !H) return;
-  if (c.width !== W || c.height !== H) { c.width = W; c.height = H; }
-  const ctx = c.getContext('2d');
-  const t = now / 1000;
-  const dt = Math.min(0.05, Math.max(0.001, (now - (s.netLast || now - 16)) / 1000));
-  s.netLast = now;
-  const step = s.step;
-  const strike = s.phase === 'strike';
-  const since = (now - (s.stepAt || now)) / 1000;
-  const A = [38, 139, 210], R = [220, 50, 47];
-  const rgba = (c3, a) => 'rgba(' + c3.join(',') + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')';
-  const N = {
-    inet: { x: 0, y: 60, s: -1, o: -1, l: 'internet' },
-    dns: { x: 16, y: 64, s: 0, d: 0.2, o: 0, l: 'dns' },
-    www: { x: 34, y: 18, s: 0, d: 1.2, l: 'www' },
-    mail: { x: 34, y: 42, s: 0, d: 2.6, l: 'mail' },
-    portal: { x: 34, y: 66, s: 0, d: 0.7, o: 0, l: 'portal' },
-    vpn: { x: 34, y: 104, s: 0, d: 3.8, l: 'vpn' },
-    ldap: { x: 120, y: 110, s: 0, d: 5.6, l: 'ldap' },
-    cdn: { x: 56, y: 10, s: 1, d: 0.6, l: 'cdn' },
-    api: { x: 58, y: 38, s: 1, d: 1.7, l: 'api' },
-    host: { x: 58, y: 66, s: 1, d: 2.4, o: 1, l: 'app-host' },
-    sso: { x: 56, y: 110, s: 1, d: 3.2, l: 'sso' },
-    k8s: { x: 128, y: 20, s: 1, d: 4.1, l: 'k8s' },
-    web: { x: 100, y: 74, s: 1, d: 4.9, o: 3, l: 'web-app' },
-    svc: { x: 82, y: 50, s: 1, d: 5.8, o: 2, l: 'svc :8443' },
-    git: { x: 146, y: 70, s: 1, d: 6.6, l: 'git' },
-    ssh: { x: 82, y: 88, s: 1, d: 7.4, l: 'ssh' },
-    db: { x: 122, y: 92, s: 3, d: 0.8, o: 3, hot: 1, l: 'db' },
-    srv: { x: 106, y: 40, s: 4, d: 0.5, o: 4, hot: 1, l: 'server' },
-    u1: { x: 78, y: 8, s: 99 }, u2: { x: 80, y: 112, s: 99 }, u3: { x: 102, y: 16, s: 99 }, u4: { x: 142, y: 36, s: 99 },
-    u5: { x: 144, y: 104, s: 99 }, u6: { x: 166, y: 52, s: 99 }, u7: { x: 170, y: 92, s: 99 }, u8: { x: 188, y: 24, s: 99 },
-    u9: { x: 192, y: 70, s: 99 }, u10: { x: 186, y: 112, s: 99 }, u11: { x: 124, y: 58, s: 99 }
-  };
-  const E = [['inet', 'dns'], ['dns', 'www'], ['dns', 'mail'], ['dns', 'portal'], ['dns', 'vpn'], ['www', 'cdn'], ['mail', 'api'], ['portal', 'api'], ['portal', 'host'], ['vpn', 'sso'],
-    ['cdn', 'u1'], ['u1', 'u3'], ['api', 'u3'], ['u3', 'k8s'], ['host', 'svc'], ['host', 'ssh'], ['host', 'web'], ['sso', 'u2'], ['u2', 'ldap'], ['ssh', 'u2'],
-    ['svc', 'srv'], ['web', 'db'], ['web', 'u11'], ['u11', 'git'], ['k8s', 'u4'], ['srv', 'u4'], ['srv', 'u11'], ['ldap', 'u5'], ['db', 'u5'],
-    ['u4', 'u6'], ['git', 'u6'], ['git', 'u7'], ['u5', 'u7'], ['u6', 'u8'], ['u6', 'u9'], ['u7', 'u9'], ['u7', 'u10']];
-  const revealT = (n) => (n.s < 0 ? -1 : (n.s < step ? -1 : (n.s === step ? n.d || 0 : Infinity)));
-  const known = (n) => n.s < 0 || (n.s < 99 && (n.s < step || (n.s === step && since >= (n.d || 0))));
-  const popK = (n) => { const r = revealT(n); return r >= 0 && r !== Infinity ? Math.max(0, Math.min(1, (since - r) / 0.9)) : (known(n) ? 1 : 0); };
-  const owned = (n) => n.o !== undefined && (n.o < 0 || n.o < step || (n.o === step && strike));
-  const hot = (n) => !!n.hot && owned(n);
-  const info = step <= 1 || step >= 5;
-  let front = 0;
-  Object.keys(N).forEach((k) => { const n = N[k]; if (n.o !== undefined && n.o <= step) front = Math.max(front, n.x); });
-  const tgtW = info ? 204 : 118;
-  const tgtC = info ? 98 : Math.max(tgtW / 2 - 4, front - tgtW * 0.25);
-  if (s.netW === undefined) { s.netW = tgtW; s.netCam = tgtC; }
-  const ck = 1 - Math.exp(-dt * 1.2);
-  s.netW += (tgtW - s.netW) * ck; s.netCam += (tgtC - s.netCam) * ck;
-  const viewW = s.netW;
-  const padX = 22 * dpr, padT = 12 * dpr, padB = 28 * dpr;
-  const sx = (W - padX * 2) / viewW;
-  const P = (n) => ({ x: padX + (n.x - (s.netCam - viewW / 2)) * sx, y: padT + (n.y / 120) * (H - padT - padB) });
-  const edgeFade = (x) => Math.max(0, Math.min(1, Math.min(x, W - x) / (36 * dpr)));
-  const bez = (pa, pb, k) => {
-    const dx = (pb.x - pa.x) * 0.5, u2 = 1 - k;
-    return { x: u2 * u2 * u2 * pa.x + 3 * u2 * u2 * k * (pa.x + dx) + 3 * u2 * k * k * (pb.x - dx) + k * k * k * pb.x, y: u2 * u2 * u2 * pa.y + 3 * u2 * u2 * k * pa.y + 3 * u2 * k * k * pb.y + k * k * k * pb.y };
-  };
-  ctx.clearRect(0, 0, W, H);
+
+function drawStrokes(s, ctx, F, alpha, draw, P2) {
+  const col = (c, a) => 'rgba(' + PAL[c][0] + ',' + PAL[c][1] + ',' + PAL[c][2] + ',' + clamp01(a).toFixed(3) + ')';
   ctx.lineCap = 'round';
-  E.forEach(([a, b]) => {
-    const na = N[a], nb = N[b], pa = P(na), pb = P(nb);
-    const f = Math.min(edgeFade(pa.x), edgeFade(pb.x));
-    if (f <= 0) return;
-    const both = owned(na) && owned(nb);
-    const frontier = owned(na) && nb.o === step && !owned(nb) && known(nb);
-    const vis = Math.min(popK(na), popK(nb));
-    const dx = (pb.x - pa.x) * 0.5;
-    ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.bezierCurveTo(pa.x + dx, pa.y, pb.x - dx, pb.y, pb.x, pb.y);
-    ctx.lineWidth = (both ? 1.5 : 1) * dpr;
-    if (both) { ctx.strokeStyle = rgba(hot(nb) ? R : A, 0.55 * f); ctx.shadowColor = rgba(hot(nb) ? R : A, 0.8); ctx.shadowBlur = 6 * dpr; }
-    else if (frontier) { ctx.strokeStyle = rgba(A, 0.35 * f); ctx.shadowBlur = 0; }
-    else { ctx.strokeStyle = 'rgba(228,229,229,' + ((0.035 + 0.1 * vis) * f).toFixed(3) + ')'; ctx.shadowBlur = 0; }
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-    if (frontier) {
-      for (let j = 0; j < 2; j++) {
-        const q = bez(pa, pb, ((t * 0.45) + j * 0.5) % 1);
-        const g = ctx.createRadialGradient(q.x, q.y, 0, q.x, q.y, 7 * dpr);
-        g.addColorStop(0, rgba(A, 0.9 * f)); g.addColorStop(1, rgba(A, 0));
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(q.x, q.y, 7 * dpr, 0, Math.PI * 2); ctx.fill();
+  F.strokes.forEach((st) => {
+    let a = alpha, g = draw;
+    if (st.rev != null) { const rv = clamp01((s.tSince - st.rev * s.RV) / 0.9); a *= rv; g = Math.min(g, rv); }
+    if (a <= 0.01 || g <= 0.01) return;
+    if (st.t === 'e' || st.t === 'l') {
+      ctx.strokeStyle = col(st.c, st.a2 * 0.5 * a); ctx.lineWidth = st.t === 'e' ? 0.8 : 1; ctx.beginPath();
+      const n = 32;
+      for (let i = 0; i <= n * g; i++) {
+        const t = i / n, u = 1 - t;
+        let x, y;
+        if (st.t === 'e') { x = u * u * st.a[0] + 2 * u * t * st.q[0] + t * t * st.b[0]; y = u * u * st.a[1] + 2 * u * t * st.q[1] + t * t * st.b[1]; }
+        else { x = st.a[0] + (st.b[0] - st.a[0]) * t; y = st.a[1] + (st.b[1] - st.a[1]) * t; }
+        const q = P2([x, y]);
+        if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]);
+      }
+      ctx.stroke();
+    } else {
+      // node or ring: a smooth circle (nodes also get a solid core)
+      ctx.strokeStyle = col(st.c, st.a * 0.5 * a); ctx.lineWidth = st.t === 'n' ? 0.9 : 1; ctx.beginPath();
+      const n = 48;
+      for (let i = 0; i <= n * g; i++) {
+        const an = -Math.PI / 2 + (i / n) * 6.2832;
+        const q = P2([st.p[0] + Math.cos(an) * st.r, st.p[1] + Math.sin(an) * st.r]);
+        if (i === 0) ctx.moveTo(q[0], q[1]); else ctx.lineTo(q[0], q[1]);
+      }
+      ctx.stroke();
+      if (st.t === 'n') {
+        const q = P2(st.p);
+        ctx.fillStyle = col(st.c, st.a * 0.55 * a); ctx.beginPath();
+        ctx.arc(q[0], q[1], Math.max(1.2, 0.012 * s.S * q[2]), 0, 6.2832); ctx.fill();
       }
     }
   });
-  ctx.font = Math.round(10.5 * dpr) + 'px "IBM Plex Mono", monospace';
-  ctx.textBaseline = 'top';
-  ctx.textAlign = 'center';
-  Object.keys(N).forEach((key) => {
-    const n = N[key], p = P(n);
-    const f = edgeFade(p.x);
+}
+
+// Crisp dots, batched by colour and opacity in tenths
+function drawDots(ctx, bk) {
+  for (let b = 0; b < BUCKETS; b++) {
+    const B = bk[b];
+    if (!B.length) continue;
+    const c = PAL[Math.floor(b / 10)];
+    ctx.fillStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + ((b % 10) + 0.5) / 10 + ')';
+    ctx.beginPath();
+    for (let j = 0; j < B.length; j += 3) { ctx.moveTo(B[j] + B[j + 2], B[j + 1]); ctx.arc(B[j], B[j + 1], B[j + 2], 0, 6.2832); }
+    ctx.fill();
+  }
+}
+
+function drawReport(s, ctx, RP, proj) {
+  const pt = repTok(s, RP);
+  RP.rules.forEach((r) => {
+    const li = Math.floor(r.li), at = RP.start[li] + (r.li - li) * RP.cnt[li];
+    const f = clamp01((pt - at) / 4);
     if (f <= 0) return;
-    const o = owned(n), pk = popK(n), h = hot(n), cur = n.o === step && !o;
-    const col = h ? R : A;
-    if (pk <= 0) {
-      ctx.fillStyle = 'rgba(228,229,229,' + (0.12 * f).toFixed(3) + ')';
-      ctx.beginPath(); ctx.arc(p.x, p.y, 1.8 * dpr, 0, Math.PI * 2); ctx.fill();
-      return;
-    }
-    if (pk < 1) {
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, (6 + 20 * pk) * dpr);
-      g.addColorStop(0, rgba([143, 192, 232], 0.5 * (1 - pk) * f)); g.addColorStop(1, rgba([143, 192, 232], 0));
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, (6 + 20 * pk) * dpr, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = rgba([143, 192, 232], 0.6 * (1 - pk) * f); ctx.lineWidth = 1 * dpr;
-      ctx.beginPath(); ctx.arc(p.x, p.y, (4 + 14 * pk) * dpr, 0, Math.PI * 2); ctx.stroke();
-    }
-    if (cur && known(n)) {
-      const pulse = 0.5 + 0.5 * Math.sin(t * 2.4);
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, (12 + 6 * pulse) * dpr);
-      g.addColorStop(0, rgba(A, (0.28 + 0.12 * pulse) * f)); g.addColorStop(1, rgba(A, 0));
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, (12 + 6 * pulse) * dpr, 0, Math.PI * 2); ctx.fill();
-    }
-    if (o) {
-      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 11 * dpr);
-      g.addColorStop(0, rgba(col, (h ? 0.45 : 0.3) * f)); g.addColorStop(1, rgba(col, 0));
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, 11 * dpr, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = rgba(col, f);
-      ctx.beginPath(); ctx.arc(p.x, p.y, 3.6 * dpr, 0, Math.PI * 2); ctx.fill();
-    } else {
-      ctx.strokeStyle = 'rgba(228,229,229,' + (0.55 * pk * f).toFixed(3) + ')';
-      ctx.lineWidth = 1 * dpr;
-      ctx.beginPath(); ctx.arc(p.x, p.y, 3.4 * pk * dpr, 0, Math.PI * 2); ctx.stroke();
-    }
-    if (n.l) {
-      const la = (o ? 0.9 : 0.72) * pk * f;
-      ctx.fillStyle = o && h ? 'rgba(232,129,125,' + la.toFixed(3) + ')' : (o ? 'rgba(228,229,229,' + la.toFixed(3) + ')' : 'rgba(170,171,172,' + la.toFixed(3) + ')');
-      ctx.fillText(n.l, p.x, p.y + 9 * dpr);
-    }
+    const a = proj([RP.L0, r.y, 0]), b = proj([RP.x1 - 0.12, r.y, 0]);
+    ctx.strokeStyle = 'rgba(228,229,229,' + (0.12 * f).toFixed(3) + ')'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
   });
-  ctx.textAlign = 'left';
-}
-
-function toCanvas(s, e) {
-  if (!s.canvas) return null;
-  const r = s.canvas.getBoundingClientRect();
-  const sx = s.canvas.width / (r.width || 1), sy = s.canvas.height / (r.height || 1);
-  return { x: (e.clientX - r.left) * sx, y: (e.clientY - r.top) * sy };
-}
-
-// Mouse: trail and the pentester follows; click = knock on the target.
-function bindPointer(s, wrap) {
-  wrap.addEventListener('pointermove', (e) => {
-    const p = toCanvas(s, e); if (!p) return;
-    const now = performance.now();
-    s.mouse = { x: p.x, y: p.y, t: now };
-    s.mtrail.push({ x: p.x, y: p.y, t: now });
-    if (s.mtrail.length > 60) s.mtrail.shift();
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  RP.lines.forEach((ln) => {
+    if (!ln.toks.length || pt <= ln.toks[0].k) return;
+    let end = 0, part = null;
+    for (const tk of ln.toks) { if (tk.k + 1 <= pt) end = tk.end; else if (tk.k < pt) part = tk; }
+    const cw = ln.size * 0.6, q = proj([ln.x, ln.y, 0]), sc = q[2] || 1;
+    ctx.font = ln.w + ' ' + (ln.size * s.S * sc).toFixed(1) + 'px ' + MONO;
+    ctx.fillStyle = ln.col;
+    if (end > 0) { ctx.globalAlpha = 0.96; ctx.fillText(ln.text.slice(0, end), q[0], q[1]); }
+    if (part) { const qp = proj([ln.x + part.start * cw, ln.y, 0]); ctx.globalAlpha = 0.96 * (pt - part.k); ctx.fillText(ln.text.slice(part.start, part.end), qp[0], qp[1]); }
   });
-  wrap.addEventListener('pointerleave', () => { s.mouse = null; });
-  wrap.addEventListener('pointerdown', (e) => {
-    const p = toCanvas(s, e); if (!p || !s.ripples) return;
-    const now = performance.now();
-    s.ripples.push({ x: p.x, y: p.y, at: now, big: true });
-    if (s.replies) s.replies.push({ x: p.x, y: p.y - 24, at: now, text: 'ping', warm: true });
-  });
+  ctx.globalAlpha = 1;
 }
 
-function resume(s) {
-  if (!s.raf) s.raf = requestAnimationFrame((n) => frame(s, n));
+function agentPos(s, a, t) {
+  if (a.fn) return a.fn(s.tSince + (t - s.nowT), t);
+  // smooth, continuous wander through the waypoints plus a little free roaming
+  const hop = a.hop || 1.9, n = a.pts.length;
+  const u = t / hop + a.o * n, i = Math.floor(u), f = u - i;
+  const P = (k) => a.pts[((k % n) + n) % n];
+  const q = cr(P(i - 1), P(i), P(i + 1), P(i + 2), f);
+  const o = a.o * 13;
+  return [
+    q[0] + Math.sin(t * 0.9 + o) * 0.06 + Math.sin(t * 2.3 + o * 1.7) * 0.025,
+    q[1] + Math.cos(t * 0.7 + o * 1.3) * 0.05 + Math.sin(t * 1.9 + o) * 0.02,
+  ];
 }
 
-// Pause timeline and rendering while the stage is off screen or the tab is hidden.
-function bindVisibility(s, stage) {
-  let inView = true;
-  const apply = () => {
-    const on = inView && !document.hidden;
-    if (on === s.playing) return;
-    s.playing = on;
-    if (on) resume(s);
+function labelText(s, lb) {
+  if (lb.key === 'suspect') return 'svc :8443 · ' + s.texts.labels.suspect;
+  if (lb.key === 'me') return s.texts.labels.me;
+  return lb.t;
+}
+
+/* ---------- render loop ---------- */
+
+function autoplay(s, now) {
+  if (s.reduce) return;
+  if (s.intro && now - s.stepAt > INTRO_MS) toStep(s, 0);
+  else if (!s.intro && now - s.stepAt > DURATION_MS[s.step]) {
+    if (s.step < s.steps.length - 1) toStep(s, s.step + 1);
+    else restartIntro(s, now);
+  }
+}
+
+function frame(s, now) {
+  s.raf = requestAnimationFrame((n) => frame(s, n));
+  if (!s.F || (!s.visible && s.drawnOnce)) return;
+  if (!s.zc || now - s.zc > RESIZE_CHECK_MS) {
+    s.zc = now;
+    const r = s.root.getBoundingClientRect(), z = r.width / (s.root.clientWidth || 1);
+    if (Math.abs(z - (s.zoom || 1)) > 0.08 || s.root.clientWidth !== s.W || s.root.clientHeight !== s.H) resize(s);
+  }
+  autoplay(s, now);
+
+  const ctx = s.cv.getContext('2d');
+  ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0);
+  ctx.clearRect(0, 0, s.W, s.H);
+  const F = s.F, N = s.N, t = now / 1000;
+  const dtH = Math.min(0.05, s.lastTH ? t - s.lastTH : 0.016); s.lastTH = t;
+  const p = (now - s.t0) / FORM_MS;
+  const ptr = s.ptr;
+  ptr.x += (ptr.tx - ptr.x) * 0.05; ptr.y += (ptr.ty - ptr.y) * 0.05;
+  const tk = F.report ? 0.2 : 1;
+  const yaw = (ptr.x * 0.16 + Math.sin(t * 0.21) * 0.05) * tk, pitch = (-ptr.y * 0.08 + Math.sin(t * 0.17) * 0.025) * tk;
+  const cyw = Math.cos(yaw), syw = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+  const S = s.S, cx = s.cx, cy = s.cy, D = DEPTH;
+  const fk = smooth(clamp01((p - 0.55) / 1.15));
+  const pk = 1 - smooth(clamp01(p / 0.95));
+  // flat projection (z = 0) for strokes, labels and the report
+  const P2 = (q) => {
+    const x = q[0], y = q[1], rx = x * cyw, rz0 = -x * syw, ry = y * cp - rz0 * sp, rz = y * sp + rz0 * cp, sc = D / (D - rz * 0.9);
+    return [cx + rx * S * sc, cy + ry * S * sc, sc];
   };
-  new IntersectionObserver((entries) => { inView = entries[0].isIntersecting; apply(); }).observe(stage);
-  document.addEventListener('visibilitychange', apply);
+  const amp = s.prevF && p < 1.2 ? s.prevF.drift + (F.drift - s.prevF.drift) * Math.min(1, p) : F.drift;
+  s.RV = F.rv || DEFAULT_REVEAL_S; s.tSince = (now - s.t0) / 1000 - 1.4; s.nowT = t;
+  if (F.report) {
+    const hp = repHeadAt(F.report, repTok(s, F.report));
+    if (!s.head || s.headF !== F) { s.head = hp.slice(); s.headF = F; s.hist = []; }
+    const kh = 1 - Math.exp(-dtH * 9);
+    s.head[0] += (hp[0] - s.head[0]) * kh; s.head[1] += (hp[1] - s.head[1]) * kh;
+    s.hist.unshift(s.head.slice()); if (s.hist.length > 45) s.hist.length = 45;
+  }
+  const done = repDone(s);
+  const agentC = F.agents.map((a) => agentPos(s, a, t));
+  for (let b = 0; b < BUCKETS; b++) { s.bk[b].length = 0; s.bk2[b].length = 0; }
+  const glow = [];
+  for (let i = 0; i < N; i++) {
+    s.cTo[i] = F.col[i];
+    const l = clamp01((p - s.delay[i]) / 0.5);
+    const e = l < 0.5 ? 4 * l * l * l : 1 - Math.pow(-2 * l + 2, 3) / 2;
+    s.lastE[i] = e;
+    const role = F.role[i], ph = s.ph[i];
+    let tx = F.pos[3 * i], ty = F.pos[3 * i + 1], tz = F.pos[3 * i + 2];
+    let aMul = 1, rvI = 1;
+    if (role >= 1 && role <= 4 && F.agents[role - 1]) {
+      // each agent is its own little swarm: particles orbit the moving centre on tilted paths and trail behind it
+      const ag = F.agents[role - 1], c = agentPos(s, ag, t - s.oL[i] * (ag.lag == null ? 1 : ag.lag));
+      const r = s.oR[i] * (1 + 0.3 * Math.sin(t * 2.7 + ph)), an = s.oW[i] * t + ph, tl = s.oT[i];
+      tx += c[0] + Math.cos(an) * r; ty += c[1] + Math.sin(an) * r * Math.cos(tl); tz += Math.sin(an) * r * Math.sin(tl);
+    } else if (role === 7) {
+      // revealed content: a faint, scattered haze until the swarm passes, then it settles into place
+      const rv = smooth(clamp01((s.tSince - F.par[i] * s.RV) / 0.9)), k7 = 1 - rv;
+      tx += (Math.sin(ph * 7.1 + t * 0.6) * 0.22 + Math.sin(t * 1.3 + ph) * 0.03) * k7;
+      ty += Math.cos(ph * 5.3 + t * 0.5) * 0.16 * k7;
+      tz += Math.sin(ph * 3.7 + t * 0.4) * 0.25 * k7;
+      rvI = rv;
+      const hz = F.haze == null ? 0.5 : F.haze;
+      aMul = hz + (1 - hz) * rv;
+      if (F.report) aMul *= 1 - done;
+    } else if (role === 8) {
+      const w = 1.1 + Math.abs(s.oW[i]) * 0.5;
+      if (s.hist && s.hist.length && (ph * 7.3) % 1 < 0.68) {
+        // bundled: buzz tightly around the token being written, trailing slightly behind it
+        const h = s.hist[Math.min(s.hist.length - 1, Math.floor(s.oL[i] * 60))];
+        const r = s.oR[i] * 2.4 * (1 + 0.35 * Math.sin(t * 3.3 + ph)), an = s.oW[i] * 1.8 * t + ph, tl = s.oT[i];
+        tx = h[0] + Math.cos(an) * r * 1.4 + Math.sin(t * 5.1 + ph) * 0.02; ty = h[1] + Math.sin(an) * r * Math.cos(tl) * 0.8; tz = Math.sin(an) * r * Math.sin(tl);
+      } else {
+        // free chaotic buzzing around the slot
+        tx += Math.sin(t * w + ph) * 0.2 + Math.sin(t * w * 2.3 + ph * 1.7) * 0.06 + Math.sin(t * 0.31 + ph * 0.2) * 0.08;
+        ty += Math.cos(t * w * 0.8 + ph * 1.3) * 0.16 + Math.sin(t * w * 2.9 + ph) * 0.05 + Math.cos(t * 0.27 + ph * 0.3) * 0.06;
+        tz += Math.sin(t * w * 1.1 + ph * 0.7) * 0.15;
+      }
+      // once the report is complete, the swarm scatters and vanishes
+      if (done > 0) { tx += Math.cos(ph * 3) * done * 1.3; ty += Math.sin(ph * 3) * done * 0.9; aMul = 1 - done; }
+    } else if (role === 5) {
+      // the pentester: one calm, dense swarm that breathes in place
+      const P = s.net.P, r = s.oR[i] * 0.85 * (1 + 0.2 * Math.sin(t * 1.6 + ph)), an = s.oW[i] * 0.45 * t + ph, tl = s.oT[i];
+      tx += P[0] + Math.sin(t * 0.6) * 0.02 + Math.cos(an) * r; ty += P[1] + Math.cos(t * 0.5) * 0.015 + Math.sin(an) * r * Math.cos(tl); tz += Math.sin(an) * r * Math.sin(tl);
+    }
+    const x = s.from[3 * i] + (tx - s.from[3 * i]) * e + Math.sin(t * 0.5 + ph) * amp;
+    const y = s.from[3 * i + 1] + (ty - s.from[3 * i + 1]) * e + Math.cos(t * 0.42 + ph * 1.3) * amp;
+    const z = s.from[3 * i + 2] + (tz - s.from[3 * i + 2]) * e + Math.sin(t * 0.37 + ph * 0.7) * amp;
+    s.cur[3 * i] = x; s.cur[3 * i + 1] = y; s.cur[3 * i + 2] = z;
+    const a = (s.aFrom[i] + (F.al[i] - s.aFrom[i]) * e) * aMul; s.aCur[i] = a;
+    const sm = s.smFrom[i] + (F.sm[i] - s.smFrom[i]) * e; s.smCur[i] = sm;
+    // rotate and project
+    const rx = x * cyw + z * syw; let rz = -x * syw + z * cyw;
+    const ry = y * cp - rz * sp; rz = y * sp + rz * cp;
+    const sc = D / (D - rz * 0.9);
+    if (sc <= 0 || sc > 6) continue;
+    const sx = cx + rx * S * sc, sy = cy + ry * S * sc;
+    if (sx < -20 || sx > s.W + 20 || sy < -20 || sy > s.H + 20) continue;
+    const rad = Math.min(4.2, Math.max(0.55, s.sz[i] * sm * sc * 0.92));
+    const c0 = s.cFrom[i], c1 = F.col[i];
+    const layer = F.report && (role === 7 || role === 8 || (role >= 1 && role <= 4)) ? s.bk2 : s.bk;
+    const put = (c, al) => {
+      if (al < 0.02) return;
+      layer[c * 10 + Math.min(9, Math.floor(al * 10))].push(sx, sy, rad);
+      if (rad > 1.5) glow.push(c, sx, sy, rad, al);
+    };
+    // once the shape has formed, its line particles fade into the smooth stroke; on the next change they come back as a swarm
+    const ad = a * (1 - 0.5 * (s.lfFrom[i] * pk + F.lf[i] * fk * rvI));
+    if (c0 === c1 || e >= 1) put(c1, Math.min(1, ad));
+    else { put(c0, Math.min(1, ad * (1 - e))); put(c1, Math.min(1, ad * e)); }
+  }
+  // soft halo behind larger points
+  for (let g = 0; g < glow.length; g += 5) {
+    const r = glow[g + 3] * 5;
+    ctx.globalAlpha = glow[g + 4] * 0.5;
+    ctx.drawImage(s.sprites[glow[g]], glow[g + 1] - r, glow[g + 2] - r, 2 * r, 2 * r);
+  }
+  ctx.globalAlpha = 1;
+  // strokes: the new shape draws itself in, the previous one breaks apart quickly
+  if (s.prevF && pk > 0.01) drawStrokes(s, ctx, s.prevF, pk, 1, P2);
+  if (fk > 0) drawStrokes(s, ctx, F, fk, fk, P2);
+  drawDots(ctx, s.bk);
+  if (F.report) {
+    drawGlass(s, ctx, F.report, P2, clamp01((now - s.t0) / GLASS_FADE_MS));
+    drawDots(ctx, s.bk2);
+    drawReport(s, ctx, F.report, P2);
+  }
+  drawLabels(s, ctx, F, agentC, now, P2);
+  s.drawnOnce = true;
+}
+
+function drawLabels(s, ctx, F, agentC, now, P2) {
+  const la = clamp01((now - s.t0 - LABEL_DELAY_MS) / LABEL_FADE_MS);
+  if (la <= 0) return;
+  ctx.font = '500 12px ' + MONO; ctx.textBaseline = 'middle';
+  F.labels.forEach((lb) => {
+    if (lb.key === 'root' && s.tSince < 0.92 * s.RV) return;
+    const q = P2([lb.p[0] + lb.dx, lb.p[1] + lb.dy]);
+    ctx.globalAlpha = la; ctx.fillStyle = lb.c; ctx.textAlign = lb.al; ctx.fillText(labelText(s, lb), q[0], q[1]);
+  });
+  F.agents.forEach((a, j) => {
+    if (!a.name) return;
+    const c = agentC[j], q = P2([c[0] - 0.11, c[1] - 0.1]);
+    ctx.globalAlpha = la * 0.9; ctx.fillStyle = AGENT_LABEL; ctx.textAlign = 'right'; ctx.fillText(a.name, q[0], q[1]);
+  });
+  ctx.globalAlpha = 1;
+}
+
+/* ---------- wiring ---------- */
+
+function bindPointer(s) {
+  s.root.addEventListener('pointermove', (e) => {
+    wake(s);
+    const r = s.root.getBoundingClientRect();
+    s.ptr.tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    s.ptr.ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+  });
+  s.root.addEventListener('pointerleave', () => { s.ptr.tx = 0; s.ptr.ty = 0; });
+}
+
+function bindRail(s) {
+  s.dom.rail.forEach((btn, i) => btn.addEventListener('click', () => { wake(s); toStep(s, i, s.reduce); }));
+}
+
+function bindVisibility(s) {
+  s.visible = false;
+  s.ioSeen = false;
+  setTimeout(() => { if (!s.ioSeen) s.visible = true; }, VISIBLE_FALLBACK_MS);
+  if (!('IntersectionObserver' in window)) { s.visible = true; return; }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((x) => {
+      s.ioSeen = true;
+      const was = s.visible;
+      const now = x.isIntersecting && x.intersectionRatio > VISIBLE_RATIO;
+      if (now && !was) wake(s);
+      else if (!now && was) { s.visible = false; s.pausedAt = performance.now(); }
+    });
+  }, { threshold: [0, 0.25, 0.5] });
+  io.observe(s.root);
+}
+
+function startTimers(s) {
+  setInterval(() => {
+    if (s.reduce || !s.visible || s.intro) return;
+    if (s.chars < s.steps[s.step].cmd.length) update(s, { chars: s.chars + 1 });
+  }, TYPE_INTERVAL_MS);
+  setInterval(() => {
+    if (!s.visible || s.reduce || s.intro) return;
+    const p = Math.min(1, (performance.now() - s.stepAt) / DURATION_MS[s.step]);
+    if (Math.abs(p - s.prog) > 0.02) update(s, { prog: p });
+  }, PROGRESS_INTERVAL_MS);
 }
 
 function queryDom(root) {
   return {
-    wrap: root.querySelector('[data-canvas-wrap]'),
     canvas: root.querySelector('[data-canvas]'),
-    net: root.querySelector('[data-net]'),
-    flash: root.querySelector('[data-flash]'),
-    statusDot: root.querySelector('[data-status-dot]'),
-    statusLabel: root.querySelector('[data-status-label]'),
-    statusCount: root.querySelector('[data-status-count]'),
-    meterGroup: root.querySelector('[data-meter]'),
-    meter: Array.from(root.querySelectorAll('[data-meter-seg]')),
-    prompts: Array.from(root.querySelectorAll('[data-prompt]')).map((el) => ({
-      el,
-      cmd: el.querySelector('[data-cmd]'),
-      cursor: el.querySelector('[data-cursor]'),
-      out: el.querySelector('[data-out]'),
-      hit: el.querySelector('[data-hit]'),
-    })),
-    results: document.querySelector('[data-results]'),
+    phaseNo: root.querySelector('[data-phase-no]'),
+    mode: root.querySelector('[data-mode]'),
+    title: root.querySelector('[data-title]'),
+    hit: root.querySelector('[data-hit]'),
+    cmd: root.querySelector('[data-cmd]'),
+    rail: [...root.querySelectorAll('[data-rail]')],
+    fills: [...root.querySelectorAll('[data-fill]')],
   };
-}
-
-function start(s) {
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  s.reduce = reduce;
-  s.trans = null;
-  s.impactAt = 0;
-  newLayer(s, s.step, performance.now());
-  if (reduce) {
-    const lastStep = s.steps.length - 1;
-    update(s, { step: lastStep, phase: 'strike', chars: 999, playing: false });
-    newLayer(s, lastStep, performance.now() - 5000);
-    s.impactAt = performance.now() - 5000;
-  }
-  s.raf = requestAnimationFrame((n) => frame(s, n));
-  if (reduce) return;
-  s.typer = setInterval(() => {
-    if (s.playing && s.phase !== 'strike') {
-      const st = s.steps[s.step];
-      if (s.chars < st.cmd.length) update(s, { chars: s.chars + 1 });
-    }
-  }, TYPE_INTERVAL_MS);
-  s.stepAt = performance.now();
-  setPhase(s, 'think');
-  schedule(s);
 }
 
 export function mount(root) {
   const data = JSON.parse(root.querySelector('[data-engagement-data]').textContent);
   const dom = queryDom(root);
   const s = {
-    steps: data.steps,
-    T: data.texts,
-    dom,
-    canvas: dom.canvas,
-    net: dom.net,
-    step: 0,
-    phase: 'think',
-    phaseAt: 0,
-    chars: 0,
-    playing: true,
-    flash: false,
-    mtrail: [],
+    root, dom, cv: dom.canvas, steps: data.steps, texts: data.texts,
+    step: 0, chars: 0, prog: 0,
+    ptr: { x: 0, y: 0, tx: 0, ty: 0 },
+    reduce: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   };
-  bindPointer(s, dom.wrap);
-  start(s);
-  if (!s.reduce) bindVisibility(s, root);
+  init(s);
+  bindVisibility(s);
+  bindPointer(s);
+  bindRail(s);
+  window.addEventListener('resize', () => resize(s));
+  if (s.reduce) toStep(s, s.steps.length - 1, true);
+  else { setForm(s, 0, true); s.stepAt = performance.now(); s.intro = true; update(s, { chars: 0 }); }
+  startTimers(s);
+  s.raf = requestAnimationFrame((n) => frame(s, n));
   return s;
 }
 

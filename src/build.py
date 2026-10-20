@@ -56,6 +56,11 @@ FORBIDDEN_TAGS = {"script", "style", "canvas", "img"}
 # Versioned stylesheet and script addresses, spec 008
 ASSET_HASH_CHARS = 10
 
+# Approach walkthrough, spec 010
+WALKTHROUGH_PHASES = 6
+WALKTHROUGH_MODES = {"ai", "manual", "assist"}
+WALKTHROUGH_PHASE_TEXTS = ("titles", "hits", "rail")
+
 
 @dataclass(frozen=True)
 class Page:
@@ -556,13 +561,28 @@ def localized_tools(tools: list[dict], code: str) -> list[dict]:
     ]
 
 
+def check_engagement(engagement: dict) -> None:
+    steps = engagement["steps"]
+    if len(steps) != WALKTHROUGH_PHASES:
+        raise ValueError(f"{ENGAGEMENT_FILE.name}: needs exactly {WALKTHROUGH_PHASES} phases, found {len(steps)}")
+    for i, step in enumerate(steps, 1):
+        if step["mode"] not in WALKTHROUGH_MODES:
+            raise ValueError(f"{ENGAGEMENT_FILE.name}: phase {i} has unknown mode '{step['mode']}'")
+
+
 def engagement_data(engagement: dict, texts: dict) -> dict:
     t = texts["engagement"]
+    for key in WALKTHROUGH_PHASE_TEXTS:
+        if len(t[key]) != WALKTHROUGH_PHASES:
+            raise ValueError(f"engagement.{key} needs exactly {WALKTHROUGH_PHASES} entries, found {len(t[key])}")
     steps = [
-        {**step, "depth": t["depth"][i], "hit": t["hits"][i]}
+        {**step, "title": t["titles"][i], "hit": t["hits"][i], "rail": t["rail"][i]}
         for i, step in enumerate(engagement["steps"])
     ]
-    return {"steps": steps, "texts": {"cv": t["cv"], "work": t["work"], "meter_label": t["meter_label"]}}
+    return {
+        "steps": steps,
+        "texts": {"phase": t["phase"], "modes": t["modes"], "labels": t["labels"], "report": t["report"]},
+    }
 
 
 def article_page_data(data: dict, texts: dict, lang: dict, page: Page, topics: list[dict]) -> dict:
@@ -672,6 +692,7 @@ def main() -> None:
         "tools": load_json(TOOLS_FILE),
         "engagement": load_json(ENGAGEMENT_FILE),
     }
+    check_engagement(data["engagement"])
     remove_unpublished_dirs(unpublished)
     remove_stale_article_dirs(site, topics, articles)
     render_pages(env, site, texts, data, pages)
