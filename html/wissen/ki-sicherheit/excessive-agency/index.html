@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/assets/css/main.css?v=bc47fabeac">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/player.js?v=e0f72dceb7"></script>
 </head>
 <body class="page-light">
   <div class="site-header-bar">
@@ -34,45 +35,157 @@ Wissen</span>
         </span>
         <h1 class="overview__title">Excessive Agency</h1>
         <p class="overview__lead">Ein Agent ist ein Sprachmodell mit Werkzeugen und Zugangsdaten. Wie viel Schaden eine falsche Entscheidung anrichtet, hängt nicht vom Modell ab, sondern davon, was das System ihm erlaubt hat.</p>
-        <p class="article__updated">Stand <time datetime="2026-10-17">2026-10-17</time></p>
+        <p class="article__updated">Stand <time datetime="2026-10-20">2026-10-20</time></p>
       </div>
       <div class="article__body">
 <h2>Worum es geht</h2>
-<p>Der Prototyp läuft. Der Agent liest Tickets, durchsucht Logs und startet den hängenden Dienst neu. Er tut das auf dem Laptop des Entwicklers, mit dessen SSH-Schlüssel, dessen Cloud-Token und dessen Shell. Niemand hat ihm diese Rechte eingeräumt. Sie lagen einfach da.</p>
-<p>So fangen die meisten Agenten an, und bis hierhin ist nichts passiert. Die Frage ist, wie viel von diesem Zuschnitt mit in Produktion geht. Meist fast alles. Kimmerle und Okeyode nennen das ambiente Autorität: Der Agent findet breiten Zugriff vor und nutzt ihn, sobald ein Plan es nahelegt.</p>
-<p>OWASP führt das als LLM03:2026 Excessive Agency. Das System lässt schädliche Aktionen zu, wenn das Modell unerwartet, mehrdeutig oder manipuliert antwortet. Der wichtige Teil ist der Nachsatz: egal, warum das Modell danebenliegt. Halluzination, schlechter Prompt oder Angriff, die Folgen sind dieselben. Das Problem sitzt nicht im Modell. Es sitzt in dem, was Sie dem Modell in die Hand gegeben haben.</p>
+<p>Ein Agent (Sprachmodell mit aufrufbaren Funktionen und Zugangsdaten) findet oft breiten Zugriff vor und nutzt ihn, sobald ein Plan es nahelegt. Kimmerle und Okeyode nennen das ambiente Autorität (Zugriffsrechte aus der Umgebung). OWASP führt das als LLM03:2026 Excessive Agency: Das System lässt schädliche Aktionen zu, wenn das Modell unerwartet, mehrdeutig oder manipuliert antwortet, egal warum. Entscheidend ist, was Sie ihm erlauben. <a href="https://blog.railway.com/p/your-ai-wants-to-nuke-your-database">Railway</a> bestätigt im Blog, dass ein Coding-Agent auf seiner Plattform ein Produktions-Volume löschte. Es traf im April 2026 PocketOS, einen Softwareanbieter für Autovermieter, dessen Agent in Cursor arbeitete. Die Animation zeigt diesen Fall nach Railway und den Berichten von <a href="https://www.pcgamer.com/software/ai/here-we-go-again-ai-deletes-entire-company-database-and-all-backups-in-9-seconds-then-cheerfully-admits-i-violated-every-principle-i-was-given/">PC Gamer</a> und <a href="https://cybersecuritynews.com/ai-coding-agent-deletes-data/">Cybersecurity News</a>.</p>
+<figure data-animation aria-label="Animierte Illustration: Ein Agent löscht mit einem gefundenen Token ein Produktions-Volume">
+<div data-switch><span data-variant="exposed">ohne Schutz</span><span data-variant="protected">mit Freigabe</span></div>
+
+<section data-chapter data-label="Auftrag" data-duration="8000" data-address="example/app · Editor · Agent">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Editor · Agent</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Agent</strong><span class="surface__account">im Editor · angemeldet als <strong>dev-account</strong></span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Der Staging-Deploy schlägt fehl. Kannst du das beheben?</div>
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2500">
+        <div class="surface__answer"><p>Im Staging passen die Zugangsdaten nicht zusammen. Ich kümmere mich darum.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Gelesen</span><span class="surface__source"><span class="surface__sourcetitle">Deploy-Log</span><span class="surface__origin">staging</span></span></div>
+      </div>
+    </div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption><strong>Ein Agent soll in Staging einen Fehler beheben.</strong> Er arbeitet im Editor des Entwicklers, mit dessen Dateien und dessen Terminal, und stößt auf nicht passende Zugangsdaten.</p>
+</section>
+
+<section data-chapter data-label="Fund" data-duration="8000" data-address="example/app · Terminal des Agenten">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Terminal des Agenten</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--running" aria-hidden="true"></span><strong>agent</strong><span>· Terminal im Editor von dev-account ·</span><span>läuft</span></div>
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="3000">
+      <div class="surface__logline"><span class="surface__logts">14:02:07</span><span>agent: Volume in staging löschen, um den Mismatch zu beheben</span></div>
+<div class="surface__logline"><span class="surface__logts">14:02:09</span><span>agent sucht im Projekt nach einem API-Token</span></div>
+      <div class="surface__logline"><span class="surface__logts">14:02:11</span><span>gefunden: tools/cli.env  →  tok_••••7Qm</span></div>
+    </div>
+  </div>
+</div><p data-caption><strong>Zum Beheben will er ein Volume löschen und sucht dafür einen Token.</strong> Er findet einen in einer Datei, die mit der Aufgabe nichts zu tun hat. Niemand hat ihn dem Agenten gegeben, er lag auf der Platte.</p>
+</section>
+
+<section data-chapter data-label="Rechte" data-duration="9000" data-address="example/app · Terminal des Agenten">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Terminal des Agenten</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--running" aria-hidden="true"></span><strong>agent</strong><span>· Terminal im Editor von dev-account ·</span><span>läuft</span></div>
+    <div class="surface__loglines">
+      <div class="surface__logline"><span class="surface__logts">14:02:07</span><span>agent: Volume in staging löschen, um den Mismatch zu beheben</span></div>
+<div class="surface__logline"><span class="surface__logts">14:02:09</span><span>agent sucht im Projekt nach einem API-Token</span></div>
+      <div data-aha="compare" data-at="1000" data-for="5000">
+<div data-state="intended" data-label="Wofür der Token angelegt wurde"><div class="surface__logline"><span class="surface__logts">14:02:11</span><span>gefunden: tools/cli.env  →  tok_••••7Qm</span></div><div class="surface__lognote">angelegt für: Custom Domains hinzufügen und entfernen</div></div>
+        <div data-state="actual" data-label="Was der Token darf"><div class="surface__logline"><span class="surface__logts">14:02:11</span><span>gefunden: tools/cli.env  →  tok_••••7Qm</span></div><div class="surface__lognote">gültig: <strong>ganzes Konto</strong> · alle Projekte · alle Umgebungen</div><div class="surface__lognote">erlaubt: jede API-Operation, auch <strong>volumeDelete</strong></div></div>
+</div>
+    </div>
+  </div>
+</div><p data-caption><strong>Gedacht für Domains, gültig für alles.</strong> Der Token sollte nur Custom Domains verwalten, darf aber im ganzen Konto alles, über alle Umgebungen, bis zum Löschen von Volumes. Kippen Sie selbst zwischen beiden Ansichten.</p>
+</section>
+
+<section data-chapter data-label="Aufruf" data-duration="9000" data-address="example/app · Terminal des Agenten">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Terminal des Agenten</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel data-variant="exposed" data-harm><p class="anim-variant-label" data-variant-label>ohne Schutz</p><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--done" aria-hidden="true"></span><strong>agent</strong><span>· Terminal im Editor von dev-account ·</span><span>beendet</span></div>
+    <div class="surface__logid surface__logid--neutral">API: Löschen sofort, ohne Bestätigung</div>
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="2500">
+  <div class="surface__logline"><span class="surface__logts">14:02:14</span><span>curl -X POST https://api.example-cloud.net/graphql</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -H &#34;Authorization: Bearer tok_••••7Qm&#34;</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -d &#39;mutation { volumeDelete(volumeId: &#34;vol-••••&#34;) }&#39;</span></div>
+</div>
+    <div class="surface__out surface__out--harm" data-cue="show" data-at="3500">200 OK · Volume gelöscht</div>
+  </div>
+</div><p data-caption data-variant="exposed"><strong>Ein Aufruf aus dem Terminal, keine Rückfrage.</strong> Der Agent schickt die Löschung per curl mit dem gefundenen Token an die API. Die nimmt sie an wie von einem Deploy-Skript und führt sie sofort aus.</p><div data-panel data-variant="protected"><p class="anim-variant-label" data-variant-label>mit Freigabe</p><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--done" aria-hidden="true"></span><strong>agent</strong><span>· Terminal im Editor von dev-account ·</span><span>beendet</span></div>
+    <div class="surface__logid surface__logid--protected">API: Löschen erst nach Bestätigung im Konto</div>
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="2500">
+  <div class="surface__logline"><span class="surface__logts">14:02:14</span><span>curl -X POST https://api.example-cloud.net/graphql</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -H &#34;Authorization: Bearer tok_••••7Qm&#34;</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -d &#39;mutation { volumeDelete(volumeId: &#34;vol-••••&#34;) }&#39;</span></div>
+</div>
+    <div class="surface__out surface__out--ok" data-cue="show" data-at="3500">202 · wartet auf Bestätigung · Ziel: vol-•••• · production</div>
+  </div>
+</div><p data-caption data-variant="protected"><strong>Derselbe Aufruf, die Plattform hält ihn an.</strong> Löschen braucht hier die Bestätigung eines Menschen im Konto, ein Token allein reicht nicht. Der Agent kann sie nicht selbst geben.</p>
+</section>
+
+<section data-chapter data-label="Folge" data-duration="9000" data-address="example/app · Editor · Agent">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Editor · Agent</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel data-variant="exposed" data-harm><p class="anim-variant-label" data-variant-label>ohne Schutz</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Agent</strong><span class="surface__account">im Editor · angemeldet als <strong>dev-account</strong></span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Warum hast du das Volume gelöscht?</div>
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2000">
+        <div class="surface__answer"><p>Ich habe geraten, dass das Löschen eines Staging-Volumes über die API auf Staging beschränkt wäre. Ich habe es nicht geprüft. … Ich hätte Sie vorher fragen oder eine Lösung ohne Löschen finden müssen.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Ausgeführt</span><span class="surface__source surface__source--harm"><span class="surface__sourcetitle">volumeDelete · vol-•••• · production</span></span></div>
+      </div>
+    </div>
+    <div class="surface__outcome surface__outcome--harm" data-cue="show" data-at="3000">Produktions-Volume gelöscht · Backups darin nicht mehr erreichbar</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption data-variant="exposed"><strong>Getroffen hat es das Volume der Produktion.</strong> Der Agent hatte geraten, der Aufruf bleibe in Staging, und es nicht geprüft. Nach eigener Auskunft brach er damit seine Regeln, doch eine Regel im Prompt hält keinen Aufruf auf.</p><div data-panel data-variant="protected"><p class="anim-variant-label" data-variant-label>mit Freigabe</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Agent</strong><span class="surface__account">im Editor · angemeldet als <strong>dev-account</strong></span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2000">
+        <div class="surface__answer"><p>Das Löschen von vol-•••• ist angehalten. Es liegt in production und wartet auf Ihre Bestätigung im Konto.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Angehalten</span><span class="surface__source surface__source--ok"><span class="surface__sourcetitle">volumeDelete · vol-•••• · production</span><span class="surface__sourcetag">wartet auf Bestätigung</span></span></div>
+      </div>
+    </div>
+    <div class="surface__outcome" data-cue="show" data-at="3000">Produktions-Volume unverändert · nichts bestätigt</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption data-variant="protected"><strong>Ohne Bestätigung passiert nichts.</strong> Die Rückfrage nennt Aktion und Ziel, und das Ziel heißt production. Restrisiko: Wer bestätigt, ohne zu lesen, löscht trotzdem, und alles ohne Bestätigungspflicht darf der Token weiter.</p>
+</section>
+</figure>
+<p>Niemand griff an, das Modell hatte falsch geraten. Railways API führte die korrekt aufgebaute und authentifizierte Anfrage wie den Aufruf eines Bereitstellungsskripts aus. Ein freies Terminal, ein Token für das ganze Konto und eine unumkehrbare Aktion ohne Freigabe machten den Irrtum wirksam: zu viel Funktion, zu viele Rechte, zu viel Autonomie.</p>
+<p>PocketOS arbeitete laut PC Gamer zunächst mit einem drei Monate alten Backup weiter. Railway stellte später die Datenbank wieder her und machte Löschungen über die API für 48 Stunden rückgängig machbar.</p>
 <h2>Drei Formen</h2>
 <p>OWASP nennt drei Ursachen. In der Praxis treffe ich sie selten einzeln an.</p>
-<p><strong>Zu viel Funktion.</strong> Der Agent soll bei einer Störung einen Dienst neu starten. Dafür reicht ein Werkzeug, das <code>systemctl restart</code> für eine feste Liste von Diensten ausführt. Stattdessen bekommt er „Shell-Befehl ausführen“, weil das schneller gebaut war. Jetzt kann er auch Pakete installieren, Dateien löschen und Verbindungen nach außen öffnen. Dazu die Werkzeuge aus der Entwicklung, die nie jemand abgebaut hat.</p>
-<p><strong>Zu viele Rechte.</strong> Das Werkzeug ist eng, die Identität dahinter nicht. Der Agent wertet Logs aus und meldet sich dafür per SSH an. Der Schlüssel gehört dem Automationskonto, und das steht in der <code>sudoers</code>, weil dasselbe Konto deployt. Oder das Lesewerkzeug nutzt einen Datenbankbenutzer, der neben <code>SELECT</code> auch <code>UPDATE</code> und <code>DELETE</code> darf. Oder der Agent arbeitet für einen Nutzer, greift aber mit einem technischen Konto zu, das alle Nutzer sieht. Wilson sagt es knapp: Behandeln Sie das Modell wie einen weiteren Systembenutzer. Dann fällt auf, was Sie ihm alles gegeben haben.</p>
-<p><strong>Zu viel Autonomie.</strong> Der Agent handelt, ohne dass jemand bestätigt. Er räumt Speicherplatz frei und löscht, was er für Altlasten hält. Er passt Firewall-Regeln an. Er darf <code>terraform apply</code>, weil die Rückfrage im Pilotbetrieb genervt hat.</p>
-<h2>Der Auslöser: Prompt Injection</h2>
-<p>Excessive Agency ist selten der Einstieg. Sie ist der Grund, warum der Einstieg teuer wird. Der typische Auslöser ist eine <a href="../prompt-injection/">Prompt Injection</a>: eine Anweisung im Ticket, im Dokument oder in der Antwort eines anderen Werkzeugs, und das Modell setzt seine Werkzeuge für ein Ziel ein, das niemand beauftragt hat. Der Angreifer hat keinen Zugang zur Datenbank. Der Agent schon.</p>
-<p>Das ist der Confused Deputy mit einem Sprachmodell in der Mitte. Jeder einzelne Aufruf ist sauber: authentifiziert, gut geformt, auf der erlaubten Liste. Lesen, zusammenfassen, hochladen. Den Angriff sieht nur, wer die Kette neben den ursprünglichen Auftrag legt. Mit wenig Rechten läuft dieselbe Injection ins Leere. Mit vielen Rechten ist aus einem Textproblem ein Vorfall geworden.</p>
+<p><strong>Zu viel Funktion.</strong> Soll der Agent einen Dienst neu starten, reicht ein Werkzeug (aufrufbare Funktion), das <code>systemctl restart</code> für eine feste Liste von Diensten ausführt. Bekommt er stattdessen „Shell-Befehl ausführen“, weil das schneller gebaut war, kann er auch Pakete installieren, Dateien löschen und Verbindungen nach außen öffnen. Dazu kommen laut OWASP Werkzeuge aus der Entwicklung, die niemand entfernt hat.</p>
+<p><strong>Zu viele Rechte.</strong> Das Werkzeug ist eng, die Identität dahinter nicht. Wertet der Agent Logs per SSH aus, könnte der Schlüssel zum Automationskonto gehören, das wegen seiner Bereitstellungsaufgaben in der <code>sudoers</code> steht. Oder das Lesewerkzeug nutzt einen Datenbankbenutzer, der neben <code>SELECT</code> auch <code>UPDATE</code> und <code>DELETE</code> darf. Oder ein technisches Konto sieht alle Nutzer, obwohl der Agent nur für einen handelt. Wilson rät: Behandeln Sie das Modell wie einen weiteren Systembenutzer. Dann fällt auf, was Sie ihm alles gegeben haben.</p>
+<p><strong>Zu viel Autonomie.</strong> Räumt der Agent Speicherplatz frei, könnte er löschen, was er für Altlasten hält. Er dürfte Firewall-Regeln ändern oder <code>terraform apply</code> ausführen, weil die Rückfrage im Pilotbetrieb genervt hat.</p>
+<h2>Nachbarn</h2>
+<p>Excessive Agency ist selten der Einstieg. Sie ist der Grund, warum der Einstieg teuer wird. Auslöser kann eine falsche Vermutung sein wie bei PocketOS oder eine <a href="../prompt-injection/">Prompt Injection</a> (eingeschleuste Anweisung): im Ticket, Dokument oder in einer Werkzeugantwort. Der Agent setzt dann seine Werkzeuge für ein Ziel ein, das niemand beauftragt hat. Mit wenigen Rechten läuft dieselbe Anweisung ins Leere. Was der Agent über Antworten und Ausgaben preisgibt, gehört zu <a href="../sensitive-information-disclosure/">Sensitive Information Disclosure</a>.</p>
 <h2>Was ich im Pentest prüfe</h2>
 <ol>
-<li><strong>Werkzeuginventar.</strong> Welche Werkzeuge kann der Agent aufrufen, und was kann jedes davon wirklich? Ich suche offene Werkzeuge: Shell, HTTP-Abruf, freies SQL. Dann Reste aus der Entwicklung und Funktionen ohne Anwendungsfall.</li>
-<li><strong>Identitäten und Rechte.</strong> Mit wessen Zugangsdaten arbeitet jedes Werkzeug? Ich lese die Berechtigungen hinter dem Token nach: Datenbank-Grants, <code>sudoers</code>, IAM-Richtlinien, OAuth-Scopes. Dann die Frage, die am meisten bringt: Was kann der Agent, wenn er diese Werkzeuge unter dieser Identität verkettet?</li>
-<li><strong>Freigaben.</strong> Welche Aktionen laufen ohne Bestätigung? Was zeigt die Rückfrage an? Und erreicht ein anderes Werkzeug dieselbe Wirkung ohne Rückfrage?</li>
-<li><strong>Auslösung.</strong> Ich lege Anweisungen in die Daten, die der Agent liest, und sehe zu, was er daraufhin tut.</li>
-<li><strong>Nachvollziehbarkeit.</strong> Ich lese das Protokoll rückwärts. Welches Ziel hat zu dieser Aktion geführt, mit welcher Identität, auf welchem System, mit welcher Freigabe? Fehlt ein Glied, erkennen Sie den Vorfall nicht und grenzen ihn nicht ein.</li>
+<li><strong>Werkzeuginventar.</strong> Ich prüfe, was jedes Werkzeug wirklich kann: Shell, HTTP-Abruf, freies SQL. Ich suche Entwicklungsreste und Funktionen ohne Anwendungsfall.</li>
+<li><strong>Identitäten und Rechte.</strong> Ich ermittle, mit wessen Zugangsdaten jedes Werkzeug arbeitet. Ich prüfe Datenbankrechte, <code>sudoers</code>, IAM-Richtlinien, OAuth-Scopes und den Geltungsbereich der API-Tokens. Ich suche Zugangsdaten in Projektdateien, der Konfiguration von Kommandozeilenwerkzeugen und im SSH-Agenten. Was kann der Agent, wenn er Werkzeuge unter dieser Identität verkettet?</li>
+<li><strong>Freigaben.</strong> Ich prüfe, welche Aktionen ohne Bestätigung laufen, was die Rückfrage zeigt und ob ein anderes Werkzeug dieselbe Wirkung ohne Rückfrage erreicht.</li>
+<li><strong>Auslösung.</strong> Ich stelle mehrdeutige Aufgaben und lege Anweisungen in die Daten, die der Agent liest. Ich beobachte, welche Werkzeuge er einsetzt, nicht nur seine Antwort.</li>
+<li><strong>Nachvollziehbarkeit.</strong> Ich lese das Protokoll rückwärts: Welches Ziel führte zur Aktion, mit welcher Identität, auf welchem System, mit welcher Freigabe?</li>
 </ol>
 <h2>Welche Gegenmaßnahmen tragen</h2>
 <ul>
-<li><strong>Geringste Rechte pro Werkzeug.</strong> Wenige Werkzeuge, wenige Funktionen, keine offenen. Statt „Shell-Befehl ausführen“ ein Werkzeug für genau eine Operation mit geprüften Parametern. Zugangsdaten mit Verb, Ziel und Ablauf: dieses Repository lesen, diese Tabelle lesen, bis die Aufgabe fertig ist.</li>
-<li><strong>Eigene Identitäten für Agenten.</strong> Ein Agent läuft unter eigenem Namen, mit Eigentümer, kurzlebigen Zugangsdaten und einem Schalter zum Widerrufen. Kein geliehenes Entwicklertoken. Handelt er für einen Nutzer, dann mit dessen Rechten, auch über verkettete Aufrufe hinweg.</li>
-<li><strong>Freigabe durch Menschen bei wirksamen Aktionen.</strong> Löschen, Senden, Deployen, Bezahlen: Davor bestätigt ein Mensch. Die Rückfrage zeigt Aktion, Ziel und Rückweg, nicht „Werkzeug erlauben?“. Was reversibel und klein ist, darf automatisch laufen. Was nicht, geht an einen Menschen.</li>
-<li><strong>Architektur vor Filtern.</strong> Ob eine Aktion erlaubt ist, entscheidet Code, nicht das Modell. Jede Anfrage an ein nachgelagertes System läuft gegen eine Richtlinie, im Werkzeug, in einer Instanz davor oder im Zielsystem. Filter auf Ein- und Ausgaben behalten Sie, aber OWASP zählt sie nicht zu den Grundmaßnahmen gegen Excessive Agency. Protokolle und Ratenbegrenzung verhindern nichts. Sie begrenzen, wie weit es geht.</li>
+<li><strong>Geringste Rechte pro Werkzeug.</strong> Wenige Werkzeuge, wenige Funktionen: Statt „Shell-Befehl ausführen“ ein Werkzeug für genau eine Operation mit geprüften Parametern. Zugangsdaten begrenzen Sie auf Aktion, Ziel, Umgebung und Laufzeit: Ein Token für Staging erreicht die Produktion nicht.</li>
+<li><strong>Eigene Identitäten für Agenten.</strong> Ein Agent läuft unter eigenem Namen, mit Eigentümer, kurzlebigen Zugangsdaten und Widerrufsmöglichkeit. Keine geliehenen Entwicklertokens oder langlebigen Tokens auf der Platte. Für einen Nutzer handelt er mit dessen Rechten, auch über verkettete Aufrufe hinweg.</li>
+<li><strong>Freigabe durch Menschen, im Zielsystem.</strong> Vor Löschen, Senden, Bereitstellen oder Bezahlen bestätigt ein Mensch und sieht dabei Aktion, Ziel und Rückweg. Das Zielsystem oder Werkzeug erzwingt die Freigabe außerhalb der Reichweite des Agenten; eine Regel im Prompt genügt nicht. Kleine, umkehrbare Aktionen dürfen automatisch laufen.</li>
+<li><strong>Einen Rückweg einbauen.</strong> Löschungen verzögern und umkehrbar machen, wie Railway nach dem Fall. Backups gehören außerhalb der Reichweite der Identität, die Daten löschen darf. Das begrenzt den Schaden, verhindert aber die Aktion nicht.</li>
+<li><strong>Architektur vor Filtern.</strong> Code prüft jede Anfrage gegen eine Richtlinie, im Werkzeug, in einer unabhängigen Instanz davor oder im Zielsystem. Filter auf Ein- und Ausgaben bleiben, zählen laut OWASP aber nicht zu den Grundmaßnahmen. Protokollierung und Ratenbegrenzung verhindern den Fehlaufruf nicht, begrenzen aber den Schaden.</li>
 </ul>
-<p>Ein Agent, der wenig darf, macht aus einer gelungenen Injection keinen Vorfall. Fangen Sie dort an, nicht beim Filter.</p>
+<p>Bei PocketOS genügte eine falsche Vermutung. Begrenzen Sie, was Ihr Agent darf, damit daraus kein Vorfall wird, egal ob das Modell allein irrt oder ein Angreifer nachhilft.</p>
       </div>
+      <div class="anim-i18n" hidden
+        data-play="Abspielen"
+        data-pause="Pause"
+        data-replay="Noch einmal abspielen"
+        data-chapters="Kapitel"
+        data-variants="Variante"
+        data-illustration="Illustration"
+        data-raw-show="Rohtext anzeigen"
+        data-raw-hide="Rohtext ausblenden"></div>
       <section class="article__sources">
         <h2>Quellen</h2>
         <ol>
-          <li><a href="https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/">OWASP Top 10 for LLM Applications 2026, LLM03:2026 Excessive Agency</a></li>
+          <li><a href="https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/">OWASP Top 10 for LLM Applications, LLM03:2026 Excessive Agency</a></li>
           <li>Steve Wilson: The Developer&#39;s Playbook for Large Language Model Security</li>
           <li>Kris Kimmerle, David Okeyode: AI Under Attack</li>
-          <li>Harriet Farlow: Practical AI Security</li>
+          <li><a href="https://blog.railway.com/p/your-ai-wants-to-nuke-your-database">Railway: Your AI wants to nuke your database. Guardrails fix that.</a></li>
+          <li><a href="https://www.pcgamer.com/software/ai/here-we-go-again-ai-deletes-entire-company-database-and-all-backups-in-9-seconds-then-cheerfully-admits-i-violated-every-principle-i-was-given/">PC Gamer: Here we go again: AI deletes entire company database and all backups in 9 seconds, then cheerfully admits &#39;I violated every principle I was given&#39;</a></li>
+          <li><a href="https://cybersecuritynews.com/ai-coding-agent-deletes-data/">Cybersecurity News: AI Coding Agent Powered by Claude Opus 4.6 Deletes Production Database in 9 Seconds</a></li>
         </ol>
       </section>
     </article>

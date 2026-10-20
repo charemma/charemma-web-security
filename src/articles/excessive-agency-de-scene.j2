@@ -1,0 +1,141 @@
+{% from "player.html.j2" import scene, switch, chapter, panel, caption, compare, state with context %}
+{%- set account = "dev-account" -%}
+{%- set chat_address = "example/app · Editor · Agent" -%}
+{%- set log_address = "example/app · Terminal des Agenten" -%}
+{%- set token_line = "gefunden: tools/cli.env  →  tok_••••7Qm" -%}
+{%- set target = "volumeDelete · vol-•••• · production" -%}
+{%- set variants = [{"id": "exposed", "label": "ohne Schutz"}, {"id": "protected", "label": "mit Freigabe"}] -%}
+
+{%- macro chathead() -%}
+<div class="surface__chathead"><strong>Agent</strong><span class="surface__account">im Editor · angemeldet als <strong>{{ account }}</strong></span></div>
+{%- endmacro -%}
+
+{%- macro chatinput() -%}
+<div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+{%- endmacro -%}
+
+{%- macro loghead(state) -%}
+<div class="surface__loghead"><span class="surface__logdot surface__logdot--{{ state }}" aria-hidden="true"></span><strong>agent</strong><span>· Terminal im Editor von {{ account }} ·</span><span>{% if state == "running" %}läuft{% else %}beendet{% endif %}</span></div>
+{%- endmacro -%}
+
+{%- macro logline(ts, text, harm=false) -%}
+<div class="surface__logline{% if harm %} surface__logline--harm{% endif %}"><span class="surface__logts">{{ ts }}</span><span>{{ text }}</span></div>
+{%- endmacro -%}
+
+{%- macro search_lines() -%}
+{{ logline("14:02:07", "agent: Volume in staging löschen, um den Mismatch zu beheben") }}
+{{ logline("14:02:09", "agent sucht im Projekt nach einem API-Token") }}
+{%- endmacro -%}
+
+{%- macro request_lines() -%}
+<div class="surface__loglines" data-cue="lines" data-at="500" data-for="2500">
+  {{ logline("14:02:14", "curl -X POST https://api.example-cloud.net/graphql") }}
+  {{ logline("", '  -H "Authorization: Bearer tok_••••7Qm"') }}
+  {{ logline("", "  -d 'mutation { volumeDelete(volumeId: \"vol-••••\") }'") }}
+</div>
+{%- endmacro -%}
+
+{% call scene("Animierte Illustration: Ein Agent löscht mit einem gefundenen Token ein Produktions-Volume") -%}
+
+{{ switch(variants) }}
+
+{% call chapter("Auftrag", 8000, chat_address) -%}
+  {%- call panel() -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Der Staging-Deploy schlägt fehl. Kannst du das beheben?</div>
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2500">
+        <div class="surface__answer"><p>Im Staging passen die Zugangsdaten nicht zusammen. Ich kümmere mich darum.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Gelesen</span><span class="surface__source"><span class="surface__sourcetitle">Deploy-Log</span><span class="surface__origin">staging</span></span></div>
+      </div>
+    </div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption() %}<strong>Ein Agent soll in Staging einen Fehler beheben.</strong> Er arbeitet im Editor des Entwicklers, mit dessen Dateien und dessen Terminal, und stößt auf nicht passende Zugangsdaten.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Fund", 8000, log_address) -%}
+  {%- call panel() -%}
+  <div class="surface surface--log">
+    {{ loghead("running") }}
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="3000">
+      {{ search_lines() }}
+      {{ logline("14:02:11", token_line) }}
+    </div>
+  </div>
+  {%- endcall -%}
+  {% call caption() %}<strong>Zum Beheben will er ein Volume löschen und sucht dafür einen Token.</strong> Er findet einen in einer Datei, die mit der Aufgabe nichts zu tun hat. Niemand hat ihn dem Agenten gegeben, er lag auf der Platte.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Rechte", 9000, log_address) -%}
+  {%- call panel() -%}
+  <div class="surface surface--log">
+    {{ loghead("running") }}
+    <div class="surface__loglines">
+      {{ search_lines() }}
+      {% call compare(1000, 5000) -%}
+        {% call state("intended", "Wofür der Token angelegt wurde") %}{{ logline("14:02:11", token_line) }}<div class="surface__lognote">angelegt für: Custom Domains hinzufügen und entfernen</div>{% endcall %}
+        {% call state("actual", "Was der Token darf") %}{{ logline("14:02:11", token_line) }}<div class="surface__lognote">gültig: <strong>ganzes Konto</strong> · alle Projekte · alle Umgebungen</div><div class="surface__lognote">erlaubt: jede API-Operation, auch <strong>volumeDelete</strong></div>{% endcall %}
+      {%- endcall %}
+    </div>
+  </div>
+  {%- endcall -%}
+  {% call caption() %}<strong>Gedacht für Domains, gültig für alles.</strong> Der Token sollte nur Custom Domains verwalten, darf aber im ganzen Konto alles, über alle Umgebungen, bis zum Löschen von Volumes. Kippen Sie selbst zwischen beiden Ansichten.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Aufruf", 9000, log_address) -%}
+  {%- call panel(variant=variants[0], harm=true) -%}
+  <div class="surface surface--log">
+    {{ loghead("done") }}
+    <div class="surface__logid surface__logid--neutral">API: Löschen sofort, ohne Bestätigung</div>
+    {{ request_lines() }}
+    <div class="surface__out surface__out--harm" data-cue="show" data-at="3500">200 OK · Volume gelöscht</div>
+  </div>
+  {%- endcall -%}
+  {% call caption(variant=variants[0]) %}<strong>Ein Aufruf aus dem Terminal, keine Rückfrage.</strong> Der Agent schickt die Löschung per curl mit dem gefundenen Token an die API. Die nimmt sie an wie von einem Deploy-Skript und führt sie sofort aus.{% endcall %}
+  {%- call panel(variant=variants[1]) -%}
+  <div class="surface surface--log">
+    {{ loghead("done") }}
+    <div class="surface__logid surface__logid--protected">API: Löschen erst nach Bestätigung im Konto</div>
+    {{ request_lines() }}
+    <div class="surface__out surface__out--ok" data-cue="show" data-at="3500">202 · wartet auf Bestätigung · Ziel: vol-•••• · production</div>
+  </div>
+  {%- endcall -%}
+  {% call caption(variant=variants[1]) %}<strong>Derselbe Aufruf, die Plattform hält ihn an.</strong> Löschen braucht hier die Bestätigung eines Menschen im Konto, ein Token allein reicht nicht. Der Agent kann sie nicht selbst geben.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Folge", 9000, chat_address) -%}
+  {%- call panel(variant=variants[0], harm=true) -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Warum hast du das Volume gelöscht?</div>
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2000">
+        <div class="surface__answer"><p>Ich habe geraten, dass das Löschen eines Staging-Volumes über die API auf Staging beschränkt wäre. Ich habe es nicht geprüft. … Ich hätte Sie vorher fragen oder eine Lösung ohne Löschen finden müssen.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Ausgeführt</span><span class="surface__source surface__source--harm"><span class="surface__sourcetitle">{{ target }}</span></span></div>
+      </div>
+    </div>
+    <div class="surface__outcome surface__outcome--harm" data-cue="show" data-at="3000">Produktions-Volume gelöscht · Backups darin nicht mehr erreichbar</div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption(variant=variants[0]) %}<strong>Getroffen hat es das Volume der Produktion.</strong> Der Agent hatte geraten, der Aufruf bleibe in Staging, und es nicht geprüft. Nach eigener Auskunft brach er damit seine Regeln, doch eine Regel im Prompt hält keinen Aufruf auf.{% endcall %}
+  {%- call panel(variant=variants[1]) -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2000">
+        <div class="surface__answer"><p>Das Löschen von vol-•••• ist angehalten. Es liegt in production und wartet auf Ihre Bestätigung im Konto.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Angehalten</span><span class="surface__source surface__source--ok"><span class="surface__sourcetitle">{{ target }}</span><span class="surface__sourcetag">wartet auf Bestätigung</span></span></div>
+      </div>
+    </div>
+    <div class="surface__outcome" data-cue="show" data-at="3000">Produktions-Volume unverändert · nichts bestätigt</div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption(variant=variants[1]) %}<strong>Ohne Bestätigung passiert nichts.</strong> Die Rückfrage nennt Aktion und Ziel, und das Ziel heißt production. Restrisiko: Wer bestätigt, ohne zu lesen, löscht trotzdem, und alles ohne Bestätigungspflicht darf der Token weiter.{% endcall %}
+{%- endcall %}
+
+{%- endcall %}
