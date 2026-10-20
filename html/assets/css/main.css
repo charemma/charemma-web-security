@@ -897,6 +897,13 @@ figure[data-animation]:not(.anim--js) [data-aha="compare"] > [data-state] + [dat
 .surface__logts { flex: 0 0 auto; color: #6e7070; }
 .surface__out { margin: 14px 16px 0; padding: 10px 0 14px; border-top: 1px solid #333; color: #8a8c8c; font-size: 12px; }
 .surface__out--harm { color: #f0938f; }
+/* A configuration line that is neither the attack nor the countermeasure,
+   an answer line in the intended colour, and the notes a comparison puts
+   under a log line */
+.surface__logid--neutral { background: #2a2b2b; color: #c9caca; }
+.surface__out--ok { color: #7fc0ec; }
+.surface__lognote { margin: 4px 0 0; padding-left: 12px; border-left: 2px solid #3a3b3b; color: #c9caca; overflow-wrap: anywhere; }
+.surface__lognote strong { color: #e6edf3; }
 
 /* Cue end states without the player: elements that end hidden stay hidden,
    a swap shows its second child. */
