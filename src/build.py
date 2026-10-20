@@ -4,11 +4,13 @@
 # ///
 """Render the static language versions of security.charemma.de into html/."""
 
+import hashlib
 import json
 import re
 import shutil
 from dataclasses import dataclass
 from datetime import date
+from functools import cache
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
@@ -51,6 +53,9 @@ COMPARE_MIN_FOR_MS = 4000
 REVEAL_FOR_MS = (1000, 2000)
 FORBIDDEN_TAGS = {"script", "style", "canvas", "img"}
 
+# Versioned stylesheet and script addresses, spec 008
+ASSET_HASH_CHARS = 10
+
 
 @dataclass(frozen=True)
 class Page:
@@ -73,6 +78,16 @@ class Article:
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+@cache
+def asset_url(path: str) -> str:
+    """The address of a file under html/ with the hash of its content appended, so a change gets a new address."""
+    source = OUT_DIR / path.lstrip("/")
+    if not source.is_file():
+        raise ValueError(f"asset {path} does not exist in {OUT_DIR.name}/")
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()[:ASSET_HASH_CHARS]
+    return f"{path}?v={digest}"
 
 
 def url_path(prefix: str, page_path: str) -> str:
@@ -619,6 +634,7 @@ def main() -> None:
         undefined=StrictUndefined,
         keep_trailing_newline=True,
     )
+    env.globals["asset_url"] = asset_url
     articles = load_articles(site, topics, env, texts)
     pages = [Page(**p) for p in site["pages"]] + article_pages(site, topics, articles)
     data = {
