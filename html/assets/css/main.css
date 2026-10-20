@@ -1311,15 +1311,21 @@ figure[data-animation].anim--js [data-aha="compare"].is-second > [data-state]:la
   visibility: visible;
   transition: opacity .5s ease, visibility 0s;
 }
+/* Side by side while both labels fit in one line, otherwise one under the
+   other at the full width of the group; the radius is half the button
+   height, so one line reads as a pill and two as a rounded rectangle. */
 .anim-compare {
   display: inline-flex;
   flex-wrap: wrap;
+  max-width: 100%;
   border: 1px solid var(--light-line);
-  border-radius: 999px;
+  border-radius: 22px;
   overflow: hidden;
   background: #f1f1f1;
 }
 .anim-compare__btn {
+  flex: 1 1 auto;
+  white-space: nowrap;
   min-height: 44px;
   padding: 6px 16px;
   border: none;
@@ -1330,6 +1336,8 @@ figure[data-animation].anim--js [data-aha="compare"].is-second > [data-state]:la
   cursor: pointer;
 }
 .anim-compare__btn[aria-pressed="true"] { background: #ffffff; color: var(--light-heading); font-weight: 700; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+/* The pill clips its children, so the focus ring is drawn inside the button. */
+.anim-compare__btn:focus-visible { outline-offset: -2px; }
 
 /* Article animation: the switch (two variant buttons in the control bar).
    It sits at the right end of the bar and, when the chapters leave no room,
