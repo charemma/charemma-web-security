@@ -1,6 +1,6 @@
 # 001 Version display
 
-Status: approved 2026-10-17
+Status: approved 2026-10-17, amended 2026-10-20
 
 ## Why
 
@@ -34,13 +34,13 @@ never went through CI, so a local image cannot be mistaken for the live site.
 The `-dirty` suffix exists because a hash alone claims a reproducible state
 that an uncommitted tree does not have.
 
-The identifier is language-neutral. It is identical on the German, English
-and Greek pages and needs no translation.
+The identifier is language-neutral. It is identical on the pages of every
+published language (spec 009) and needs no translation.
 
 ### Footer display
 
 Every HTML page the site delivers shows the identifier in its footer: the
-start page and the knowledge overview in all three languages, every future
+start page and the knowledge overview in every published language, every future
 page built on the same base template, and the 404 page.
 
 The footer entry reads like terminal output, in line with the header prompt
@@ -111,8 +111,8 @@ hand.
    appended while the tree has uncommitted changes.
 5. `git diff -- html` is empty after `just build` on any commit; the
    identifier never lands in the committed pages.
-6. The footer's layout, font and colors on the three language versions are
-   unchanged except for the added entry.
+6. The footer's layout, font and colors on every published language version
+   are unchanged except for the added entry.
 
 ## Touches
 

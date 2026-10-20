@@ -1,6 +1,6 @@
 # 002 Knowledge topics
 
-Status: approved 2026-10-17, amended 2026-10-18
+Status: approved 2026-10-17, amended 2026-10-18, 2026-10-20
 
 ## Why
 
@@ -85,11 +85,11 @@ topics closest to a Linux infrastructure test.
 
 ## Acceptance
 
-1. The overview page in all three languages shows ten `llm` topics with the
+1. The overview page in every published language (spec 009) shows ten `llm` topics with the
    identifiers `LLM01:2026` to `LLM10:2026` in OWASP order, followed by five
    `infra` topics `INFRA·01` to `INFRA·05` under the group title AI
    infrastructure in the language of the page.
-2. The start page in all three languages shows the six topics named in
+2. The start page in every published language shows the six topics named in
    `site.json`, in that order.
 3. Removing a listed identifier from `topics.json` makes `just build` fail.
 4. `just check-generated` passes after the list change.

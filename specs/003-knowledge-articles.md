@@ -1,6 +1,6 @@
 # 003 Knowledge articles
 
-Status: approved 2026-10-17, amended 2026-10-19
+Status: approved 2026-10-17, amended 2026-10-19, 2026-10-20
 
 ## Why
 
@@ -67,13 +67,13 @@ page. Wide tables scroll horizontally on narrow screens for the same reason.
 ### Page address and head
 
 The article lives at `/<prefix>wissen/ki-sicherheit/<slug>/`, the address
-the overview card already points to, in every language that has the
-article. The page title is `<topic title> · <overview section title> ·
+the overview card already points to, in every published language (spec 009)
+that has the article. The page title is `<topic title> · <overview section title> ·
 security.charemma.de`, following the pattern of the overview page. The meta
 description is the lead.
 
 Canonical and `hreflang` follow the other pages, with one difference: the
-alternates name only the languages in which the article exists, plus
+alternates name only the published languages in which the article exists, plus
 `x-default`. `x-default` points to the German article when it exists,
 otherwise to the first existing language in the order of `site.json`.
 
@@ -127,7 +127,8 @@ to every article page:
 
 ### Language switcher
 
-The switcher in the header lists all languages, as on every page. For a
+The switcher in the header lists all published languages (spec 009), as on
+every page; with a single published language there is no switcher. For a
 language that has this article, the entry leads to the article in that
 language. For a language without it, the entry leads to the overview page
 of that language, so a reader who switches lands on the list of topics and
@@ -191,14 +192,15 @@ pages without a change to this spec.
    renders `/wissen/ki-sicherheit/prompt-injection/` with back link,
    eyebrow `LLM-Anwendungen · LLM01:2026`, title, lead, date, body, source
    list and the start page's call to action, in the light page style.
-2. The German overview links the LLM01 card to that page; the English and
-   Greek overviews show the LLM01 card without a link and without any
-   label; all other cards are teasers in all three languages.
+2. The German overview links the LLM01 card to that page; the overview of
+   every other published language shows the LLM01 card without a link and
+   without any label; all other cards are teasers in every published
+   language.
 3. The head of the article page carries a canonical link, `hreflang="de"`
    and `hreflang="x-default"`, both pointing to the German page, and no
    English or Greek alternate.
-4. On the article page, the English and Greek entries of the language
-   switcher lead to `/en/wissen/ki-sicherheit/` and
+4. While English and Greek are published (spec 009), the English and Greek
+   entries of the language switcher on the article page lead to `/en/wissen/ki-sicherheit/` and
    `/el/wissen/ki-sicherheit/`.
 5. `sitemap.xml` contains the German article once, with alternates for
    `de` and `x-default` only.
