@@ -1,6 +1,6 @@
 # 009 Published languages
 
-Status: approved 2026-10-20
+Status: approved 2026-10-20, amended 2026-10-20 (relative redirect locations)
 
 ## Why
 
@@ -86,6 +86,14 @@ acceptable.
 
 Redirects carry `Cache-Control: no-cache` like every redirect (spec 008).
 
+Every redirect the web server sends carries a relative `Location`, a path
+without scheme and host. TLS ends in front of nginx, so nginx sees plain
+HTTP and would build an absolute `Location` with `http://`, which the site
+does not serve; a reader without a stored HSTS entry would land on an error.
+A relative `Location` keeps the scheme and host the reader came with. This
+applies to the language redirect, the `security.txt` redirect and the
+redirects nginx adds by itself, such as the trailing slash of a directory.
+
 ## Constraints
 
 - Bringing a language back is a change of its `published` value and a
@@ -111,8 +119,10 @@ Checked against a local nginx serving the stamped site.
 3. `sitemap.xml` and the 404 page contain German only; every page names
    `de` and `x-default` as its only alternates, both pointing to itself.
 4. `curl -I` on `/en`, `/en/`, `/en/wissen/ki-sicherheit/` and `/el/` answers
-   `302` with a `Location` on the German counterpart and
-   `Cache-Control: no-cache`.
+   `302` with a relative `Location` on the German counterpart (a path
+   without scheme and host) and `Cache-Control: no-cache`; the same holds
+   for the `security.txt` redirect and a directory address without its
+   trailing slash.
 5. With `sec-lang` set to `en` in `localStorage`, a German page stays where it
    is.
 6. `just check-generated` passes.
