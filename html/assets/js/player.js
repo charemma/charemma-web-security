@@ -239,10 +239,14 @@ function create(figure) {
   const ahaAt = ahaEl ? Number(ahaEl.dataset.at) : 0;
   const ahaDur = ahaEl ? Number(ahaEl.dataset.for) : 0;
   const demo = { seen: false, over: false };
+  // The controls under the caption (fallback button or state buttons). They
+  // stand only while the moment's chapter is current.
+  let ahaHost = null;
 
   // The lens: a round reveal of the raw layer. The pointer takes precedence
-  // at any time. A fallback button under the caption toggles the full raw
-  // layer for keyboard and screen reader. Reduced motion shows the raw layer
+  // at any time. A fallback button under the caption, in the lens's chapter
+  // only, toggles the full raw layer for keyboard and screen reader and
+  // pauses the player there. Reduced motion shows the raw layer
   // and lets the button toggle it, with no pointer follow.
   const lensEl = ahaKind === 'lens' ? ahaEl : null;
   const lensIdx = lensEl ? ahaIdx : -1;
@@ -350,8 +354,8 @@ function create(figure) {
   // back at the midpoint of data-for and to the second again at its end,
   // where it stays; each flip is the crossfade of swap, in the stylesheet.
   // A click or tap on the element flips it, and so do two state buttons
-  // under the caption, which are also the keyboard and screen reader
-  // fallback: they take the player to the chapter, paused. Under reduced
+  // under the caption, in the comparison's chapter only, which are also the
+  // keyboard and screen reader fallback: they pause the player. Under reduced
   // motion the element stands in its end state and only the buttons flip it.
   const compareEl = ahaKind === 'compare' ? ahaEl : null;
   const compareStates = compareEl ? [...compareEl.children].filter((c) => c.hasAttribute('data-state')) : [];
@@ -388,7 +392,6 @@ function create(figure) {
   // Taking the comparison: show the chosen state, stop the demonstration for
   // this playback and hold the chapter by pausing the player.
   function takeCompare(target) {
-    if (state.index !== ahaIdx) enter(ahaIdx);
     demo.seen = true;
     demo.over = true;
     compareChosen = target;
@@ -399,6 +402,7 @@ function create(figure) {
   function setupCompare() {
     if (!compareEl) return;
     const host = el('div', 'anim-aha');
+    ahaHost = host;
     const group = el('div', 'anim-compare', host);
     group.setAttribute('role', 'group');
     compareButtons = compareStates.map((stateEl, i) => {
@@ -435,6 +439,7 @@ function create(figure) {
     lensRing.style.display = 'none';
 
     const host = el('div', 'anim-aha');
+    ahaHost = host;
     lensButton = el('button', 'anim-aha__btn', host);
     lensButton.type = 'button';
     const relabel = () => {
@@ -443,9 +448,6 @@ function create(figure) {
     };
     relabel();
     lensButton.addEventListener('click', () => {
-      if (state.index !== lensIdx) {
-        enter(lensIdx);
-      }
       pause();
       revealed = !revealed;
       relabel();
@@ -513,11 +515,22 @@ function create(figure) {
     });
   }
 
+  // The moment's controls stand in its chapter only; the space collapses
+  // elsewhere. Focus on a control that disappears goes to the current
+  // chapter's button, so it never falls back to the page.
+  function renderAhaHost() {
+    if (!ahaHost) return;
+    const shown = state.index === ahaIdx;
+    if (!shown && ahaHost.contains(document.activeElement)) buttons[state.index].button.focus();
+    ahaHost.hidden = !shown;
+  }
+
   function render() {
     const chapter = chapters[state.index];
     renderStage(chapter);
     renderControls(chapter);
     renderCaption(chapter);
+    renderAhaHost();
     paintCues(chapter);
     maybePaintMoment();
   }
