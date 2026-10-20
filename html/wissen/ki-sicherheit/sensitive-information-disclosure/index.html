@@ -14,6 +14,7 @@
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <script type="module" src="/assets/js/lang.js"></script>
+  <script type="module" src="/assets/js/player.js"></script>
 </head>
 <body class="page-light">
   <div class="site-header-bar">
@@ -40,39 +41,173 @@ Wissen</span>
         </span>
         <h1 class="overview__title">Sensitive Information Disclosure</h1>
         <p class="overview__lead">Ein Modell gibt preis, was es sieht. Und es sieht meist mehr, als die Aufgabe braucht: Dokumente, Datenbankzeilen, Zugangsdaten, fremde Sitzungen. Die Antwort im Chat ist dabei nur einer von vielen Wegen nach draußen.</p>
-        <p class="article__updated">Stand <time datetime="2026-10-17">2026-10-17</time></p>
+        <p class="article__updated">Stand <time datetime="2026-10-20">2026-10-20</time></p>
       </div>
       <div class="article__body">
 <h2>Worum es geht</h2>
-<p>Stellen Sie sich einen internen Assistenten vor, der Fragen zur Entwicklungsumgebung beantwortet. Jemand fragt: „Wie komme ich auf die Staging-Datenbank?“ Die Antwort enthält Host, Benutzer und Passwort. Niemand hat das Modell angegriffen. Ein Kollege hatte eine Anleitung mit diesen Zugangsdaten in die Teamablage gelegt, und die Ablage wurde komplett indiziert. Das Modell hat die passendste Stelle gefunden und wiedergegeben.</p>
-<p>Das ist Sensitive Information Disclosure in ihrer häufigsten Form. OWASP führt sie als LLM02:2026: Ein System mit Sprachmodell gibt vertrauliche, regulierte oder geschützte Daten über einen Kanal preis, den der Eigentümer der Daten nicht freigegeben hat. Der Kanal ist nicht nur die Antwort im Chatfenster. Argumente von Werkzeugaufrufen, Reasoning-Traces, abgerufene Textstücke, Logs, Telemetrie und Embeddings sind ebenfalls Ausgaben und nach OWASP genauso zu klassifizieren und zu schwärzen.</p>
-<p>Wilson fragt: Kann Ihr Modell zu viel wissen? Ja. Prüfen Sie jede Datenquelle danach, was passiert, wenn das Modell sie herausgibt.</p>
+<p>Ein System mit Sprachmodell gibt vertrauliche, regulierte oder geschützte Daten über einen Kanal preis, den der Dateneigentümer nicht freigegeben hat. OWASP führt dieses Risiko als LLM02:2026 Sensitive Information Disclosure (Offenlegung sensibler Informationen). Dazu zählen neben Chatantworten auch Werkzeugargumente, abgerufene Textstücke, Logs, Telemetrie, Reasoning-Traces (ausgegebene Denkzwischenschritte) und Embeddings (Zahlendarstellungen von Texten). Nach OWASP müssen Sie alle diese Ausgaben klassifizieren und schwärzen. Die Animation zeigt ein nachgestelltes Szenario: Jemand stellt nur eine Frage.</p>
+<figure data-animation aria-label="Animierte Illustration: Datenabfluss über die Antwort eines Assistenten">
+<div data-switch><span data-variant="exposed">ohne Schutz</span><span data-variant="protected">mit Rechteprüfung</span></div>
+
+<section data-chapter data-label="Frage" data-duration="8000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistent</strong><span class="surface__account">angemeldet als <strong>t.lang</strong> · extern</span></div>
+    <div class="surface__chatlog"></div>
+    <div class="surface__chatinput"><span class="surface__inputfield"><span class="anim-type" data-cue="type" data-at="500" data-for="1500">Wie steht das Quartal?</span></span><span class="surface__btn surface__btn--send" data-cue="press" data-at="2500">Senden</span></div>
+  </div>
+</div><p data-caption><span data-scenario>Ein nachgestelltes Szenario:</span><strong>Ein externer Dienstleister stellt eine harmlose Frage.</strong> Er hat Zugang zum internen Assistenten wie alle, die im Haus arbeiten, und will wissen, wie das Quartal steht.</p>
+</section>
+
+<section data-chapter data-label="Abruf" data-duration="8000" data-address="assist.example.net · Kontext">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Kontext</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--prompt">
+    <span class="surface__promptlabel">Kontext für das Modell · Treffer der Suche</span>
+    <div class="surface__merge">
+      <div class="surface__block surface__block--intended">
+        <span class="surface__blocklabel">Von t.lang</span>
+        Wie steht das Quartal?
+      </div>
+      <div class="surface__retrieved" data-cue="lines" data-at="500" data-for="3000">
+        <div class="surface__block surface__block--data">
+          <span class="surface__blocklabel">Aus Ablage/Allgemein · Quartalsinfo für alle</span>
+          Das Quartal läuft stabil, Details folgen im Townhall am Freitag.
+        </div>
+        <div class="surface__block surface__block--data">
+          <span class="surface__blocklabel">Aus Ablage/Leitung · Vorstand, vertraulich</span>
+          Umsatz Q3: ••••. Prognose Gesamtjahr: ••••. Nur für die Leitung.
+        </div>
+      </div>
+    </div>
+    <span class="surface__promptlabel">Index: Dienstkonto · alle Ablagen</span>
+  </div>
+</div><p data-caption><strong>Die Suche findet, was zur Frage passt.</strong> Sie bringt einen Infotext für alle und eine vertrauliche Vorlage mit den Zahlen. Beide gehen als Kontext an das Modell.</p>
+</section>
+
+<section data-chapter data-label="Antwort" data-duration="8000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistent</strong><span class="surface__account">angemeldet als <strong>t.lang</strong> · extern</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Wie steht das Quartal?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer" data-cue="lines" data-at="500" data-for="2500"><p>Das Quartal läuft stabil, Details folgen im Townhall am Freitag.</p>
+<p>Der Umsatz Q3 liegt bei ••••, die Prognose für das Gesamtjahr bei ••••.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Quellen</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quartalsinfo für alle</span><span class="surface__origin">Ablage/Allgemein</span></span>
+  <span class="surface__source"><span class="surface__sourcetitle">Vorstand, vertraulich</span><span class="surface__origin">Ablage/Leitung</span></span>
+  
+</div>
+      </div>
+    </div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption><strong>Der Assistent antwortet hilfreich, mit Zahlen.</strong> Umsatz und Prognose, darunter die Quellen. Niemand musste etwas knacken.</p>
+</section>
+
+<section data-chapter data-label="Vergleich" data-duration="9000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistent</strong><span class="surface__account">angemeldet als <strong>t.lang</strong> · extern</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Wie steht das Quartal?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div data-aha="compare" data-at="1000" data-for="5000">
+<div data-state="answer" data-label="Was diese Person bekam"><div class="surface__answer"><p>Das Quartal läuft stabil, Details folgen im Townhall am Freitag.</p>
+<p>Der Umsatz Q3 liegt bei ••••, die Prognose für das Gesamtjahr bei ••••.</p></div><div class="surface__sources"><span class="surface__sourceslabel">Quellen</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quartalsinfo für alle</span><span class="surface__origin">Ablage/Allgemein</span></span>
+  <span class="surface__source"><span class="surface__sourcetitle">Vorstand, vertraulich</span><span class="surface__origin">Ablage/Leitung</span></span>
+  
+</div></div>
+          <div data-state="origin" data-label="Woraus die Antwort stammt"><div class="surface__answer"><p>Das Quartal läuft stabil, Details folgen im Townhall am Freitag.</p>
+<span class="surface__from">Quartalsinfo für alle · Ablage/Allgemein · Zugriff t.lang: ja</span>
+<p>Der Umsatz Q3 liegt bei ••••, die Prognose für das Gesamtjahr bei ••••.</p>
+<span class="surface__from surface__from--harm">Vorstand, vertraulich · Ablage/Leitung · Zugriff t.lang: nein</span></div></div>
+</div>
+      </div>
+    </div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption><strong>Was diese Person bekam, und woher es stammt.</strong> Der erste Satz kommt aus einem Text für alle, die Zahlen aus einer Vorlage, die t.lang in der Ablage nicht einmal öffnen könnte. Kippen Sie selbst zwischen beiden Ansichten.</p>
+</section>
+
+<section data-chapter data-label="Rechte" data-duration="8000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel data-variant="exposed" data-harm><p class="anim-variant-label" data-variant-label>ohne Schutz</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistent</strong><span class="surface__account">angemeldet als <strong>t.lang</strong> · extern</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Wie steht das Quartal?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer"><p>Das Quartal läuft stabil, Details folgen im Townhall am Freitag.</p>
+<p>Der Umsatz Q3 liegt bei ••••, die Prognose für das Gesamtjahr bei ••••.</p></div>
+        <div class="surface__sources" data-cue="lines" data-at="500" data-for="1500"><span class="surface__sourceslabel">Quellen</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quartalsinfo für alle</span><span class="surface__origin">Ablage/Allgemein</span></span>
+  <span class="surface__source surface__source--harm"><span class="surface__sourcetitle">Vorstand, vertraulich</span><span class="surface__origin">Ablage/Leitung</span><span class="surface__sourcetag">kein Zugriff</span></span>
+  
+</div>
+      </div>
+    </div>
+    <div class="surface__config">Suche: Rechte des Fragenden nicht geprüft</div>
+    <div class="surface__outcome surface__outcome--harm" data-cue="show" data-at="3000">Die Zahlen sind bei einer Person ohne Zugriff</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption data-variant="exposed"><strong>Die Suche fragt nicht, wer fragt.</strong> Der Index liest mit einem Dienstkonto alle Ablagen und liefert nach Ähnlichkeit, nicht nach Rechten. Die Zahlen sind jetzt bei einer Person, die die Vorlage nie hätte öffnen dürfen.</p><div data-panel data-variant="protected"><p class="anim-variant-label" data-variant-label>mit Rechteprüfung</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistent</strong><span class="surface__account">angemeldet als <strong>t.lang</strong> · extern</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Wie steht das Quartal?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer"><p>Das Quartal läuft stabil, Details folgen im Townhall am Freitag.</p></div>
+        <div class="surface__sources" data-cue="lines" data-at="500" data-for="1500"><span class="surface__sourceslabel">Quellen</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quartalsinfo für alle</span><span class="surface__origin">Ablage/Allgemein</span></span>
+  
+  <span class="surface__source surface__source--ok"><span class="surface__sourcetitle">1 Treffer ausgelassen</span><span class="surface__origin">Ablage/Leitung</span><span class="surface__sourcetag">kein Zugriff</span></span>
+</div>
+      </div>
+    </div>
+    <div class="surface__config">Suche: Rechte des Fragenden geprüft</div>
+    <div class="surface__outcome" data-cue="show" data-at="3000">Antwort innerhalb der Rechte von t.lang</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Senden</span></div>
+  </div>
+</div><p data-caption data-variant="protected"><strong>Dieselbe Frage, die Suche prüft die Rechte.</strong> Treffer, die t.lang nicht öffnen darf, bleiben draußen, und die Antwort kommt ohne die Zahlen. Restrisiko: Was im Quellsystem falsch freigegeben ist, besteht die Prüfung und kommt weiter durch.</p>
+</section>
+</figure>
+<p>Niemand musste einbrechen, eine Frage genügte. Die Suche reichte weiter als die Rechte der fragenden Person.</p>
+<p>Aim Security entdeckte in Microsoft 365 Copilot die Lücke EchoLeak (CVE-2025-32711), über die <a href="https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html">The Hacker News</a> und <a href="https://arxiv.org/abs/2509.10540">Reddy und Gujral</a> berichten. Vertrauliche Daten aus der Reichweite des Assistenten verließen die Umgebung über die Adresse eines automatisch geladenen Bildes, nachdem eine <a href="../prompt-injection/">Prompt Injection</a> (eingeschleuste Anweisung) in einer Mail den Abfluss ausgelöst hatte. Diesen Kanal hatte niemand als Ausgabe behandelt.</p>
 <h2>Vier Wege nach draußen</h2>
-<p><strong>Beim Training.</strong> Was in Trainings- oder Fine-Tuning-Daten gelangt, kann das Modell später wörtlich wiedergeben. Angenommen, Sie trainieren einen Adapter auf alten Tickets, damit der Assistent im Ton des Supports antwortet. In manchen Tickets stehen SSH-Schlüssel, die jemand zum Debuggen eingefügt hat. Schmale Adapter merken sich nach OWASP seltene Beispiele besonders treu. Löschen Sie das Ticket, bleibt der Schlüssel.</p>
-<p><strong>Zur Laufzeit.</strong> Das Modell gibt weiter, was gerade in seinem Kontext liegt: System-Prompt, abgerufene Dokumente, Werkzeugausgaben, Gedächtnis, im schlimmsten Fall die Sitzung eines anderen Nutzers. Die Ursache liegt nach OWASP meist stromaufwärts: offene Ablagen und alte Berechtigungen füllen den Index. Kimmerle und Okeyode zeigen, warum RAG hier schwächelt: Vektorähnlichkeit weiß nicht, wer fragt. Zwei Nutzer mit derselben Frage bekommen dieselben Treffer, wenn nicht vor der Suche nach Identität, Mandant oder Dokumentrechten gefiltert wird. Die zweite Spielart ist Speicher an der falschen Grenze: ein gemeinsamer Cache, ein geteilter Vektor-Namensraum. Dort fließt eine Sitzung in die Ausgabe einer anderen.</p>
-<p><strong>In Pipeline und Betrieb.</strong> Observability-Plattformen protokollieren nach OWASP standardmäßig vollständige Prompts, Antworten und Traces. Angenommen, Ihr Agent liest ein Kundenkonto und schreibt Kundennummer und Adresse in die Argumente eines Werkzeugaufrufs. Der Aufruf landet im Journal auf dem Host, und dort liest ihn jedes Konto in der Gruppe <code>adm</code>. Die Antwort an den Nutzer war sauber. Das Log nicht. Auch aus geleakten Embeddings lässt sich der Klartext rekonstruieren. Ein Backup „nur mit Embeddings“ ist nach OWASP ein Dokumentenleck.</p>
-<p><strong>Durch Beobachtung.</strong> Der Angreifer bekommt keinen Inhalt und lernt trotzdem etwas: aus Tokenlängen im verschlüsselten Stream, aus Antwortzeiten, aus Konfidenzwerten. Farlow ordnet das als Seitenkanal ein: weniger zuverlässig als direkte Angriffe, dafür schwer zu entdecken. Auf einem geteilten Inferenz-Server mit Prefix-Cache antwortet ein Prompt, den schon jemand gestellt hat, messbar schneller.</p>
+<p><strong>Beim Training.</strong> Was ein Modell im Training oder beim Nachtrainieren (Fine-Tuning) sieht, kann es später wörtlich ausgeben. Angenommen, Sie trainieren einen Adapter, eine kleine Modellerweiterung, auf alten Tickets, damit der Assistent im Ton Ihres Supports antwortet. Darin stehen SSH-Schlüssel aus früheren Fehlersuchen. Solche spezialisierten Adapter merken sich nach OWASP seltene Beispiele besonders treu. Was einmal in den gelernten Modellparametern (Gewichten), Adaptern oder Embeddings steckt, bleibt nach dem Löschen der Quelle erhalten.</p>
+<p><strong>Zur Laufzeit.</strong> Das Modell kann Dokumente, Systemvorgaben, Werkzeugausgaben, gespeicherte Erinnerungen oder fremde Sitzungsdaten weitergeben. Angenommen, Sie fragen einen internen Assistenten „Wie komme ich auf die Staging-Datenbank?“ Er nennt Host, Benutzer und Passwort aus einer Anleitung, die ein Kollege in der vollständig indizierten, für Sie lesbaren Teamablage abgelegt hat. Niemand musste das Modell angreifen. Offene Ablagen und alte Berechtigungen sind nach OWASP häufig die Ursache. Beim Verfahren RAG lädt die Anwendung passende Textstellen vor der Antwort nach. Deren Ähnlichkeit sagt nichts über Leserechte, betonen Kimmerle und Okeyode. Ohne Filter nach Identität, Mandant und Dokumentrechten bekommen Nutzer mit derselben Frage dieselben Treffer. Ein gemeinsamer Cache oder Suchspeicher kann zusätzlich Sitzungen vermischen.</p>
+<p><strong>In Pipeline und Betrieb.</strong> Überwachungsplattformen protokollieren nach OWASP standardmäßig vollständige Modelleingaben, Antworten und Ablaufspuren. Angenommen, ein Assistent ruft ein Kundenkonto ab. Kundennummer und Adresse gelangen als Werkzeugargumente ins Host-Journal, lesbar für die Gruppe <code>adm</code>. Die Chatantwort war sauber, das Log enthält die Daten. Aus geleakten Embeddings lässt sich nach OWASP Klartext rekonstruieren: Auch ein Backup „nur mit Embeddings“ kann Dokumente preisgeben.</p>
+<p><strong>Durch Beobachtung.</strong> Auch ohne Klartext verraten die Länge verschlüsselter Antworten, Antwortzeiten und Konfidenzwerte (Sicherheitseinschätzungen des Modells) etwas. Auf einem gemeinsam genutzten Modellserver mit Prefix-Cache, einem Zwischenspeicher für bereits verarbeitete Eingabeanfänge, werden wiederholte Fragen messbar schneller beantwortet. Farlow beschreibt solche Nebenkanäle als weniger zuverlässig und schwerer erkennbar als direkte Angriffe.</p>
 <h2>Nachbarn</h2>
-<p>Der häufigste Auslöser ist eine <a href="../prompt-injection/">Prompt Injection</a>: Eine Anweisung im Dokument bringt das Modell dazu, den System-Prompt samt API-Key auszugeben oder abgerufene Daten in einen Werkzeugaufruf nach außen zu packen. Wie weit der zweite Teil kommt, entscheidet <a href="../excessive-agency/">Excessive Agency</a>. Das Leck des System-Prompts selbst behandelt OWASP unter LLM08:2026, die Mechanik von Vektorspeichern unter LLM09:2026.</p>
+<p>Der häufigste Auslöser ist eine <a href="../prompt-injection/">Prompt Injection</a>: Eine Anweisung im Dokument lässt das Modell seine Systemvorgaben samt Zugangsschlüssel ausgeben oder Daten über ein Werkzeug nach außen senden. Wie weit das reicht, entscheidet <a href="../excessive-agency/">Excessive Agency</a>.</p>
 <h2>Was ich im Pentest prüfe</h2>
 <ol>
-<li><strong>Datenoberfläche.</strong> Ich sehe mir an, was die Anwendung indiziert hat, nicht was sie indizieren sollte: welche Ablagen, mit welchen Rechten, seit wann. Über den Korpus lasse ich einen Secrets-Scanner laufen, wie über ein Repository.</li>
-<li><strong>Autorisierung vor dem Abruf.</strong> Zwei Konten mit unterschiedlichen Rechten stellen dieselbe Frage. Dann suche ich die Stelle, an der gefiltert wird: in der Index-Abfrage oder erst nach dem Abruf. Hängt die Berechtigung an Metadaten-Tags, schleuse ich ein Dokument mit falschem Tag ein. Bei mehreren Mandanten suche ich den Namensraum-Fehler.</li>
-<li><strong>Ausgabekanäle.</strong> Ich schicke einen markierten Datensatz durch das System und verfolge ihn: Journal, Observability-Plattform, Werkzeugargumente, Cache, Backup. An jeder Stelle frage ich, wer lesen darf.</li>
-<li><strong>Mehr als gefragt.</strong> Ich prüfe, ob Zusammenfassen, Übersetzen und Extrahieren mehr zurückgeben als verlangt: den Text unter einem schwarzen Balken im PDF, das Nachbarfeld der Datenbankzeile, den System-Prompt. Bei Fine-Tunes probiere ich, ob sich Trainingsbeispiele vervollständigen lassen.</li>
-<li><strong>Sitzungstrennung.</strong> Parallele Sitzungen unter verschiedenen Nutzern, dazu Gedächtnis und Caches: Taucht Kontext aus der einen in der anderen auf?</li>
+<li><strong>Datenoberfläche.</strong> Ich prüfe, welche Ablagen seit wann und mit welchen Rechten tatsächlich indiziert sind. Über die Textsammlung lasse ich einen Scanner für Zugangsdaten laufen, wie über ein Repository.</li>
+<li><strong>Autorisierung vor dem Abruf.</strong> Ich stelle dieselbe Frage unter zwei unterschiedlich berechtigten Konten. Ich prüfe, ob die Rechteprüfung in der Suchabfrage oder erst danach greift. Mit falschen Rechteangaben an Dokumenten teste ich den Filter und prüfe, ob ein Mandant Treffer eines anderen erhält.</li>
+<li><strong>Ausgabekanäle.</strong> Ich verfolge einen markierten Datensatz durch Journal, Überwachungsplattform, Werkzeugargumente, Cache und Backup. Überall prüfe ich die Leserechte.</li>
+<li><strong>Mehr als gefragt.</strong> Ich prüfe Zusammenfassen, Übersetzen und Extrahieren: Erscheinen verdeckter PDF-Text, benachbarte Datenbankfelder oder Systemvorgaben? Bei nachtrainierten Modellen versuche ich, Trainingsbeispiele vervollständigen zu lassen.</li>
+<li><strong>Sitzungstrennung.</strong> Ich betreibe parallele Sitzungen unter verschiedenen Nutzern und prüfe, ob gespeicherte Erinnerungen oder Caches Inhalte zwischen ihnen übertragen.</li>
 </ol>
 <h2>Welche Gegenmaßnahmen tragen</h2>
 <ul>
-<li><strong>Datenoberfläche verkleinern.</strong> Was das Modell für seine Aufgabe nicht sehen muss, kommt weder in den Index noch in den Trainingskorpus. Quellen klassifizieren, Secrets und personenbezogene Daten vor der Aufnahme entfernen, Duplikate reduzieren. Die Korrektur liegt nach OWASP an der Datenoberfläche, nicht am Modell.</li>
-<li><strong>Autorisierung in der Abfrage.</strong> Dokument- und Chunk-Rechte werden in der Index-Abfrage erzwungen, nicht danach. Ein Textstück, das schon im Modell war, holt kein Filter zurück. Sensible Workloads bekommen eigene Indexe pro Mandant.</li>
-<li><strong>Kontext minimieren.</strong> An einen externen Anbieter gehen nur die Felder, die die Aufgabe braucht, kein automatisch angehängter Kundendatensatz. Im System-Prompt stehen keine Secrets.</li>
-<li><strong>Speicher an der richtigen Grenze.</strong> Gedächtnis pro Nutzer, Mandanten getrennt, Caches mit Scope und Ablauf. Für Kimmerle und Okeyode ist das die eigentliche Kontrolle: Isolation statt cleverer Prompts.</li>
-<li><strong>Logs und Traces als Ausgaben.</strong> Vor dem Export in die Observability-Plattform schwärzen, Zugriff auf Logs beschränken, Reasoning-Traces nie roh ablegen. Zusagen wie „kein Training mit Ihren Daten“ technisch erzwingen, nicht nur vertraglich.</li>
-<li><strong>Filter zuletzt.</strong> Ausgabefilter mit Klassifikatoren und Entitätserkennung statt Regex allein, weil Regex an Base64, Hex und Fremdsprachen scheitert. Als letzte Schicht, nicht als erste.</li>
+<li><strong>Datenoberfläche verkleinern.</strong> Wilson fragt bei jeder Quelle, was passiert, wenn das Modell sie ausgibt. Klassifizieren Sie Quellen, entfernen Sie unnötige Inhalte, Zugangsdaten, personenbezogene Daten und Duplikate vor der Aufnahme.</li>
+<li><strong>Autorisierung in der Abfrage.</strong> Erzwingen Sie Rechte auf Dokumente und Textstücke schon bei der Suche. Ein nachträglicher Filter holt einmal übermittelte Inhalte nicht zurück. Für sensible Daten nutzen Sie eigene Indexe pro Mandant.</li>
+<li><strong>Kontext minimieren.</strong> Senden Sie externen Anbietern nur die benötigten Felder. Zugangsdaten gehören nicht in die Systemvorgaben.</li>
+<li><strong>Speicher an der richtigen Grenze.</strong> Trennen Sie Erinnerungen nach Nutzer und Mandant, begrenzen Sie Geltungsbereich und Lebensdauer der Caches. Kimmerle und Okeyode setzen auf diese Isolation.</li>
+<li><strong>Logs und Traces als Ausgaben.</strong> Schwärzen Sie vor dem Export und begrenzen Sie Leserechte; legen Sie Denkzwischenschritte nie roh ab. Erzwingen Sie Zusagen wie „kein Training mit Ihren Daten“ technisch.</li>
+<li><strong>Filter zuletzt.</strong> Ergänzen Sie reguläre Ausdrücke um Filter, die Inhalte einordnen und sensible Angaben erkennen. Bloße Textmuster scheitern an Kodierungen und anderen Sprachen.</li>
 </ul>
-<p>Was einmal in Gewichten, Adaptern oder Embeddings steckt, bleibt dort, auch wenn die Quelle gelöscht ist. Das Modell am Anfang hat nichts falsch gemacht. Falsch war die Anleitung im Index. Fangen Sie dort an.</p>
+<p>Weder im Szenario noch bei EchoLeak musste jemand einbrechen. Das System gab weiter, was in seiner Reichweite lag: einmal an eine Person ohne Recht darauf, einmal über einen übersehenen Ausgabekanal. Setzen Sie dort an, bei der Reichweite und bei den Kanälen.</p>
       </div>
+      <div class="anim-i18n" hidden
+        data-play="Abspielen"
+        data-pause="Pause"
+        data-replay="Noch einmal abspielen"
+        data-chapters="Kapitel"
+        data-variants="Variante"
+        data-illustration="Illustration"
+        data-raw-show="Rohtext anzeigen"
+        data-raw-hide="Rohtext ausblenden"></div>
       <section class="article__sources">
         <h2>Quellen</h2>
         <ol>
@@ -80,6 +215,9 @@ Wissen</span>
           <li>Steve Wilson: The Developer&#39;s Playbook for Large Language Model Security</li>
           <li>Kris Kimmerle, David Okeyode: AI Under Attack</li>
           <li>Harriet Farlow: Practical AI Security</li>
+          <li><a href="https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html">The Hacker News: Zero-Click AI Vulnerability Exposes Microsoft 365 Copilot Data Without User Interaction</a></li>
+          <li><a href="https://arxiv.org/abs/2509.10540">Pavan Reddy, Aditya Sanjay Gujral: EchoLeak: The First Real-World Zero-Click Prompt Injection Exploit in a Production LLM System</a></li>
+          <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-32711">NIST NVD: CVE-2025-32711</a></li>
         </ol>
       </section>
     </article>

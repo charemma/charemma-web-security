@@ -1,0 +1,161 @@
+{% from "player.html.j2" import scene, switch, chapter, panel, caption, compare, state with context %}
+{%- set user = "t.lang" -%}
+{%- set question = "Wie steht das Quartal?" -%}
+{%- set chat_address = "assist.example.net · Chat" -%}
+{%- set answer_public = "Das Quartal läuft stabil, Details folgen im Townhall am Freitag." -%}
+{%- set answer_figures = "Der Umsatz Q3 liegt bei ••••, die Prognose für das Gesamtjahr bei ••••." -%}
+{%- set doc_public = "Quartalsinfo für alle" -%}
+{%- set doc_secret = "Vorstand, vertraulich" -%}
+{%- set share_public = "Ablage/Allgemein" -%}
+{%- set share_secret = "Ablage/Leitung" -%}
+{%- set variants = [{"id": "exposed", "label": "ohne Schutz"}, {"id": "protected", "label": "mit Rechteprüfung"}] -%}
+
+{%- macro chathead() -%}
+<div class="surface__chathead"><strong>Assistent</strong><span class="surface__account">angemeldet als <strong>{{ user }}</strong> · extern</span></div>
+{%- endmacro -%}
+
+{%- macro chatinput(text="", typed=false) -%}
+<div class="surface__chatinput"><span class="surface__inputfield">{% if typed %}<span class="anim-type" data-cue="type" data-at="500" data-for="1500">{{ text }}</span>{% else %}{{ text }}{% endif %}</span><span class="surface__btn surface__btn--send"{% if typed %} data-cue="press" data-at="2500"{% endif %}>Senden</span></div>
+{%- endmacro -%}
+
+{%- macro user_message() -%}
+<div class="surface__bubble surface__bubble--user">{{ question }}</div>
+{%- endmacro -%}
+
+{%- macro source(title, origin, harm=false, ok=false) -%}
+<span class="surface__source{% if harm %} surface__source--harm{% elif ok %} surface__source--ok{% endif %}"><span class="surface__sourcetitle">{{ title }}</span><span class="surface__origin">{{ origin }}</span>{% if harm or ok %}<span class="surface__sourcetag">kein Zugriff</span>{% endif %}</span>
+{%- endmacro -%}
+
+{%- macro sources(secret=true, harm=false, omitted=false, lines=false) -%}
+<div class="surface__sources"{% if lines %} data-cue="lines" data-at="500" data-for="1500"{% endif %}><span class="surface__sourceslabel">Quellen</span>
+  {{ source(doc_public, share_public) }}
+  {% if secret %}{{ source(doc_secret, share_secret, harm=harm) }}{% endif %}
+  {% if omitted %}{{ source("1 Treffer ausgelassen", share_secret, ok=true) }}{% endif %}
+</div>
+{%- endmacro -%}
+
+{%- macro answer() -%}
+<p>{{ answer_public }}</p>
+<p>{{ answer_figures }}</p>
+{%- endmacro -%}
+
+{%- macro answer_origin() -%}
+<p>{{ answer_public }}</p>
+<span class="surface__from">{{ doc_public }} · {{ share_public }} · Zugriff {{ user }}: ja</span>
+<p>{{ answer_figures }}</p>
+<span class="surface__from surface__from--harm">{{ doc_secret }} · {{ share_secret }} · Zugriff {{ user }}: nein</span>
+{%- endmacro -%}
+
+{% call scene("Animierte Illustration: Datenabfluss über die Antwort eines Assistenten") -%}
+
+{{ switch(variants) }}
+
+{% call chapter("Frage", 8000, chat_address) -%}
+  {%- call panel() -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog"></div>
+    {{ chatinput(question, typed=true) }}
+  </div>
+  {%- endcall -%}
+  {% call caption(scenario="Ein nachgestelltes Szenario:") %}<strong>Ein externer Dienstleister stellt eine harmlose Frage.</strong> Er hat Zugang zum internen Assistenten wie alle, die im Haus arbeiten, und will wissen, wie das Quartal steht.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Abruf", 8000, "assist.example.net · Kontext") -%}
+  {%- call panel() -%}
+  <div class="surface surface--prompt">
+    <span class="surface__promptlabel">Kontext für das Modell · Treffer der Suche</span>
+    <div class="surface__merge">
+      <div class="surface__block surface__block--intended">
+        <span class="surface__blocklabel">Von {{ user }}</span>
+        {{ question }}
+      </div>
+      <div class="surface__retrieved" data-cue="lines" data-at="500" data-for="3000">
+        <div class="surface__block surface__block--data">
+          <span class="surface__blocklabel">Aus {{ share_public }} · {{ doc_public }}</span>
+          {{ answer_public }}
+        </div>
+        <div class="surface__block surface__block--data">
+          <span class="surface__blocklabel">Aus {{ share_secret }} · {{ doc_secret }}</span>
+          Umsatz Q3: ••••. Prognose Gesamtjahr: ••••. Nur für die Leitung.
+        </div>
+      </div>
+    </div>
+    <span class="surface__promptlabel">Index: Dienstkonto · alle Ablagen</span>
+  </div>
+  {%- endcall -%}
+  {% call caption() %}<strong>Die Suche findet, was zur Frage passt.</strong> Sie bringt einen Infotext für alle und eine vertrauliche Vorlage mit den Zahlen. Beide gehen als Kontext an das Modell.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Antwort", 8000, chat_address) -%}
+  {%- call panel() -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      {{ user_message() }}
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer" data-cue="lines" data-at="500" data-for="2500">{{ answer() }}</div>
+        {{ sources() }}
+      </div>
+    </div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption() %}<strong>Der Assistent antwortet hilfreich, mit Zahlen.</strong> Umsatz und Prognose, darunter die Quellen. Niemand musste etwas knacken.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Vergleich", 9000, chat_address) -%}
+  {%- call panel() -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      {{ user_message() }}
+      <div class="surface__bubble surface__bubble--assistant">
+        {% call compare(1000, 5000) -%}
+          {% call state("answer", "Was diese Person bekam") %}<div class="surface__answer">{{ answer() }}</div>{{ sources() }}{% endcall %}
+          {% call state("origin", "Woraus die Antwort stammt") %}<div class="surface__answer">{{ answer_origin() }}</div>{% endcall %}
+        {%- endcall %}
+      </div>
+    </div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption() %}<strong>Was diese Person bekam, und woher es stammt.</strong> Der erste Satz kommt aus einem Text für alle, die Zahlen aus einer Vorlage, die {{ user }} in der Ablage nicht einmal öffnen könnte. Kippen Sie selbst zwischen beiden Ansichten.{% endcall %}
+{%- endcall %}
+
+{% call chapter("Rechte", 8000, chat_address) -%}
+  {%- call panel(variant=variants[0], harm=true) -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      {{ user_message() }}
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer">{{ answer() }}</div>
+        {{ sources(harm=true, lines=true) }}
+      </div>
+    </div>
+    <div class="surface__config">Suche: Rechte des Fragenden nicht geprüft</div>
+    <div class="surface__outcome surface__outcome--harm" data-cue="show" data-at="3000">Die Zahlen sind bei einer Person ohne Zugriff</div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption(variant=variants[0]) %}<strong>Die Suche fragt nicht, wer fragt.</strong> Der Index liest mit einem Dienstkonto alle Ablagen und liefert nach Ähnlichkeit, nicht nach Rechten. Die Zahlen sind jetzt bei einer Person, die die Vorlage nie hätte öffnen dürfen.{% endcall %}
+  {%- call panel(variant=variants[1]) -%}
+  <div class="surface surface--chat">
+    {{ chathead() }}
+    <div class="surface__chatlog">
+      {{ user_message() }}
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer"><p>{{ answer_public }}</p></div>
+        {{ sources(secret=false, omitted=true, lines=true) }}
+      </div>
+    </div>
+    <div class="surface__config">Suche: Rechte des Fragenden geprüft</div>
+    <div class="surface__outcome" data-cue="show" data-at="3000">Antwort innerhalb der Rechte von {{ user }}</div>
+    {{ chatinput() }}
+  </div>
+  {%- endcall -%}
+  {% call caption(variant=variants[1]) %}<strong>Dieselbe Frage, die Suche prüft die Rechte.</strong> Treffer, die {{ user }} nicht öffnen darf, bleiben draußen, und die Antwort kommt ohne die Zahlen. Restrisiko: Was im Quellsystem falsch freigegeben ist, besteht die Prüfung und kommt weiter durch.{% endcall %}
+{%- endcall %}
+
+{%- endcall %}
