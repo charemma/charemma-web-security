@@ -1,6 +1,6 @@
 # 010 Landing walkthrough
 
-Status: approved 2026-10-20
+Status: approved 2026-10-20, amended 2026-10-20 (AI pipeline version)
 
 ## Why
 
@@ -13,10 +13,21 @@ attack path, the report. The particles that make up a line dissolve into a
 clean drawn line once the picture stands, hence the working title "Schwarm →
 Linien".
 
+The design tool has since replaced that version with one that puts AI
+security in the foreground, working title "KI-Pipeline". The swarm, the
+stage, the timing and the report stay; the story changes. Agents map the
+attack surface of an AI application and fire broad batteries of test
+prompts; the pentester then follows one chain from a crafted document
+through the RAG ingestion and an agent pod into the Kubernetes cluster. The
+network carries AI components and infrastructure side by side, told apart by
+label colour and a small legend, and the report lists its findings under
+their OWASP LLM identifiers. This spec follows that version; the earlier
+artboard is gone.
+
 This spec takes the new section over as it is. A later spec revises the
 animation; until then the values below are the design's values, without
 changes of our own. The section is the only one on the start page whose
-design source is the artboard `VorgehenLinien.dc.html`; every other section
+design source is the artboard `VorgehenKIPipeline.dc.html`; every other section
 keeps following `Main.dc.html`.
 
 Three things of the artboard are left out on purpose:
@@ -112,12 +123,12 @@ Absolutely positioned at `left: clamp(20px, 4vw, 56px)`, `right: 24px`,
 
 | # | Mode | Title | Hit line | Rail label | Command | Duration |
 | - | ---- | ----- | -------- | ---------- | ------- | -------- |
-| 1 | `ai` | Informationsbeschaffung | Subdomains & Technologien erfasst | info · passiv | `ai-recon start --scope "*.[redacted].de" --agents osint,dns-enum` | 7600 ms |
-| 2 | `ai` | Informationsbeschaffung | Hosts, Ports & Dienste kartiert | info · aktiv | `ai-recon add --agents port-scanning,service-discovery` | 8200 ms |
-| 3 | `manual` | Analyse | Verdächtiger Dienst | analyse | `ai-recon brief --to me && nmap -sV -sC -p 8443 $SUSPECT` | 6800 ms |
-| 4 | `manual` | Manual Testing | SQL-Injection + Fehlkonfiguration | manual testing | `burpsuite --project-file=engagement.burp` | 7600 ms |
-| 5 | `manual` | Exploit | Remote Code Execution | exploit | `python3 poc.py --target svc.[redacted].de` | 7400 ms |
-| 6 | `assist` | Reporting | Bericht mit Fixes übergeben | reporting | `ai-report draft --findings ./loot && review` | 13000 ms |
+| 1 | `ai` | Angriffsfläche | Eingänge, Modell & Tools erfasst | angriffsfläche | `ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint` | 7600 ms |
+| 2 | `ai` | Breitentest | Auffällig: Injection über Upload, Tool-Zugriff im Pod | breitentest | `ai-probe run --suite owasp-llm --agents jailbreak,leak,injection,tool-enum` | 8200 ms |
+| 3 | `manual` | Analyse | Zwei Ziele: RAG-Ingestion und Agent-Pod | analyse | `ai-recon brief --to me && triage --chain upload,rag,agent-pod` | 6800 ms |
+| 4 | `manual` | Manual Testing | Indirect Prompt Injection, Pod mit cluster-admin | manual testing | `python3 craft_doc.py --hidden-instructions -o angebot.pdf` | 7600 ms |
+| 5 | `manual` | Exploit | Über den Agenten in den Cluster: Secrets offen | exploit | `curl -F file=@angebot.pdf https://app.[redacted].ai/upload` | 7400 ms |
+| 6 | `assist` | Reporting | Bericht mit Fixes übergeben | reporting | `ai-report draft --map owasp-llm && review` | 13000 ms |
 
 Mode labels (German): `ai` → `AI-DRIVEN WITH SUBAGENTS`, `manual` →
 `MANUELL`, `assist` → `AI-ASSISTED · HUMAN REVIEW`. The word `PHASE` and the
@@ -139,7 +150,7 @@ no margin or padding; a flex row with gap 6px. Each item has
   `6px 2px`, `cursor: pointer`, left aligned, a column with gap 7px, IBM Plex
   Mono. Focus ring on `:focus-visible`: `2px solid #268bd2`, offset 2px.
 - Its accessible name is `<phase> <n>: <rail label>`, for example
-  `PHASE 1: info · passiv`. The current phase's button carries
+  `PHASE 1: angriffsfläche`. The current phase's button carries
   `aria-current="step"`; the others carry no `aria-current`.
 - A track: a 2px high block in `rgba(228, 229, 229, 0.12)`,
   `overflow: hidden`, with a fill inside it at full height. Fill width: 100 %
@@ -222,7 +233,7 @@ changed or the zoom moved by more than 0.08; a window resize recomputes too.
 | P (pentester) | (−1.55, −0.95) |
 | T (target) | H2 |
 
-Edges: R to every S; S0–H0, S1–H1, S1–H2, S3–H2, S2–H3; H0–D0, H1–D1,
+Edges: R to every S; S0–H0, S1–H1, S1–H2, S3–H2, S2–H3; H0–D1, H1–D0,
 H2–D1, H3–D2; D1–X0, D2–X1, D0–X0.
 
 An edge from `a` to `b` is a quadratic Bézier curve. Its control point lies
@@ -270,56 +281,72 @@ changes. Formation `k` draws its numbers from seed `100 + 17 k`. Its drift is
 y `(R − 0.5) × 4.0`, z `(R − 0.5) × 4.2`; colour 2 with probability 0.09,
 otherwise 0; opacity `0.3 + 0.6 R`. Drift 0.05. No haze.
 
-**1, passive reconnaissance.** Node R (colour 4, 0.95, radius 0.07); nodes
-S (4, 0.9); edges R–S (0, 0.55); ghosts at all H, D and X. Agents with roles
-1 and 2 in colour 1. Agent paths (`o` is the offset):
+**1, attack surface.** The AI application and every way content gets in
+or out. Node R (colour 4, 0.95, radius 0.07); nodes S (4, 0.9); edges R–S
+(0, 0.55); ghosts at all H, D and X. Agents with roles 1 and 2 in colour 1.
+Agent paths (`o` is the offset):
 
-- `osint`: R, S0, (−1.1, −0.5), S3, (−1.1, 0.45), S1; o 0.
-- `dns-enum`: S0, S1, S2, S3, S2, S1; o 0.5.
+- `input-mapping`: R, S0, (−1.1, −0.5), S3, (−1.1, 0.45), S1; o 0.
+- `model-fingerprint`: S0, S1, S2, S3, S2, S1; o 0.5.
 
-Labels: `*.[redacted].de` at R + (−0.02, 0.13), `#c0c1c1`, centred; `www`,
-`api`, `vpn`, `git` at S0 … S3 + (−0.1, 0.012), `#979899`, right aligned.
+Labels: `app.[redacted].ai` at R + (−0.02, 0.13), `#8fc0e8`, centred;
+`chat`, `api`, `git`, `docs-upload` at S0 … S3 + (−0.1, 0.012), `#979899`,
+right aligned.
 
-**2, active reconnaissance.** Node R (4, 0.9, 0.07); nodes S (4, 0.85);
-nodes H (4, 0.9); a ring of radius 0.11 around each H (4, 0.45, 7 points);
-node D1 (4, 0.75); ghosts D0, D2 and both X; edges R–S and S–H (0, 0.5);
-edges H1–D1 and H2–D1 (0, 0.35, density 30). Agents with roles 1 to 4 in
-colour 1:
+**2, broad testing.** Small probe swarms hammer the inputs, and the pipeline
+behind them appears. Node R (4, 0.9, 0.07); nodes S (4, 0.85); nodes H (4,
+0.9); node D1 (4, 0.75); ghosts D0, D2 and both X; edges R–S and S–H (0,
+0.5); edges H0–D1 and H2–D1 (0, 0.35, density 30). No rings around the
+hosts. Agents with roles 1 to 4 in colour 1, each with its own time per
+waypoint:
 
-- `osint`: R, S0, S3, (−1.1, 0.4); o 0.
-- `dns-enum`: S1, S2, S3, S0; o 0.3.
-- `port-scanning`: H0, H1, H2, H3, H2; o 0.6.
-- `service-discovery`: H3, H1, D1, H0, H2; o 0.15.
+- `jailbreak`: S0, R, S1, S0; o 0; 0.8 s.
+- `leak`: S1, H0, S0, H1; o 0.3; 0.9 s.
+- `injection`: S3, H2, S1, H2; o 0.6; 0.85 s.
+- `tool-enum`: H2, D1, H0, D1; o 0.15; 1.1 s.
 
-Labels at H0 … H3 + (0.15, 0.012), `#c0c1c1`, left aligned: `web-app`,
-`k8s`, `svc :8443`, `ssh`. Further: `db` at D1 + (0.1, 0.012) in `#979899`;
-`?` at D0 and at D2 + (0.1, 0.012) in `#6f7071`; all left aligned.
+Labels at H0 … H3 + (0.15, 0.012), left aligned: `llm-gateway`,
+`vector-db` and `rag · ingest` in `#8fc0e8`, `ci/cd` in `#c0c1c1`. Further:
+`agent · k8s-pod` at D1 + (0.1, 0.012) in `#c0c1c1`; `?` at D0 and at D2 +
+(0.1, 0.012) in `#6f7071`; all left aligned.
 
-**3, analysis.** `dimNet(false)`; around T a ring of radius 0.17 (2, 0.95,
-70 points) and one of radius 0.1 (2, 0.6, 34); four crosshair lines from
+**3, analysis.** Two suspects: an AI-specific one (the RAG ingestion takes
+unvetted documents) and an infrastructure one (the agent pod with broad
+rights). `dimNet(false)`; around T a ring of radius 0.17 (2, 0.95, 70
+points) and one of radius 0.1 (2, 0.6, 34); four crosshair lines from
 `T + 0.21 v` to `T + 0.32 v` for v right, left, down, up (2, 0.95, 9
-points); node T (4, 0.95); me(). Labels: `svc :8443 · <suspect>` at
-T + (0.36, 0.012) and `<me>` at P + (0.12, 0.012), both `#268bd2`, left
+points); node T (4, 0.95); a ring around D1 of radius 0.13 (2, 0.7, 48);
+node D1 (4, 0.9); edge T–D1 (2, 0.5, density 50); me(). Labels, all
+`#268bd2`: `<rag>` at T + (0.36, 0.012), left aligned; `<pod>` at
+D1 + (0, −0.21), centred; `<me>` at P + (0.12, 0.012), left aligned.
+
+**4, manual testing.** Both suspects are tested by hand: hidden
+instructions in a document, and what the pod's service account may do.
+`dimNet(false)`; ring around T of radius 0.13 (3, 0.95, 54) and one of
+radius 0.2 (2, 0.35, 40); node T (4, 0.9); ring around D1 of radius 0.11
+(3, 0.8, 44); node D1 (4, 0.85); me(0.5); swarm(role 1, colour 2, 150);
+swarm(role 2, colour 2, 110). Two unnamed agents: role 1 on `loop(T, 0.17)`,
+o 0, 0.85 s per waypoint; role 2 on `loop(D1, 0.14)`, o 0.5, 0.95 s per
+waypoint. Labels: `indirect prompt injection` at T + (0.25, 0.012) in
+`#dc322f`, left aligned; `serviceaccount: cluster-admin` at D1 + (0, −0.2)
+in `#dc322f`, centred; `<me>` at P + (0.12, 0.012) in `#268bd2`, left
 aligned.
 
-**4, manual testing.** `dimNet(false)`; ring around T of radius 0.13 (3,
-0.95, 54) and one of radius 0.2 (2, 0.35, 40); node T (4, 0.9); me(0.55);
-swarm(role 1, colour 2, 210). One unnamed agent on `loop(T, 0.17)`, o 0,
-0.85 s per waypoint. Labels: `sql-injection` at T + (0.25, 0.012) in
-`#dc322f` and `<me>` at P + (0.12, 0.012) in `#268bd2`, left aligned.
+**5, exploit.** The pentester drives the chain: the poisoned document goes
+in through the upload, the RAG ingestion hands it to the agent, the agent
+runs a command in its pod, the pod's token is cluster-admin, and the
+Kubernetes API hands out the secrets. The path turns red only where the
+swarm has passed.
 
-**5, exploit.** The pentester drives the exploit: the swarm leaves P, pushes
-through the service, the database and the server, and the path turns red
-only where it has passed.
-
-- The path is a Catmull-Rom curve through P, T, the middle of T–D1, D1, the
-  middle of D1–X0 and X0, sampled at 24 points per segment, measured by
-  length.
+- The path is a Catmull-Rom curve through P, (−1.2, 0.2), S3, the middle of
+  S3–T, T, the middle of T–D1, D1, the middle of D1–X0 and X0, sampled at 24
+  points per segment, measured by length.
 - `dimNet(true)`; me(0.55).
 - Then, with reveal on: ring around T of radius 0.13 (3, 0.8, 44); node T
-  (3, 0.9); edges T–D1 and D1–X0 (3, 0.85, density 70); node D1 (3, 0.8);
-  rings around X0 of radius 0.17 (3, 0.95, 70) and 0.3 (3, 0.3, 55); node X0
-  (3, 0.95, radius 0.075). Reveal gives every slot role 7 and the parameter
+  (3, 0.9); edges S3–T, T–D1 and D1–X0 (3, 0.85, density 70); ring around
+  D1 of radius 0.11 (3, 0.8, 40); node D1 (3, 0.8); rings around X0 of
+  radius 0.17 (3, 0.95, 70) and 0.3 (3, 0.3, 55); node X0 (3, 0.95, radius
+  0.075). Reveal gives every slot role 7 and the parameter
   `min(0.95, 0.92 f)`, f being the share of the path length at the path
   point nearest to it; every stroke gets the same value for its middle.
 - swarm(role 1, colour 2, 200), reveal off.
@@ -328,9 +355,12 @@ only where it has passed.
   the path with ease-in-out-quad until `0.92 RV`, wobbling by
   `0.025 sin(5.1 t)` and `0.025 cos(4.3 t)`, and afterwards circles X0 at
   `(0.17 cos 1.9t, 0.13 sin 1.9t, 0.08 sin 3.8t)`.
-- Labels: `uid=0(root)` at X0 + (0, −0.38), `#dc322f`, centred, shown from
-  `0.92 RV`; `svc :8443` at T + (−0.17, 0.012), `#979899`, right aligned;
-  `<me>` at P + (0.12, 0.012), `#268bd2`, left aligned.
+- Labels: `kubectl get secrets -A` at X0 + (0.1, −0.34), `#dc322f`, right
+  aligned, shown from `0.92 RV`; `k8s-api` at X0 + (0, 0.36), `#c0c1c1`,
+  centred; `docs-upload` at S3 + (−0.1, 0.012), `#979899`, right aligned;
+  `agent · k8s-pod` at D1 + (0.1, −0.12), `#c0c1c1`, left aligned;
+  `rag · ingest` at T + (−0.17, 0.012), `#8fc0e8`, right aligned; `<me>` at
+  P + (0.12, 0.012), `#268bd2`, left aligned.
 
 **6, reporting.** A glass panel; the swarm swirls over it and the report
 appears token by token where it has been (see *Report*).
@@ -358,7 +388,7 @@ The panel spans x from −0.36 to 1.12 and y from −0.98 to 0.98; text starts a
 | 1 | L0 | −0.68 | 0.038 | 400 | meta line | `#979899` (0) |
 | 2 | from L0 | −0.48 | 0.04 | 500 | `■ <count> <severity>` per severity, 0.07 apart | severity colour |
 | 3 | L0, L0 + 0.2, L0 + 0.52 | −0.3 | 0.036 | 500 | column heads | `#7d7e7f` (0) |
-| 4 + i | L0 | `−0.14 + 0.17 i` | 0.038 | 400 | `F-0<i+1>` | `#979899` (0) |
+| 4 + i | L0 | `−0.14 + 0.17 i` | 0.038 | 400 | the row's ID, `F-0<i+1>` if it has none | `#979899` (0) |
 | 4 + i | L0 + 0.2 | same | 0.038 | 700 | severity | severity colour |
 | 4 + i | L0 + 0.52 | same | 0.05 | 400 | finding | `#e4e5e5` (4) |
 | 9 | L0 | 0.76 | 0.038 | 400 | foot line | `#979899` (0) |
@@ -446,9 +476,16 @@ formation's reveal time `RV`:
   the palette colour at `0.5 × opacity`; circles in 48 steps from the top at
   width 0.9 (node) or 1 (ring). A node also gets a filled core of radius
   `max(1.2, 0.012 S scale)` at `0.55 × opacity`. Round line caps.
+- **Legend**: while formation 2, 3, 4 or 5 shows, the top right corner
+  carries two entries, `<legend 0>` with a dot in `#8fc0e8` and
+  `<legend 1>` with a dot in `#c0c1c1`. IBM Plex Mono 500 11px, baseline
+  middle, right aligned at `x = w − 28`, the first at `y = 30`, the second
+  20px lower; text in `#979899`; the dot, radius 3.5px, sits 10px left of
+  the text; everything at opacity 0.85. It appears and disappears with the
+  formation change, without a fade.
 - **Order**: halos, previous strokes, new strokes, dots; in the report
   formation then the glass, the dots of roles 1 to 4, 7 and 8 above it, and
-  the report text; labels last.
+  the report text; then the legend; labels last.
 - **Labels**: IBM Plex Mono 500 12px, baseline middle, opacity rising from 0
   to 1 between 1.5 s and 2.2 s after the formation change.
 
@@ -499,8 +536,9 @@ canvas stays empty on the stage background.
 ### Accessibility
 
 - The canvas has `role="img"` and the label from the texts
-  (`Animation: Ein Partikelschwarm formt nacheinander Netzwerkkarte, Ziel,
-  Angriffspfad und Bericht eines Penetrationstests.`).
+  (`Animation: Ein Partikelschwarm formt nacheinander eine KI-Pipeline, das
+  Ziel, den Angriffspfad über eine Prompt Injection und den Bericht eines
+  Penetrationstests.`).
 - The rail is a list of real buttons with names and `aria-current`, as above.
 - The cursor is `aria-hidden`.
 
@@ -515,23 +553,32 @@ The interface texts of every language carry, under `engagement`:
 | `aria` | the canvas label above |
 | `modes` | `ai`, `manual`, `assist` as in *Phases* |
 | `titles`, `hits`, `rail` | six entries each, as in *Phases* |
-| `labels.suspect` / `labels.me` / `labels.review` | `verdächtig` / `pentester` / `human review` |
+| `labels.rag` / `labels.pod` | `rag · ingest · KI-spezifisch` / `agent-pod · zu viele Rechte?` |
+| `labels.me` / `labels.review` | `pentester` / `human review` |
+| `labels.legend` | `KI-Komponente`, `Kubernetes / Infrastruktur` |
 | `report.title` / `report.conf` | `PENTEST-BERICHT` / `VERTRAULICH` |
-| `report.meta` | `Scope: *.[redacted].de · Black-Box · Okt 2026` |
+| `report.meta` | `Scope: *.[redacted].ai · Black-Box · Okt 2026` |
 | `report.cols` | `ID`, `SCHWERE`, `BEFUND` |
-| `report.rows` | `KRITISCH` `RCE · svc :8443`; `KRITISCH` `SQL-Injection · /login`; `HOCH` `k8s-Ingress offen`; `MITTEL` `TLS veraltet · vpn`; `NIEDRIG` `Header fehlen · www` |
+| `report.rows` | severity, finding, ID: `KRITISCH` `Prompt Injection · Upload` `LLM01`; `KRITISCH` `Agent führt Befehle aus` `LLM06`; `HOCH` `Pod mit cluster-admin` `K8S`; `MITTEL` `System-Prompt leakt` `LLM07`; `NIEDRIG` `Kein Rate-Limit` `LLM10` |
 | `report.foot` | `Jeder Fund mit PoC, Risiko und konkretem Fix.` |
 
 English and Greek carry the design's English and Greek texts for the same
 keys, so they are ready when spec 009 publishes them again. The head texts
-`approach.eyebrow`, `title_a`, `title_b`, `lead` and `note` stay as they are;
-the German ones equal the design's.
+`approach.eyebrow`, `title_a`, `title_b` and `note` stay as they are; the
+German ones equal the design's. `approach.lead` takes the design's lead in
+each language; the German one reads `KI-Agenten kartieren die
+Angriffsfläche Ihrer KI-Anwendung und feuern breit gestreute Testanfragen
+ab. Dann übernehme ich: die eine Kette, die wirklich Schaden anrichtet – vom
+präparierten Dokument bis in den Kubernetes-Cluster, manuell und
+reproduzierbar.`
 
-The canvas labels that name things in the target (`*.[redacted].de`, `www`,
-`api`, `vpn`, `git`, `web-app`, `k8s`, `svc :8443`, `ssh`, `db`, `?`,
-`sql-injection`, `uid=0(root)`) and the agent names (`osint`, `dns-enum`,
-`port-scanning`, `service-discovery`) are the same in every language and
-belong to the formations in the script.
+The canvas labels that name things in the target (`app.[redacted].ai`,
+`chat`, `api`, `git`, `docs-upload`, `llm-gateway`, `vector-db`,
+`rag · ingest`, `ci/cd`, `agent · k8s-pod`, `?`, `indirect prompt injection`,
+`serviceaccount: cluster-admin`, `kubectl get secrets -A`, `k8s-api`) and the
+agent names (`input-mapping`, `model-fingerprint`, `jailbreak`, `leak`,
+`injection`, `tool-enum`) are the same in every language and belong to the
+formations in the script.
 
 `engagement.json` holds the six phases in order, each with `mode` (`ai`,
 `manual` or `assist`) and `cmd`. The generator fails the build when it does
@@ -571,8 +618,10 @@ Points the later spec decides; this spec keeps the design's behaviour.
   first second. A still picture after the report has formed would honour the
   setting fully.
 - **Unused design texts.** The artboard carries a report subtitle
-  (`*.[redacted].de · 5 Findings`) and a label `bericht · 3 findings` that no
-  formation draws; they are not taken over.
+  (`*.[redacted].ai · 5 Findings`) and the labels `verdächtig` and
+  `bericht · 3 findings` that no formation draws; they are not taken over.
+- **Legend on phones.** The legend keeps its place in the top right corner
+  on narrow stages, as in the design.
 - **Particle count on resize.** The count is fixed when the page loads; a
   phone turned to landscape keeps it.
 - **Bold monospace.** The report title and the severities ask for IBM Plex
@@ -613,6 +662,9 @@ Points the later spec decides; this spec keeps the design's behaviour.
 6. The browser console shows no errors and no CSP violations, with the CSP of
    `nginx/security-headers.conf` applied.
 7. A build with `engagement.json` holding five phases fails.
+8. The legend shows during phases 2 to 5 and not during phases 1 and 6, the
+   report lists the IDs `LLM01`, `LLM06`, `K8S`, `LLM07`, `LLM10`, and the
+   lead above the stage reads as in *Texts*.
 
 ## Touches
 
