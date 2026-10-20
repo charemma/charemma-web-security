@@ -13,7 +13,7 @@ This file states the rules for writing and revising knowledge articles under `sr
 
 - The body MUST open concretely: either with a moment or scene, or by naming the concrete problem in plain terms. It MUST NOT open with vague boilerplate or an abstract summary, and a definition MUST be grounded in a concrete moment, example or case nearby.
 - The body SHOULD contain, in this order: an introductory section (what the risk is), the forms or mechanics of the risk, the relation to adjacent articles, the pentest checks, the countermeasures. Leave out a section the topic has no material for.
-- The body MAY contain one case from practice, per the **Case from Practice** section; it MAY serve as the opening scene or stand in any section.
+- The body MAY contain at most one documented case and at most one constructed scenario, per the **Case from Practice** section; either MAY serve as the opening scene or stand in any section, and the constructed scenario MAY be the scene of the animation.
 - Each form or mechanic of the risk SHOULD come with one example from a Linux or infrastructure point of view.
 - A reference to another article MUST be a relative Markdown link to its directory (for example `../prompt-injection/`); do not link by absolute URL.
 - The pentest section MUST list three to five checks, written as what the author does.
@@ -23,6 +23,8 @@ This file states the rules for writing and revising knowledge articles under `sr
 ## Case from Practice
 
 - Whether an article shows a case from practice, and which one, MUST be fixed by the spec of the article; do not choose a case the spec does not name.
+- The research for an article spec MUST look for cases whose decisive step is the weakness the article covers; do not choose a case for being well known when its decisive step belongs to the risk of another article.
+- A documented case whose harm needs the weakness of another article MAY stand in the prose as evidence; the prose MUST keep that weakness to at most a subordinate clause, link the other article, and keep the focus on the article's own risk.
 - A case from practice MUST be either a documented case or a constructed scenario.
 - A documented case MUST rest on a public source that describes it; the source MUST be named in the sentence and listed in `sources` with its `url`.
 - A documented case MUST be retold only with the facts the source states; do not add actors, numbers, causes or consequences the source does not give.
@@ -58,6 +60,7 @@ This file states the rules for writing and revising knowledge articles under `sr
 - A caption MUST open with the core statement in bold and continue with one or two sentences; do not add a third sentence or a second caption, and leave what the caption cannot say in that space to the prose.
 - The article text around the animation MUST NOT repeat the chapters; it MUST order the animation into the article: what the reader is about to see, and what follows from it.
 - A scene that shows a documented case MUST name the source of the case in the article text next to the figure and list it in `sources` with its `url`; do not name the source only in a caption or only in the sources list.
+- The animation scene MUST show the article's risk in isolation: every step it depicts MUST belong to the weakness the article covers; leave out a step that belongs to the risk of another article, such as its trigger or an environment-specific detour, and show a constructed scenario where no documented case works without such a step.
 
 ## Scene Review
 
@@ -76,6 +79,7 @@ Review checklist:
 8. Is the countermeasure a switch on the same scene, technically correct, with the residual risk named?
 9. Is the source of the case named in the article? Secrets masked, no invented data?
 10. Does it work without movement, with the keyboard, on the phone?
+11. Does every step the scene depicts belong to the article's own risk, with no step from the risk of another article?
 
 ## Rewrite Pass
 
