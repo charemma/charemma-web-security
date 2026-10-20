@@ -11,7 +11,7 @@ This file states the rules for writing and revising knowledge articles under `sr
 
 ## Structure
 
-- The body MUST open with a concrete moment or scene, not with a summary or a definition.
+- The body MUST open concretely: either with a moment or scene, or by naming the concrete problem in plain terms. It MUST NOT open with vague boilerplate or an abstract summary, and a definition MUST be grounded in a concrete moment, example or case nearby.
 - The body SHOULD contain, in this order: an introductory section (what the risk is), the forms or mechanics of the risk, the relation to adjacent articles, the pentest checks, the countermeasures. Leave out a section the topic has no material for.
 - The body MAY contain one case from practice, per the **Case from Practice** section; it MAY serve as the opening scene or stand in any section.
 - Each form or mechanic of the risk SHOULD come with one example from a Linux or infrastructure point of view.
