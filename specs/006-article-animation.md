@@ -2,7 +2,8 @@
 
 Status: approved 2026-10-19, amended 2026-10-19 (chapter player), amended
 2026-10-19 (kinds of interactive moment), amended 2026-10-19 (mail client
-and assistant chat surfaces)
+and assistant chat surfaces), amended 2026-10-20 (controls of the
+interactive moment only in its chapter)
 
 History: the first version of this spec put a list of steps into the
 article's front matter and played it as boxes and arrows. Branch
@@ -224,9 +225,15 @@ an uncovering), the demonstration stops and does not resume, the player
 pauses on this chapter, the play button shows the paused state, and the
 chapter never continues on its own: the reader presses play to go on. The
 element takes the height of the taller of its layers, so no layer is ever
-cut off. A button under the caption, created by the player, is the fallback
-for keyboard and screen reader for every kind; it takes the player to the
-moment's chapter, paused, and toggles the element's end state. Without
+cut off. A control under the caption, created by the player, is the
+fallback for keyboard and screen reader for every kind: a button for the
+lens and the uncovering, the two state buttons for the comparison. It
+stands only while the moment's chapter is the current chapter; in every
+other chapter it is hidden, visually, from assistive technology and from
+the tab order, and the space it takes collapses. The chapter bar is the
+way to the chapter; in the chapter the control is the next stop in the
+tab order after the caption. Pressing it pauses the player on the chapter
+and toggles the element's end state. Without
 JavaScript the fallback does not exist and the element stands in its end
 state, as the storyboard section says. A scene has no second interactive
 element: nothing else reacts to hover, pointer, click or touch, and no
@@ -425,7 +432,11 @@ With JavaScript, the player turns the storyboard into the stage:
 - The caption under the frame shows the caption of the current chapter
   and variant with the chapter number in its circle, in a live region
   that announces politely when the chapter changes. Under the caption,
-  indented to its text, stands the button of the interactive moment.
+  indented to its text, stands the control of the interactive moment, in
+  the moment's chapter only. In the other chapters the space collapses:
+  the control stands outside the frame, so the stage does not move, and
+  the content below the figure already shifts with the height of each
+  caption.
 
 States and transitions:
 
@@ -454,9 +465,13 @@ States and transitions:
   comparison, an uncovering) pauses the player on that chapter; the player
   stays paused when the reader lets go, and play resumes the chapter where
   it stands.
-- A press on the fallback button takes the player to the moment's
-  chapter, paused, in the end state of its kind; a second press returns
-  the element to its start state and leaves the player paused there.
+- A press on the fallback button pauses the player on the moment's
+  chapter in the end state of its kind; a second press returns the
+  element to its start state and leaves the player paused there.
+- When the chapter changes while a control of the interactive moment has
+  the focus, the focus moves to the button of the new current chapter in
+  the chapter bar, so it never falls back to the page; playback is not
+  stopped by it.
 
 There is no usage hint anywhere: no text that explains the controls. If
 the controls need an explanation, they are wrong.
@@ -470,8 +485,8 @@ builds the frame and the controls, but:
   view changes nothing;
 - the stage shows the end state of the current chapter at once, and a
   click on a chapter shows that chapter's end state; the interactive
-  moment stands in its end state in its chapter, and the fallback button
-  toggles it;
+  moment stands in its end state in its chapter, and the fallback
+  control, shown in that chapter only as in playback, toggles it;
 - play steps through the chapters' end states at the chapter durations
   without running any cue, so the reader who presses play gets a slide
   show, not a film;
@@ -541,7 +556,11 @@ read as revealed code.
 
 The state buttons of a comparison use the pill shape of the switch in
 neutral colours, the pressed state white, with no red or blue: both
-states are the same surface, neither is the attack. The cover of an
+states are the same surface, neither is the attack. The two state buttons
+stand side by side while both labels fit in one line; when they do not,
+they stand one under the other, each as wide as the group, and the group
+becomes a rectangle with the corner radius of the pill's ends. A label
+never breaks inside its button. The cover of an
 uncovering is drawn as the real surface draws it, a black bar on a
 document, a fold line in a log, a masked field in a form, so the reader
 recognises that something is covered before anything moves. The fallback
@@ -594,7 +613,9 @@ introduces it.
   with a touch target of at least 44 px in each direction: the play
   button, each chapter button, each variant button and the fallback
   button. The design component draws some of them smaller; this spec
-  sets the minimum.
+  sets the minimum. The controls of the interactive moment are hidden
+  outside its chapter, as the interactive moment section says, and the
+  focus never falls back to the page when they disappear.
 - The figure carries the `aria-label` the scene gives it; the caption is a
   live region with polite announcements; the chapter list and the switch
   group carry labels from the interface texts; the current chapter is
@@ -763,11 +784,11 @@ player comes into being with the first scene:
    its kind says (for the lens: it moves across its element on its own
    and widens to the full raw layer) and afterwards obeys the reader (the
    lens follows the mouse and the finger); the fallback button toggles the
-   end state and takes the player to that chapter, paused.
+   end state and pauses the player on that chapter.
 6. With reduced motion requested, nothing plays on its own; chapter
    buttons show end states; play steps through end states; the
-   interactive moment stands in its end state and the fallback button
-   toggles it. With JavaScript disabled
+   interactive moment stands in its end state and the fallback button,
+   shown in the moment's chapter only, toggles it. With JavaScript disabled
    the storyboard of acceptance 1 is what the reader sees.
 7. Every control is a `<button>` with a touch target of at least 44 px
    and an accessible name; the figure carries the scene's `aria-label`;
@@ -812,6 +833,19 @@ player comes into being with the first scene:
     the cover dissolves over `data-for`, a click or tap and the fallback
     button toggle it, and uncovering pauses the player. Before such a
     scene exists, acceptance 2 is the acceptance of these kinds.
+17. For every kind (lens, compare, reveal), the controls of the
+    interactive moment stand under the caption only while the moment's
+    chapter is current, with JavaScript, with and without reduced motion;
+    in the other chapters they are neither visible nor reachable by Tab
+    nor exposed to assistive technology, the space collapses and the
+    stage does not move. When the chapter changes while such a control
+    has the focus, the focus stands on the current chapter's button in
+    the chapter bar. At 390 px viewport width the state buttons of a
+    comparison stand in one line or one under the other at equal width,
+    with no label broken inside its button. Checked in the scenes of
+    prompt injection (lens) and sensitive information disclosure
+    (compare); for reveal with its first scene, until then by
+    acceptance 2.
 
 ## Touches
 
