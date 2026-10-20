@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Vorgehen – Schwarm zu Linien</title>
+<title>Vorgehen – KI-Pipeline</title>
 <script src="./vendor/react.js"></script>
 <script src="./vendor/react-dom.js"></script>
 <script src="./support.js"></script>
@@ -73,12 +73,12 @@ class Component extends DCLogic {
     super(props);
     this.DUR = [7600, 8200, 6800, 7600, 7400, 13000];
     this.CMD = [
-      'ai-recon start --scope "*.[redacted].de" --agents osint,dns-enum',
-      'ai-recon add --agents port-scanning,service-discovery',
-      'ai-recon brief --to me && nmap -sV -sC -p 8443 $SUSPECT',
-      'burpsuite --project-file=engagement.burp',
-      'python3 poc.py --target svc.[redacted].de',
-      'ai-report draft --findings ./loot && review'
+      'ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint',
+      'ai-probe run --suite owasp-llm --agents jailbreak,leak,injection,tool-enum',
+      'ai-recon brief --to me && triage --chain upload,rag,agent-pod',
+      'python3 craft_doc.py --hidden-instructions -o angebot.pdf',
+      'curl -F file=@angebot.pdf https://app.[redacted].ai/upload',
+      'ai-report draft --map owasp-llm && review'
     ];
     this.MODE = ['ai', 'ai', 'manual', 'manual', 'manual', 'assist'];
     this.state = { step: 0, chars: 0, lang: 'de', prog: 0 };
@@ -102,42 +102,42 @@ class Component extends DCLogic {
     const L = {
       de: {
         ve: '02 / vorgehen', vh1: 'Agenten kartieren. ', vh2: 'Ich gehe rein.',
-        vlead: 'KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.',
+        vlead: 'KI-Agenten kartieren die Angriffsfläche Ihrer KI-Anwendung und feuern breit gestreute Testanfragen ab. Dann übernehme ich: die eine Kette, die wirklich Schaden anrichtet – vom präparierten Dokument bis in den Kubernetes-Cluster, manuell und reproduzierbar.',
         vnote: 'Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.',
-        aria: 'Animation: Ein Partikelschwarm formt nacheinander Netzwerkkarte, Ziel, Angriffspfad und Bericht eines Penetrationstests.',
+        aria: 'Animation: Ein Partikelschwarm formt nacheinander eine KI-Pipeline, das Ziel, den Angriffspfad über eine Prompt Injection und den Bericht eines Penetrationstests.',
         phasesLabel: 'Phasen', phase: 'PHASE',
-        titles: ['Informationsbeschaffung', 'Informationsbeschaffung', 'Analyse', 'Manual Testing', 'Exploit', 'Reporting'],
-        rail: ['info · passiv', 'info · aktiv', 'analyse', 'manual testing', 'exploit', 'reporting'],
-        hits: ['Subdomains & Technologien erfasst', 'Hosts, Ports & Dienste kartiert', 'Verdächtiger Dienst', 'SQL-Injection + Fehlkonfiguration', 'Remote Code Execution', 'Bericht mit Fixes übergeben'],
+        titles: ['Angriffsfläche', 'Breitentest', 'Analyse', 'Manual Testing', 'Exploit', 'Reporting'],
+        rail: ['angriffsfläche', 'breitentest', 'analyse', 'manual testing', 'exploit', 'reporting'],
+        hits: ['Eingänge, Modell & Tools erfasst', 'Auffällig: Injection über Upload, Tool-Zugriff im Pod', 'Zwei Ziele: RAG-Ingestion und Agent-Pod', 'Indirect Prompt Injection, Pod mit cluster-admin', 'Über den Agenten in den Cluster: Secrets offen', 'Bericht mit Fixes übergeben'],
         modes: { ai: 'AI-DRIVEN WITH SUBAGENTS', manual: 'MANUELL', assist: 'AI-ASSISTED · HUMAN REVIEW' },
-        rp: { conf: 'VERTRAULICH', meta: 'Scope: *.[redacted].de · Black-Box · Okt 2026', cols: ['ID', 'SCHWERE', 'BEFUND'], title: 'PENTEST-BERICHT', sub: '*.[redacted].de · 5 Findings', rows: [['KRITISCH', 'RCE · svc :8443'], ['KRITISCH', 'SQL-Injection · /login'], ['HOCH', 'k8s-Ingress offen'], ['MITTEL', 'TLS veraltet · vpn'], ['NIEDRIG', 'Header fehlen · www']], foot: 'Jeder Fund mit PoC, Risiko und konkretem Fix.' },
-        lb: { suspect: 'verdächtig', me: 'pentester', report: 'bericht · 3 findings', review: 'human review' }
+        rp: { conf: 'VERTRAULICH', meta: 'Scope: *.[redacted].ai · Black-Box · Okt 2026', cols: ['ID', 'SCHWERE', 'BEFUND'], title: 'PENTEST-BERICHT', sub: '*.[redacted].ai · 5 Findings', rows: [['KRITISCH', 'Prompt Injection · Upload', 'LLM01'], ['KRITISCH', 'Agent führt Befehle aus', 'LLM06'], ['HOCH', 'Pod mit cluster-admin', 'K8S'], ['MITTEL', 'System-Prompt leakt', 'LLM07'], ['NIEDRIG', 'Kein Rate-Limit', 'LLM10']], foot: 'Jeder Fund mit PoC, Risiko und konkretem Fix.' },
+        lb: { sRag: 'rag · ingest · KI-spezifisch', sPod: 'agent-pod · zu viele Rechte?', lg: ['KI-Komponente', 'Kubernetes / Infrastruktur'], suspect: 'verdächtig', me: 'pentester', report: 'bericht · 3 findings', review: 'human review' }
       },
       en: {
         ve: '02 / approach', vh1: 'Agents map it. ', vh2: 'I go in.',
-        vlead: 'AI agents gather in parallel what is publicly discoverable about your systems. Then I take over: targeted, manual and all the way to a verifiable proof. The result is a report your team can act on right away.',
+        vlead: 'AI agents map the attack surface of your AI application and fire broad batteries of test prompts. Then I take over: the one chain that does real damage – from a crafted document into the Kubernetes cluster, by hand and reproducible.',
         vnote: 'The animation follows a real black-box assessment – simplified and anonymised.',
-        aria: 'Animation: a particle swarm forms the network map, target, attack path and report of a penetration test.',
+        aria: 'Animation: a particle swarm forms an AI pipeline, the target, the attack path via prompt injection and the report of a penetration test.',
         phasesLabel: 'Phases', phase: 'PHASE',
-        titles: ['Information gathering', 'Information gathering', 'Analysis', 'Manual testing', 'Exploit', 'Reporting'],
-        rail: ['info · passive', 'info · active', 'analysis', 'manual testing', 'exploit', 'reporting'],
-        hits: ['Subdomains & technologies captured', 'Hosts, ports & services mapped', 'Suspicious service', 'SQL injection + misconfiguration', 'Remote code execution', 'Report with fixes delivered'],
+        titles: ['Attack surface', 'Broad testing', 'Analysis', 'Manual testing', 'Exploit', 'Reporting'],
+        rail: ['attack surface', 'broad testing', 'analysis', 'manual testing', 'exploit', 'reporting'],
+        hits: ['Inputs, model & tools captured', 'Anomalies: injection via upload, tool access in a pod', 'Two targets: RAG ingestion and agent pod', 'Indirect prompt injection, pod with cluster-admin', 'Through the agent into the cluster: secrets exposed', 'Report with fixes delivered'],
         modes: { ai: 'AI-DRIVEN WITH SUBAGENTS', manual: 'MANUAL', assist: 'AI-ASSISTED · HUMAN REVIEW' },
-        rp: { conf: 'CONFIDENTIAL', meta: 'Scope: *.[redacted].de · black box · Oct 2026', cols: ['ID', 'SEVERITY', 'FINDING'], title: 'PENTEST REPORT', sub: '*.[redacted].de · 5 findings', rows: [['CRITICAL', 'RCE · svc :8443'], ['CRITICAL', 'SQL injection · /login'], ['HIGH', 'k8s ingress exposed'], ['MEDIUM', 'outdated TLS · vpn'], ['LOW', 'missing headers · www']], foot: 'Every finding with PoC, risk and a concrete fix.' },
-        lb: { suspect: 'suspicious', me: 'pentester', report: 'report · 3 findings', review: 'human review' }
+        rp: { conf: 'CONFIDENTIAL', meta: 'Scope: *.[redacted].ai · black box · Oct 2026', cols: ['ID', 'SEVERITY', 'FINDING'], title: 'PENTEST REPORT', sub: '*.[redacted].ai · 5 findings', rows: [['CRITICAL', 'Prompt injection · upload', 'LLM01'], ['CRITICAL', 'Agent runs commands', 'LLM06'], ['HIGH', 'Pod with cluster-admin', 'K8S'], ['MEDIUM', 'System prompt leaks', 'LLM07'], ['LOW', 'No rate limit', 'LLM10']], foot: 'Every finding with PoC, risk and a concrete fix.' },
+        lb: { sRag: 'rag · ingest · AI-specific', sPod: 'agent pod · too many rights?', lg: ['AI component', 'Kubernetes / infrastructure'], suspect: 'suspicious', me: 'pentester', report: 'report · 3 findings', review: 'human review' }
       },
       el: {
         ve: '02 / προσέγγιση', vh1: 'Οι agents χαρτογραφούν. ', vh2: 'Εγώ μπαίνω μέσα.',
-        vlead: 'AI agents συγκεντρώνουν παράλληλα ό,τι είναι δημόσια διαθέσιμο για τα συστήματά σας. Μετά αναλαμβάνω εγώ: στοχευμένα, χειροκίνητα και μέχρι την επαληθεύσιμη απόδειξη. Στο τέλος υπάρχει μια αναφορά με την οποία η ομάδα σας μπορεί να δουλέψει αμέσως.',
+        vlead: 'AI agents χαρτογραφούν την επιφάνεια επίθεσης της AI εφαρμογής σας και εκτελούν πλήθος δοκιμαστικών prompts. Μετά αναλαμβάνω εγώ: την αλυσίδα που κάνει πραγματική ζημιά – από ένα προετοιμασμένο έγγραφο μέχρι το Kubernetes cluster, χειροκίνητα και αναπαραγώγιμα.',
         vnote: 'Η κινούμενη απεικόνιση βασίζεται σε πραγματικό black-box assessment – απλοποιημένο και ανωνυμοποιημένο.',
         aria: 'Κινούμενη απεικόνιση: ένα σμήνος σωματιδίων σχηματίζει χάρτη δικτύου, στόχο, διαδρομή επίθεσης και αναφορά ενός penetration test.',
         phasesLabel: 'Φάσεις', phase: 'ΦΑΣΗ',
-        titles: ['Συλλογή πληροφοριών', 'Συλλογή πληροφοριών', 'Ανάλυση', 'Manual testing', 'Exploit', 'Reporting'],
-        rail: ['info · παθητικά', 'info · ενεργά', 'ανάλυση', 'manual testing', 'exploit', 'reporting'],
-        hits: ['Subdomains & τεχνολογίες καταγράφηκαν', 'Hosts, ports & υπηρεσίες χαρτογραφήθηκαν', 'Ύποπτη υπηρεσία', 'SQL injection + λάθος ρύθμιση', 'Remote code execution', 'Αναφορά με διορθώσεις παραδόθηκε'],
+        titles: ['Επιφάνεια επίθεσης', 'Ευρύς έλεγχος', 'Ανάλυση', 'Manual testing', 'Exploit', 'Reporting'],
+        rail: ['επιφάνεια', 'ευρύς έλεγχος', 'ανάλυση', 'manual testing', 'exploit', 'reporting'],
+        hits: ['Είσοδοι, μοντέλο & tools καταγράφηκαν', 'Ευρήματα: injection μέσω upload, tool access σε pod', 'Δύο στόχοι: RAG ingestion και agent pod', 'Indirect prompt injection, pod με cluster-admin', 'Μέσω του agent στο cluster: εκτεθειμένα secrets', 'Αναφορά με διορθώσεις παραδόθηκε'],
         modes: { ai: 'AI-DRIVEN WITH SUBAGENTS', manual: 'ΧΕΙΡΟΚΙΝΗΤΑ', assist: 'AI-ASSISTED · HUMAN REVIEW' },
-        rp: { conf: 'ΕΜΠΙΣΤΕΥΤΙΚΟ', meta: 'Scope: *.[redacted].de · black box · Οκτ 2026', cols: ['ID', 'ΣΟΒΑΡΟΤΗΤΑ', 'ΕΥΡΗΜΑ'], title: 'ΑΝΑΦΟΡΑ PENTEST', sub: '*.[redacted].de · 5 ευρήματα', rows: [['ΚΡΙΣΙΜΟ', 'RCE · svc :8443'], ['ΚΡΙΣΙΜΟ', 'SQL injection · /login'], ['ΥΨΗΛΟ', 'k8s ingress ανοιχτό'], ['ΜΕΣΑΙΟ', 'παλιό TLS · vpn'], ['ΧΑΜΗΛΟ', 'λείπουν headers · www']], foot: 'Κάθε εύρημα με PoC, κίνδυνο και διόρθωση.' },
-        lb: { suspect: 'ύποπτο', me: 'pentester', report: 'αναφορά · 3 ευρήματα', review: 'human review' }
+        rp: { conf: 'ΕΜΠΙΣΤΕΥΤΙΚΟ', meta: 'Scope: *.[redacted].ai · black box · Οκτ 2026', cols: ['ID', 'ΣΟΒΑΡΟΤΗΤΑ', 'ΕΥΡΗΜΑ'], title: 'ΑΝΑΦΟΡΑ PENTEST', sub: '*.[redacted].ai · 5 ευρήματα', rows: [['ΚΡΙΣΙΜΟ', 'Prompt injection · upload', 'LLM01'], ['ΚΡΙΣΙΜΟ', 'Ο agent εκτελεί εντολές', 'LLM06'], ['ΥΨΗΛΟ', 'Pod με cluster-admin', 'K8S'], ['ΜΕΣΑΙΟ', 'Διαρροή system prompt', 'LLM07'], ['ΧΑΜΗΛΟ', 'Χωρίς rate limit', 'LLM10']], foot: 'Κάθε εύρημα με PoC, κίνδυνο και διόρθωση.' },
+        lb: { sRag: 'rag · ingest · AI-specific', sPod: 'agent pod · πολλά δικαιώματα;', lg: ['AI component', 'Kubernetes / υποδομή'], suspect: 'ύποπτο', me: 'pentester', report: 'αναφορά · 3 ευρήματα', review: 'human review' }
       }
     };
     return L[this.state.lang] || L.de;
@@ -241,7 +241,7 @@ class Component extends DCLogic {
     n.T = n.H[2];
     n.edgesRS = n.S.map((s) => [n.R, s]);
     n.edgesSH = [[n.S[0], n.H[0]], [n.S[1], n.H[1]], [n.S[1], n.H[2]], [n.S[3], n.H[2]], [n.S[2], n.H[3]]];
-    n.edgesHD = [[n.H[0], n.D[0]], [n.H[1], n.D[1]], [n.H[2], n.D[1]], [n.H[3], n.D[2]]];
+    n.edgesHD = [[n.H[0], n.D[1]], [n.H[1], n.D[0]], [n.H[2], n.D[1]], [n.H[3], n.D[2]]];
     n.edgesDX = [[n.D[1], n.X[0]], [n.D[2], n.X[1]], [n.D[0], n.X[0]]];
     this.net = n;
   }
@@ -286,52 +286,61 @@ class Component extends DCLogic {
       F.drift = 0.05;
     }
     if (k === 1) {
+      // attack surface: the AI app and every way content gets in (inputs) or out (tools)
       node(n.R, 4, 0.95, 0.07); n.S.forEach((p) => node(p, 4, 0.9));
       n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.55));
       n.H.forEach(ghost); n.D.forEach(ghost); n.X.forEach(ghost);
       agent(1, 1); agent(2, 1);
-      F.agents = [{ name: 'osint', pts: [n.R, n.S[0], [-1.1, -0.5], n.S[3], [-1.1, 0.45], n.S[1]], o: 0 }, { name: 'dns-enum', pts: [n.S[0], n.S[1], n.S[2], n.S[3], n.S[2], n.S[1]], o: 0.5 }];
-      F.labels = [{ p: n.R, t: '*.[redacted].de', dx: -0.02, dy: 0.13, c: '#c0c1c1', al: 'center' }].concat(['www', 'api', 'vpn', 'git'].map((t, i) => ({ p: n.S[i], t: t, dx: -0.1, dy: 0.012, c: '#979899', al: 'right' })));
+      F.agents = [{ name: 'input-mapping', pts: [n.R, n.S[0], [-1.1, -0.5], n.S[3], [-1.1, 0.45], n.S[1]], o: 0 }, { name: 'model-fingerprint', pts: [n.S[0], n.S[1], n.S[2], n.S[3], n.S[2], n.S[1]], o: 0.5 }];
+      F.labels = [{ p: n.R, t: 'app.[redacted].ai', dx: -0.02, dy: 0.13, c: '#8fc0e8', al: 'center' }].concat(['chat', 'api', 'git', 'docs-upload'].map((t, i) => ({ p: n.S[i], t: t, dx: -0.1, dy: 0.012, c: '#979899', al: 'right' })));
     }
     if (k === 2) {
+      // broad automated probing: many small probe swarms hammer the inputs, the pipeline behind appears
       node(n.R, 4, 0.9, 0.07); n.S.forEach((p) => node(p, 4, 0.85)); n.H.forEach((p) => node(p, 4, 0.9));
-      n.H.forEach((p) => ring(p, 0.11, 4, 0.45, 7));
       node(n.D[1], 4, 0.75); ghost(n.D[0]); ghost(n.D[2]); n.X.forEach(ghost);
       n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.5)); n.edgesSH.forEach((e) => edge(e[0], e[1], 0, 0.5));
-      edge(n.H[1], n.D[1], 0, 0.35, 30); edge(n.H[2], n.D[1], 0, 0.35, 30);
+      edge(n.H[0], n.D[1], 0, 0.35, 30); edge(n.H[2], n.D[1], 0, 0.35, 30);
       agent(1, 1); agent(2, 1); agent(3, 1); agent(4, 1);
       F.agents = [
-        { name: 'osint', pts: [n.R, n.S[0], n.S[3], [-1.1, 0.4]], o: 0 },
-        { name: 'dns-enum', pts: [n.S[1], n.S[2], n.S[3], n.S[0]], o: 0.3 },
-        { name: 'port-scanning', pts: [n.H[0], n.H[1], n.H[2], n.H[3], n.H[2]], o: 0.6 },
-        { name: 'service-discovery', pts: [n.H[3], n.H[1], n.D[1], n.H[0], n.H[2]], o: 0.15 }
+        { name: 'jailbreak', pts: [n.S[0], n.R, n.S[1], n.S[0]], o: 0, hop: 0.8 },
+        { name: 'leak', pts: [n.S[1], n.H[0], n.S[0], n.H[1]], o: 0.3, hop: 0.9 },
+        { name: 'injection', pts: [n.S[3], n.H[2], n.S[1], n.H[2]], o: 0.6, hop: 0.85 },
+        { name: 'tool-enum', pts: [n.H[2], n.D[1], n.H[0], n.D[1]], o: 0.15, hop: 1.1 }
       ];
-      F.labels = ['web-app', 'k8s', 'svc :8443', 'ssh'].map((t, i) => ({ p: n.H[i], t: t, dx: 0.15, dy: 0.012, c: '#c0c1c1', al: 'left' }))
-        .concat([{ p: n.D[1], t: 'db', dx: 0.1, dy: 0.012, c: '#979899', al: 'left' }, { p: n.D[0], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' }, { p: n.D[2], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' }]);
+      F.labels = [
+        { p: n.H[0], t: 'llm-gateway', dx: 0.15, dy: 0.012, c: '#8fc0e8', al: 'left' }, { p: n.H[1], t: 'vector-db', dx: 0.15, dy: 0.012, c: '#8fc0e8', al: 'left' },
+        { p: n.H[2], t: 'rag · ingest', dx: 0.15, dy: 0.012, c: '#8fc0e8', al: 'left' }, { p: n.H[3], t: 'ci/cd', dx: 0.15, dy: 0.012, c: '#c0c1c1', al: 'left' },
+        { p: n.D[1], t: 'agent · k8s-pod', dx: 0.1, dy: 0.012, c: '#c0c1c1', al: 'left' }, { p: n.D[0], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' }, { p: n.D[2], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' }];
     }
     if (k === 3) {
+      // two suspects: an AI-specific one (RAG accepts unvetted documents) and an infrastructure one (agent pod with broad rights)
       dimNet(false);
       ring(n.T, 0.17, 2, 0.95, 70); ring(n.T, 0.1, 2, 0.6, 34);
       [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach((v) => line([n.T[0] + v[0] * 0.21, n.T[1] + v[1] * 0.21], [n.T[0] + v[0] * 0.32, n.T[1] + v[1] * 0.32], 2, 0.95, 9));
-      node(n.T, 4, 0.95); me();
-      F.labels = [{ p: n.T, t: 'svc :8443 · ' + 'SUSPECT', dx: 0.36, dy: 0.012, c: '#268bd2', al: 'left', key: 'suspect' }, { p: n.P, t: 'pentester', dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' }];
+      node(n.T, 4, 0.95);
+      ring(n.D[1], 0.13, 2, 0.7, 48); node(n.D[1], 4, 0.9);
+      edge(n.T, n.D[1], 2, 0.5, 50);
+      me();
+      F.labels = [{ p: n.T, t: '', dx: 0.36, dy: 0.012, c: '#268bd2', al: 'left', tk: 'sRag' }, { p: n.D[1], t: '', dx: 0, dy: -0.21, c: '#268bd2', al: 'center', tk: 'sPod' }, { p: n.P, t: 'pentester', dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' }];
     }
     if (k === 4) {
+      // manual testing on both: hidden instructions in a document; what the pod's service account may do
       dimNet(false);
       ring(n.T, 0.13, 3, 0.95, 54); ring(n.T, 0.2, 2, 0.35, 40); node(n.T, 4, 0.9);
-      me(0.55); swarm(1, 2, 210);
-      F.agents = [{ name: '', pts: loop(n.T, 0.17), o: 0, hop: 0.85 }];
-      F.labels = [{ p: n.T, t: 'sql-injection', dx: 0.25, dy: 0.012, c: '#dc322f', al: 'left' }, { p: n.P, t: 'pentester', dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' }];
+      ring(n.D[1], 0.11, 3, 0.8, 44); node(n.D[1], 4, 0.85);
+      me(0.5); swarm(1, 2, 150); swarm(2, 2, 110);
+      F.agents = [{ name: '', pts: loop(n.T, 0.17), o: 0, hop: 0.85 }, { name: '', pts: loop(n.D[1], 0.14), o: 0.5, hop: 0.95 }];
+      F.labels = [{ p: n.T, t: 'indirect prompt injection', dx: 0.25, dy: 0.012, c: '#dc322f', al: 'left' }, { p: n.D[1], t: 'serviceaccount: cluster-admin', dx: 0, dy: -0.2, c: '#dc322f', al: 'center' }, { p: n.P, t: 'pentester', dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' }];
     }
     if (k === 5) {
-      // the pentester drives the exploit: his swarm leaves him, pushes through svc -> db -> server,
-      // and the path only turns red where it has passed
-      const path = this.smoothPath([n.P, n.T, this.mid(n.T, n.D[1]), n.D[1], this.mid(n.D[1], n.X[0]), n.X[0]]);
+      // the pentester drives the chain: poisoned document via upload -> RAG -> agent runs a command in its pod -> pod token is cluster-admin -> k8s API secrets.
+      // the path only turns red where his swarm has passed
+      const path = this.smoothPath([n.P, [-1.2, 0.2], n.S[3], this.mid(n.S[3], n.T), n.T, this.mid(n.T, n.D[1]), n.D[1], this.mid(n.D[1], n.X[0]), n.X[0]]);
       dimNet(true); me(0.55);
       reveal = (x, y, z) => Math.min(0.95, this.pathFrac(path, x, y, z) * 0.92);
       ring(n.T, 0.13, 3, 0.8, 44); node(n.T, 3, 0.9);
-      edge(n.T, n.D[1], 3, 0.85, 70); edge(n.D[1], n.X[0], 3, 0.85, 70);
-      node(n.D[1], 3, 0.8); ring(n.X[0], 0.17, 3, 0.95, 70); ring(n.X[0], 0.3, 3, 0.3, 55); node(n.X[0], 3, 0.95, 0.075);
+      edge(n.S[3], n.T, 3, 0.85, 70); edge(n.T, n.D[1], 3, 0.85, 70); edge(n.D[1], n.X[0], 3, 0.85, 70);
+      ring(n.D[1], 0.11, 3, 0.8, 40); node(n.D[1], 3, 0.8); ring(n.X[0], 0.17, 3, 0.95, 70); ring(n.X[0], 0.3, 3, 0.3, 55); node(n.X[0], 3, 0.95, 0.075);
       reveal = null;
       swarm(1, 2, 200);
       F.rv = 4.6; F.haze = 0.1;
@@ -341,7 +350,7 @@ class Component extends DCLogic {
         if (pr < 1) { const e = pr < 0.5 ? 2 * pr * pr : 1 - Math.pow(-2 * pr + 2, 2) / 2; const q = this.pathAt(path, e); return [q[0] + Math.sin(t * 5.1) * 0.025, q[1] + Math.cos(t * 4.3) * 0.025, q[2]]; }
         const X = n.X[0], a = t * 1.9; return [X[0] + Math.cos(a) * 0.17, X[1] + Math.sin(a) * 0.13, (X[2] || 0) + Math.sin(a * 2) * 0.08];
       } }];
-      F.labels = [{ p: n.X[0], t: 'uid=0(root)', dx: 0, dy: -0.38, c: '#dc322f', al: 'center', key: 'root' }, { p: n.T, t: 'svc :8443', dx: -0.17, dy: 0.012, c: '#979899', al: 'right' }, { p: n.P, t: 'pentester', dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' }];
+      F.labels = [{ p: n.X[0], t: 'kubectl get secrets -A', dx: 0.1, dy: -0.34, c: '#dc322f', al: 'right', key: 'root' }, { p: n.X[0], t: 'k8s-api', dx: 0, dy: 0.36, c: '#c0c1c1', al: 'center' }, { p: n.S[3], t: 'docs-upload', dx: -0.1, dy: 0.012, c: '#979899', al: 'right' }, { p: n.D[1], t: 'agent · k8s-pod', dx: 0.1, dy: -0.12, c: '#c0c1c1', al: 'left' }, { p: n.T, t: 'rag · ingest', dx: -0.17, dy: 0.012, c: '#8fc0e8', al: 'right' }, { p: n.P, t: 'pentester', dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' }];
     }
     if (k === 6) {
       // glass panel; the swarm swirls over it and the report appears line by line where it has been
@@ -417,7 +426,7 @@ class Component extends DCLogic {
     const groups = []; P.rows.forEach((r, i) => { const g = groups.find((q) => q.n === r[0]); if (g) g.c++; else groups.push({ n: r[0], c: 1, i: i }); });
     let gx = L0; groups.forEach((g) => { const c = sevC(g.i), t = '■ ' + g.c + ' ' + g.n; T(2, gx, -0.48, 0.04, 500, t, c[0], c[1]); gx += W(t, 0.04) + 0.07; });
     T(3, L0, -0.3, 0.036, 500, P.cols[0], '#7d7e7f', 0); T(3, L0 + 0.2, -0.3, 0.036, 500, P.cols[1], '#7d7e7f', 0); T(3, L0 + 0.52, -0.3, 0.036, 500, P.cols[2], '#7d7e7f', 0);
-    P.rows.forEach((r, i) => { const y = -0.14 + i * 0.17, c = sevC(i); T(4 + i, L0, y, 0.038, 400, 'F-0' + (i + 1), '#979899', 0); T(4 + i, L0 + 0.2, y, 0.038, 700, r[0], c[0], c[1]); T(4 + i, L0 + 0.52, y, 0.05, 400, r[1], '#e4e5e5', 4); });
+    P.rows.forEach((r, i) => { const y = -0.14 + i * 0.17, c = sevC(i); T(4 + i, L0, y, 0.038, 400, r[2] || ('F-0' + (i + 1)), '#979899', 0); T(4 + i, L0 + 0.2, y, 0.038, 700, r[0], c[0], c[1]); T(4 + i, L0 + 0.52, y, 0.05, 400, r[1], '#e4e5e5', 4); });
     T(9, L0, 0.76, 0.038, 400, P.foot, '#979899', 0);
     T(10, L0, 0.88, 0.04, 500, '✓ ' + L.review, '#268bd2', 2);
     const rules = [{ li: 1.6, y: -0.6 }, { li: 3.5, y: -0.235 }, { li: 8.7, y: 0.665 }];
@@ -696,6 +705,13 @@ class Component extends DCLogic {
       this.drawDots(ctx, this.bk2);
       this.drawReport(ctx, F.report, projR, S);
     }
+    // legend: AI components vs. Kubernetes / infrastructure
+    if (this.k >= 2 && this.k <= 5) {
+      const lg = this.T().lb.lg; ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.textBaseline = 'middle'; ctx.textAlign = 'right';
+      const x = this.W - 28; let y = 30; ctx.globalAlpha = 0.85;
+      [['#8fc0e8', lg[0]], ['#c0c1c1', lg[1]]].forEach((it) => { ctx.fillStyle = '#979899'; ctx.fillText(it[1], x, y); const w = ctx.measureText(it[1]).width; ctx.fillStyle = it[0]; ctx.beginPath(); ctx.arc(x - w - 10, y, 3.5, 0, 6.2832); ctx.fill(); y += 20; });
+      ctx.globalAlpha = 1;
+    }
     // labels
     const la = Math.max(0, Math.min(1, (now - this.t0 - 1500) / 700));
     if (la > 0) {
@@ -704,7 +720,8 @@ class Component extends DCLogic {
       ctx.font = '500 12px "IBM Plex Mono", monospace'; ctx.textBaseline = 'middle';
       F.labels.forEach((lb) => {
         let txt = lb.t;
-        if (lb.key === 'suspect') txt = 'svc :8443 · ' + L.suspect;
+        if (lb.tk) txt = L[lb.tk];
+        if (lb.key === 'suspect') txt = 'rag · ingest · ' + L.suspect;
         if (lb.key === 'me') txt = L.me;
         if (lb.key === 'report') txt = L.report;
         if (lb.key === 'review') { txt = '✓ ' + L.review; if (this.tSince < 0.97 * this.RV) return; }
