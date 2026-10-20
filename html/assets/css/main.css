@@ -886,10 +886,27 @@ figure[data-animation]:not(.anim--js) [data-panel] + [data-caption] { margin-bot
 figure[data-animation]:not(.anim--js) [data-aha="lens"] .anim-lens__rendered { display: none; }
 figure[data-animation]:not(.anim--js) [data-aha="lens"] [data-raw] { padding: 14px; background: #fff8f0; }
 
+/* Comparison: in the storyboard both states stand one after the other, each
+   preceded by its label as a short muted line, like the variants of a
+   switched chapter; the label comes from the state's attribute. */
+figure[data-animation]:not(.anim--js) [data-aha="compare"] > [data-state]::before {
+  content: attr(data-label);
+  display: block;
+  margin: 0 0 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+figure[data-animation]:not(.anim--js) [data-aha="compare"] > [data-state] + [data-state] { margin-top: 16px; }
+
 /* Prompt surface: a labelled sheet where two blocks merge into one */
 .surface--prompt { align-items: center; justify-content: center; gap: 14px; padding: 18px; background: #f6f8fa; }
 .surface__promptlabel { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #59636e; }
 .surface__merge { width: min(640px, 100%); display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 1px solid #d8dee4; border-radius: 12px; background: #ffffff; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08); }
+/* The retrieved blocks of a context view, grouped so a lines cue brings them in one by one under the question */
+.surface__retrieved { display: flex; flex-direction: column; gap: 12px; }
 .surface__block { padding: 10px 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
 .surface__block--intended { background: rgba(0, 110, 193, 0.08); border-left: 3px solid var(--accent-light-bg); color: #0b4f8a; }
 .surface__block--data { background: #f6f8fa; border-left: 3px solid #8c959f; }
@@ -919,8 +936,68 @@ figure[data-animation]:not(.anim--js) [data-cue="hide"] { display: none; }
 figure[data-animation]:not(.anim--js) [data-cue="show"][data-for] { display: none; }
 figure[data-animation]:not(.anim--js) [data-cue="swap"] > :first-child { display: none; }
 
+/* Assistant chat surface: light; a header with the assistant and the
+   account, the conversation, the sources bar under the answer, the input
+   field with its send button; a configuration line and a status strip when a
+   chapter shows a setting of the assistant and what it did with it. */
+.surface--chat { background: #ffffff; color: #1f2328; }
+.surface__chathead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px; padding: 12px 18px; border-bottom: 1px solid #e1e4e8; font-size: 14px; }
+.surface__chatlog { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 12px; padding: 14px 18px; overflow: auto; }
+.surface__bubble { max-width: 85%; padding: 9px 13px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+.surface__bubble--user { align-self: flex-end; background: #e8eef7; border-bottom-right-radius: 4px; }
+.surface__bubble--assistant { align-self: flex-start; min-width: 60%; background: #f3f4f6; border-bottom-left-radius: 4px; }
+.surface__answer p { margin: 0 0 8px; }
+.surface__answer p:last-child { margin-bottom: 0; }
+/* Provenance line under a paragraph of the answer: where the sentence came
+   from and whether the person asking may read there; the line for a source
+   the person may not read is the block of a raw layer, alarm tint and colour */
+.surface__from { display: block; margin: -4px 0 10px; font-size: 12px; line-height: 1.5; color: #6e7781; }
+.surface__from--harm { padding: 3px 8px; border-radius: 4px; background: var(--alert-tint); color: var(--alert); }
+.surface__link { color: #0969da; text-decoration: underline; }
+.surface__rawtext { margin: 0; font-family: var(--font-mono); font-size: 12px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.surface__sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px solid #e1e4e8; font-size: 12px; }
+.surface__sourceslabel { flex-basis: 100%; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #6e7781; }
+.surface__source { display: inline-flex; flex-wrap: wrap; gap: 0 6px; align-items: baseline; padding: 4px 10px; border: 1px solid #d8dee4; border-radius: 999px; background: #ffffff; color: #1f2328; }
+.surface__origin { color: #6e7781; }
+.surface__origin::before { content: "· "; }
+.surface__source--harm { border-color: var(--alert); background: var(--alert-tint); color: var(--alert); }
+.surface__source--harm .surface__origin { color: var(--alert); }
+.surface__source--ok { border-color: var(--accent-light-bg); background: rgba(0, 110, 193, 0.08); color: var(--accent-light-bg); }
+.surface__source--ok .surface__origin { color: var(--accent-light-bg); }
+.surface__sourcetag { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.surface__config { margin: 0 18px; padding: 6px 12px; border: 1px solid #e1e4e8; border-radius: 6px; background: #fafbfc; font-size: 12px; color: #4b5563; }
+.surface__status { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 6px 18px 0; padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; }
+.surface__status--harm { background: var(--alert-tint); color: var(--alert); }
+.surface__status--ok { background: rgba(0, 110, 193, 0.08); color: var(--accent-light-bg); }
+.surface__outcome { margin: 6px 18px 0; font-size: 13px; color: #4b5563; }
+.surface__outcome--harm { color: var(--alert); font-weight: 600; }
+.surface__chatinput { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding: 10px 18px; border-top: 1px solid #e1e4e8; }
+.surface__inputfield { flex: 1 1 auto; min-height: 36px; padding: 7px 12px; border: 1px solid #d8dee4; border-radius: 8px; font-size: 14px; color: #1f2328; }
+.surface__btn--send { background: #e2e5ea; border-color: #d0d7de; color: #1f2328; }
+
 @media (max-width: 720px) {
   .surface__logts { display: none; }
+  /* The chat and the context view tighten on phones: the stage keeps its
+     height range, so the header shrinks to one line, texts drop a size and
+     paddings narrow, and a chapter's conversation stands inside the stage
+     without scrolling. */
+  .surface__chathead { padding: 10px 12px; font-size: 13px; }
+  .surface__chatlog { gap: 8px; padding: 8px 12px; }
+  .surface__bubble { max-width: 100%; padding: 8px 11px; font-size: 13px; }
+  .surface__answer p { margin-bottom: 6px; }
+  .surface__from { margin: -2px 0 8px; font-size: 11px; }
+  .surface__sources { gap: 4px; margin-top: 6px; padding-top: 5px; font-size: 11px; }
+  .surface__source { padding: 2px 8px; }
+  .surface__config { margin: 0 12px; padding: 5px 10px; font-size: 11px; }
+  .surface__outcome { margin: 4px 12px 0; font-size: 12px; }
+  .surface__chatinput { margin-top: 8px; padding: 8px 12px; }
+  .surface__inputfield { min-height: 32px; padding: 5px 10px; font-size: 13px; }
+  .surface--prompt { gap: 10px; padding: 12px; }
+  .surface__promptlabel { font-size: 10px; letter-spacing: .1em; }
+  .surface__merge { gap: 8px; padding: 10px; }
+  .surface__retrieved { gap: 8px; }
+  .surface__block { padding: 8px 10px; font-size: 12px; }
+  .surface__blocklabel { margin-bottom: 4px; font-size: 10px; }
 }
 
 /* Article animation: the player's stage, built by player.js once it enhances
@@ -1107,6 +1184,9 @@ figure[data-animation].anim--js [data-aha="lens"] .anim-lens__rendered { display
 figure[data-animation].anim--js [data-aha="lens"] [data-raw] { display: none; }
 
 @media (max-width: 720px) {
+  /* The stage keeps its height on phones; a narrower rim gives the surface
+     the room the header and the input field take. */
+  .anim-frame [data-chapter] { padding: 10px; }
   .anim-chapters { min-width: 0; }
   .anim-chapter { flex: 1 1 0; min-width: 0; }
   .anim-chapter__label { overflow: hidden; text-overflow: ellipsis; }
@@ -1160,7 +1240,8 @@ figure[data-animation].anim--js .surface__btn.is-pressed { transform: translateY
   figure[data-animation].anim--js :not(.anim-off),
   figure[data-animation].anim--js .anim-swap > *,
   figure[data-animation].anim--js .surface__merge > .surface__block,
-  figure[data-animation].anim--js .surface__btn { transition: none; }
+  figure[data-animation].anim--js .surface__btn,
+  figure[data-animation].anim--js [data-aha="compare"] > [data-state] { transition: none; }
   .anim-caret::after { animation: none; }
 }
 
@@ -1194,6 +1275,7 @@ figure[data-animation].anim--js [data-aha="lens"] [data-raw] {
   transition: opacity .3s ease;
 }
 .anim-aha {
+  width: 100%;
   max-width: 680px;
   margin: 10px auto 0;
   padding-left: 38px;
@@ -1210,6 +1292,44 @@ figure[data-animation].anim--js [data-aha="lens"] [data-raw] {
   cursor: pointer;
 }
 .anim-aha__btn:hover, .anim-aha__btn:focus { border-color: var(--accent-light-bg); }
+
+/* Article animation: the comparison (interactive moment). Both states share
+   one grid cell, so the element is as tall as the taller state; a flip is
+   the half-second crossfade of swap, and the state not shown is hidden from
+   pointer and assistive technology once the fade is over. The state buttons
+   take the pill of the switch in neutral colours, the pressed one white. */
+figure[data-animation].anim--js [data-aha="compare"] { display: grid; cursor: pointer; }
+figure[data-animation].anim--js [data-aha="compare"] > [data-state] {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .5s ease, visibility 0s linear .5s;
+}
+figure[data-animation].anim--js [data-aha="compare"]:not(.is-second) > [data-state]:first-child,
+figure[data-animation].anim--js [data-aha="compare"].is-second > [data-state]:last-child {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .5s ease, visibility 0s;
+}
+.anim-compare {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--light-line);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f1f1f1;
+}
+.anim-compare__btn {
+  min-height: 44px;
+  padding: 6px 16px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: #6a6a6a;
+  cursor: pointer;
+}
+.anim-compare__btn[aria-pressed="true"] { background: #ffffff; color: var(--light-heading); font-weight: 700; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
 
 /* Article animation: the switch (two variant buttons in the control bar).
    It sits at the right end of the bar and, when the chapters leave no room,

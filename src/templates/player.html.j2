@@ -1,12 +1,12 @@
 {#
   Player template for article animations, spec 006.
   A scene file imports these macros and calls them to build its figure; the
-  macros add the chrome (frame, chapter sections, captions, switch, lens) so a
-  scene writes only its surfaces and texts. The markup here is the contract
+  macros add the chrome (frame, chapter sections, captions, switch, lens,
+  comparison) so a scene writes only its surfaces and texts. The markup here is the contract
   the build checks and the player script rely on. Import with context so the
   macros can read the interface texts in `t`:
 
-    {% from "player.html.j2" import scene, switch, chapter, panel, caption, lens, raw with context %}
+    {% from "player.html.j2" import scene, switch, chapter, panel, caption, lens, raw, compare, state with context %}
 #}
 
 {%- macro scene(aria_label) -%}
@@ -45,4 +45,19 @@
 
 {%- macro raw() -%}
 <div data-raw>{{ caller() }}</div>
+{%- endmacro -%}
+
+{#
+  The comparison: the same region of a surface in two complete states. The
+  caller places exactly two state() children; the first is the state the
+  surface shows at first, the second is the end state.
+#}
+{%- macro compare(at, dur) -%}
+<div data-aha="compare" data-at="{{ at }}" data-for="{{ dur }}">
+{{ caller() }}
+</div>
+{%- endmacro -%}
+
+{%- macro state(id, label) -%}
+<div data-state="{{ id }}" data-label="{{ label }}">{{ caller() }}</div>
 {%- endmacro -%}

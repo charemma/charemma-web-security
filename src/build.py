@@ -45,6 +45,10 @@ CUE_END_GAP_MS = 3000
 TYPE_MAX_CHARS = 180
 CUE_EFFECTS = {"show", "hide", "swap", "type", "lines", "press", "merge"}
 CUE_NEEDS_FOR = {"type", "lines", "merge"}
+AHA_KINDS = {"lens", "compare", "reveal"}
+COMPARE_STATES = 2
+COMPARE_MIN_FOR_MS = 4000
+REVEAL_FOR_MS = (1000, 2000)
 FORBIDDEN_TAGS = {"script", "style", "canvas", "img"}
 
 
@@ -296,6 +300,33 @@ def check_chapter_captions(chapter: Element, panels: list[Element], captions: li
             raise ValueError(f"{where}: {name} must have exactly one caption, found {len(applies)}")
 
 
+def check_moment(moment: Element, where: str) -> None:
+    """The interactive moment: a known kind with data-at, data-for and the children its kind requires."""
+    kind = moment.attrs.get("data-aha")
+    if kind not in AHA_KINDS:
+        raise ValueError(f"{where}: unknown interactive moment '{kind}', expected one of {sorted(AHA_KINDS)}")
+    if not (moment.has("data-at") and moment.has("data-for")):
+        raise ValueError(f"{where}: the {kind} lacks data-at or data-for")
+    dur = int(moment.attrs["data-for"])
+    if kind == "lens" and not any(c.has("data-raw") for c in moment.descendants()):
+        raise ValueError(f"{where}: the lens has no data-raw child")
+    if kind == "compare":
+        states = [c for c in moment.children if c.has("data-state")]
+        if len(states) != COMPARE_STATES:
+            raise ValueError(f"{where}: the compare must have exactly {COMPARE_STATES} data-state children, found {len(states)}")
+        for state in states:
+            if not state.attrs.get("data-label"):
+                raise ValueError(f"{where}: compare state '{state.attrs.get('data-state')}' lacks data-label")
+        if dur < COMPARE_MIN_FOR_MS:
+            raise ValueError(f"{where}: the compare's data-for is {dur} ms, at least {COMPARE_MIN_FOR_MS} ms are needed")
+    if kind == "reveal":
+        if not any(c.has("data-covered") for c in moment.descendants()):
+            raise ValueError(f"{where}: the reveal has no data-covered child")
+        low, high = REVEAL_FOR_MS
+        if not low <= dur <= high:
+            raise ValueError(f"{where}: the reveal's data-for is {dur} ms, outside {low}-{high} ms")
+
+
 def check_scene(figure_html: str, path: Path) -> None:
     """Fail, with file and reason, on every condition spec 006 lists for the build."""
     root = parse_html(figure_html)
@@ -324,14 +355,11 @@ def check_scene(figure_html: str, path: Path) -> None:
         if value not in variant_ids:
             raise ValueError(f"{where0}: data-variant '{value}' is not one of the switch's variants")
 
-    lenses = [el for el in root.descendants() if el.has("data-aha")]
-    if len(lenses) != 1:
-        raise ValueError(f"{where0}: the scene must have exactly one interactive moment, found {len(lenses)}")
-    lens = lenses[0]
-    if not any(c.has("data-raw") for c in lens.descendants()):
-        raise ValueError(f"{where0}: the lens has no data-raw child")
-    if not (lens.has("data-at") and lens.has("data-for")):
-        raise ValueError(f"{where0}: the lens lacks data-at or data-for")
+    moments = [el for el in root.descendants() if el.has("data-aha")]
+    if len(moments) != 1:
+        raise ValueError(f"{where0}: the scene must have exactly one interactive moment, found {len(moments)}")
+    moment = moments[0]
+    check_moment(moment, where0)
 
     chapters = [el for el in root.descendants() if el.has("data-chapter")]
     if not CHAPTERS_MIN <= len(chapters) <= CHAPTERS_MAX:
@@ -377,10 +405,10 @@ def check_scene(figure_html: str, path: Path) -> None:
             at = int(cue.attrs["data-at"])
             dur = int(cue.attrs["data-for"]) if cue.has("data-for") else None
             by_group.setdefault(nearest_variant(cue), []).append((at, cue_end(effect, at, dur), effect))
-        if lens in chapter.descendants():
-            at = int(lens.attrs["data-at"])
-            dur = int(lens.attrs["data-for"])
-            by_group.setdefault(nearest_variant(lens), []).append((at, at + dur, "lens"))
+        if moment in chapter.descendants():
+            at = int(moment.attrs["data-at"])
+            dur = int(moment.attrs["data-for"])
+            by_group.setdefault(nearest_variant(moment), []).append((at, at + dur, moment.attrs["data-aha"]))
         for variant, cues in by_group.items():
             scope = where + (f" [{variant}]" if variant else "")
             check_cue_group(cues, duration, scope)

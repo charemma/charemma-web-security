@@ -5,7 +5,8 @@
 //
 // This file is built in the order the spec sets. Core here: the frame, the
 // control bar, the chapter bar, play/pause/replay, autoplay on view, pause off
-// view, and reduced motion. Cues, the lens and the switch are added on top.
+// view, and reduced motion. Cues, the interactive moment (lens, comparison)
+// and the switch are added on top.
 
 const FIGURE = 'figure[data-animation]';
 const ENHANCED = 'anim--js';
@@ -223,20 +224,31 @@ function create(figure) {
   function frameUpdate(chapter) {
     renderControls(chapter);
     paintCues(chapter);
-    maybePaintLens();
+    maybePaintMoment();
   }
 
-  // The lens (interactive moment, spec 006): a round reveal of the raw layer.
-  // Auto-demonstration the first time the chapter plays in a playback; the
-  // pointer takes precedence at any time, stops the demonstration and pauses
-  // the player on the chapter. A fallback button under the caption toggles
-  // the full raw layer for keyboard and screen reader. Reduced motion shows
-  // the raw layer and lets the button toggle it, with no pointer follow.
-  const lensEl = figure.querySelector('[data-aha="lens"]');
-  const lensIdx = lensEl ? chapters.findIndex((c) => c.section.contains(lensEl)) : -1;
+  // The interactive moment (spec 006): one element with data-aha naming its
+  // kind. Its demonstration runs the first time its chapter plays within a
+  // playback; taking the element stops the demonstration and pauses the
+  // player on the chapter. seen: the demonstration has started in this
+  // playback, so a return to the chapter shows the end state and waits.
+  // over: the demonstration has finished or the reader took the element.
+  const ahaEl = figure.querySelector('[data-aha]');
+  const ahaKind = ahaEl ? ahaEl.dataset.aha : null;
+  const ahaIdx = ahaEl ? chapters.findIndex((c) => c.section.contains(ahaEl)) : -1;
+  const ahaAt = ahaEl ? Number(ahaEl.dataset.at) : 0;
+  const ahaDur = ahaEl ? Number(ahaEl.dataset.for) : 0;
+  const demo = { seen: false, over: false };
+
+  // The lens: a round reveal of the raw layer. The pointer takes precedence
+  // at any time. A fallback button under the caption toggles the full raw
+  // layer for keyboard and screen reader. Reduced motion shows the raw layer
+  // and lets the button toggle it, with no pointer follow.
+  const lensEl = ahaKind === 'lens' ? ahaEl : null;
+  const lensIdx = lensEl ? ahaIdx : -1;
   const lensRaw = lensEl ? lensEl.querySelector('[data-raw]') : null;
-  const lensAt = lensEl ? Number(lensEl.dataset.at) : 0;
-  const lensDur = lensEl ? Number(lensEl.dataset.for) : 0;
+  const lensAt = ahaAt;
+  const lensDur = ahaDur;
   // 160 px diameter, within the 140 to 180 px the spec sets; the
   // demonstration spends two thirds of its time travelling across the
   // element at the height of the hidden part, like a gaze reading the
@@ -247,10 +259,6 @@ function create(figure) {
   const LENS_DIP = 0.2;
   const lensMark = lensRaw ? lensRaw.querySelector('.anim-mark') : null;
   const pointer = { active: false, x: 0, y: 0 };
-  // seen: the demonstration has started in this playback, so a return to
-  // the chapter shows the raw layer and waits. over: the demonstration has
-  // finished or the reader took the lens, so the raw layer stands revealed.
-  const demo = { seen: false, over: false };
   let revealed = lensEl ? reduced.matches : false;
   let lensRing = null;
   let lensButton = null;
@@ -337,13 +345,87 @@ function create(figure) {
     lensFull();
   }
 
+  // The comparison: the same region of a surface in two states, the first
+  // shown at first. The demonstration flips to the second state at data-at,
+  // back at the midpoint of data-for and to the second again at its end,
+  // where it stays; each flip is the crossfade of swap, in the stylesheet.
+  // A click or tap on the element flips it, and so do two state buttons
+  // under the caption, which are also the keyboard and screen reader
+  // fallback: they take the player to the chapter, paused. Under reduced
+  // motion the element stands in its end state and only the buttons flip it.
+  const compareEl = ahaKind === 'compare' ? ahaEl : null;
+  const compareStates = compareEl ? [...compareEl.children].filter((c) => c.hasAttribute('data-state')) : [];
+  const COMPARE_FIRST = 0;
+  const COMPARE_SECOND = 1;
+  // The state the reader or the buttons chose; null while the demonstration
+  // or the end state decides.
+  let compareChosen = null;
+  let compareButtons = [];
+
+  function compareDemoState(t) {
+    if (t < ahaAt) return COMPARE_FIRST;
+    demo.seen = true;
+    if (t < ahaAt + ahaDur / 2) return COMPARE_SECOND;
+    if (t < ahaAt + ahaDur) return COMPARE_FIRST;
+    demo.over = true;
+    return COMPARE_SECOND;
+  }
+
+  function compareShownState() {
+    return compareEl.classList.contains('is-second') ? COMPARE_SECOND : COMPARE_FIRST;
+  }
+
+  function paintCompare(t) {
+    let shown;
+    if (compareChosen != null) shown = compareChosen;
+    else if (reduced.matches || demo.over) shown = COMPARE_SECOND;
+    else shown = compareDemoState(t);
+    compareEl.classList.toggle('is-second', shown === COMPARE_SECOND);
+    compareStates.forEach((stateEl, i) => stateEl.setAttribute('aria-hidden', i === shown ? 'false' : 'true'));
+    compareButtons.forEach((button, i) => button.setAttribute('aria-pressed', i === shown ? 'true' : 'false'));
+  }
+
+  // Taking the comparison: show the chosen state, stop the demonstration for
+  // this playback and hold the chapter by pausing the player.
+  function takeCompare(target) {
+    if (state.index !== ahaIdx) enter(ahaIdx);
+    demo.seen = true;
+    demo.over = true;
+    compareChosen = target;
+    if (state.playing) pause();
+    else render();
+  }
+
+  function setupCompare() {
+    if (!compareEl) return;
+    const host = el('div', 'anim-aha');
+    const group = el('div', 'anim-compare', host);
+    group.setAttribute('role', 'group');
+    compareButtons = compareStates.map((stateEl, i) => {
+      const button = el('button', 'anim-compare__btn', group);
+      button.type = 'button';
+      button.textContent = stateEl.dataset.label;
+      button.addEventListener('click', () => takeCompare(i));
+      return button;
+    });
+    figure.append(host);
+    compareEl.addEventListener('click', () => {
+      if (reduced.matches || state.index !== ahaIdx) return;
+      takeCompare(compareShownState() === COMPARE_SECOND ? COMPARE_FIRST : COMPARE_SECOND);
+    });
+  }
+
   function resetDemo() {
     demo.seen = false;
     demo.over = false;
+    compareChosen = null;
   }
 
-  function maybePaintLens() {
-    if (lensEl && state.index === lensIdx) paintLens(effectiveElapsed(chapters[lensIdx]));
+  function maybePaintMoment() {
+    if (!ahaEl || state.index !== ahaIdx) return;
+    const t = effectiveElapsed(chapters[ahaIdx]);
+    if (lensEl) paintLens(t);
+    else if (compareEl) paintCompare(t);
   }
 
   function setupLens() {
@@ -367,7 +449,7 @@ function create(figure) {
       pause();
       revealed = !revealed;
       relabel();
-      maybePaintLens();
+      maybePaintMoment();
     });
     figure.append(host);
 
@@ -383,11 +465,11 @@ function create(figure) {
       demo.seen = true;
       demo.over = true;
       if (state.playing) pause();
-      else maybePaintLens();
+      else maybePaintMoment();
     }
     function releaseLens() {
       pointer.active = false;
-      maybePaintLens();
+      maybePaintMoment();
     }
     lensEl.addEventListener('pointerdown', takeLens);
     lensEl.addEventListener('pointermove', takeLens);
@@ -437,7 +519,7 @@ function create(figure) {
     renderControls(chapter);
     renderCaption(chapter);
     paintCues(chapter);
-    maybePaintLens();
+    maybePaintMoment();
   }
 
   function enter(index) {
@@ -499,12 +581,13 @@ function create(figure) {
     else playFrom(null);
   }
 
-  // A chapter click plays that chapter from its start, except the lens's
-  // chapter once its demonstration has run in this playback: then it is
-  // shown with the raw layer revealed and the player waits.
+  // A chapter click plays that chapter from its start, except the
+  // interactive moment's chapter once its demonstration has run in this
+  // playback: then it is shown in its end state and the player waits.
   function selectChapter(index) {
-    if (index === lensIdx && demo.seen) {
+    if (index === ahaIdx && demo.seen) {
       demo.over = true;
+      compareChosen = null;
       enter(index);
       pause();
       return;
@@ -550,6 +633,7 @@ function create(figure) {
 
   buildSwitch();
   setupLens();
+  setupCompare();
   enter(0);
 
   // Autoplay once the figure is a third in view; pause off view or on a hidden
