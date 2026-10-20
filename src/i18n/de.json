@@ -47,8 +47,8 @@
     "eyebrow": "02 / vorgehen",
     "title_a": "Agenten kartieren. ",
     "title_b": "Ich gehe rein.",
-    "lead": "KI-Agenten kartieren die Angriffsfläche Ihrer KI-Anwendung und feuern breit gestreute Testanfragen ab. Dann übernehme ich: die eine Kette, die wirklich Schaden anrichtet – vom präparierten Dokument bis in den Kubernetes-Cluster, manuell und reproduzierbar.",
-    "note": "Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert."
+    "lead": "KI-Agenten kartieren Ihre Angriffsfläche und testen breit und automatisiert. Ich prüfe Befunde manuell und verfolge ausnutzbare Ketten kontrolliert im vereinbarten Rahmen. Sie erhalten einen Bericht mit reproduzierbaren Nachweisen und konkreten Fixes.",
+    "note": "Die Animation folgt einem echten Black-Box-Assessment einer KI-Anwendung, vereinfacht und anonymisiert."
   },
   "engagement": {
     "phase": "PHASE",
