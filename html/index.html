@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/assets/css/main.css?v=bc47fabeac">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-  <script type="module" src="/assets/js/engagement.js?v=bd42420e05"></script>
+  <script type="module" src="/assets/js/engagement.js?v=8a7a69aaa5"></script>
 </head>
 <body class="page-dark">
   <div class="site-header-bar">
@@ -97,31 +97,31 @@
           <h2 class="section-title">Agenten kartieren. <span class="accent">Ich gehe rein.</span></h2>
         </div>
         <div class="approach__text">
-          <p class="approach__lead">KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.</p>
+          <p class="approach__lead">KI-Agenten kartieren die Angriffsfläche Ihrer KI-Anwendung und feuern breit gestreute Testanfragen ab. Dann übernehme ich: die eine Kette, die wirklich Schaden anrichtet – vom präparierten Dokument bis in den Kubernetes-Cluster, manuell und reproduzierbar.</p>
         </div>
       </div>
       <div class="walk" data-engagement>
-        <script type="application/json" data-engagement-data>{"steps": [{"cmd": "ai-recon start --scope \"*.[redacted].de\" --agents osint,dns-enum", "hit": "Subdomains \u0026 Technologien erfasst", "mode": "ai", "rail": "info \u00b7 passiv", "title": "Informationsbeschaffung"}, {"cmd": "ai-recon add --agents port-scanning,service-discovery", "hit": "Hosts, Ports \u0026 Dienste kartiert", "mode": "ai", "rail": "info \u00b7 aktiv", "title": "Informationsbeschaffung"}, {"cmd": "ai-recon brief --to me \u0026\u0026 nmap -sV -sC -p 8443 $SUSPECT", "hit": "Verd\u00e4chtiger Dienst", "mode": "manual", "rail": "analyse", "title": "Analyse"}, {"cmd": "burpsuite --project-file=engagement.burp", "hit": "SQL-Injection + Fehlkonfiguration", "mode": "manual", "rail": "manual testing", "title": "Manual Testing"}, {"cmd": "python3 poc.py --target svc.[redacted].de", "hit": "Remote Code Execution", "mode": "manual", "rail": "exploit", "title": "Exploit"}, {"cmd": "ai-report draft --findings ./loot \u0026\u0026 review", "hit": "Bericht mit Fixes \u00fcbergeben", "mode": "assist", "rail": "reporting", "title": "Reporting"}], "texts": {"labels": {"me": "pentester", "review": "human review", "suspect": "verd\u00e4chtig"}, "modes": {"ai": "AI-DRIVEN WITH SUBAGENTS", "assist": "AI-ASSISTED \u00b7 HUMAN REVIEW", "manual": "MANUELL"}, "phase": "PHASE", "report": {"cols": ["ID", "SCHWERE", "BEFUND"], "conf": "VERTRAULICH", "foot": "Jeder Fund mit PoC, Risiko und konkretem Fix.", "meta": "Scope: *.[redacted].de \u00b7 Black-Box \u00b7 Okt 2026", "rows": [["KRITISCH", "RCE \u00b7 svc :8443"], ["KRITISCH", "SQL-Injection \u00b7 /login"], ["HOCH", "k8s-Ingress offen"], ["MITTEL", "TLS veraltet \u00b7 vpn"], ["NIEDRIG", "Header fehlen \u00b7 www"]], "title": "PENTEST-BERICHT"}}}</script>
-        <canvas class="walk__canvas" data-canvas role="img" aria-label="Animation: Ein Partikelschwarm formt nacheinander Netzwerkkarte, Ziel, Angriffspfad und Bericht eines Penetrationstests."></canvas>
+        <script type="application/json" data-engagement-data>{"steps": [{"cmd": "ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint", "hit": "Eing\u00e4nge, Modell \u0026 Tools erfasst", "mode": "ai", "rail": "angriffsfl\u00e4che", "title": "Angriffsfl\u00e4che"}, {"cmd": "ai-probe run --suite owasp-llm --agents jailbreak,leak,injection,tool-enum", "hit": "Auff\u00e4llig: Injection \u00fcber Upload, Tool-Zugriff im Pod", "mode": "ai", "rail": "breitentest", "title": "Breitentest"}, {"cmd": "ai-recon brief --to me \u0026\u0026 triage --chain upload,rag,agent-pod", "hit": "Zwei Ziele: RAG-Ingestion und Agent-Pod", "mode": "manual", "rail": "analyse", "title": "Analyse"}, {"cmd": "python3 craft_doc.py --hidden-instructions -o angebot.pdf", "hit": "Indirect Prompt Injection, Pod mit cluster-admin", "mode": "manual", "rail": "manual testing", "title": "Manual Testing"}, {"cmd": "curl -F file=@angebot.pdf https://app.[redacted].ai/upload", "hit": "\u00dcber den Agenten in den Cluster: Secrets offen", "mode": "manual", "rail": "exploit", "title": "Exploit"}, {"cmd": "ai-report draft --map owasp-llm \u0026\u0026 review", "hit": "Bericht mit Fixes \u00fcbergeben", "mode": "assist", "rail": "reporting", "title": "Reporting"}], "texts": {"labels": {"legend": ["KI-Komponente", "Kubernetes / Infrastruktur"], "me": "pentester", "pod": "agent-pod \u00b7 zu viele Rechte?", "rag": "rag \u00b7 ingest \u00b7 KI-spezifisch", "review": "human review"}, "modes": {"ai": "AI-DRIVEN WITH SUBAGENTS", "assist": "AI-ASSISTED \u00b7 HUMAN REVIEW", "manual": "MANUELL"}, "phase": "PHASE", "report": {"cols": ["ID", "SCHWERE", "BEFUND"], "conf": "VERTRAULICH", "foot": "Jeder Fund mit PoC, Risiko und konkretem Fix.", "meta": "Scope: *.[redacted].ai \u00b7 Black-Box \u00b7 Okt 2026", "rows": [["KRITISCH", "Prompt Injection \u00b7 Upload", "LLM01"], ["KRITISCH", "Agent f\u00fchrt Befehle aus", "LLM06"], ["HOCH", "Pod mit cluster-admin", "K8S"], ["MITTEL", "System-Prompt leakt", "LLM07"], ["NIEDRIG", "Kein Rate-Limit", "LLM10"]], "title": "PENTEST-BERICHT"}}}</script>
+        <canvas class="walk__canvas" data-canvas role="img" aria-label="Animation: Ein Partikelschwarm formt nacheinander eine KI-Pipeline, das Ziel, den Angriffspfad über eine Prompt Injection und den Bericht eines Penetrationstests."></canvas>
         <div class="walk__over">
           <span class="walk__phase"><span data-phase-no>PHASE 01 / 06</span><span class="walk__mode walk__mode--ai" data-mode>AI-DRIVEN WITH SUBAGENTS</span></span>
           <div class="walk__titles">
-            <span class="walk__title" data-title>Informationsbeschaffung</span>
-            <span class="walk__hit" data-hit>Subdomains &amp; Technologien erfasst</span>
+            <span class="walk__title" data-title>Angriffsfläche</span>
+            <span class="walk__hit" data-hit>Eingänge, Modell &amp; Tools erfasst</span>
           </div>
-          <div class="walk__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon start --scope &#34;*.[redacted].de&#34; --agents osint,dns-enum</span><span class="walk__cursor" aria-hidden="true">▌</span></div>
+          <div class="walk__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint</span><span class="walk__cursor" aria-hidden="true">▌</span></div>
         </div>
         <ol class="walk__rail" aria-label="Phasen">
           <li class="walk__rail-item">
-            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 1: info · passiv" aria-current="step">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 1: angriffsfläche" aria-current="step">
               <span class="walk__track"><span class="walk__fill walk__fill--ai" data-fill></span></span>
-              <span class="walk__rail-label">info · passiv</span>
+              <span class="walk__rail-label">angriffsfläche</span>
             </button>
           </li>
           <li class="walk__rail-item">
-            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 2: info · aktiv">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 2: breitentest">
               <span class="walk__track"><span class="walk__fill walk__fill--ai" data-fill></span></span>
-              <span class="walk__rail-label">info · aktiv</span>
+              <span class="walk__rail-label">breitentest</span>
             </button>
           </li>
           <li class="walk__rail-item">

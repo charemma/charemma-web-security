@@ -1,6 +1,6 @@
 // Approach walkthrough for the "02 / vorgehen" section, spec 010: a particle
-// swarm forms each phase of a black-box assessment (map, target, attack path,
-// report), and the particles of every line dissolve into a drawn stroke once
+// swarm forms each phase of an assessment of an AI application (pipeline,
+// targets, attack path, report), and the particles of every line dissolve into a drawn stroke once
 // the picture stands. Values and formulas follow spec 010 one to one.
 
 const DURATION_MS = [7600, 8200, 6800, 7600, 7400, 13000];
@@ -21,6 +21,9 @@ const DEPTH = 4.2;
 const MAX_PIXELS = 9e6;
 const DEFAULT_REVEAL_S = 7.2;
 const AGENT_LABEL = '#8fc0e8';
+const AI_LABEL = '#8fc0e8';
+const INFRA_LABEL = '#c0c1c1';
+const LEGEND_FORMS = [2, 5];
 const MONO = '"IBM Plex Mono", monospace';
 
 // Palette: haze, agents, accent, alert, light
@@ -108,7 +111,7 @@ function buildNet() {
   n.T = n.H[2];
   n.edgesRS = n.S.map((p) => [n.R, p]);
   n.edgesSH = [[n.S[0], n.H[0]], [n.S[1], n.H[1]], [n.S[1], n.H[2]], [n.S[3], n.H[2]], [n.S[2], n.H[3]]];
-  n.edgesHD = [[n.H[0], n.D[0]], [n.H[1], n.D[1]], [n.H[2], n.D[1]], [n.H[3], n.D[2]]];
+  n.edgesHD = [[n.H[0], n.D[1]], [n.H[1], n.D[0]], [n.H[2], n.D[1]], [n.H[3], n.D[2]]];
   return n;
 }
 
@@ -153,7 +156,7 @@ function reportLayout(texts) {
   T(3, L0 + 0.52, -0.3, 0.036, 500, P.cols[2], '#7d7e7f', 0);
   P.rows.forEach((r, i) => {
     const y = -0.14 + i * 0.17, c = sevC(i);
-    T(4 + i, L0, y, 0.038, 400, 'F-0' + (i + 1), '#979899', 0);
+    T(4 + i, L0, y, 0.038, 400, r[2] || 'F-0' + (i + 1), '#979899', 0);
     T(4 + i, L0 + 0.2, y, 0.038, 700, r[0], c[0], c[1]);
     T(4 + i, L0 + 0.52, y, 0.05, 400, r[1], '#e4e5e5', 4);
   });
@@ -276,66 +279,76 @@ function build(s, k) {
     F.drift = 0.05;
   }
   if (k === 1) {
+    // attack surface: the AI app and every way content gets in (inputs) or out (tools)
     node(n.R, 4, 0.95, 0.07); n.S.forEach((p) => node(p, 4, 0.9));
     n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.55));
     n.H.forEach(ghost); n.D.forEach(ghost); n.X.forEach(ghost);
     agent(1, 1); agent(2, 1);
     F.agents = [
-      { name: 'osint', pts: [n.R, n.S[0], [-1.1, -0.5], n.S[3], [-1.1, 0.45], n.S[1]], o: 0 },
-      { name: 'dns-enum', pts: [n.S[0], n.S[1], n.S[2], n.S[3], n.S[2], n.S[1]], o: 0.5 },
+      { name: 'input-mapping', pts: [n.R, n.S[0], [-1.1, -0.5], n.S[3], [-1.1, 0.45], n.S[1]], o: 0 },
+      { name: 'model-fingerprint', pts: [n.S[0], n.S[1], n.S[2], n.S[3], n.S[2], n.S[1]], o: 0.5 },
     ];
-    F.labels = [{ p: n.R, t: '*.[redacted].de', dx: -0.02, dy: 0.13, c: '#c0c1c1', al: 'center' }]
-      .concat(['www', 'api', 'vpn', 'git'].map((t, i) => ({ p: n.S[i], t, dx: -0.1, dy: 0.012, c: '#979899', al: 'right' })));
+    F.labels = [{ p: n.R, t: 'app.[redacted].ai', dx: -0.02, dy: 0.13, c: AI_LABEL, al: 'center' }]
+      .concat(['chat', 'api', 'git', 'docs-upload'].map((t, i) => ({ p: n.S[i], t, dx: -0.1, dy: 0.012, c: '#979899', al: 'right' })));
   }
   if (k === 2) {
+    // broad automated probing: small probe swarms hammer the inputs, the pipeline behind them appears
     node(n.R, 4, 0.9, 0.07); n.S.forEach((p) => node(p, 4, 0.85)); n.H.forEach((p) => node(p, 4, 0.9));
-    n.H.forEach((p) => ring(p, 0.11, 4, 0.45, 7));
     node(n.D[1], 4, 0.75); ghost(n.D[0]); ghost(n.D[2]); n.X.forEach(ghost);
     n.edgesRS.forEach((e) => edge(e[0], e[1], 0, 0.5)); n.edgesSH.forEach((e) => edge(e[0], e[1], 0, 0.5));
-    edge(n.H[1], n.D[1], 0, 0.35, 30); edge(n.H[2], n.D[1], 0, 0.35, 30);
+    edge(n.H[0], n.D[1], 0, 0.35, 30); edge(n.H[2], n.D[1], 0, 0.35, 30);
     agent(1, 1); agent(2, 1); agent(3, 1); agent(4, 1);
     F.agents = [
-      { name: 'osint', pts: [n.R, n.S[0], n.S[3], [-1.1, 0.4]], o: 0 },
-      { name: 'dns-enum', pts: [n.S[1], n.S[2], n.S[3], n.S[0]], o: 0.3 },
-      { name: 'port-scanning', pts: [n.H[0], n.H[1], n.H[2], n.H[3], n.H[2]], o: 0.6 },
-      { name: 'service-discovery', pts: [n.H[3], n.H[1], n.D[1], n.H[0], n.H[2]], o: 0.15 },
+      { name: 'jailbreak', pts: [n.S[0], n.R, n.S[1], n.S[0]], o: 0, hop: 0.8 },
+      { name: 'leak', pts: [n.S[1], n.H[0], n.S[0], n.H[1]], o: 0.3, hop: 0.9 },
+      { name: 'injection', pts: [n.S[3], n.H[2], n.S[1], n.H[2]], o: 0.6, hop: 0.85 },
+      { name: 'tool-enum', pts: [n.H[2], n.D[1], n.H[0], n.D[1]], o: 0.15, hop: 1.1 },
     ];
-    F.labels = ['web-app', 'k8s', 'svc :8443', 'ssh'].map((t, i) => ({ p: n.H[i], t, dx: 0.15, dy: 0.012, c: '#c0c1c1', al: 'left' }))
+    F.labels = [['llm-gateway', AI_LABEL], ['vector-db', AI_LABEL], ['rag · ingest', AI_LABEL], ['ci/cd', INFRA_LABEL]]
+      .map((l, i) => ({ p: n.H[i], t: l[0], dx: 0.15, dy: 0.012, c: l[1], al: 'left' }))
       .concat([
-        { p: n.D[1], t: 'db', dx: 0.1, dy: 0.012, c: '#979899', al: 'left' },
+        { p: n.D[1], t: 'agent · k8s-pod', dx: 0.1, dy: 0.012, c: INFRA_LABEL, al: 'left' },
         { p: n.D[0], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' },
         { p: n.D[2], t: '?', dx: 0.1, dy: 0.012, c: '#6f7071', al: 'left' },
       ]);
   }
   if (k === 3) {
+    // two suspects: an AI-specific one (RAG takes unvetted documents) and an infrastructure one (agent pod with broad rights)
     dimNet(false);
     ring(n.T, 0.17, 2, 0.95, 70); ring(n.T, 0.1, 2, 0.6, 34);
     [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach((v) => line([n.T[0] + v[0] * 0.21, n.T[1] + v[1] * 0.21], [n.T[0] + v[0] * 0.32, n.T[1] + v[1] * 0.32], 2, 0.95, 9));
-    node(n.T, 4, 0.95); me();
+    node(n.T, 4, 0.95);
+    ring(n.D[1], 0.13, 2, 0.7, 48); node(n.D[1], 4, 0.9);
+    edge(n.T, n.D[1], 2, 0.5, 50);
+    me();
     F.labels = [
-      { p: n.T, dx: 0.36, dy: 0.012, c: '#268bd2', al: 'left', key: 'suspect' },
+      { p: n.T, dx: 0.36, dy: 0.012, c: '#268bd2', al: 'left', key: 'rag' },
+      { p: n.D[1], dx: 0, dy: -0.21, c: '#268bd2', al: 'center', key: 'pod' },
       { p: n.P, dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' },
     ];
   }
   if (k === 4) {
+    // manual testing on both: hidden instructions in a document; what the pod's service account may do
     dimNet(false);
     ring(n.T, 0.13, 3, 0.95, 54); ring(n.T, 0.2, 2, 0.35, 40); node(n.T, 4, 0.9);
-    me(0.55); swarm(1, 2, 210);
-    F.agents = [{ name: '', pts: loop(n.T, 0.17), o: 0, hop: 0.85 }];
+    ring(n.D[1], 0.11, 3, 0.8, 44); node(n.D[1], 4, 0.85);
+    me(0.5); swarm(1, 2, 150); swarm(2, 2, 110);
+    F.agents = [{ name: '', pts: loop(n.T, 0.17), o: 0, hop: 0.85 }, { name: '', pts: loop(n.D[1], 0.14), o: 0.5, hop: 0.95 }];
     F.labels = [
-      { p: n.T, t: 'sql-injection', dx: 0.25, dy: 0.012, c: '#dc322f', al: 'left' },
+      { p: n.T, t: 'indirect prompt injection', dx: 0.25, dy: 0.012, c: '#dc322f', al: 'left' },
+      { p: n.D[1], t: 'serviceaccount: cluster-admin', dx: 0, dy: -0.2, c: '#dc322f', al: 'center' },
       { p: n.P, dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' },
     ];
   }
   if (k === 5) {
-    // the pentester drives the exploit: the swarm leaves P, pushes through svc -> db -> server,
-    // and the path only turns red where it has passed
-    const path = smoothPath([n.P, n.T, mid(n.T, n.D[1]), n.D[1], mid(n.D[1], n.X[0]), n.X[0]]);
+    // the pentester drives the chain: poisoned document via upload -> RAG -> agent runs a command in its pod
+    // -> pod token is cluster-admin -> k8s API secrets; the path only turns red where his swarm has passed
+    const path = smoothPath([n.P, [-1.2, 0.2], n.S[3], mid(n.S[3], n.T), n.T, mid(n.T, n.D[1]), n.D[1], mid(n.D[1], n.X[0]), n.X[0]]);
     dimNet(true); me(0.55);
     reveal = (x, y, z) => Math.min(0.95, pathFrac(path, x, y, z) * 0.92);
     ring(n.T, 0.13, 3, 0.8, 44); node(n.T, 3, 0.9);
-    edge(n.T, n.D[1], 3, 0.85, 70); edge(n.D[1], n.X[0], 3, 0.85, 70);
-    node(n.D[1], 3, 0.8); ring(n.X[0], 0.17, 3, 0.95, 70); ring(n.X[0], 0.3, 3, 0.3, 55); node(n.X[0], 3, 0.95, 0.075);
+    edge(n.S[3], n.T, 3, 0.85, 70); edge(n.T, n.D[1], 3, 0.85, 70); edge(n.D[1], n.X[0], 3, 0.85, 70);
+    ring(n.D[1], 0.11, 3, 0.8, 40); node(n.D[1], 3, 0.8); ring(n.X[0], 0.17, 3, 0.95, 70); ring(n.X[0], 0.3, 3, 0.3, 55); node(n.X[0], 3, 0.95, 0.075);
     reveal = null;
     swarm(1, 2, 200);
     F.rv = 4.6; F.haze = 0.1;
@@ -351,8 +364,11 @@ function build(s, k) {
       return [X[0] + Math.cos(a) * 0.17, X[1] + Math.sin(a) * 0.13, Math.sin(a * 2) * 0.08];
     } }];
     F.labels = [
-      { p: n.X[0], t: 'uid=0(root)', dx: 0, dy: -0.38, c: '#dc322f', al: 'center', key: 'root' },
-      { p: n.T, t: 'svc :8443', dx: -0.17, dy: 0.012, c: '#979899', al: 'right' },
+      { p: n.X[0], t: 'kubectl get secrets -A', dx: 0.1, dy: -0.34, c: '#dc322f', al: 'right', key: 'root' },
+      { p: n.X[0], t: 'k8s-api', dx: 0, dy: 0.36, c: INFRA_LABEL, al: 'center' },
+      { p: n.S[3], t: 'docs-upload', dx: -0.1, dy: 0.012, c: '#979899', al: 'right' },
+      { p: n.D[1], t: 'agent · k8s-pod', dx: 0.1, dy: -0.12, c: INFRA_LABEL, al: 'left' },
+      { p: n.T, t: 'rag · ingest', dx: -0.17, dy: 0.012, c: AI_LABEL, al: 'right' },
       { p: n.P, dx: 0.12, dy: 0.012, c: '#268bd2', al: 'left', key: 'me' },
     ];
   }
@@ -621,8 +637,7 @@ function agentPos(s, a, t) {
 }
 
 function labelText(s, lb) {
-  if (lb.key === 'suspect') return 'svc :8443 · ' + s.texts.labels.suspect;
-  if (lb.key === 'me') return s.texts.labels.me;
+  if (lb.key === 'rag' || lb.key === 'pod' || lb.key === 'me') return s.texts.labels[lb.key];
   return lb.t;
 }
 
@@ -764,8 +779,23 @@ function frame(s, now) {
     drawDots(ctx, s.bk2);
     drawReport(s, ctx, F.report, P2);
   }
+  drawLegend(s, ctx);
   drawLabels(s, ctx, F, agentC, now, P2);
   s.drawnOnce = true;
+}
+
+// legend: AI components vs. Kubernetes / infrastructure, while the network formations show
+function drawLegend(s, ctx) {
+  if (s.k < LEGEND_FORMS[0] || s.k > LEGEND_FORMS[1]) return;
+  const lg = s.texts.labels.legend, x = s.W - 28;
+  ctx.font = '500 11px ' + MONO; ctx.textBaseline = 'middle'; ctx.textAlign = 'right'; ctx.globalAlpha = 0.85;
+  [[AI_LABEL, lg[0]], [INFRA_LABEL, lg[1]]].forEach((it, j) => {
+    const y = 30 + j * 20;
+    ctx.fillStyle = '#979899'; ctx.fillText(it[1], x, y);
+    const w = ctx.measureText(it[1]).width;
+    ctx.fillStyle = it[0]; ctx.beginPath(); ctx.arc(x - w - 10, y, 3.5, 0, 6.2832); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
 }
 
 function drawLabels(s, ctx, F, agentC, now, P2) {
