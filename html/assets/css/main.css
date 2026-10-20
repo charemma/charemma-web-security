@@ -689,7 +689,8 @@ body.page-light { background: var(--light-bg-alt); color: var(--light-text); }
   font-size: 15px;
   line-height: 1.5;
 }
-.article__body pre code { font-size: inherit; }
+.article__body pre code { font-size: inherit; overflow-wrap: normal; }
+.article__body p, .article__body li, .article__body code { overflow-wrap: anywhere; }
 .article__body table { display: block; overflow-x: auto; margin: 0 0 18px; border-collapse: collapse; font-size: 16px; }
 .article__body th, .article__body td { padding: 8px 12px; border-bottom: 1px solid var(--light-line); text-align: left; vertical-align: top; }
 .article__body th { color: var(--light-heading); }
