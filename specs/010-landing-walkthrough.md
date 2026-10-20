@@ -1,6 +1,7 @@
 # 010 Landing walkthrough
 
-Status: approved 2026-10-20, amended 2026-10-20 (AI pipeline version)
+Status: approved 2026-10-20, amended 2026-10-20 (AI pipeline version),
+amended 2026-10-20 (head texts move to spec 012)
 
 ## Why
 
@@ -564,13 +565,9 @@ The interface texts of every language carry, under `engagement`:
 
 English and Greek carry the design's English and Greek texts for the same
 keys, so they are ready when spec 009 publishes them again. The head texts
-`approach.eyebrow`, `title_a`, `title_b` and `note` stay as they are; the
-German ones equal the design's. `approach.lead` takes the design's lead in
-each language; the German one reads `KI-Agenten kartieren die
-Angriffsfläche Ihrer KI-Anwendung und feuern breit gestreute Testanfragen
-ab. Dann übernehme ich: die eine Kette, die wirklich Schaden anrichtet – vom
-präparierten Dokument bis in den Kubernetes-Cluster, manuell und
-reproduzierbar.`
+`approach.eyebrow`, `title_a`, `title_b`, `lead` and `note` are not part of
+this spec; spec 012 states what they say. This spec only places them, as
+set in *Section layout*.
 
 The canvas labels that name things in the target (`app.[redacted].ai`,
 `chat`, `api`, `git`, `docs-upload`, `llm-gateway`, `vector-db`,
@@ -644,6 +641,7 @@ Points the later spec decides; this spec keeps the design's behaviour.
 
 - The revision of the animation (see *Material for the revision*).
 - Other sections of the start page.
+- The texts of the section head and the note below the stage (spec 012).
 - The article animations (spec 006).
 
 ## Acceptance
@@ -663,8 +661,7 @@ Points the later spec decides; this spec keeps the design's behaviour.
    `nginx/security-headers.conf` applied.
 7. A build with `engagement.json` holding five phases fails.
 8. The legend shows during phases 2 to 5 and not during phases 1 and 6, the
-   report lists the IDs `LLM01`, `LLM06`, `K8S`, `LLM07`, `LLM10`, and the
-   lead above the stage reads as in *Texts*.
+   report lists the IDs `LLM01`, `LLM06`, `K8S`, `LLM07`, `LLM10`.
 
 ## Touches
 
