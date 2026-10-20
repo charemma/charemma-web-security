@@ -8,8 +8,7 @@
   "a11y": {
     "nav": "Hauptnavigation",
     "lang": "Sprache / Language / Γλώσσα",
-    "profile": "Kurzprofil",
-    "console": "Konsole"
+    "profile": "Kurzprofil"
   },
   "nav": [
     { "id": "leistungen", "label": "Leistungen" },
@@ -49,16 +48,31 @@
     "title_a": "Agenten kartieren. ",
     "title_b": "Ich gehe rein.",
     "lead": "KI-Agenten tragen parallel zusammen, was über Ihre Systeme öffentlich auffindbar ist. Dann übernehme ich: gezielt, manuell und bis zum nachvollziehbaren Beweis. Am Ende steht ein Bericht, mit dem Ihr Team direkt arbeiten kann.",
-    "note": "Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert.",
-    "net": "netzwerk",
-    "results": ["Proof of Concept, jederzeit reproduzierbar", "Für jeden Fund ein konkreter Fix", "Hilfe beim Schließen der Lücken"]
+    "note": "Die Animation folgt einem echten Black-Box-Assessment – vereinfacht und anonymisiert."
   },
   "engagement": {
-    "meter_label": "Phase {n} von {total}",
-    "cv": { "handover": "übergabe · findings", "weak": "schwachstelle?", "manual": "MANUELL", "assist": "AI-ASSISTED · HUMAN REVIEW", "ai": "AI-DRIVEN WITH SUBAGENTS" },
-    "depth": ["informationsbeschaffung", "informationsbeschaffung", "analyse", "manual testing", "exploit", "reporting"],
-    "hits": ["subdomains & technologien erfasst", "hosts, ports & dienste kartiert", "verdächtiger dienst", "sql-injection + fehlkonfiguration", "remote code execution", "bericht mit fixes übergeben"],
-    "work": ["…", "anomalie", "500", "unerwartet", "leak?", "stacktrace"]
+    "phase": "PHASE",
+    "phases_label": "Phasen",
+    "aria": "Animation: Ein Partikelschwarm formt nacheinander Netzwerkkarte, Ziel, Angriffspfad und Bericht eines Penetrationstests.",
+    "modes": { "ai": "AI-DRIVEN WITH SUBAGENTS", "manual": "MANUELL", "assist": "AI-ASSISTED · HUMAN REVIEW" },
+    "titles": ["Informationsbeschaffung", "Informationsbeschaffung", "Analyse", "Manual Testing", "Exploit", "Reporting"],
+    "hits": ["Subdomains & Technologien erfasst", "Hosts, Ports & Dienste kartiert", "Verdächtiger Dienst", "SQL-Injection + Fehlkonfiguration", "Remote Code Execution", "Bericht mit Fixes übergeben"],
+    "rail": ["info · passiv", "info · aktiv", "analyse", "manual testing", "exploit", "reporting"],
+    "labels": { "suspect": "verdächtig", "me": "pentester", "review": "human review" },
+    "report": {
+      "title": "PENTEST-BERICHT",
+      "conf": "VERTRAULICH",
+      "meta": "Scope: *.[redacted].de · Black-Box · Okt 2026",
+      "cols": ["ID", "SCHWERE", "BEFUND"],
+      "rows": [
+        ["KRITISCH", "RCE · svc :8443"],
+        ["KRITISCH", "SQL-Injection · /login"],
+        ["HOCH", "k8s-Ingress offen"],
+        ["MITTEL", "TLS veraltet · vpn"],
+        ["NIEDRIG", "Header fehlen · www"]
+      ],
+      "foot": "Jeder Fund mit PoC, Risiko und konkretem Fix."
+    }
   },
   "process": {
     "eyebrow": "03 / zusammenarbeit",

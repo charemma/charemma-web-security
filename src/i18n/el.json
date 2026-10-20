@@ -8,8 +8,7 @@
   "a11y": {
     "nav": "Κύρια πλοήγηση",
     "lang": "Sprache / Language / Γλώσσα",
-    "profile": "Σύντομο προφίλ",
-    "console": "Κονσόλα"
+    "profile": "Σύντομο προφίλ"
   },
   "nav": [
     { "id": "leistungen", "label": "Υπηρεσίες" },
@@ -49,16 +48,31 @@
     "title_a": "Οι agents χαρτογραφούν. ",
     "title_b": "Εγώ μπαίνω μέσα.",
     "lead": "Οι AI agents συγκεντρώνουν παράλληλα ό,τι είναι δημόσια διαθέσιμο για τα συστήματά σας. Μετά αναλαμβάνω εγώ: με στοχευμένες χειροκίνητες δοκιμές και επαληθεύσιμα αποτελέσματα. Παραδίδω μια αναφορά με σαφή ευρήματα και πρακτικές οδηγίες για την ομάδα σας.",
-    "note": "Η κινούμενη απεικόνιση βασίζεται σε πραγματικό black-box assessment – απλοποιημένο και ανωνυμοποιημένο.",
-    "net": "δίκτυο",
-    "results": ["Proof of concept, αναπαραγώγιμο ανά πάσα στιγμή", "Συγκεκριμένη διόρθωση για κάθε εύρημα", "Υποστήριξη στην αποκατάσταση των ευπαθειών"]
+    "note": "Η κινούμενη απεικόνιση βασίζεται σε πραγματικό black-box assessment – απλοποιημένο και ανωνυμοποιημένο."
   },
   "engagement": {
-    "meter_label": "Φάση {n} από {total}",
-    "cv": { "handover": "παράδοση · ευρήματα", "weak": "ευπάθεια;", "manual": "ΧΕΙΡΟΚΙΝΗΤΑ", "assist": "AI-ASSISTED · HUMAN REVIEW", "ai": "AI-DRIVEN WITH SUBAGENTS" },
-    "depth": ["συλλογή πληροφοριών", "συλλογή πληροφοριών", "ανάλυση", "manual testing", "exploit", "reporting"],
-    "hits": ["subdomains & τεχνολογίες καταγράφηκαν", "hosts, ports & υπηρεσίες χαρτογραφήθηκαν", "ύποπτη υπηρεσία", "sql injection + λάθος ρύθμιση", "remote code execution", "αναφορά με διορθώσεις παραδόθηκε"],
-    "work": ["…", "ανωμαλία", "500", "απρόσμενο", "leak?", "stacktrace"]
+    "phase": "ΦΑΣΗ",
+    "phases_label": "Φάσεις",
+    "aria": "Κινούμενη απεικόνιση: ένα σμήνος σωματιδίων σχηματίζει χάρτη δικτύου, στόχο, διαδρομή επίθεσης και αναφορά ενός penetration test.",
+    "modes": { "ai": "AI-DRIVEN WITH SUBAGENTS", "manual": "ΧΕΙΡΟΚΙΝΗΤΑ", "assist": "AI-ASSISTED · HUMAN REVIEW" },
+    "titles": ["Συλλογή πληροφοριών", "Συλλογή πληροφοριών", "Ανάλυση", "Manual testing", "Exploit", "Reporting"],
+    "hits": ["Subdomains & τεχνολογίες καταγράφηκαν", "Hosts, ports & υπηρεσίες χαρτογραφήθηκαν", "Ύποπτη υπηρεσία", "SQL injection + λάθος ρύθμιση", "Remote code execution", "Αναφορά με διορθώσεις παραδόθηκε"],
+    "rail": ["info · παθητικά", "info · ενεργά", "ανάλυση", "manual testing", "exploit", "reporting"],
+    "labels": { "suspect": "ύποπτο", "me": "pentester", "review": "human review" },
+    "report": {
+      "title": "ΑΝΑΦΟΡΑ PENTEST",
+      "conf": "ΕΜΠΙΣΤΕΥΤΙΚΟ",
+      "meta": "Scope: *.[redacted].de · black box · Οκτ 2026",
+      "cols": ["ID", "ΣΟΒΑΡΟΤΗΤΑ", "ΕΥΡΗΜΑ"],
+      "rows": [
+        ["ΚΡΙΣΙΜΟ", "RCE · svc :8443"],
+        ["ΚΡΙΣΙΜΟ", "SQL injection · /login"],
+        ["ΥΨΗΛΟ", "k8s ingress ανοιχτό"],
+        ["ΜΕΣΑΙΟ", "παλιό TLS · vpn"],
+        ["ΧΑΜΗΛΟ", "λείπουν headers · www"]
+      ],
+      "foot": "Κάθε εύρημα με PoC, κίνδυνο και διόρθωση."
+    }
   },
   "process": {
     "eyebrow": "03 / συνεργασία",

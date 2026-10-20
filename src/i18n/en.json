@@ -8,8 +8,7 @@
   "a11y": {
     "nav": "Main navigation",
     "lang": "Sprache / Language / Γλώσσα",
-    "profile": "Profile",
-    "console": "Console"
+    "profile": "Profile"
   },
   "nav": [
     { "id": "leistungen", "label": "Services" },
@@ -49,16 +48,31 @@
     "title_a": "Agents map it. ",
     "title_b": "I go in.",
     "lead": "AI agents gather in parallel what is publicly discoverable about your systems. Then I take over: targeted, manual and all the way to a verifiable proof. The result is a report your team can act on right away.",
-    "note": "The animation follows a real black-box assessment – simplified and anonymised.",
-    "net": "network",
-    "results": ["Proof of concept, reproducible at any time", "A concrete fix for every finding", "Help closing the gaps"]
+    "note": "The animation follows a real black-box assessment – simplified and anonymised."
   },
   "engagement": {
-    "meter_label": "Phase {n} of {total}",
-    "cv": { "handover": "handover · findings", "weak": "vulnerability?", "manual": "MANUAL", "assist": "AI-ASSISTED · HUMAN REVIEW", "ai": "AI-DRIVEN WITH SUBAGENTS" },
-    "depth": ["information gathering", "information gathering", "analysis", "manual testing", "exploit", "reporting"],
-    "hits": ["subdomains & technologies captured", "hosts, ports & services mapped", "suspicious service", "sql injection + misconfiguration", "remote code execution", "report with fixes delivered"],
-    "work": ["…", "anomaly", "500", "unexpected", "leak?", "stacktrace"]
+    "phase": "PHASE",
+    "phases_label": "Phases",
+    "aria": "Animation: a particle swarm forms the network map, target, attack path and report of a penetration test.",
+    "modes": { "ai": "AI-DRIVEN WITH SUBAGENTS", "manual": "MANUAL", "assist": "AI-ASSISTED · HUMAN REVIEW" },
+    "titles": ["Information gathering", "Information gathering", "Analysis", "Manual testing", "Exploit", "Reporting"],
+    "hits": ["Subdomains & technologies captured", "Hosts, ports & services mapped", "Suspicious service", "SQL injection + misconfiguration", "Remote code execution", "Report with fixes delivered"],
+    "rail": ["info · passive", "info · active", "analysis", "manual testing", "exploit", "reporting"],
+    "labels": { "suspect": "suspicious", "me": "pentester", "review": "human review" },
+    "report": {
+      "title": "PENTEST REPORT",
+      "conf": "CONFIDENTIAL",
+      "meta": "Scope: *.[redacted].de · black box · Oct 2026",
+      "cols": ["ID", "SEVERITY", "FINDING"],
+      "rows": [
+        ["CRITICAL", "RCE · svc :8443"],
+        ["CRITICAL", "SQL injection · /login"],
+        ["HIGH", "k8s ingress exposed"],
+        ["MEDIUM", "outdated TLS · vpn"],
+        ["LOW", "missing headers · www"]
+      ],
+      "foot": "Every finding with PoC, risk and a concrete fix."
+    }
   },
   "process": {
     "eyebrow": "03 / process",
