@@ -80,6 +80,18 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def split_languages(site: dict) -> tuple[list[dict], list[dict]]:
+    """Published and unpublished languages of site.json, spec 009."""
+    for lang in site["languages"]:
+        if not isinstance(lang.get("published"), bool):
+            raise ValueError(f"{SITE_CONFIG.name}: language '{lang['code']}' needs 'published' set to true or false")
+    published = [lang for lang in site["languages"] if lang["published"]]
+    unpublished = [lang for lang in site["languages"] if not lang["published"]]
+    if site["default_lang"] not in {lang["code"] for lang in published}:
+        raise ValueError(f"{SITE_CONFIG.name}: the default language '{site['default_lang']}' must be published")
+    return published, unpublished
+
+
 @cache
 def asset_url(path: str) -> str:
     """The address of a file under html/ with the hash of its content appended, so a change gets a new address."""
@@ -443,14 +455,16 @@ def split_animation(body: str, path: Path, has_scene: bool) -> tuple[str, str] |
     return "\n".join(lines[:at]), "\n".join(lines[at + 1 :])
 
 
-def load_articles(site: dict, topics: list[dict], env: "Environment", texts: dict) -> dict[str, dict[str, Article]]:
-    """Published articles by language code and slug; drafts count as missing."""
+def load_articles(
+    site: dict, topics: list[dict], env: "Environment", texts: dict, unpublished: set[str]
+) -> dict[str, dict[str, Article]]:
+    """Published articles by language code and slug; drafts and unpublished languages count as missing."""
     slugs = {t["slug"] for t in topics}
     articles: dict[str, dict[str, Article]] = {lang["code"]: {} for lang in site["languages"]}
     renderer = MarkdownIt("commonmark", {"html": False}).enable("table")
     for path in sorted(ARTICLES_DIR.glob("*.md")):
         slug, _, lang = path.stem.rpartition("-")
-        if lang not in articles:
+        if lang not in articles and lang not in unpublished:
             raise ValueError(f"{path}: unknown language '{lang}'")
         if slug not in slugs:
             raise ValueError(f"{path}: no topic with slug '{slug}' in {TOPICS_FILE.name}")
@@ -460,6 +474,8 @@ def load_articles(site: dict, topics: list[dict], env: "Environment", texts: dic
         missing = [field for field in REQUIRED_ARTICLE_FIELDS if field not in meta]
         if missing:
             raise ValueError(f"{path}: missing front matter fields {missing}")
+        if lang in unpublished:
+            continue
         has_scene = (ARTICLES_DIR / f"{slug}-{lang}{SCENE_SUFFIX}").exists()
         articles[lang][slug] = Article(
             slug=slug,
@@ -505,6 +521,17 @@ def remove_stale_article_dirs(site: dict, topics: list[dict], articles: dict) ->
             if stale.is_dir():
                 shutil.rmtree(stale)
                 print(f"removed {stale.relative_to(OUT_DIR.parent)}")
+
+
+def remove_unpublished_dirs(unpublished: list[dict]) -> None:
+    """Drop the rendered pages of languages that are not published."""
+    for lang in unpublished:
+        if not lang["prefix"]:
+            raise ValueError(f"{SITE_CONFIG.name}: unpublished language '{lang['code']}' needs a prefix")
+        stale = OUT_DIR / lang["prefix"]
+        if stale.is_dir():
+            shutil.rmtree(stale)
+            print(f"removed {stale.relative_to(OUT_DIR.parent)}")
 
 
 def knowledge_groups(site: dict, texts: dict, topics: list[dict]) -> list[dict]:
@@ -625,7 +652,9 @@ def render_sitemap(site: dict, pages: list[Page]) -> None:
 
 
 def main() -> None:
-    site = load_json(SITE_CONFIG)
+    config = load_json(SITE_CONFIG)
+    published, unpublished = split_languages(config)
+    site = {**config, "languages": published}
     texts = {lang["code"]: load_json(I18N_DIR / f"{lang['code']}.json") for lang in site["languages"]}
     topics = load_json(TOPICS_FILE)
     env = Environment(
@@ -635,7 +664,7 @@ def main() -> None:
         keep_trailing_newline=True,
     )
     env.globals["asset_url"] = asset_url
-    articles = load_articles(site, topics, env, texts)
+    articles = load_articles(site, topics, env, texts, {lang["code"] for lang in unpublished})
     pages = [Page(**p) for p in site["pages"]] + article_pages(site, topics, articles)
     data = {
         "topics": topics,
@@ -643,6 +672,7 @@ def main() -> None:
         "tools": load_json(TOOLS_FILE),
         "engagement": load_json(ENGAGEMENT_FILE),
     }
+    remove_unpublished_dirs(unpublished)
     remove_stale_article_dirs(site, topics, articles)
     render_pages(env, site, texts, data, pages)
     render_not_found(env, site, texts)

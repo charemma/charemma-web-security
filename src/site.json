@@ -2,9 +2,9 @@
   "base_url": "https://security.charemma.de",
   "default_lang": "de",
   "languages": [
-    { "code": "de", "label": "DE", "prefix": "" },
-    { "code": "en", "label": "EN", "prefix": "en/" },
-    { "code": "el", "label": "EL", "prefix": "el/" }
+    { "code": "de", "label": "DE", "prefix": "", "published": true },
+    { "code": "en", "label": "EN", "prefix": "en/", "published": false },
+    { "code": "el", "label": "EL", "prefix": "el/", "published": false }
   ],
   "pages": [
     { "template": "index.html.j2", "path": "" },

@@ -17,7 +17,9 @@
   <link rel="stylesheet" href="{{ asset_url('/assets/css/main.css') }}">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  {%- if lang_links | length > 1 %}
   <script type="module" src="{{ asset_url('/assets/js/lang.js') }}"></script>
+  {%- endif %}
   {%- block scripts %}{% endblock %}
 </head>
 <body class="{% block body_class %}page-dark{% endblock %}">
@@ -30,11 +32,14 @@
         <a href="{{ home_href }}#{{ item.id }}">{{ item.label }}</a>
         {%- endfor %}
         {%- endblock %}
+        {#- One published language needs no switcher, spec 009 #}
+        {%- if lang_links | length > 1 %}
         <span class="lang-switch" role="group" aria-label="{{ t.a11y.lang }}">
           {%- for alt in lang_links %}
           <a href="{{ alt.path }}" hreflang="{{ alt.code }}" lang="{{ alt.code }}" data-lang="{{ alt.code }}"{% if alt.code == lang %} aria-current="true"{% endif %}>{{ alt.label }}</a>
           {%- endfor %}
         </span>
+        {%- endif %}
       </nav>
     </header>
   </div>
