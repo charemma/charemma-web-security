@@ -1,10 +1,10 @@
 {
   "steps": [
-    { "mode": "ai", "cmd": "ai-recon start --scope \"*.[redacted].de\" --agents osint,dns-enum" },
-    { "mode": "ai", "cmd": "ai-recon add --agents port-scanning,service-discovery" },
-    { "mode": "manual", "cmd": "ai-recon brief --to me && nmap -sV -sC -p 8443 $SUSPECT" },
-    { "mode": "manual", "cmd": "burpsuite --project-file=engagement.burp" },
-    { "mode": "manual", "cmd": "python3 poc.py --target svc.[redacted].de" },
-    { "mode": "assist", "cmd": "ai-report draft --findings ./loot && review" }
+    { "mode": "ai", "cmd": "ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint" },
+    { "mode": "ai", "cmd": "ai-probe run --suite owasp-llm --agents jailbreak,leak,injection,tool-enum" },
+    { "mode": "manual", "cmd": "ai-recon brief --to me && triage --chain upload,rag,agent-pod" },
+    { "mode": "manual", "cmd": "python3 craft_doc.py --hidden-instructions -o angebot.pdf" },
+    { "mode": "manual", "cmd": "curl -F file=@angebot.pdf https://app.[redacted].ai/upload" },
+    { "mode": "assist", "cmd": "ai-report draft --map owasp-llm && review" }
   ]
 }

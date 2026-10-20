@@ -47,7 +47,7 @@
     "eyebrow": "02 / προσέγγιση",
     "title_a": "Οι agents χαρτογραφούν. ",
     "title_b": "Εγώ μπαίνω μέσα.",
-    "lead": "Οι AI agents συγκεντρώνουν παράλληλα ό,τι είναι δημόσια διαθέσιμο για τα συστήματά σας. Μετά αναλαμβάνω εγώ: με στοχευμένες χειροκίνητες δοκιμές και επαληθεύσιμα αποτελέσματα. Παραδίδω μια αναφορά με σαφή ευρήματα και πρακτικές οδηγίες για την ομάδα σας.",
+    "lead": "AI agents χαρτογραφούν την επιφάνεια επίθεσης της AI εφαρμογής σας και εκτελούν πλήθος δοκιμαστικών prompts. Μετά αναλαμβάνω εγώ: την αλυσίδα που κάνει πραγματική ζημιά – από ένα προετοιμασμένο έγγραφο μέχρι το Kubernetes cluster, χειροκίνητα και αναπαραγώγιμα.",
     "note": "Η κινούμενη απεικόνιση βασίζεται σε πραγματικό black-box assessment – απλοποιημένο και ανωνυμοποιημένο."
   },
   "engagement": {
@@ -55,21 +55,21 @@
     "phases_label": "Φάσεις",
     "aria": "Κινούμενη απεικόνιση: ένα σμήνος σωματιδίων σχηματίζει χάρτη δικτύου, στόχο, διαδρομή επίθεσης και αναφορά ενός penetration test.",
     "modes": { "ai": "AI-DRIVEN WITH SUBAGENTS", "manual": "ΧΕΙΡΟΚΙΝΗΤΑ", "assist": "AI-ASSISTED · HUMAN REVIEW" },
-    "titles": ["Συλλογή πληροφοριών", "Συλλογή πληροφοριών", "Ανάλυση", "Manual testing", "Exploit", "Reporting"],
-    "hits": ["Subdomains & τεχνολογίες καταγράφηκαν", "Hosts, ports & υπηρεσίες χαρτογραφήθηκαν", "Ύποπτη υπηρεσία", "SQL injection + λάθος ρύθμιση", "Remote code execution", "Αναφορά με διορθώσεις παραδόθηκε"],
-    "rail": ["info · παθητικά", "info · ενεργά", "ανάλυση", "manual testing", "exploit", "reporting"],
-    "labels": { "suspect": "ύποπτο", "me": "pentester", "review": "human review" },
+    "titles": ["Επιφάνεια επίθεσης", "Ευρύς έλεγχος", "Ανάλυση", "Manual testing", "Exploit", "Reporting"],
+    "hits": ["Είσοδοι, μοντέλο & tools καταγράφηκαν", "Ευρήματα: injection μέσω upload, tool access σε pod", "Δύο στόχοι: RAG ingestion και agent pod", "Indirect prompt injection, pod με cluster-admin", "Μέσω του agent στο cluster: εκτεθειμένα secrets", "Αναφορά με διορθώσεις παραδόθηκε"],
+    "rail": ["επιφάνεια", "ευρύς έλεγχος", "ανάλυση", "manual testing", "exploit", "reporting"],
+    "labels": { "rag": "rag · ingest · AI-specific", "pod": "agent pod · πολλά δικαιώματα;", "me": "pentester", "review": "human review", "legend": ["AI component", "Kubernetes / υποδομή"] },
     "report": {
       "title": "ΑΝΑΦΟΡΑ PENTEST",
       "conf": "ΕΜΠΙΣΤΕΥΤΙΚΟ",
-      "meta": "Scope: *.[redacted].de · black box · Οκτ 2026",
+      "meta": "Scope: *.[redacted].ai · black box · Οκτ 2026",
       "cols": ["ID", "ΣΟΒΑΡΟΤΗΤΑ", "ΕΥΡΗΜΑ"],
       "rows": [
-        ["ΚΡΙΣΙΜΟ", "RCE · svc :8443"],
-        ["ΚΡΙΣΙΜΟ", "SQL injection · /login"],
-        ["ΥΨΗΛΟ", "k8s ingress ανοιχτό"],
-        ["ΜΕΣΑΙΟ", "παλιό TLS · vpn"],
-        ["ΧΑΜΗΛΟ", "λείπουν headers · www"]
+        ["ΚΡΙΣΙΜΟ", "Prompt injection · upload", "LLM01"],
+        ["ΚΡΙΣΙΜΟ", "Ο agent εκτελεί εντολές", "LLM06"],
+        ["ΥΨΗΛΟ", "Pod με cluster-admin", "K8S"],
+        ["ΜΕΣΑΙΟ", "Διαρροή system prompt", "LLM07"],
+        ["ΧΑΜΗΛΟ", "Χωρίς rate limit", "LLM10"]
       ],
       "foot": "Κάθε εύρημα με PoC, κίνδυνο και διόρθωση."
     }

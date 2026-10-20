@@ -47,29 +47,29 @@
     "eyebrow": "02 / approach",
     "title_a": "Agents map it. ",
     "title_b": "I go in.",
-    "lead": "AI agents gather in parallel what is publicly discoverable about your systems. Then I take over: targeted, manual and all the way to a verifiable proof. The result is a report your team can act on right away.",
+    "lead": "AI agents map the attack surface of your AI application and fire broad batteries of test prompts. Then I take over: the one chain that does real damage – from a crafted document into the Kubernetes cluster, by hand and reproducible.",
     "note": "The animation follows a real black-box assessment – simplified and anonymised."
   },
   "engagement": {
     "phase": "PHASE",
     "phases_label": "Phases",
-    "aria": "Animation: a particle swarm forms the network map, target, attack path and report of a penetration test.",
+    "aria": "Animation: a particle swarm forms an AI pipeline, the target, the attack path via prompt injection and the report of a penetration test.",
     "modes": { "ai": "AI-DRIVEN WITH SUBAGENTS", "manual": "MANUAL", "assist": "AI-ASSISTED · HUMAN REVIEW" },
-    "titles": ["Information gathering", "Information gathering", "Analysis", "Manual testing", "Exploit", "Reporting"],
-    "hits": ["Subdomains & technologies captured", "Hosts, ports & services mapped", "Suspicious service", "SQL injection + misconfiguration", "Remote code execution", "Report with fixes delivered"],
-    "rail": ["info · passive", "info · active", "analysis", "manual testing", "exploit", "reporting"],
-    "labels": { "suspect": "suspicious", "me": "pentester", "review": "human review" },
+    "titles": ["Attack surface", "Broad testing", "Analysis", "Manual testing", "Exploit", "Reporting"],
+    "hits": ["Inputs, model & tools captured", "Anomalies: injection via upload, tool access in a pod", "Two targets: RAG ingestion and agent pod", "Indirect prompt injection, pod with cluster-admin", "Through the agent into the cluster: secrets exposed", "Report with fixes delivered"],
+    "rail": ["attack surface", "broad testing", "analysis", "manual testing", "exploit", "reporting"],
+    "labels": { "rag": "rag · ingest · AI-specific", "pod": "agent pod · too many rights?", "me": "pentester", "review": "human review", "legend": ["AI component", "Kubernetes / infrastructure"] },
     "report": {
       "title": "PENTEST REPORT",
       "conf": "CONFIDENTIAL",
-      "meta": "Scope: *.[redacted].de · black box · Oct 2026",
+      "meta": "Scope: *.[redacted].ai · black box · Oct 2026",
       "cols": ["ID", "SEVERITY", "FINDING"],
       "rows": [
-        ["CRITICAL", "RCE · svc :8443"],
-        ["CRITICAL", "SQL injection · /login"],
-        ["HIGH", "k8s ingress exposed"],
-        ["MEDIUM", "outdated TLS · vpn"],
-        ["LOW", "missing headers · www"]
+        ["CRITICAL", "Prompt injection · upload", "LLM01"],
+        ["CRITICAL", "Agent runs commands", "LLM06"],
+        ["HIGH", "Pod with cluster-admin", "K8S"],
+        ["MEDIUM", "System prompt leaks", "LLM07"],
+        ["LOW", "No rate limit", "LLM10"]
       ],
       "foot": "Every finding with PoC, risk and a concrete fix."
     }
