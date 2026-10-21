@@ -7,4 +7,4 @@ resources:
 images:
   - name: ghcr.io/charemma/charemma-web-ai
     newName: ghcr.io/charemma/charemma-web-ai
-    newTag: latest
+    newTag: sha-171a861
