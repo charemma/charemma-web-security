@@ -156,6 +156,8 @@ The Type column carries a categorical label describing what the file is. The set
   - The Instructions column of a file of type `scene` MUST name `article-writing.md`.
   - The markup of a file of type `scene` MUST be derived from the article spec in its Dependencies and follow the format of `006-article-animation.md`; do not use other sources.
   - A scene file whose article has no spec that specifies an animation MUST NOT be registered until that spec exists.
+- `asset`: a file delivered to the browser as is, neither written nor read by the generator (fonts, icons, images, crawler and well-known files).
+  - Files of type `asset` MUST carry the `editable` protocol.
 
 AI MAY propose new types; AI MUST NOT introduce them silently. Adding a type requires explicit user approval and an entry here.
 
@@ -206,6 +208,10 @@ The set of permitted extensions is closed. Only the following extensions are all
 - `.conf`
 - `.py`
 - `.js`
+- `.yaml`
+- `.woff2`
+- `.png`
+- `.ico`
 
 AI MAY propose new extensions; AI MUST NOT introduce them silently. Adding an extension requires explicit user approval and an entry here.
 
