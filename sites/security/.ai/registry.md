@@ -57,3 +57,16 @@ This site is security.charemma.de, the website for Charalambos Emmanouilidis' pe
 | `sites/security/src/articles` | `sensitive-information-disclosure-de-scene.j2` | scene | generated | `007-article-sensitive-information-disclosure.md`, `006-article-animation.md` | `article-writing.md` | Knowledge article animation scene, German, for the topic sensitive-information-disclosure: the surfaces, chapters, captions, interactive moment and switch of its animation. |
 | `sites/security/src/articles` | `excessive-agency-de.md` | article | generated | `011-article-excessive-agency.md` | `article-writing.md` | Knowledge article text, German, for the topic excessive-agency. |
 | `sites/security/src/articles` | `excessive-agency-de-scene.j2` | scene | generated | `011-article-excessive-agency.md`, `006-article-animation.md` | `article-writing.md` | Knowledge article animation scene, German, for the topic excessive-agency: the surfaces, chapters, captions, interactive moment and switch of its animation. |
+| `sites/security/k8s` | `deployment.yaml` | code | spec-maintained |  |  | Kubernetes deployment manifest: which image the cluster runs for the site and how its pod is set up. |
+| `sites/security/k8s` | `service.yaml` | code | spec-maintained |  |  | Kubernetes service manifest: how the site's pods are reachable inside the cluster. |
+| `sites/security/k8s` | `ingress.yaml` | code | spec-maintained |  |  | Kubernetes ingress manifest: under which host name and with which TLS settings the site is reachable from outside. |
+| `sites/security/k8s` | `kustomization.yaml` | code | spec-maintained |  |  | Kustomize entry point: which manifests ArgoCD applies and which image tag they run, the tag being written by the image updater. |
+| `sites/security/nginx` | `security-headers.conf` | code | spec-maintained |  |  | Web server header snippet: the security-related response headers every response carries. |
+| `sites/security/src` | `check_security_txt.py` | code | spec-maintained |  |  | Expiry check for the security contact file: the program that fails the checks when that file is about to expire. |
+| `sites/security/src/templates` | `404.html.j2` | code | spec-maintained |  |  | Not-found page template: the markup of the error page for unknown addresses, built on the page skeleton. |
+| `sites/security/src/templates` | `book-icon.svg.j2` | code | spec-maintained |  |  | Knowledge badge icon fragment: the inline icon markup the templates include in the knowledge badge. |
+| `sites/security/html/assets/fonts` | `*.woff2` | asset | editable |  |  | Web fonts: the font files the stylesheet loads. |
+| `sites/security/html` | `favicon.ico` | asset | editable |  |  | Browser tab icon: the small icon browsers show for the site. |
+| `sites/security/html/assets` | `apple-touch-icon.png` | asset | editable |  |  | Home screen icon: the icon mobile devices use when the site is saved to the home screen. |
+| `sites/security/html` | `robots.txt` | asset | editable |  |  | Crawler instructions: which addresses search engines may crawl and where the sitemap is. |
+| `sites/security/html/.well-known` | `security.txt` | asset | editable |  |  | Security contact file: how to report vulnerabilities in the site, and until when that statement is valid. |
