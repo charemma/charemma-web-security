@@ -5,6 +5,9 @@ default:
 build:
     uv run --quiet src/build.py
 
+# Run every check of this site (the CI entry point, see specs/013-site-images.md)
+check: check-generated check-security-txt
+
 # Fail if the committed html/ is out of date with src/
 check-generated: build
     git diff --exit-code -- html

@@ -1,4 +1,4 @@
-name: Build and Push Container Image
+name: Build and Push Container Images
 
 on:
   push:
@@ -7,28 +7,59 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  # Fixed image prefix, not github.repository, see specs/013-site-images.md
+  IMAGE_PREFIX: ghcr.io/charemma/charemma-web-
 
 jobs:
-  check-generated:
+  # Sites whose folder changed (k8s/ excluded), or all sites when this workflow changed
+  changes:
     runs-on: ubuntu-latest
+    outputs:
+      sites: ${{ steps.sites.outputs.sites }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: sites
+        env:
+          BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          all="$(find sites -mindepth 1 -maxdepth 1 -type d -printf '%f\n')"
+          if ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
+            changed="$all"
+          else
+            files="$(git diff --name-only "$BASE" HEAD)"
+            if printf '%s\n' "$files" | grep -qx '.github/workflows/build.yml'; then
+              changed="$all"
+            else
+              changed="$(printf '%s\n' "$files" | grep '^sites/' | grep -v '^sites/[^/]*/k8s/' | cut -d/ -f2 | sort -u)"
+            fi
+          fi
+          echo "sites=$(printf '%s\n' "$changed" | jq -R . | jq -sc 'map(select(length > 0))')" >> "$GITHUB_OUTPUT"
+
+  check:
+    needs: changes
+    if: needs.changes.outputs.sites != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        site: ${{ fromJSON(needs.changes.outputs.sites) }}
+    defaults:
+      run:
+        working-directory: sites/${{ matrix.site }}
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - uses: extractions/setup-just@v3
-      - run: just check-generated
-
-  check-security-txt:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v3
-      - run: just check-security-txt
+      - run: just check
 
   build:
-    needs: [check-generated, check-security-txt]
-    if: github.event_name == 'push'
+    needs: [changes, check]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        site: ${{ fromJSON(needs.changes.outputs.sites) }}
     permissions:
       contents: read
       packages: write
@@ -40,7 +71,8 @@ jobs:
       - id: version
         run: echo "id=$(git rev-parse --short=7 HEAD)" >> "$GITHUB_OUTPUT"
 
-      - uses: docker/login-action@v3
+      - if: github.event_name == 'push'
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -49,15 +81,15 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE_PREFIX }}${{ matrix.site }}
           tags: |
             type=raw,value=latest
             type=sha
 
       - uses: docker/build-push-action@v5
         with:
-          context: .
-          push: true
+          context: sites/${{ matrix.site }}
+          push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
