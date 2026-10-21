@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: charemma-web-ai
+spec:
+  selector:
+    app: charemma-web-ai
+  ports:
+    - port: 80
+      targetPort: 80
