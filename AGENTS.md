@@ -313,4 +313,4 @@ The use of this column — whether a file requires it, and what the referenced f
 |  | `README.md` | docs | editable |  |  | Public project overview for human readers: what the project is, how its material is organized, and where that material comes from. _Platform-imposed name (README convention); see Platform-imposed exemption rule._ |
 | `sites/security/.ai` | `registry.md` | rules | editable |  |  | Site registry for security.charemma.de: the site's intent and the registry rows of every file in its site folder. |
 | `specs` | `013-site-images.md` | spec | editable |  |  | Spec for the site images: how each site folder becomes its own checked, built and published container image and where the cluster reads its manifests, and the reasons for it. |
-| `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
+| `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md`, `013-site-images.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
