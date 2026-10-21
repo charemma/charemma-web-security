@@ -18,7 +18,7 @@ All durable rules MUST follow these conventions:
 
 (e) When a rule depends on a long protocol or list, place the detail in a separate file and reference it instead of embedding it.
 
-(f) When a rule references a file, cite the file by its registered name (e.g., `rule-analysis.md`). Do not refer to a file by type, description, or alias.
+(f) When a rule references a file, cite the file by its registered name (e.g., `rule-analysis.md`), or by its project-relative path when the name is not unique per the **Reference resolution** rule. Do not refer to a file by type, description, or alias.
 
 ## Analysis Steps
 

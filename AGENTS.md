@@ -2,7 +2,7 @@
 
 ## Project Intent
 
-This project specifies security.charemma.de, the website for Charalambos Emmanouilidis' penetration testing services with a focus on Linux infrastructure. It presents the services, the engagement approach as an animated walkthrough, and a knowledge section on AI security, as static pages in German, English and Greek. The specification is the source of truth; the pages, styles, scripts, container image and deployment are built from it. The visual design in `docs/design/` is the input the specification was derived from.
+This project specifies the websites of Charalambos Emmanouilidis, one site folder per domain, sharing one set of rules, tooling and contract. Each site's intent is stated in its site registry. The specification is the source of truth; the pages, styles, scripts, container images and deployments are built from it.
 
 ## Rule Management
 
@@ -94,6 +94,22 @@ The project root contains a single reserved directory named `.tmp/` for AI's tra
 
 - When the current branch is `main`, AI MUST ask the user for a branch name before the first commit, then create and switch to that branch.
 
+## Sites
+
+- A site is one website delivered under its own domain; all files of a site MUST live in its site folder `sites/<site>/`.
+
+- Each site folder MUST contain a site registry `sites/<site>/.ai/registry.md` of type `rules`, holding the site's intent and the registry rows of every file inside that site folder.
+
+- Files outside site folders MUST be registered in the File Registry of `AGENTS.md`.
+
+- Every site registry MUST be registered in the File Registry of `AGENTS.md`.
+
+- Site registries MUST follow the Structure and Discipline of the File Registry section; their Subfolder column holds project-relative paths.
+
+- A path or file name in a rule of `AGENTS.md` that is not registered at the project root (e.g. `src/articles/`, `build.py`) MUST be read as that path inside each site folder.
+
+- A spec MUST derive layout, colors and texts only from `design` files of its own site folder; do not use the `design` files of another site.
+
 ## File Registry
 
 The File Registry is the project's index of every file in it, structured as a table where each row represents one registered file. Every change to the file inventory MUST be reflected here before the file system is touched. Subfolders are not registered separately — they are derived from the Subfolder column of registered files, and exist on disk by virtue of having at least one file placed in them.
@@ -110,7 +126,7 @@ The Type column carries a categorical label describing what the file is. The set
 - `log` — a file accumulating timestamped entries.
 - `spec` — a file specifying a feature's intended behavior and the reasons for it; the source of truth that implementation is built from.
   - Files of type `spec` MUST be named `NNN-<name>.md`, where `NNN` is a three-digit number and `<name>` is a short souvlaki-case name (e.g. `001-landing-page.md`).
-  - A new spec MUST take the number following the highest number ever assigned to a spec in the git history of `main` or of the current branch, including specs since removed; do not reuse a freed number.
+  - A new spec MUST take the number following the highest number ever assigned to a spec in the same subfolder in the git history of `main` or of the current branch, including specs since removed or moved into that subfolder; do not reuse a freed number.
   - The number of an existing spec MUST NOT change; when renaming a spec, change only the `<name>` part.
 - `code`: a source, test, or build-configuration file of the implementation.
   - Files of type `code` MUST carry the `generated` or the `spec-maintained` protocol.
@@ -170,8 +186,6 @@ Every registered file MUST carry an explicit protocol value. AI MAY propose new 
 
 #### Extension
 
-Registered file names use one extension separated by a single period, except dot-files without an extension per the **Dot-file extension** rule and files of type `design` per the **Design-tool exemption** rule.
-
 The extension MUST be derived from the File column as the part of the file name after its last period, including that period (e.g. `.md` for `AGENTS.md`). A leading dot per the **Leading dot** rule is not an extension separator; a dot-file without a further period has no extension (e.g. `.gitignore`).
 
 The Registered Files table MUST NOT carry an Extension column; derive the extension from the File column instead.
@@ -227,13 +241,13 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Inventory change. Any change to the project's file inventory — creation, deletion, rename, or move — MUST be reflected in the File Registry. AI MUST propose the registry update (a complete row for additions; the affected row for changes; the deletion target for removals) and obtain explicit user approval. Only after approval MAY AI write the registry update or perform the file-system operation.
 
-- Naming convention. Registered file names and subfolder path segments MUST consist only of lowercase English letters (a–z), digits (0–9), dashes (`-`), and underscores (`_`), except as allowed by the **Leading dot** rule. File extensions MUST follow the same restriction. AI MUST NOT register a non-conforming name and MUST propose a conforming alternative.
+- Naming convention. Registered file names MUST consist only of lowercase English letters (a–z), digits (0–9), dashes (`-`), underscores (`_`) and periods (`.`), except as allowed by the **Leading dot** rule. Subfolder path segments MUST consist only of lowercase English letters, digits, dashes and underscores, except as allowed by the **Leading dot** rule. AI MUST NOT register a non-conforming name and MUST propose a conforming alternative.
 
 - Leading dot. A file name or subfolder path segment MAY start with a single leading dot (e.g. `.gitignore`, `.ai`, `.python-version`); the dot is part of the name, not an extension separator, and the rest of the name MUST follow the **Naming convention** rule.
 
 - Dot-file extension. A file whose name starts with a dot MAY have no extension.
 
-- Name uniqueness. No two entries in the File Registry MAY share the same value in the File column, compared case-insensitively, regardless of subfolder. When a proposed file name collides with an existing entry, AI MUST flag the collision and propose a distinct name before registration.
+- Name uniqueness. No two registered files MAY share the same project-relative path (Subfolder plus File), compared case-insensitively; files in different subfolders MAY share a file name. When a proposed path collides with a registered path, AI MUST flag the collision and propose a distinct name before registration.
 
 - Path discipline. AI MUST place every registered file at the path recorded in its registry row (subfolder plus file name). Moving a file requires updating the row first; loose files outside their registered path MUST be flagged when detected.
 
@@ -245,7 +259,9 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Unregistered-file edits. AI MUST NOT modify an unregistered file; propose its registry row per the **Inventory change** rule first and change the file only after the row is approved. Reading an unregistered file remains allowed, so that a Description can be proposed. Files in `.tmp/` and paths matched by a pattern in `.gitignore` are exempt per the **Scratch exemption** and **Ignored-path exemption** rules.
 
-- Reference resolution. When a rule references a file by name, AI MUST resolve the reference against the File Registry's file rows. AI MUST NOT check disk presence for the purposes of reference resolution. Unresolved file references MUST trigger the **Undefined References** rule.
+- Reference resolution. When a rule or registry cell references a file by name, AI MUST resolve the name first against the registry of the referencing file's site folder, then against the File Registry of `AGENTS.md`, then against all site registries. A reference written as a project-relative path MUST resolve only to that path. A name that matches more than one registered file at the first level where it matches MUST be rewritten as a project-relative path. AI MUST NOT check disk presence for the purposes of reference resolution. Unresolved file references MUST trigger the **Undefined References** rule.
+
+- Glob rows. A registry row MAY register several files by a glob in the File column (`*` within a name segment, `**` across subfolders); its Type, Protocol and Description apply to every matched file. Glob rows MUST carry the `editable` or `read-only` protocol; register `spec`, `rules`, `generated` and `spec-maintained` files individually. No file MAY match more than one row.
 
 - Agent-imposed exemption. The file `AGENTS.md` is exempt from the Naming Convention, Name Uniqueness, Path Discipline, and Subfolder Convention rules — its name and location are dictated by the AI agent. The registry's Description field for `AGENTS.md` MUST note this agent-imposed nature.
 
@@ -253,9 +269,9 @@ The use of this column — whether a file requires it, and what the referenced f
 
 - Platform-imposed note. The registry's Description field for `README.md` MUST note its platform-imposed name.
 
-- Build-tool exemption. The files `Dockerfile` and `justfile` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; their names are dictated by the build tools that read them. The registry's Description field for both MUST note this tool-imposed nature.
+- Build-tool exemption. The files `Dockerfile` and `justfile` are exempt from the Naming convention rule; their names are dictated by the build tools that read them. The registry's Description field for both MUST note this tool-imposed nature.
 
-- Design-tool exemption. Files of type `design` are exempt from the Naming convention rule and from the single-extension requirement of the Extension section; keep the names the design tool assigned, because the handoff refers to the files by those names. Their extension is derived per the **Extension** section (e.g. `.html` for `Main.dc.html`) and MUST be a permitted extension.
+- Design-tool exemption. Files of type `design` are exempt from the Naming convention rule; keep the names the design tool assigned, because the handoff refers to the files by those names. Their extension is derived per the **Extension** section (e.g. `.html` for `Main.dc.html`) and MUST be a permitted extension.
 
 - Design-tool note. The registry's Description field for every file of type `design` MUST note its tool-imposed name.
 
