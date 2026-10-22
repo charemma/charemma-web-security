@@ -4,8 +4,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Engineering · Charalambos Emmanouilidis</title>
-<meta name="description" content="AI Engineer mit Plattform- und Security-Hintergrund: Coding-Agenten, Spec-driven Development, MCP-Server und LLM-Workflows – nachvollziehbar, auditfähig, auf Ihrer Infrastruktur.">
+<title>AI, GenAI & LLM Engineering · Charalambos Emmanouilidis</title>
+<meta name="description" content="AI & LLM Engineer aus Stuttgart: GenAI-Lösungen, LLM-Anwendungen, KI-Pipelines, Coding-Agenten, Spec-driven Development und MCP-Server – nachvollziehbar, auditfähig, auf Ihrer Infrastruktur.">
 <link rel="canonical" href="https://ai.charemma.de/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -187,6 +187,28 @@ section { position: relative; }
 /* ---------- Stats ---------- */
 .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: transparent; }
 .stat__v, .stat__l { text-shadow: 0 0 14px var(--bg), 0 0 4px var(--bg); }
+.ident { margin: 0 0 26px; font-family: var(--font-mono); font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--text); text-shadow: 0 0 14px var(--bg); }
+.ident i { font-style: normal; color: var(--accent); margin: 0 6px; }
+.focus { list-style: none; margin: 44px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; width: min(920px, 100%); text-align: left; border-top: 1px solid var(--line-2); }
+.focus li { padding: 18px 18px 0; display: grid; grid-template-columns: auto 1fr; column-gap: 12px; row-gap: 2px; }
+.focus li + li { border-left: 1px solid var(--line); }
+.focus__n { grid-row: span 2; font-family: var(--font-mono); font-size: 12px; color: var(--accent); padding-top: 3px; }
+.focus b { font-weight: 600; font-size: 16px; color: var(--ink); }
+.focus small { font-size: 14px; color: var(--muted); line-height: 1.45; }
+.focus, .focus b, .focus small { text-shadow: 0 0 12px var(--bg), 0 0 4px var(--bg); }
+.cta .focus { margin: 64px auto 0; }
+@media (max-width: 760px) { .focus { grid-template-columns: 1fr; } .focus li + li { border-left: 0; border-top: 1px solid var(--line); } .focus li { padding: 14px 4px; } }
+.ways { list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line-2); }
+.ways li { padding: 28px 28px 8px 0; display: flex; flex-direction: column; gap: 8px; }
+.ways li + li { padding-left: 28px; border-left: 1px solid var(--line); }
+.ways__n { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.ways__more { margin: 28px 0 0; padding-top: 22px; border-top: 1px solid var(--line); font-size: 16px; color: var(--text); }
+.ways__more span { font-weight: 500; color: var(--ink); margin-right: 6px; }
+.ways__more a { color: var(--accent); white-space: nowrap; }
+.ways__more a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ways h3 { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
+.ways p { margin: 0; font-size: 15.5px; color: var(--text); }
+@media (max-width: 860px) { .ways { grid-template-columns: 1fr; } .ways li, .ways li + li { padding: 20px 0; border-left: 0; } .ways li + li { border-top: 1px solid var(--line); } }
 .dialog__text { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
 .dialog__kicker { margin: 0; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
 .dialog__kicker i { font-style: normal; color: var(--accent); }
@@ -445,6 +467,7 @@ section { position: relative; }
   <!-- HERO -->
   <section class="container hero" data-shape="code">
     <div class="hero__float">
+      <p class="ident reveal">Charalambos Emmanouilidis <i>·</i> AI &amp; LLM Engineer</p>
       <h1 class="hero__title" data-type data-type-now><span class="vibe">Die Spec entsteht im Vibe.</span><br><span class="acc">Aus der Spec entsteht der Code.</span></h1>
     </div>
     <div class="scroll-cue" aria-hidden="true">SCROLL<i></i></div>
@@ -453,7 +476,6 @@ section { position: relative; }
   <!-- DIALOG -->
   <section class="chapter-audio" id="dialog" data-shape="audio">
     <div class="container dialog__text">
-      <p class="dialog__kicker reveal">Charalambos Emmanouilidis <i>·</i> AI Engineer</p>
       <p class="dialog__lead reveal">Ideen, Spezifikation und Plan entstehen frei und explorativ – im Dialog mit dem Modell. Umgesetzt wird dann streng nach Spec: Agenten schreiben den Code, ich sorge dafür, dass es der richtige ist. Mit eigenen MCP-Servern, Audit-Trail und auf Ihrer Infrastruktur.</p>
       <div class="hero__actions reveal">
         <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Anfrage%20AI%20Engineering">Gespräch vereinbaren <span class="arr">→</span></a>
@@ -467,6 +489,21 @@ section { position: relative; }
       <div class="stat"><span class="stat__v"><span class="br">[</span> 100% <span class="br">]</span></span><span class="stat__l">Spec vor Code</span></div>
       <div class="stat"><span class="stat__v"><span class="br">[</span> OSCP <span class="br">]</span></span><span class="stat__l">Offensive Security zertifiziert</span></div>
     </div>
+    </div>
+  </section>
+
+  <!-- FOKUS -->
+  <section class="container sec" id="fokus">
+    <div class="glass">
+      <div class="eyebrow reveal"><b>Fokus</b> Wobei ich helfe</div>
+      <h2 class="h2" data-type>Wo KI bei Ihnen ansetzen kann.</h2>
+      <p class="lead reveal">Ein paar Beispiele, wie sich AI Engineering, GenAI und LLMs einsetzen lassen – bewusst nicht abschließend.</p>
+      <ol class="ways stagger">
+        <li><span class="ways__n">z. B.</span><h3>Teams befähigen</h3><p>Ich führe Coding-Agenten und Spec-driven Development in Ihrer Entwicklung ein: Regeln, Workflows und Onboarding – passend zu Ihren Prozessen, auch im regulierten Umfeld.</p></li>
+        <li><span class="ways__n">z. B.</span><h3>Mit Agenten umsetzen</h3><p>Ich übernehme Entwicklungsaufgaben selbst und liefere nach Spec mit Coding-Agenten – schnell, nachvollziehbar und mit Audit-Trail.</p></li>
+        <li><span class="ways__n">z. B.</span><h3>GenAI- &amp; LLM-Lösungen bauen</h3><p>KI-Pipelines, LLM-Anwendungen, RAG und MCP-Server – GenAI, die sich sicher in Ihre bestehenden Systeme und Ihre Infrastruktur einfügt.</p></li>
+      </ol>
+      <p class="ways__more reveal"><span>…und mehr.</span> Wo KI in Ihren Abläufen wirklich hilft, finden wir am besten gemeinsam heraus. <a href="#kontakt" data-go>Sprechen wir darüber →</a></p>
     </div>
   </section>
 
@@ -575,6 +612,7 @@ section { position: relative; }
 
   <!-- CTA -->
   <section class="container cta" id="kontakt" data-shape="ring"><div class="cta__float">
+    <p class="ident reveal">Charalambos Emmanouilidis <i>·</i> AI &amp; LLM Engineer</p>
     <h2 class="h2" data-type>Agenten ins Team bringen, <span class="acc">ohne die Kontrolle abzugeben.</span></h2>
     <p class="reveal">Ein kurzes Gespräch reicht, um zu sehen, wo Agenten bei Ihnen Zeit sparen – und wo sie Leitplanken brauchen.</p>
     <div class="cta__actions reveal">
