@@ -21,6 +21,10 @@
   <script type="module" src="{{ asset_url('/assets/js/lang.js') }}"></script>
   {%- endif %}
   {%- block scripts %}{% endblock %}
+  {#- Visitor statistics under host plus path; pages without a canonical address (404) do not count, spec 014 #}
+  {%- if canonical %}
+  <script data-goatcounter="{{ site.stats.endpoint }}" data-goatcounter-settings='{{ {"path": canonical | replace(site.base_url, site_host)} | tojson }}' async src="{{ site.stats.script }}"></script>
+  {%- endif %}
 </head>
 <body class="{% block body_class %}page-dark{% endblock %}">
   <div class="site-header-bar">
@@ -54,6 +58,7 @@
       <div class="site-footer__links">
         <a href="{{ site.links.github }}">GitHub</a>
         <a href="{{ site.links.main_site }}">charemma.de</a>
+        <a href="{{ home_href }}{{ site.privacy_path }}">{{ t.privacy.link }}</a>
         {#- __SITE_VERSION__ and __SITE_COMMIT__ are replaced when the deliverable is built (Dockerfile, justfile), not here #}
         <a class="site-footer__version" href="{{ site.links.repo }}/commit/__SITE_COMMIT__">git:(__SITE_VERSION__)</a>
       </div>

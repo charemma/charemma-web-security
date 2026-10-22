@@ -8,8 +8,10 @@
   ],
   "pages": [
     { "template": "index.html.j2", "path": "" },
-    { "template": "wissen.html.j2", "path": "wissen/ki-sicherheit/" }
+    { "template": "wissen.html.j2", "path": "wissen/ki-sicherheit/" },
+    { "template": "datenschutz.html.j2", "path": "datenschutz/" }
   ],
+  "privacy_path": "datenschutz/",
   "knowledge": {
     "path": "wissen/ki-sicherheit/",
     "groups": ["llm", "infra"],
@@ -28,5 +30,9 @@
     "github": "https://github.com/charemma",
     "repo": "https://github.com/charemma/charemma-web-security",
     "main_site": "https://charemma.de"
+  },
+  "stats": {
+    "endpoint": "https://stats.charemma.de/count",
+    "script": "https://stats.charemma.de/count.js"
   }
 }

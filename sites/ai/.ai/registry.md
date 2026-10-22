@@ -10,7 +10,8 @@ This site is ai.charemma.de, the AI engineering website of Charalambos Emmanouil
 
 | Subfolder | File | Type | Protocol | Dependencies | Instructions | Description |
 | --- | --- | --- | --- | --- | --- | --- |
-| `sites/ai/html` | `index.html` | asset | editable |  |  | Start page: the single page of the site, delivered to the browser as is. |
+| `sites/ai/html` | `index.html` | asset | editable |  |  | Start page: the front page of the site, delivered to the browser as is. |
+| `sites/ai/html/datenschutz` | `index.html` | asset | editable |  |  | Privacy page: the site's privacy notice, delivered to the browser as is. |
 | `sites/ai` | `Dockerfile` | code | spec-maintained | `013-site-images.md` |  | Container image recipe: how the delivered site is packaged into the web server image and which build-time values it takes. _Tool-imposed name; see Build-tool exemption rule._ |
 | `sites/ai` | `justfile` | code | spec-maintained | `013-site-images.md` |  | Task runner recipes: the local and CI entry points for checking, stamping, serving and building the site. _Tool-imposed name; see Build-tool exemption rule._ |
 | `sites/ai/nginx` | `default.conf` | code | spec-maintained | `013-site-images.md` |  | Web server configuration: how requests are routed and which response headers apply. |
