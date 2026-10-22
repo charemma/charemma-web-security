@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script data-goatcounter="https://stats.charemma.de/count" data-goatcounter-settings='{"path": "charemma.de/"}' async src="https://stats.charemma.de/count.js"></script></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>charemma.de Platform</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Platform & DevOps Engineer aus Stuttgart: Entwicklerplattformen, Kubernetes, GitOps, CI/CD, Embedded Linux und deklarative, reproduzierbare Setups – mit Security und KI-Integration aus einer Hand.">
@@ -22,12 +22,15 @@
   --faint: #9aa6ae;
   --line: #d6dde2;
   --line-2: #b9c5cc;
-  --grid: rgba(30, 70, 110, 0.055);
-  --grid-major: rgba(30, 70, 110, 0.1);
+  --grid: rgba(30, 91, 184, 0.0);
+  --grid-major: rgba(30, 91, 184, 0.055);
   --accent: #1e5bb8;
   --accent-rgb: 30, 91, 184;
   --accent-soft: rgba(30, 91, 184, 0.08);
   --on-accent: #ffffff;
+  --panel: rgba(252, 252, 253, 0.84);
+  --panel-line: rgba(19, 32, 43, 0.08);
+  --panel-shadow: 0 1px 2px rgba(19, 32, 43, .04), 0 10px 28px -12px rgba(19, 32, 43, .14), 0 40px 80px -40px rgba(30, 91, 184, .22);
   --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -37,18 +40,22 @@
 }
 :root[data-theme="dark"] {
   --paper: #0b1824; --sheet: #0f1f2d; --ink: #e6eef3; --ink-rgb: 230, 238, 243; --text: #a9bac5; --muted: #7c8f9b; --faint: #50636f;
-  --line: #1c3040; --line-2: #2b4356; --grid: rgba(150, 195, 235, 0.05); --grid-major: rgba(150, 195, 235, 0.09);
+  --line: #1c3040; --line-2: #2b4356; --grid: rgba(150, 195, 235, 0); --grid-major: rgba(150, 195, 235, 0.07);
   --accent: #6aa8ff; --accent-rgb: 106, 168, 255; --accent-soft: rgba(106, 168, 255, 0.1); --on-accent: #06101f;
+  --panel: rgba(15, 31, 45, 0.82); --panel-line: rgba(150, 195, 235, 0.09); --panel-shadow: inset 0 1px 0 rgba(255, 255, 255, .03), 0 30px 70px -30px rgba(0, 0, 0, .75);
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0; color: var(--ink); font-family: var(--font-sans); font-size: 17px; line-height: 1.6;
   background-color: var(--paper);
-  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px), linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; background-attachment: fixed;
+  background-image: none;
   overflow-x: hidden; -webkit-font-smoothing: antialiased; transition: background-color .3s, color .3s;
 }
+body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+  background-size: 96px 96px; background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 40% 45%, transparent 35%, #000 100%); mask-image: radial-gradient(ellipse 70% 80% at 40% 45%, transparent 35%, #000 100%); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--paper); }
 a { color: inherit; text-decoration: none; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -114,12 +121,18 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .hero { min-height: calc(100vh - 65px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-block: 72px; border-bottom: 1px solid var(--line-2); }
 .ident { margin: 0; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
 .ident i { font-style: normal; color: var(--accent); margin: 0 8px; }
-.h1 { margin: 26px 0 0; font-family: var(--font-display); font-weight: 650; font-size: clamp(40px, 6.4vw, 96px); line-height: .98; letter-spacing: -0.035em; font-variation-settings: "wdth" 118; }
+.h1 { margin: 26px 0 0; font-family: var(--font-display); font-weight: 650; font-size: clamp(34px, 5.6vw, 84px); line-height: 1.02; letter-spacing: -0.035em; font-variation-settings: "wdth" 118; }
 .h1 .d { display: block; color: var(--faint); font-weight: 400; font-variation-settings: "wdth" 100; }
 .h1 .s { display: block; }
 .h1 .s em, .h1 .s2 em { font-style: normal; color: var(--accent); }
+.h1 .w { white-space: normal; }
+.hero__sub { margin: 28px auto 0; max-width: 46ch; font-size: clamp(17px, 1.6vw, 21px); line-height: 1.5; color: var(--text); }
 .h1 .s2 { display: block; margin-top: .18em; font-size: .56em; font-weight: 500; letter-spacing: -0.02em; color: var(--text); font-variation-settings: "wdth" 108; }
-.cue { margin-top: 72px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .3em; color: var(--faint); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.cue { margin-top: 72px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .3em; color: var(--accent); display: flex; flex-direction: column; align-items: center; gap: 10px; animation: cueBob 2.2s ease-in-out infinite; transition: opacity .4s ease; }
+.cue::after { content: ""; width: 8px; height: 8px; margin-top: -6px; border-right: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(45deg); }
+.cue i { background: linear-gradient(var(--accent), transparent) !important; }
+.cue.gone { opacity: 0; }
+@keyframes cueBob { 0%, 100% { transform: translateY(0); opacity: .55; } 50% { transform: translateY(10px); opacity: 1; } }
 .cue i { width: 1px; height: 36px; background: linear-gradient(var(--faint), transparent); animation: cue 2s ease-in-out infinite; transform-origin: top; }
 @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
 
@@ -158,9 +171,45 @@ h1, h2, h3, h4 { text-wrap: balance; }
 .rail.lit::after { background: var(--accent); box-shadow: 0 0 10px rgba(var(--accent-rgb), .5); }
 .rail.lit .rail__n { color: var(--ink); }
 /* drawings settle in when their chapter arrives */
-.js .bg-draw svg { opacity: 0; transition: opacity 1.4s ease; }
+.hero { position: relative; }
+.hero > .wrap, .hero > .cue { position: relative; z-index: 1; }
+.bg-draw.hero-draw svg { transform: none; top: auto; right: auto; }
+.bg-draw.hero-draw .hd-l { left: max(8px, calc((100vw - 1240px) / 2 - 60px)); bottom: 6%; width: clamp(200px, 22vw, 330px); }
+.bg-draw.hero-draw .hd-r { right: max(8px, calc((100vw - 1240px) / 2 - 80px)); top: 7%; width: clamp(220px, 27vw, 420px); }
+@media (max-width: 1100px) { .bg-draw.hero-draw .hd-l { bottom: 2%; width: 180px; opacity: .6; } .bg-draw.hero-draw .hd-r { top: 2%; width: 220px; opacity: .6; } }
+@media (max-width: 640px) { .bg-draw.hero-draw .hd-l { display: none; } .bg-draw.hero-draw .hd-r { right: -40px; top: 0; width: 200px; opacity: .45; } }
+.js .bg-draw svg { opacity: 0; transition: opacity .2s ease; }
+.js .hero.seen .bg-draw svg { opacity: 1; }
 .js .sheet.seen .bg-draw svg { opacity: 1; }
 @media (max-width: 1100px) { .js .sheet.seen .bg-draw svg { opacity: .55; } }
+/* calmer layout: no framed panels, only hairlines between rows */
+.foci, .aps, .views, .steps, .tblock, .bom, .stack, .log, .cta__card { background: transparent !important; border: 0 !important; border-top: 1px solid var(--line-2) !important; }
+/* each chapter is a sheet of paper lying on the blueprint: solid, slightly raised, soft layered shadow */
+.sheet .body { position: relative; background: var(--panel); border: 1px solid var(--panel-line); border-radius: 6px; padding: clamp(24px, 3.6vw, 48px); box-shadow: var(--panel-shadow); -webkit-backdrop-filter: blur(10px) saturate(1.2); backdrop-filter: blur(10px) saturate(1.2); }
+@media (min-width: 861px) { .sheet .body { margin-left: 40px; } }
+@media (min-width: 1180px) { .sheet .body { max-width: 760px; } }
+.sheet .body::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; border-radius: 6px 6px 0 0; background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), .35), transparent); }
+.subpage .sheet .body { max-width: none; }
+.foc, .ap, .view-c, .step { padding: 22px 28px 22px 0; border-left: 0 !important; border-bottom: 1px solid var(--line) !important; }
+.foc:hover, .ap:hover, a.view-c:hover, .bom tbody tr:hover { background: transparent; }
+.foc, .ap { cursor: default; }
+.foc__sep, .foc__n, .ap__h b { transition: background .4s ease, color .4s ease, opacity .4s ease; }
+.foc__n { opacity: .75; } .foc:hover .foc__n { opacity: 1; }
+.foc:hover .foc__sep { background: repeating-linear-gradient(90deg, rgba(var(--accent-rgb), .45) 0 6px, transparent 6px 11px); }
+a.view-c:hover .view-c__t { color: var(--accent); }
+.view-c--here { background: transparent; }
+.tblock > div { padding-left: 0; border-left: 0 !important; }
+.bom th { background: transparent; padding-left: 0; }
+.bom td { padding-left: 0; }
+.bom td.bom__pos { padding-left: 0; }
+.log__h { background: transparent; padding-left: 0; padding-right: 0; }
+.log li { padding-left: 0; padding-right: 0; }
+.log__f { padding-left: 0; padding-right: 0; }
+.cta__card { padding: 24px 0 0; }
+.stack__k { background: transparent; border-right: 0; padding-left: 0; }
+.sublink { background: transparent; }
+.sheet { border-bottom-color: var(--line); }
+.sites a.is-here { background: transparent; color: var(--accent); }
 /* typewriter for headings */
 .ty .w { white-space: nowrap; }
 .ty .ch { opacity: 0; }
@@ -190,7 +239,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
 
 .foci { margin-top: 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
 .foc { padding: 22px; display: flex; flex-direction: column; gap: 6px; min-width: 0; border-bottom: 1px solid var(--line-2); transition: background .25s; }
-.foc:hover { background: var(--accent-soft); }
+
 .foc:nth-child(even) { border-left: 1px solid var(--line-2); }
 .foc:nth-last-child(-n+2) { border-bottom: 0; }
 .foc__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
@@ -286,7 +335,7 @@ a.xl:hover { text-decoration-thickness: 2px; }
 .v--after { color: var(--accent); font-weight: 500; }
 .aps { margin-top: 44px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
 .ap { padding: 22px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; min-width: 0; transition: background .25s; }
-.ap:hover { background: var(--accent-soft); }
+
 .ap:nth-child(even) { border-left: 1px solid var(--line); }
 .ap:nth-last-child(-n+2) { border-bottom: 0; }
 .ap__h { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
@@ -425,9 +474,11 @@ a.view-c:hover { background: var(--accent-soft); }
 
   <!-- HERO: title only -->
   <section class="hero">
+    <div class="bg-draw hero-draw" aria-hidden="true"><svg class="hd-l" viewBox="0 0 400 440" aria-hidden="true"><polygon class="k" points="200,230 373.2,330 200,430 26.8,330"/><polygon class="c" points="200,266 310.8,330 200,394 89.2,330"/><rect class="k" x="54" y="54" width="32" height="32"/><text class="t" x="70" y="46" text-anchor="middle">TEAM A</text><line class="ad" x1="70" y1="88" x2="176.6" y2="294"/><polygon class="af" points="176.6,294 170.4,288.9 176,286"/><rect class="k" x="184" y="24" width="32" height="32"/><text class="t" x="200" y="16" text-anchor="middle">TEAM B</text><line class="ad" x1="200" y1="58" x2="200" y2="294"/><polygon class="af" points="200,294 196.9,286.6 203.1,286.6"/><rect class="k" x="314" y="54" width="32" height="32"/><text class="t" x="330" y="46" text-anchor="middle">TEAM C</text><line class="ad" x1="330" y1="88" x2="223.4" y2="294"/><polygon class="af" points="223.4,294 224,286 229.6,288.9"/><text class="ta" x="200" y="334" text-anchor="middle">GOLDEN PATH</text><line class="c2" x1="373.2" y1="330" x2="391.2" y2="360"/><text class="t" x="391.2" y="374" text-anchor="end">SELF-SERVICE</text><text class="t" x="10" y="426" text-anchor="start">ABB. B · ZUGANG FÜR TEAMS</text></svg><svg class="hd-r" viewBox="0 0 500 460" aria-hidden="true"><line class="c" x1="175" y1="235.6" x2="175" y2="134.8"/><line class="c" x1="330.9" y1="325.6" x2="330.9" y2="224.8"/><line class="c" x1="175" y1="415.6" x2="175" y2="314.8"/><line class="c" x1="19.1" y1="325.6" x2="19.1" y2="224.8"/><polygon class="k" points="175,235.6 330.9,325.6 175,415.6 19.1,325.6"/><polygon class="c" points="175,268 274.8,325.6 175,383.2 75.2,325.6"/><line class="c2" x1="330.9" y1="325.6" x2="352.9" y2="325.6"/><text class="t" x="358.9" y="329.1" text-anchor="start">INFRASTRUKTUR</text><polygon class="k" points="175,185.2 330.9,275.2 175,365.2 19.1,275.2"/><polygon class="c" points="175,217.6 274.8,275.2 175,332.8 75.2,275.2"/><line class="c2" x1="330.9" y1="275.2" x2="352.9" y2="275.2"/><text class="t" x="358.9" y="278.7" text-anchor="start">KUBERNETES</text><polygon class="a" points="175,134.8 330.9,224.8 175,314.8 19.1,224.8"/><line class="c2" x1="330.9" y1="224.8" x2="352.9" y2="224.8"/><text class="ta" x="358.9" y="228.3" text-anchor="start">PLATTFORM-DIENSTE</text><polygon class="k" points="175,140.2 195.3,151.9 175,163.6 154.7,151.9"/><line class="k" x1="195.3" y1="151.9" x2="195.3" y2="175.3"/><line class="k" x1="175" y1="163.6" x2="175" y2="187"/><line class="k" x1="154.7" y1="151.9" x2="154.7" y2="175.3"/><line class="k" x1="195.3" y1="175.3" x2="175" y2="187"/><line class="k" x1="175" y1="187" x2="154.7" y2="175.3"/><polygon class="k" points="218.6,165.4 238.9,177.1 218.6,188.8 198.4,177.1"/><line class="k" x1="238.9" y1="177.1" x2="238.9" y2="200.5"/><line class="k" x1="218.6" y1="188.8" x2="218.6" y2="212.2"/><line class="k" x1="198.4" y1="177.1" x2="198.4" y2="200.5"/><line class="k" x1="238.9" y1="200.5" x2="218.6" y2="212.2"/><line class="k" x1="218.6" y1="212.2" x2="198.4" y2="200.5"/><polygon class="k" points="262.3,190.6 282.6,202.3 262.3,214 242,202.3"/><line class="k" x1="282.6" y1="202.3" x2="282.6" y2="225.7"/><line class="k" x1="262.3" y1="214" x2="262.3" y2="237.4"/><line class="k" x1="242" y1="202.3" x2="242" y2="225.7"/><line class="k" x1="282.6" y1="225.7" x2="262.3" y2="237.4"/><line class="k" x1="262.3" y1="237.4" x2="242" y2="225.7"/><polygon class="k" points="125.1,169 145.4,180.7 125.1,192.4 104.9,180.7"/><line class="k" x1="145.4" y1="180.7" x2="145.4" y2="204.1"/><line class="k" x1="125.1" y1="192.4" x2="125.1" y2="215.8"/><line class="k" x1="104.9" y1="180.7" x2="104.9" y2="204.1"/><line class="k" x1="145.4" y1="204.1" x2="125.1" y2="215.8"/><line class="k" x1="125.1" y1="215.8" x2="104.9" y2="204.1"/><polygon class="k" points="212.4,219.4 232.7,231.1 212.4,242.8 192.1,231.1"/><line class="k" x1="232.7" y1="231.1" x2="232.7" y2="254.5"/><line class="k" x1="212.4" y1="242.8" x2="212.4" y2="266.2"/><line class="k" x1="192.1" y1="231.1" x2="192.1" y2="254.5"/><line class="k" x1="232.7" y1="254.5" x2="212.4" y2="266.2"/><line class="k" x1="212.4" y1="266.2" x2="192.1" y2="254.5"/><polygon class="k" points="131.4,215.8 151.6,227.5 131.4,239.2 111.1,227.5"/><line class="k" x1="151.6" y1="227.5" x2="151.6" y2="250.9"/><line class="k" x1="131.4" y1="239.2" x2="131.4" y2="262.6"/><line class="k" x1="111.1" y1="227.5" x2="111.1" y2="250.9"/><line class="k" x1="151.6" y1="250.9" x2="131.4" y2="262.6"/><line class="k" x1="131.4" y1="262.6" x2="111.1" y2="250.9"/><line class="c2" x1="218.6" y1="177.1" x2="218.6" y2="131.1"/><text class="t" x="218.6" y="123.1" text-anchor="middle">ANWENDUNGEN DER TEAMS</text><text class="t" x="10" y="446" text-anchor="start">ABB. A · PLATTFORM</text></svg></div>
     <div class="wrap">
       <p class="ident">Charalambos Emmanouilidis<i>·</i>Platform &amp; DevOps Engineer</p>
-      <h1 class="h1"><span class="s">Entwicklungsplattformen, die Teams entlasten.</span><span class="s2">Automatisierte Abläufe. Reproduzierbare Umgebungen. <br><em>Von der Architektur bis zum Betrieb.</em></span></h1>
+      <h1 class="h1"><span class="s">Entwicklungs­plattformen, <em>die Teams entlasten.</em></span></h1>
+      <p class="hero__sub">Automatisierte Abläufe. Reproduzierbare Umgebungen.<br>Von der Architektur bis zum Betrieb.</p>
     </div>
     <div class="cue" aria-hidden="true">SCROLL<i></i></div>
   </section>
@@ -663,7 +714,7 @@ a.view-c:hover { background: var(--accent-soft); }
   <div class="wrap foot__in">
     <span>© 2026 Charalambos Emmanouilidis</span>
     <span>Raum Stuttgart / Remote</span>
-    <span class="foot__links"><a href="https://github.com/charemma">GitHub</a><a href="https://dev.to/charemma">dev.to</a><a href="/datenschutz/">Datenschutz</a></span>
+    <span class="foot__links"><a href="https://github.com/charemma">GitHub</a><a href="https://dev.to/charemma">dev.to</a></span>
     <span class="foot__links"><a href="https://security.charemma.de">security.charemma.de</a><a href="https://ai.charemma.de">ai.charemma.de</a></span>
     <p class="foot__made">Gestaltet im Vibe mit Claude Design, umgesetzt per Spec-driven Development. <a href="https://ai.charemma.de">Wie das funktioniert →</a></p>
   </div>
@@ -736,6 +787,10 @@ a.view-c:hover { background: var(--accent-soft); }
     window.__retype = function () { typeEls.forEach(function (el) { if (!el._played && !el.closest('[hidden]')) { tio.unobserve(el); tio.observe(el); } }); };
   }
 
+  /* scroll cue fades once the visitor starts scrolling */
+  var cueEl = document.querySelector('.cue');
+  window.addEventListener('scroll', function () { if (cueEl) cueEl.classList.toggle('gone', window.scrollY > 40); }, { passive: true });
+
   /* Strand + diamond */
   var homePane = document.querySelector('[data-view="home"]'), strand = document.querySelector('.strand');
   var sFill = strand && strand.querySelector('.strand__fill'), sDot = strand && strand.querySelector('.strand__dot');
@@ -789,9 +844,27 @@ a.view-c:hover { background: var(--accent-soft); }
   window.addEventListener('load', layoutStrand);
 
   /* drawings fade in with their chapter */
-  var sheets = document.querySelectorAll('[data-view="home"] .sheet');
+  // drawings are drawn in as if someone were drafting them: strokes run along their path
+  // one after another, labels and filled marks fade in; dashed lines get their dash pattern back at the end
+  function drawIn(host) {
+    if (host._drawn) return; host._drawn = true;
+    var els = host.querySelectorAll('.bg-draw line, .bg-draw polygon, .bg-draw polyline, .bg-draw circle, .bg-draw path, .bg-draw rect, .bg-draw text'), n = els.length, stepMs = Math.min(45, 2400 / Math.max(1, n));
+    els.forEach(function (el, i) {
+      var delay = Math.round(i * stepMs), cs = getComputedStyle(el), isText = el.tagName.toLowerCase() === 'text';
+      var hasStroke = !isText && cs.stroke && cs.stroke !== 'none', len = 0;
+      if (hasStroke && el.getTotalLength) { try { len = el.getTotalLength(); } catch (e) { len = 0; } }
+      if (!len) { el.style.opacity = '0'; el.style.transition = 'opacity .7s ease ' + delay + 'ms'; requestAnimationFrame(function () { requestAnimationFrame(function () { el.style.opacity = ''; }); }); return; }
+      if (cs.fill && cs.fill !== 'none') { el.style.fillOpacity = '0'; }
+      el.style.strokeDasharray = len + ' ' + len; el.style.strokeDashoffset = len;
+      el.getBoundingClientRect();
+      el.style.transition = 'stroke-dashoffset ' + Math.min(1.4, .5 + len / 900).toFixed(2) + 's cubic-bezier(.45, 0, .2, 1) ' + delay + 'ms, fill-opacity .6s ease ' + (delay + 400) + 'ms';
+      requestAnimationFrame(function () { el.style.strokeDashoffset = '0'; el.style.fillOpacity = ''; });
+      el.addEventListener('transitionend', function done(ev) { if (ev.propertyName !== 'stroke-dashoffset') return; el.removeEventListener('transitionend', done); el.style.strokeDasharray = ''; el.style.strokeDashoffset = ''; el.style.transition = ''; });
+    });
+  }
+  var sheets = document.querySelectorAll('[data-view="home"] .sheet, [data-view="home"] .hero');
   if ('IntersectionObserver' in window && !reduce) {
-    var dio = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('seen'); dio.unobserve(e.target); } }); }, { threshold: 0.15 });
+    var dio = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { drawIn(e.target); e.target.classList.add('seen'); dio.unobserve(e.target); } }); }, { threshold: 0.15 });
     sheets.forEach(function (sh) { dio.observe(sh); });
   } else { sheets.forEach(function (sh) { sh.classList.add('seen'); }); }
 
