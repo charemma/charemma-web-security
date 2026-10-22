@@ -1,0 +1,824 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>charemma.de Platform</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Platform & DevOps Engineer aus Stuttgart: Entwicklerplattformen, Kubernetes, GitOps, CI/CD, Embedded Linux und deklarative, reproduzierbare Setups – mit Security und KI-Integration aus einer Hand.">
+<link rel="canonical" href="https://charemma.de/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* charemma.de – Platform & DevOps · "Blueprint"
+   Layout: ein technisches Zeichenblatt. Konstruktionsraster im Hintergrund, jede Sektion ein Blatt
+   mit Blattnummer in der Randspalte. Rechts daneben eine feste, dezente technische Zeichnung pro Kapitel
+   mit Hilfslinien, Maßlinien und Positionsnummern. Hell ist Standard, dunkel = Blaupause per Umschalter.
+   Ein Akzent: Blau wie die Tinte einer Blaupause, angelehnt an die bisherige charemma.de. */
+:root {
+  --paper: #f5f6f7;
+  --sheet: #fcfcfd;
+  --ink: #13202b;
+  --ink-rgb: 19, 32, 43;
+  --text: #3a4852;
+  --muted: #62717b;
+  --faint: #9aa6ae;
+  --line: #d6dde2;
+  --line-2: #b9c5cc;
+  --grid: rgba(30, 70, 110, 0.055);
+  --grid-major: rgba(30, 70, 110, 0.1);
+  --accent: #1e5bb8;
+  --accent-rgb: 30, 91, 184;
+  --accent-soft: rgba(30, 91, 184, 0.08);
+  --on-accent: #ffffff;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --container: 1240px;
+  --rail: 160px;
+}
+:root[data-theme="dark"] {
+  --paper: #0b1824; --sheet: #0f1f2d; --ink: #e6eef3; --ink-rgb: 230, 238, 243; --text: #a9bac5; --muted: #7c8f9b; --faint: #50636f;
+  --line: #1c3040; --line-2: #2b4356; --grid: rgba(150, 195, 235, 0.05); --grid-major: rgba(150, 195, 235, 0.09);
+  --accent: #6aa8ff; --accent-rgb: 106, 168, 255; --accent-soft: rgba(106, 168, 255, 0.1); --on-accent: #06101f;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--font-sans); font-size: 17px; line-height: 1.6;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px), linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; background-attachment: fixed;
+  overflow-x: hidden; -webkit-font-smoothing: antialiased; transition: background-color .3s, color .3s;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--paper); }
+a { color: inherit; text-decoration: none; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--on-accent); }
+h1, h2, h3, h4 { text-wrap: balance; }
+.wrap { max-width: var(--container); margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+
+/* ---------- Construction drawings on the sheet itself ----------
+   Large, faint drawings behind each chapter, one per planning step. They belong to the blueprint,
+   not to the content: thin strokes, dashed construction lines, small mono annotations. */
+.bg-draw { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.bg-draw svg { position: absolute; top: 50%; right: max(-80px, calc((100vw - 1240px) / 2 - 140px)); width: min(760px, 78vw); height: auto; transform: translateY(-50%); }
+.bg-draw .k { stroke: var(--ink); stroke-opacity: .16; stroke-width: 1; stroke-dasharray: 5 5; fill: none; }
+.bg-draw .kp { stroke: var(--ink); stroke-opacity: .16; stroke-width: 1; stroke-dasharray: 3 3; fill: var(--paper); }
+.bg-draw .c { stroke: var(--ink); stroke-opacity: .09; stroke-width: 1; stroke-dasharray: 2 6; fill: none; }
+.bg-draw .c2 { stroke: var(--ink); stroke-opacity: .1; stroke-width: 1; stroke-dasharray: 2 4; fill: none; }
+.bg-draw .a { stroke: var(--accent); stroke-opacity: .32; stroke-width: 1; stroke-dasharray: 6 5; fill: none; }
+.bg-draw .ad { stroke: var(--accent); stroke-opacity: .32; stroke-width: 1; stroke-dasharray: 6 5; fill: none; }
+.bg-draw .af { fill: var(--accent); fill-opacity: .32; }
+.bg-draw .kf { fill: var(--ink); fill-opacity: .16; }
+.bg-draw .kf2 { fill: var(--ink); fill-opacity: .05; stroke: var(--ink); stroke-opacity: .16; stroke-dasharray: 3 3; }
+.bg-draw .t { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; fill: var(--ink); fill-opacity: .26; }
+.bg-draw .ta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; fill: var(--accent); fill-opacity: .5; }
+.bg-draw svg.small { width: min(600px, 64vw); }
+@media (max-width: 1100px) { .bg-draw svg { opacity: .55; right: -30vw; } }
+.sheet__in { position: relative; z-index: 1; }
+
+/* ---------- Header ---------- */
+.head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-2); }
+.head__in { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+.head__l { display: flex; align-items: center; gap: 20px; min-width: 0; }
+.brand { font-family: var(--font-mono); font-size: 14.5px; display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
+.brand__u { color: var(--muted); }
+.brand__c { width: 8px; height: 15px; margin-left: 6px; background: var(--accent); animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.sites { display: flex; font-family: var(--font-mono); font-size: 12.5px; border: 1px solid var(--line-2); }
+.sites a { padding: 6px 11px; color: var(--muted); transition: color .2s, background .2s; }
+.sites a + a { border-left: 1px solid var(--line-2); }
+.sites a:hover { color: var(--ink); }
+.sites a.is-here { background: var(--ink); color: var(--paper); }
+.nav { display: flex; gap: 2px; font-size: 15px; }
+.nav a { padding: 10px 12px; color: var(--text); border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+.nav a:hover, .nav a.is-current { color: var(--ink); border-bottom-color: var(--accent); }
+.tools { display: flex; align-items: center; gap: 8px; }
+.theme { width: 40px; height: 40px; border: 1px solid var(--line-2); background: var(--sheet); color: var(--ink); display: grid; place-items: center; cursor: pointer; transition: border-color .2s; }
+.theme:hover { border-color: var(--accent); }
+.theme svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.theme .moon { display: none; }
+:root[data-theme="dark"] .theme .sun { display: none; }
+:root[data-theme="dark"] .theme .moon { display: block; }
+
+/* ---------- Buttons ---------- */
+.btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 22px; font-size: 16px; font-weight: 500; border: 1px solid transparent; transition: background .2s, border-color .2s, color .2s, transform .25s var(--ease); }
+.btn--primary { background: var(--accent); color: var(--on-accent); }
+.btn--primary:hover { transform: translateY(-2px); }
+.btn--ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn--ghost:hover { background: var(--ink); color: var(--paper); }
+.btn--sm { min-height: 40px; padding: 8px 16px; font-size: 14.5px; }
+.btn .arr { transition: transform .3s var(--ease); }
+.btn:hover .arr { transform: translateX(4px); }
+
+/* ---------- Hero: only the title ---------- */
+.hero { min-height: calc(100vh - 65px); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-block: 72px; border-bottom: 1px solid var(--line-2); }
+.ident { margin: 0; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.ident i { font-style: normal; color: var(--accent); margin: 0 8px; }
+.h1 { margin: 26px 0 0; font-family: var(--font-display); font-weight: 650; font-size: clamp(40px, 6.4vw, 96px); line-height: .98; letter-spacing: -0.035em; font-variation-settings: "wdth" 118; }
+.h1 .d { display: block; color: var(--faint); font-weight: 400; font-variation-settings: "wdth" 100; }
+.h1 .s { display: block; }
+.h1 .s em, .h1 .s2 em { font-style: normal; color: var(--accent); }
+.h1 .s2 { display: block; margin-top: .18em; font-size: .56em; font-weight: 500; letter-spacing: -0.02em; color: var(--text); font-variation-settings: "wdth" 108; }
+.cue { margin-top: 72px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .3em; color: var(--faint); display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.cue i { width: 1px; height: 36px; background: linear-gradient(var(--faint), transparent); animation: cue 2s ease-in-out infinite; transform-origin: top; }
+@keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* ---------- Sheet scaffolding ---------- */
+.sheet { border-bottom: 1px solid var(--line-2); position: relative; }
+.sheet__in { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); padding-block: 112px; }
+.rail { position: relative; border-right: 1px solid var(--line); padding-right: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+.rail__n { display: block; font-size: 13px; color: var(--ink); }
+.rail__n b { color: var(--accent); font-weight: 500; }
+.rail__t { display: block; margin-top: 4px; text-transform: uppercase; letter-spacing: .14em; }
+.rail__meta { display: block; margin-top: 18px; color: var(--faint); line-height: 1.7; }
+.rail::after { content: ""; position: absolute; right: -4px; top: 6px; width: 7px; height: 7px; background: var(--paper); border: 1px solid var(--accent); transform: rotate(45deg); }
+.body { padding-left: 48px; min-width: 0; }
+@media (min-width: 1180px) { .body { max-width: calc(48px + 700px); } }
+.h2 { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 4.2vw, 54px); line-height: 1.04; letter-spacing: -0.025em; font-variation-settings: "wdth" 112; }
+.h2 em { font-style: normal; color: var(--accent); }
+.lead { margin: 20px 0 0; max-width: 62ch; font-size: 18px; color: var(--text); }
+@media (max-width: 860px) {
+  .sheet__in { grid-template-columns: 1fr; padding-block: 80px; }
+  .rail { border-right: 0; border-bottom: 1px solid var(--line); padding: 0 0 14px; margin-bottom: 28px; display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; }
+  .rail__t, .rail__meta { margin-top: 0; }
+  .rail::after { display: none; }
+  .body { padding-left: 0; }
+}
+
+/* strand along the rails with a glowing diamond that follows the scroll position */
+.view-pane { position: relative; }
+.strand { position: absolute; width: 1px; background: transparent; pointer-events: none; z-index: 2; display: none; }
+@media (min-width: 861px) { .strand { display: block; } }
+.strand__fill { position: absolute; left: 0; top: 0; width: 1px; height: 0; background: linear-gradient(rgba(var(--accent-rgb), 0), rgba(var(--accent-rgb), .7)); opacity: 0; transition: opacity .6s ease; }
+.strand__fill.up { background: linear-gradient(rgba(var(--accent-rgb), .7), rgba(var(--accent-rgb), 0)); }
+.strand__dot { position: absolute; left: -3px; top: -3px; width: 7px; height: 7px; background: var(--accent); opacity: .6; box-shadow: 0 0 8px rgba(var(--accent-rgb), .35); transition: opacity .6s ease, box-shadow .6s ease; }
+.strand.moving .strand__fill { opacity: 1; transition-duration: .15s; }
+.strand.moving .strand__dot { opacity: .9; box-shadow: 0 0 12px 1px rgba(var(--accent-rgb), .5); transition-duration: .15s; }
+.rail::after { transition: background .4s, box-shadow .4s; }
+.rail.lit::after { background: var(--accent); box-shadow: 0 0 10px rgba(var(--accent-rgb), .5); }
+.rail.lit .rail__n { color: var(--ink); }
+/* drawings settle in when their chapter arrives */
+.js .bg-draw svg { opacity: 0; transition: opacity 1.4s ease; }
+.js .sheet.seen .bg-draw svg { opacity: 1; }
+@media (max-width: 1100px) { .js .sheet.seen .bg-draw svg { opacity: .55; } }
+/* typewriter for headings */
+.ty .w { white-space: nowrap; }
+.ty .ch { opacity: 0; }
+.ty .ch.on { opacity: 1; animation: chIn .5s var(--ease); }
+.ty.typed .ch { opacity: 1; }
+@keyframes chIn { 0% { color: var(--accent); } 100% { } }
+.caret { position: relative; display: inline-block; width: 0; height: .82em; vertical-align: -0.04em; }
+.caret::after { content: ""; position: absolute; left: .04em; top: 0; bottom: 0; width: .07em; min-width: 2px; background: var(--accent); animation: blink .9s steps(1) infinite; }
+/* reveal: readable at rest, motion only enhances */
+.js .rv { transform: translateY(14px); opacity: .001; transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.js .rv.in { transform: none; opacity: 1; }
+.noio .rv { transform: none !important; opacity: 1 !important; }
+
+/* ---------- Intro ---------- */
+.intro__lead { margin: 0; font-family: var(--font-display); font-size: clamp(22px, 2.3vw, 30px); line-height: 1.3; letter-spacing: -0.01em; font-variation-settings: "wdth" 104; color: var(--ink); }
+.intro__lead em { font-style: normal; color: var(--accent); }
+.intro__sub { margin: 18px 0 0; max-width: 60ch; font-size: 17px; color: var(--text); }
+.actions { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px; }
+.tblock { margin-top: 56px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
+.tblock > div { padding: 16px 18px 18px; min-width: 0; }
+.tblock > div + div { border-left: 1px solid var(--line-2); }
+.tblock__k { display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.tblock__v { display: block; margin-top: 6px; font-family: var(--font-display); font-weight: 600; font-variation-settings: "wdth" 115; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.05; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.tblock__v small { font-size: .55em; font-weight: 500; color: var(--muted); margin-left: 3px; letter-spacing: 0; }
+.tblock__l { display: block; margin-top: 4px; font-size: 13.5px; color: var(--text); }
+@media (max-width: 760px) { .tblock { grid-template-columns: 1fr 1fr; } .tblock > div:nth-child(3) { border-left: 0; } .tblock > div:nth-child(n+3) { border-top: 1px solid var(--line-2); } }
+
+.foci { margin-top: 40px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
+.foc { padding: 22px; display: flex; flex-direction: column; gap: 6px; min-width: 0; border-bottom: 1px solid var(--line-2); transition: background .25s; }
+.foc:hover { background: var(--accent-soft); }
+.foc:nth-child(even) { border-left: 1px solid var(--line-2); }
+.foc:nth-last-child(-n+2) { border-bottom: 0; }
+.foc__n { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.foc__t { margin: 2px 0 8px; font-size: 22px; font-weight: 600; line-height: 1.15; font-variation-settings: "wdth" 110; }
+.foc__k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.foc__k--ok { color: var(--accent); }
+.foc__p { margin: 0; font-size: 15px; color: var(--text); }
+.foc__sep { height: 1px; margin: 8px 0 4px; background: repeating-linear-gradient(90deg, var(--line-2) 0 6px, transparent 6px 11px); }
+@media (max-width: 760px) { .foci { grid-template-columns: 1fr; } .foc:nth-child(even) { border-left: 0; } .foc:nth-last-child(2) { border-bottom: 1px solid var(--line-2); } }
+.intro__sub { margin-top: 28px !important; }
+/* inline links to the sister sites */
+a.xl { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; transition: text-decoration-thickness .2s; }
+a.xl:hover { text-decoration-thickness: 2px; }
+.h2 a.xl { text-decoration-thickness: 2px; text-underline-offset: 6px; }
+/* ---------- Befund / Massnahme ---------- */
+.finds { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
+.find { padding: 22px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.find + .find { border-left: 1px solid var(--line-2); }
+.find__k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.find__k--ok { color: var(--accent); }
+.find h3 { margin: 2px 0 0; font-size: 20px; font-weight: 600; line-height: 1.2; font-variation-settings: "wdth" 108; }
+.find p { margin: 2px 0 0; font-size: 15px; color: var(--text); }
+.find__sep { height: 1px; background: repeating-linear-gradient(90deg, var(--line-2) 0 6px, transparent 6px 11px); }
+.more { margin: 22px 0 0; font-size: 16px; color: var(--text); }
+.more a { color: var(--accent); border-bottom: 1px solid currentColor; }
+@media (max-width: 900px) { .finds { grid-template-columns: 1fr; } .find + .find { border-left: 0; border-top: 1px solid var(--line-2); } }
+
+/* ---------- Stückliste ---------- */
+.bom { margin-top: 44px; width: 100%; border-collapse: collapse; background: var(--sheet); border: 1px solid var(--line-2); }
+.bom th { text-align: left; font-family: var(--font-mono); font-weight: 400; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--line-2); background: var(--paper); }
+.bom td { padding: 18px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.bom tr:last-child td { border-bottom: 0; }
+.bom tbody tr { transition: background .25s; }
+.bom tbody tr:hover { background: var(--accent-soft); }
+.bom__pos { width: 60px; font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.bom__t { margin: 0; font-size: 18.5px; font-weight: 600; letter-spacing: -0.01em; font-variation-settings: "wdth" 106; }
+.bom__b { margin: 4px 0 0; font-size: 15px; color: var(--text); }
+.bom__links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 18px; font-family: var(--font-mono); font-size: 12.5px; }
+.bom__links a { color: var(--accent); border-bottom: 1px solid currentColor; }
+.bom__tags { width: 190px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.tag { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border: 1px solid var(--line-2); color: var(--text); background: var(--paper); white-space: nowrap; }
+@media (max-width: 760px) {
+  .bom thead { display: none; }
+  .bom, .bom tbody, .bom tr, .bom td { display: block; width: 100%; }
+  .bom tr { padding: 18px 16px; border-bottom: 1px solid var(--line); }
+  .bom td { padding: 0; border: 0; }
+  .bom__pos { margin-bottom: 4px; }
+  .bom__tags { margin-top: 12px; }
+}
+
+/* ---------- Arbeitsweise ---------- */
+.steps { margin: 44px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
+.step { padding: 18px 20px 20px; border-bottom: 1px solid var(--line); min-width: 0; }
+.step:nth-child(n+4) { border-bottom: 0; }
+.step:not(:nth-child(3n+1)) { border-left: 1px solid var(--line); }
+.step__h { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.step__h b { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--ink); color: var(--ink); font-weight: 500; letter-spacing: 0; }
+.step--human .step__h b { border-color: var(--accent); border-style: dashed; color: var(--accent); }
+.step__t { margin: 12px 0 0; font-size: 17px; font-weight: 600; font-variation-settings: "wdth" 106; }
+.step__b { margin: 2px 0 0; font-size: 14.5px; color: var(--text); }
+@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } .step, .step:nth-child(n+4) { border-left: 0 !important; border-bottom: 1px solid var(--line); } .step:last-child { border-bottom: 0; } }
+.work { margin-top: 40px; display: grid; grid-template-columns: 1fr; gap: 36px; }
+.log { border: 1px solid var(--line-2); background: var(--sheet); }
+.log__h { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line-2); font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); background: var(--paper); }
+.log__h b { font-weight: 500; color: var(--accent); }
+.log ol { list-style: none; margin: 0; padding: 8px 0; }
+.log li { display: grid; grid-template-columns: 50px 12px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 8px 16px; font-size: 15px; color: var(--text); }
+.log time, .log code { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.log code { padding: 1px 7px; border: 1px solid var(--line-2); }
+.log code.bad { color: var(--accent); border-color: var(--accent); }
+.log code.ok { color: var(--ink); border-color: var(--ink); }
+.dot { width: 9px; height: 9px; }
+.dot--git { background: var(--faint); } .dot--bad { background: var(--accent); } .dot--ok { background: var(--ink); }
+.log__f { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.log__f a { color: var(--text); border-bottom: 1px solid var(--line-2); font-family: var(--font-mono); font-size: 12.5px; }
+.log__f a:hover { color: var(--accent); border-color: var(--accent); }
+.princ { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-2); counter-reset: p; }
+.princ li { counter-increment: p; display: grid; grid-template-columns: 52px 1fr; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.princ li::before { content: "P" counter(p); font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); padding-top: 3px; }
+.princ h3 { margin: 0; font-size: 17px; font-weight: 600; font-variation-settings: "wdth" 106; grid-column: 2; }
+.princ p { margin: 2px 0 0; font-size: 15px; color: var(--text); grid-column: 2; }
+
+/* ---------- Messprotokoll ---------- */
+.meas-wrap { margin-top: 44px; overflow-x: auto; border: 1px solid var(--line-2); background: var(--sheet); }
+.meas { width: 100%; min-width: 580px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.meas th { text-align: left; font-family: var(--font-mono); font-weight: 400; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 12px 16px; border-bottom: 1px solid var(--line-2); background: var(--paper); }
+.meas td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 15px; color: var(--text); }
+.meas tr:last-child td { border-bottom: 0; }
+.meas td:first-child { color: var(--ink); font-weight: 500; }
+.v { font-family: var(--font-mono); font-size: 14.5px; white-space: nowrap; }
+.v--before { color: var(--faint); text-decoration: line-through; text-decoration-color: var(--accent); }
+.v--after { color: var(--accent); font-weight: 500; }
+.aps { margin-top: 44px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
+.ap { padding: 22px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; min-width: 0; transition: background .25s; }
+.ap:hover { background: var(--accent-soft); }
+.ap:nth-child(even) { border-left: 1px solid var(--line); }
+.ap:nth-last-child(-n+2) { border-bottom: 0; }
+.ap__h { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.ap__h b { color: var(--accent); font-weight: 500; }
+.ap__t { margin: 2px 0 0; font-size: 19px; font-weight: 600; line-height: 1.2; font-variation-settings: "wdth" 106; }
+.ap__b { margin: 0; font-size: 15px; color: var(--text); }
+@media (max-width: 760px) { .aps { grid-template-columns: 1fr; } .ap:nth-child(even) { border-left: 0; } .ap:nth-last-child(2) { border-bottom: 1px solid var(--line); } }
+.sublinks { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sublink { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding: 20px 22px; border: 1px solid var(--line-2); background: var(--sheet); transition: border-color .2s, transform .3s var(--ease); }
+.sublink:hover { border-color: var(--accent); transform: translateY(-3px); }
+.sublink__p { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); }
+.sublink__t { margin: 2px 0 0; font-size: 21px; font-weight: 600; font-variation-settings: "wdth" 110; }
+.sublink__b { margin: 4px 0 0; font-size: 14.5px; color: var(--text); }
+.sublink__go { grid-row: 1 / span 3; grid-column: 2; align-self: center; font-family: var(--font-mono); color: var(--accent); }
+@media (max-width: 760px) { .sublinks { grid-template-columns: 1fr; } }
+
+/* ---------- Ansichten ---------- */
+.views { margin-top: 44px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line-2); background: var(--sheet); }
+.view-c { padding: 22px; display: flex; flex-direction: column; gap: 8px; min-width: 0; transition: background .25s; }
+.view-c + .view-c { border-left: 1px solid var(--line-2); }
+a.view-c:hover { background: var(--accent-soft); }
+.view-c--here { background: var(--paper); }
+.view-c__h { display: flex; justify-content: space-between; gap: 10px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.view-c__h b { color: var(--accent); font-weight: 500; }
+.view-c__host { margin-top: 6px; font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.view-c__t { margin: 0; font-size: 21px; font-weight: 600; line-height: 1.15; font-variation-settings: "wdth" 110; }
+.view-c__b { margin: 0; font-size: 14.5px; color: var(--text); flex: 1 1 auto; }
+.view-c__go { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.bridge { margin: 24px 0 0; padding: 16px 18px; border-left: 2px solid var(--accent); background: var(--sheet); font-size: 15.5px; color: var(--text); }
+.bridge b { color: var(--ink); font-weight: 600; }
+@media (max-width: 960px) { .views { grid-template-columns: 1fr; } .view-c + .view-c { border-left: 0; border-top: 1px solid var(--line-2); } }
+
+/* ---------- Kontakt ---------- */
+.cta__h { margin: 0; font-family: var(--font-display); font-weight: 650; font-size: clamp(34px, 4.6vw, 64px); line-height: 1; letter-spacing: -0.03em; font-variation-settings: "wdth" 116; }
+.cta__h em { font-style: normal; color: var(--accent); }
+.cta__card { margin-top: 36px; border: 1px solid var(--line-2); background: var(--sheet); padding: 24px; max-width: 560px; }
+.cta__p { margin: 0 0 20px; font-size: 17px; color: var(--text); }
+.cta__mail { display: block; margin-top: 16px; font-family: var(--font-mono); font-size: 14px; color: var(--muted); user-select: all; }
+
+/* ---------- Subpages ---------- */
+.crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; padding-top: 36px; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.crumbs a { color: var(--text); }
+.crumbs a:hover { color: var(--accent); }
+.subpage .body { max-width: none; }
+.pgroup { margin-top: 56px; }
+.pgroup__h { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.pgroup__t { margin: 0; font-size: 22px; font-weight: 600; font-variation-settings: "wdth" 110; }
+.pgroup__s { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-left: 1px solid var(--line-2); }
+.card { padding: 24px; border-right: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); background: var(--sheet); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.card__m { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.card__m b { color: var(--accent); font-weight: 500; }
+.card__t { margin: 0; font-size: 20px; font-weight: 600; line-height: 1.25; font-variation-settings: "wdth" 106; }
+.card__b { margin: 0; font-size: 15.5px; color: var(--text); flex: 1 1 auto; }
+.card__r { margin: 0; font-size: 14.5px; color: var(--ink); padding: 8px 12px; background: var(--accent-soft); }
+.card__l { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); }
+.card__l:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+.tl { list-style: none; margin: 40px 0 0; padding: 0; border-top: 1px solid var(--line-2); }
+.tl li { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 4px 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.tl__y { font-family: var(--font-mono); font-size: 13px; color: var(--accent); padding-top: 3px; }
+.tl__t { margin: 0; font-size: 20px; font-weight: 600; font-variation-settings: "wdth" 106; }
+.tl__b { margin: 4px 0 0; font-size: 15.5px; color: var(--text); max-width: 62ch; }
+@media (max-width: 640px) { .tl li { grid-template-columns: 1fr; } }
+.stack { margin-top: 40px; border: 1px solid var(--line-2); background: var(--sheet); }
+.stack__row { display: grid; grid-template-columns: 200px minmax(0, 1fr); border-bottom: 1px solid var(--line); }
+.stack__row:last-child { border-bottom: 0; }
+.stack__k { padding: 14px 16px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); border-right: 1px solid var(--line); background: var(--paper); }
+.stack__v { padding: 12px 16px; min-width: 0; }
+.stack__v a { display: inline-block; margin-top: 8px; font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); }
+@media (max-width: 640px) { .stack__row { grid-template-columns: 1fr; } .stack__k { border-right: 0; border-bottom: 1px solid var(--line); } }
+.note { margin-top: 18px; font-size: 14px; color: var(--muted); }
+.view-pane[hidden] { display: none !important; }
+.js .view-pane { animation: paneIn .45s var(--ease); }
+@keyframes paneIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Footer ---------- */
+.foot { border-top: 1px solid var(--ink); background: var(--paper); }
+.foot__in { display: grid; grid-template-columns: repeat(4, minmax(0, auto)); justify-content: space-between; gap: 12px 32px; padding-block: 24px 32px; font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.foot a { color: var(--muted); padding: 6px 0; display: inline-block; }
+.foot a:hover { color: var(--accent); }
+.foot__links { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.foot__made { grid-column: 1 / -1; margin: 0; border-top: 1px solid var(--line); padding-top: 14px; font-size: 12px; }
+.foot__made a { color: var(--text); border-bottom: 1px solid var(--line-2); padding: 0; }
+@media (max-width: 760px) { .foot__in { grid-template-columns: 1fr; } }
+
+@media (max-width: 1080px) { .nav { display: none; } }
+@media (max-width: 600px) {
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .brand__u { display: none; }
+  .tools .btn--sm { display: none; }
+  .head__l { gap: 12px; }
+}
+@media (max-width: 360px) { .sites a { padding: 6px 7px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .rv { transform: none; opacity: 1; }
+}
+</style>
+
+<script>
+  document.documentElement.classList.add('js');
+  try { var t0 = localStorage.getItem('platform-theme'); if (t0 === 'dark' || t0 === 'light') document.documentElement.dataset.theme = t0; } catch (e) {}
+</script>
+
+
+<header class="head">
+  <div class="wrap head__in">
+    <div class="head__l">
+      <a class="brand" href="#top" data-go><span class="brand__u">charemma@platform:</span>~$<span class="brand__c"></span></a>
+      <nav class="sites" aria-label="Bereiche">
+        <a class="is-here" href="https://charemma.de" aria-current="page">platform</a>
+        <a href="https://security.charemma.de">security</a>
+        <a href="https://ai.charemma.de">ai</a>
+      </nav>
+    </div>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#leistungen" data-go>Leistungen</a>
+      <a href="#arbeitsweise" data-go>Arbeitsweise</a>
+      <a href="#/projekte" data-go data-view-link="projekte">Projekte</a>
+      <a href="#/profil" data-go data-view-link="profil">Profil</a>
+    </nav>
+    <div class="tools">
+      <button class="theme" id="themeBtn" type="button" aria-label="Hell/Dunkel umschalten">
+        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg>
+      </button>
+      <a class="btn btn--primary btn--sm" href="#kontakt" data-go>Kontakt</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<div class="view-pane" data-view="home">
+  <div class="strand" aria-hidden="true"><i class="strand__fill"></i><b class="strand__dot"></b></div>
+
+  <!-- HERO: title only -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="ident">Charalambos Emmanouilidis<i>·</i>Platform &amp; DevOps Engineer</p>
+      <h1 class="h1"><span class="s">Plattformen, die tragen.</span><span class="s2">Robust gebaut. <em>KI-gestützt, wo es passt.</em></span></h1>
+    </div>
+    <div class="cue" aria-hidden="true">SCROLL<i></i></div>
+  </section>
+
+  <!-- BL.00 Übersicht + Befund -->
+  <section class="sheet" id="fokus">
+    <div class="bg-draw" aria-hidden="true"><svg viewBox="0 0 740 680" aria-hidden="true"><line class="c" x1="400" y1="350.8" x2="400" y2="38.8"/><line class="c" x1="625.2" y1="480.8" x2="625.2" y2="168.8"/><line class="c" x1="400" y1="610.8" x2="400" y2="298.8"/><line class="c" x1="174.8" y1="480.8" x2="174.8" y2="168.8"/><polygon class="k" points="400,330 625.2,460 400,590 174.8,460"/><polygon class="c" points="400,379.4 539.6,460 400,540.6 260.4,460"/><polygon class="c" points="400,241.6 625.2,371.6 400,501.6 174.8,371.6"/><polygon class="ad" points="434,231.6 659.2,361.6 434,491.6 208.8,361.6"/><line class="a" x1="625.2" y1="371.6" x2="659.2" y2="361.6"/><polygon class="af" points="627.2,371 633.4,365.9 635.1,371.9"/><polygon class="k" points="400,153.2 625.2,283.2 400,413.2 174.8,283.2"/><polygon class="c" points="400,202.6 539.6,283.2 400,363.8 260.4,283.2"/><polygon class="k" points="400,64.8 625.2,194.8 400,324.8 174.8,194.8"/><polygon class="c" points="400,114.2 539.6,194.8 400,275.4 260.4,194.8"/><text class="ta" x="615.2" y="401.6" text-anchor="end">DRIFT → ABGLEICH</text><line class="c" x1="174.8" y1="460" x2="114.8" y2="460"/><text class="t" x="108.8" y="463" text-anchor="end">INFRASTRUKTUR</text><line class="c" x1="174.8" y1="371.6" x2="114.8" y2="371.6"/><text class="t ta" x="108.8" y="374.6" text-anchor="end">KUBERNETES</text><line class="c" x1="174.8" y1="283.2" x2="114.8" y2="283.2"/><text class="t" x="108.8" y="286.2" text-anchor="end">GITOPS</text><line class="c" x1="174.8" y1="194.8" x2="114.8" y2="194.8"/><text class="t" x="108.8" y="197.8" text-anchor="end">ANWENDUNGEN</text><line class="c2" x1="700" y1="64.8" x2="700" y2="590"/><line class="k" x1="694" y1="64.8" x2="706" y2="64.8"/><line class="k" x1="694" y1="590" x2="706" y2="590"/><text class="t" x="716" y="327.4" text-anchor="middle" transform="rotate(90 716 327.4)">EINE PLATTFORM</text><text class="t" x="20" y="660" text-anchor="start">SCHRITT 1 · AUFBAU IN SCHICHTEN</text></svg></div>
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> 00</span><span class="rail__t">Schwerpunkte</span><span class="rail__meta">Schritt 1:<br>Aufbau in Schichten</span></div>
+      <div class="body">
+        <h2 class="h2 rv">Wobei ich Ihnen <em>helfe.</em></h2>
+        <p class="lead rv">Ich baue Plattformen, auf denen Entwicklung und Betrieb zusammenlaufen: reproduzierbar, automatisiert und so gestaltet, dass Ihre Teams schneller und verlässlicher liefern, ohne sich um die Infrastruktur darunter kümmern zu müssen.</p>
+        <div class="foci rv">
+          <div class="foc"><span class="foc__n">Schwerpunkt 01</span><h3 class="foc__t">Platform Engineering</h3><span class="foc__k">Typisch, wenn</span><p class="foc__p">Jedes Team seine Infrastruktur selbst zusammenbaut.</p><div class="foc__sep"></div><span class="foc__k foc__k--ok">Ergebnis</span><p class="foc__p">Eine interne Plattform mit Golden Paths und Self-Service, auf der Teams selbstständig liefern.</p></div>
+          <div class="foc"><span class="foc__n">Schwerpunkt 02</span><h3 class="foc__t">Kubernetes</h3><span class="foc__k">Typisch, wenn</span><p class="foc__p">Anwendungen und Dienste auf verstreuten Servern laufen, jeder anders betrieben.</p><div class="foc__sep"></div><span class="foc__k foc__k--ok">Ergebnis</span><p class="foc__p">Ein einheitliches Fundament, auf dem Plattform-Dienste und Anwendungen laufen, in der Cloud oder on-premise.</p></div>
+          <div class="foc"><span class="foc__n">Schwerpunkt 03</span><h3 class="foc__t">GitOps</h3><span class="foc__k">Typisch, wenn</span><p class="foc__p">Niemand genau weiß, was gerade in Produktion läuft.</p><div class="foc__sep"></div><span class="foc__k foc__k--ok">Ergebnis</span><p class="foc__p">Git ist die Quelle der Wahrheit. Änderungen laufen per Review, Rollouts und Korrekturen automatisch.</p></div>
+          <div class="foc"><span class="foc__n">Schwerpunkt 04</span><h3 class="foc__t">DevOps &amp; CI/CD</h3><span class="foc__k">Typisch, wenn</span><p class="foc__p">Builds, Tests und Releases zum Engpass werden.</p><div class="foc__sep"></div><span class="foc__k foc__k--ok">Ergebnis</span><p class="foc__p">Automatisierte, reproduzierbare Pipelines vom Commit bis zum Release.</p></div>
+          <div class="foc"><span class="foc__n">Schwerpunkt 05</span><h3 class="foc__t">Infrastructure as Code</h3><span class="foc__k">Typisch, wenn</span><p class="foc__p">Server und Umgebungen gewachsen sind und niemand sie nachbauen kann.</p><div class="foc__sep"></div><span class="foc__k foc__k--ok">Ergebnis</span><p class="foc__p">Deklarativ beschriebene Infrastruktur, jederzeit reproduzierbar. Auf Wunsch per Spezifikation definiert, sodass jedes Team das Setup <a class="xl" href="https://ai.charemma.de">KI-gestützt</a> selbst erweitern kann.</p></div>
+          <div class="foc"><span class="foc__n">Schwerpunkt 06</span><h3 class="foc__t">Automatisierung</h3><span class="foc__k">Typisch, wenn</span><p class="foc__p">Wiederkehrende Aufgaben Zeit kosten und fehleranfällig sind.</p><div class="foc__sep"></div><span class="foc__k foc__k--ok">Ergebnis</span><p class="foc__p">Eigene Werkzeuge, Services und Integrationen, die Routine zuverlässig übernehmen. Wo es passt, auch als <a class="xl" href="https://ai.charemma.de">LLM-Pipelines</a>.</p></div>
+        </div>
+        <p class="intro__sub rv">Mein Fundament ist Software Engineering: Werkzeuge, Services und Integrationen, die eine Plattform braucht, entwickle ich selbst. <a class="xl" href="https://security.charemma.de">Security</a> und <a class="xl" href="https://ai.charemma.de">KI-Integration</a> plane ich von Anfang an mit ein. Über 20 Jahre Erfahrung, viel davon in regulierten Umfeldern.</p>
+        <div class="actions rv">
+          <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Anfrage%20Platform%20Engineering">Gespräch vereinbaren <span class="arr">→</span></a>
+          <a class="btn btn--ghost" href="#leistungen" data-go>Alle Leistungen</a>
+        </div>
+        <div class="tblock rv">
+          <div><span class="tblock__k">Erfahrung</span><span class="tblock__v">20+<small>Jahre</small></span><span class="tblock__l">Software &amp; Plattform</span></div>
+          <div><span class="tblock__k">Umfang</span><span class="tblock__v">End-to-End</span><span class="tblock__l">Architektur bis Betrieb</span></div>
+          <div><span class="tblock__k">Umfeld</span><span class="tblock__v">reguliert</span><span class="tblock__l">Medizintechnik &amp; Medien</span></div>
+          <div><span class="tblock__k">Security</span><span class="tblock__v">OSCP</span><span class="tblock__l"><a class="xl" href="https://security.charemma.de">Offensive Security</a></span></div>
+        </div>
+        <p class="more rv">CI/CD-Migration, Plattform-Strategie oder ein zweiter Blick auf Ihre Pipeline? <a href="#kontakt" data-go>Sprechen wir darüber</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BL.01 Leistungen -->
+  <section class="sheet" id="leistungen">
+    <div class="bg-draw" aria-hidden="true"><svg viewBox="0 0 700 680" aria-hidden="true"><polygon class="k" points="340,240.9 394.6,272.4 340,303.9 285.4,272.4"/><line class="k" x1="394.6" y1="272.4" x2="394.6" y2="335.4"/><line class="k" x1="340" y1="303.9" x2="340" y2="366.9"/><line class="k" x1="285.4" y1="272.4" x2="285.4" y2="335.4"/><line class="k" x1="394.6" y1="335.4" x2="340" y2="366.9"/><line class="k" x1="340" y1="366.9" x2="285.4" y2="335.4"/><line class="c" x1="340" y1="303.9" x2="394.6" y2="335.4"/><line class="c" x1="340" y1="303.9" x2="285.4" y2="335.4"/><line class="c" x1="340" y1="303.9" x2="340" y2="240.9"/><line class="c" x1="340" y1="330" x2="340" y2="303.9"/><line class="c2" x1="340" y1="272.4" x2="260" y2="212.4"/><circle class="k" cx="248" cy="212.4" r="12"/><text class="t" x="248" y="215.9" text-anchor="middle">01</text><polygon class="a" points="469.4,315.6 523.9,347.1 469.4,378.6 414.8,347.1"/><line class="a" x1="523.9" y1="347.1" x2="523.9" y2="410.1"/><line class="a" x1="469.4" y1="378.6" x2="469.4" y2="441.6"/><line class="a" x1="414.8" y1="347.1" x2="414.8" y2="410.1"/><line class="a" x1="523.9" y1="410.1" x2="469.4" y2="441.6"/><line class="a" x1="469.4" y1="441.6" x2="414.8" y2="410.1"/><line class="c" x1="469.4" y1="378.6" x2="523.9" y2="410.1"/><line class="c" x1="469.4" y1="378.6" x2="414.8" y2="410.1"/><line class="c" x1="469.4" y1="378.6" x2="469.4" y2="315.6"/><line class="c" x1="340" y1="330" x2="469.4" y2="378.6"/><line class="c2" x1="469.4" y1="347.1" x2="544.3" y2="341.2"/><circle class="a" cx="556.3" cy="341.2" r="12"/><text class="t ta" x="556.3" y="344.7" text-anchor="middle">02</text><polygon class="k" points="210.6,315.6 265.2,347.1 210.6,378.6 156.1,347.1"/><line class="k" x1="265.2" y1="347.1" x2="265.2" y2="410.1"/><line class="k" x1="210.6" y1="378.6" x2="210.6" y2="441.6"/><line class="k" x1="156.1" y1="347.1" x2="156.1" y2="410.1"/><line class="k" x1="265.2" y1="410.1" x2="210.6" y2="441.6"/><line class="k" x1="210.6" y1="441.6" x2="156.1" y2="410.1"/><line class="c" x1="210.6" y1="378.6" x2="265.2" y2="410.1"/><line class="c" x1="210.6" y1="378.6" x2="156.1" y2="410.1"/><line class="c" x1="210.6" y1="378.6" x2="210.6" y2="315.6"/><line class="c" x1="340" y1="330" x2="210.6" y2="378.6"/><line class="c2" x1="210.6" y1="347.1" x2="135.7" y2="341.2"/><circle class="k" cx="123.7" cy="341.2" r="12"/><text class="t" x="123.7" y="344.7" text-anchor="middle">03</text><polygon class="k" points="340,390.3 394.6,421.8 340,453.3 285.4,421.8"/><line class="k" x1="394.6" y1="421.8" x2="394.6" y2="484.8"/><line class="k" x1="340" y1="453.3" x2="340" y2="516.3"/><line class="k" x1="285.4" y1="421.8" x2="285.4" y2="484.8"/><line class="k" x1="394.6" y1="484.8" x2="340" y2="516.3"/><line class="k" x1="340" y1="516.3" x2="285.4" y2="484.8"/><line class="c" x1="340" y1="453.3" x2="394.6" y2="484.8"/><line class="c" x1="340" y1="453.3" x2="285.4" y2="484.8"/><line class="c" x1="340" y1="453.3" x2="340" y2="390.3"/><line class="c" x1="340" y1="330" x2="340" y2="453.3"/><line class="c2" x1="340" y1="421.8" x2="420" y2="441.8"/><circle class="k" cx="432" cy="441.8" r="12"/><text class="t" x="432" y="445.3" text-anchor="middle">04</text><polygon class="k" points="340,80.7 394.6,112.2 340,143.7 285.4,112.2"/><line class="k" x1="394.6" y1="112.2" x2="394.6" y2="175.2"/><line class="k" x1="340" y1="143.7" x2="340" y2="206.7"/><line class="k" x1="285.4" y1="112.2" x2="285.4" y2="175.2"/><line class="k" x1="394.6" y1="175.2" x2="340" y2="206.7"/><line class="k" x1="340" y1="206.7" x2="285.4" y2="175.2"/><line class="c" x1="340" y1="143.7" x2="394.6" y2="175.2"/><line class="c" x1="340" y1="143.7" x2="285.4" y2="175.2"/><line class="c" x1="340" y1="143.7" x2="340" y2="80.7"/><line class="c" x1="340" y1="330" x2="340" y2="143.7"/><line class="c2" x1="340" y1="112.2" x2="260" y2="52.2"/><circle class="k" cx="248" cy="52.2" r="12"/><text class="t" x="248" y="55.7" text-anchor="middle">05</text><polygon class="k" points="469.4,155.4 523.9,186.9 469.4,218.4 414.8,186.9"/><line class="k" x1="523.9" y1="186.9" x2="523.9" y2="249.9"/><line class="k" x1="469.4" y1="218.4" x2="469.4" y2="281.4"/><line class="k" x1="414.8" y1="186.9" x2="414.8" y2="249.9"/><line class="k" x1="523.9" y1="249.9" x2="469.4" y2="281.4"/><line class="k" x1="469.4" y1="281.4" x2="414.8" y2="249.9"/><line class="c" x1="469.4" y1="218.4" x2="523.9" y2="249.9"/><line class="c" x1="469.4" y1="218.4" x2="414.8" y2="249.9"/><line class="c" x1="469.4" y1="218.4" x2="469.4" y2="155.4"/><line class="c" x1="340" y1="330" x2="469.4" y2="218.4"/><line class="c2" x1="469.4" y1="186.9" x2="530" y2="140.8"/><circle class="k" cx="542" cy="140.8" r="12"/><text class="t" x="542" y="144.3" text-anchor="middle">06</text><polygon class="k" points="210.6,155.4 265.2,186.9 210.6,218.4 156.1,186.9"/><line class="k" x1="265.2" y1="186.9" x2="265.2" y2="249.9"/><line class="k" x1="210.6" y1="218.4" x2="210.6" y2="281.4"/><line class="k" x1="156.1" y1="186.9" x2="156.1" y2="249.9"/><line class="k" x1="265.2" y1="249.9" x2="210.6" y2="281.4"/><line class="k" x1="210.6" y1="281.4" x2="156.1" y2="249.9"/><line class="c" x1="210.6" y1="218.4" x2="265.2" y2="249.9"/><line class="c" x1="210.6" y1="218.4" x2="156.1" y2="249.9"/><line class="c" x1="210.6" y1="218.4" x2="210.6" y2="155.4"/><line class="c" x1="340" y1="330" x2="210.6" y2="218.4"/><line class="c2" x1="210.6" y1="186.9" x2="150" y2="140.8"/><circle class="k" cx="138" cy="140.8" r="12"/><text class="t" x="138" y="144.3" text-anchor="middle">07</text><polygon class="k" points="340,230.1 394.6,261.6 340,293.1 285.4,261.6"/><line class="k" x1="394.6" y1="261.6" x2="394.6" y2="324.6"/><line class="k" x1="340" y1="293.1" x2="340" y2="356.1"/><line class="k" x1="285.4" y1="261.6" x2="285.4" y2="324.6"/><line class="k" x1="394.6" y1="324.6" x2="340" y2="356.1"/><line class="k" x1="340" y1="356.1" x2="285.4" y2="324.6"/><line class="c" x1="340" y1="293.1" x2="394.6" y2="324.6"/><line class="c" x1="340" y1="293.1" x2="285.4" y2="324.6"/><line class="c" x1="340" y1="293.1" x2="340" y2="230.1"/><line class="c" x1="340" y1="330" x2="340" y2="293.1"/><line class="c2" x1="340" y1="261.6" x2="420" y2="201.6"/><circle class="k" cx="432" cy="201.6" r="12"/><text class="t" x="432" y="205.1" text-anchor="middle">08</text><circle class="k" cx="340" cy="330" r="5"/><line class="k" x1="326" y1="330" x2="354" y2="330"/><line class="k" x1="340" y1="316" x2="340" y2="344"/><text class="t" x="20" y="660" text-anchor="start">SCHRITT 2 · ZERLEGEN IN BAUTEILE</text></svg></div>
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> 01</span><span class="rail__t">Stückliste</span><span class="rail__meta">8 Positionen,<br>einzeln oder<br>kombiniert</span></div>
+      <div class="body">
+        <h2 class="h2 rv">Schicht für Schicht. <em>Eine Quelle der Wahrheit.</em></h2>
+        <p class="lead rv">Vom Betriebssystem bis zur Anwendung ist jede Schicht deklariert, versioniert und reproduzierbar.</p>
+        <table class="bom rv">
+          <thead><tr><th>Pos.</th><th>Leistung</th><th>Stichworte</th></tr></thead>
+          <tbody>
+            <tr><td class="bom__pos">01</td><td><h3 class="bom__t">Interne Entwicklerplattformen</h3><p class="bom__b">Plattform als Produkt: Golden Paths, Self-Service, klare Zuständigkeiten, dokumentierte Entscheidungen.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">IDP</li><li class="tag">Self-Service</li></ul></td></tr>
+            <tr><td class="bom__pos">02</td><td><h3 class="bom__t">Kubernetes</h3><p class="bom__b">Das Fundament, auf dem Plattform-Dienste und Anwendungen laufen. Aufbau und Betrieb in der Cloud und on-premise, inklusive Monitoring und Alerting.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">Kubernetes</li><li class="tag">Betrieb</li><li class="tag">Monitoring</li></ul></td></tr>
+            <tr><td class="bom__pos">03</td><td><h3 class="bom__t">GitOps</h3><p class="bom__b">Der gewünschte Zustand steht in Git, Abweichungen werden automatisch korrigiert, neue Versionen gehen ohne Handgriff live.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">GitOps</li><li class="tag">Rollouts</li></ul></td></tr>
+            <tr><td class="bom__pos">04</td><td><h3 class="bom__t">Infrastructure as Code &amp; deklarative Setups</h3><p class="bom__b">Infrastruktur, Server und Entwicklerrechner deklarativ beschrieben und aus demselben Repository reproduzierbar.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">IaC</li><li class="tag">Reproduzierbar</li></ul></td></tr>
+            <tr><td class="bom__pos">05</td><td><h3 class="bom__t">CI/CD &amp; Build-Beschleunigung</h3><p class="bom__b">Pipelines migrieren und modularisieren, Caching, Multi-Arch-Builds, nachvollziehbare Releases.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">CI/CD</li><li class="tag">Releases</li></ul></td></tr>
+            <tr><td class="bom__pos">06</td><td><h3 class="bom__t">Automatisierung</h3><p class="bom__b">Wiederkehrende Abläufe mit eigenen Kommandozeilenwerkzeugen, APIs und Services automatisieren, dazu standardisierte Container-Umgebungen.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">Automatisierung</li><li class="tag">Tooling</li></ul></td></tr>
+            <tr><td class="bom__pos">07</td><td><h3 class="bom__t">Embedded Linux</h3><p class="bom__b">Build-Systeme für Embedded Linux, Cross-Builds, Emulation, LTS-Upgrades und Systemtests.</p></td><td class="bom__tags"><ul class="tags"><li class="tag">Embedded</li></ul></td></tr>
+            <tr><td class="bom__pos">08</td><td><h3 class="bom__t">KI-gestützte Setups, abgesichert</h3><p class="bom__b">Abläufe als <a class="xl" href="https://ai.charemma.de">LLM-Pipelines</a>, Infrastruktur und Setups per Spec-driven Development definiert, damit jedes Team sie mit Coding-Agenten nachvollziehbar erweitern kann. Dazu Scans, Least Privilege, Secrets-Verwaltung und <a class="xl" href="https://security.charemma.de">Penetrationstests</a>.</p><div class="bom__links"><a href="https://security.charemma.de">Security →</a><a href="https://ai.charemma.de">AI Engineering →</a></div></td><td class="bom__tags"><ul class="tags"><li class="tag">LLM-Pipelines</li><li class="tag">Spec-driven</li><li class="tag">DevSecOps</li></ul></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- BL.02 Arbeitsweise -->
+  <section class="sheet" id="arbeitsweise">
+    <div class="bg-draw" aria-hidden="true"><svg viewBox="0 0 700 680" aria-hidden="true"><circle class="k" cx="350" cy="330" r="230"/><circle class="c" cx="350" cy="330" r="204"/><circle class="c" cx="350" cy="330" r="256"/><line class="c2" x1="60" y1="330" x2="640" y2="330"/><line class="c2" x1="350" y1="40" x2="350" y2="620"/><circle class="kp" cx="350" cy="100" r="10"/><text class="t" x="350" y="55.5" text-anchor="middle">COMMIT</text><polygon class="kf" points="465,130.8 456.1,129.7 459.6,123.6"/><circle class="kp" cx="549.2" cy="215" r="10"/><text class="t" x="590.8" y="194.5" text-anchor="middle">BUILD</text><polygon class="kf" points="580,330 576.5,321.7 583.5,321.7"/><circle class="kp" cx="549.2" cy="445" r="10"/><text class="t" x="590.8" y="472.5" text-anchor="middle">PRÜFEN</text><polygon class="kf" points="465,529.2 470.4,522 473.9,528.1"/><circle class="a" cx="350" cy="560" r="10"/><text class="t ta" x="350" y="611.5" text-anchor="middle">REVIEW</text><polygon class="kf" points="235,529.2 243.9,530.3 240.4,536.4"/><circle class="kp" cx="150.8" cy="445" r="10"/><text class="t" x="109.2" y="472.5" text-anchor="middle">SYNC</text><polygon class="kf" points="120,330 123.5,338.3 116.5,338.3"/><circle class="kp" cx="150.8" cy="215" r="10"/><text class="t" x="109.2" y="194.5" text-anchor="middle">BETRIEB</text><polygon class="kf" points="235,130.8 229.6,138 226.1,131.9"/><circle class="a" cx="350" cy="330" r="6"/><text class="ta" x="364" y="318" text-anchor="start">SOLL = IST</text><line class="k" x1="350" y1="330" x2="538.4" y2="461.9"/><text class="t" x="450.2" y="390" text-anchor="start">R = ABGLEICH</text><text class="t" x="20" y="660" text-anchor="start">SCHRITT 3 · ÄNDERN, PRÜFEN, ABGLEICHEN</text></svg></div>
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> 02</span><span class="rail__t">Schema</span><span class="rail__meta">Weg einer<br>Änderung</span></div>
+      <div class="body">
+        <h2 class="h2 rv">Deklariert <em>statt gebastelt.</em></h2>
+        <p class="lead rv">Jeder Handgriff an einem Server ist eine Abweichung, die irgendwann jemand suchen muss. Ich beschreibe den gewünschten Zustand und lasse Werkzeuge dafür sorgen, dass er gilt.</p>
+        <ol class="steps rv" aria-label="Weg einer Änderung vom Commit bis zum Betrieb">
+          <li class="step"><span class="step__h"><b>01</b>commit</span><p class="step__t">Soll-Zustand</p><p class="step__b">Infrastruktur und Konfiguration als Code.</p></li>
+          <li class="step"><span class="step__h"><b>02</b>build</span><p class="step__t">Reproduzierbar bauen</p><p class="step__b">Gleiche Eingaben, gleiches Ergebnis.</p></li>
+          <li class="step"><span class="step__h"><b>03</b>prüfen</span><p class="step__t">Automatisch prüfen</p><p class="step__b">Tests, Scans, Qualitäts-Gates.</p></li>
+          <li class="step step--human"><span class="step__h"><b>04</b>review</span><p class="step__t">Freigabe</p><p class="step__b">Ein Mensch merged.</p></li>
+          <li class="step"><span class="step__h"><b>05</b>sync</span><p class="step__t">Abgleichen</p><p class="step__b">Ausrollen ohne Handgriff.</p></li>
+          <li class="step"><span class="step__h"><b>06</b>betrieb</span><p class="step__t">Beobachten</p><p class="step__b">Metriken, Alarme, Erreichbarkeit.</p></li>
+        </ol>
+        <div class="work">
+          <div class="log rv" aria-label="Beispielhaftes Sync-Protokoll">
+            <div class="log__h"><span>Sync-Protokoll</span><b>Beispiel</b></div>
+            <ol>
+              <li><time>10:42</time><span class="dot dot--git"></span><span>Merge in main</span><code>a3f9c1e</code></li>
+              <li><time>10:42</time><span class="dot dot--bad"></span><span>Cluster weicht ab</span><code class="bad">OutOfSync</code></li>
+              <li><time>10:43</time><span class="dot dot--ok"></span><span>Neue Version ausgerollt</span><code class="ok">Synced</code></li>
+              <li><time>10:44</time><span class="dot dot--ok"></span><span>Health-Checks grün</span><code class="ok">Healthy</code></li>
+            </ol>
+            <div class="log__f">Vereinfachter Ablauf einer Änderung. Beispiele meiner Arbeit: <a href="https://github.com/charemma">github.com/charemma</a></div>
+          </div>
+          <ol class="princ rv">
+            <li><h3>Automatisierung vor Handarbeit</h3><p>Was zweimal von Hand passiert, wird beim dritten Mal Code.</p></li>
+            <li><h3>Plattform als Produkt</h3><p>Entwickler sind die Kunden. Golden Paths und Self-Service statt Tickets und Wartezeit.</p></li>
+            <li><h3>Entscheidungen festhalten</h3><p>Architekturentscheidungen liegen als Decision Records im Repository.</p></li>
+            <li><h3>Least Privilege von Anfang an</h3><p>Rechte, Secrets und Scans sind Teil der Plattform, kein späteres Projekt.</p></li>
+            <li><h3>Messen statt schätzen</h3><p>Build-Zeiten und Stabilität vorher und nachher dokumentiert.</p></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BL.03 Belege -->
+  <section class="sheet" id="belege">
+    <div class="bg-draw" aria-hidden="true"><svg viewBox="0 0 700 680" aria-hidden="true"><circle class="c" cx="350" cy="320" r="300"/><line class="c2" x1="110" y1="320" x2="170" y2="424"/><line class="c2" x1="110" y1="320" x2="170" y2="216"/><line class="c2" x1="110" y1="320" x2="230" y2="320"/><line class="c2" x1="170" y1="424" x2="230" y2="528"/><line class="c2" x1="170" y1="424" x2="230" y2="320"/><line class="c2" x1="170" y1="424" x2="290" y2="424"/><line class="c2" x1="230" y1="528" x2="290" y2="424"/><line class="c2" x1="230" y1="528" x2="350" y2="528"/><line class="c2" x1="170" y1="216" x2="230" y2="320"/><line class="c2" x1="170" y1="216" x2="230" y2="112"/><line class="c2" x1="170" y1="216" x2="290" y2="216"/><line class="c2" x1="230" y1="320" x2="290" y2="424"/><line class="c2" x1="230" y1="320" x2="290" y2="216"/><line class="c2" x1="230" y1="320" x2="350" y2="320"/><line class="c2" x1="290" y1="424" x2="350" y2="528"/><line class="c2" x1="290" y1="424" x2="350" y2="320"/><line class="c2" x1="290" y1="424" x2="410" y2="424"/><line class="c2" x1="350" y1="528" x2="410" y2="424"/><line class="c2" x1="350" y1="528" x2="470" y2="528"/><line class="c2" x1="230" y1="112" x2="290" y2="216"/><line class="c2" x1="230" y1="112" x2="350" y2="112"/><line class="c2" x1="290" y1="216" x2="350" y2="320"/><line class="c2" x1="290" y1="216" x2="350" y2="112"/><line class="c2" x1="290" y1="216" x2="410" y2="216"/><line class="c2" x1="350" y1="320" x2="410" y2="424"/><line class="c2" x1="350" y1="320" x2="410" y2="216"/><line class="c2" x1="350" y1="320" x2="470" y2="320"/><line class="c2" x1="410" y1="424" x2="470" y2="528"/><line class="c2" x1="410" y1="424" x2="470" y2="320"/><line class="c2" x1="410" y1="424" x2="530" y2="424"/><line class="c2" x1="470" y1="528" x2="530" y2="424"/><line class="c2" x1="350" y1="112" x2="410" y2="216"/><line class="c2" x1="350" y1="112" x2="470" y2="112"/><line class="c2" x1="410" y1="216" x2="470" y2="320"/><line class="c2" x1="410" y1="216" x2="470" y2="112"/><line class="c2" x1="410" y1="216" x2="530" y2="216"/><line class="c2" x1="470" y1="320" x2="530" y2="424"/><line class="c2" x1="470" y1="320" x2="530" y2="216"/><line class="c2" x1="470" y1="320" x2="590" y2="320"/><line class="c2" x1="530" y1="424" x2="590" y2="320"/><line class="c2" x1="470" y1="112" x2="530" y2="216"/><line class="c2" x1="530" y1="216" x2="590" y2="320"/><polygon class="k" points="132.5,333 110,346 87.5,333 87.5,307 110,294 132.5,307"/><polygon class="k" points="192.5,437 170,450 147.5,437 147.5,411 170,398 192.5,411"/><rect class="k" x="158" y="420" width="5" height="8"/><rect class="k" x="166" y="420" width="5" height="8"/><rect class="k" x="174" y="420" width="5" height="8"/><polygon class="k" points="252.5,541 230,554 207.5,541 207.5,515 230,502 252.5,515"/><rect class="k" x="218" y="524" width="5" height="8"/><rect class="k" x="226" y="524" width="5" height="8"/><polygon class="k" points="192.5,229 170,242 147.5,229 147.5,203 170,190 192.5,203"/><rect class="k" x="158" y="212" width="5" height="8"/><polygon class="k" points="252.5,333 230,346 207.5,333 207.5,307 230,294 252.5,307"/><polygon class="k" points="312.5,437 290,450 267.5,437 267.5,411 290,398 312.5,411"/><rect class="k" x="278" y="420" width="5" height="8"/><rect class="k" x="286" y="420" width="5" height="8"/><rect class="k" x="294" y="420" width="5" height="8"/><polygon class="k" points="372.5,541 350,554 327.5,541 327.5,515 350,502 372.5,515"/><rect class="k" x="338" y="524" width="5" height="8"/><rect class="k" x="346" y="524" width="5" height="8"/><polygon class="k" points="252.5,125 230,138 207.5,125 207.5,99 230,86 252.5,99"/><rect class="k" x="218" y="108" width="5" height="8"/><polygon class="k" points="312.5,229 290,242 267.5,229 267.5,203 290,190 312.5,203"/><polygon class="a" points="372.5,333 350,346 327.5,333 327.5,307 350,294 372.5,307"/><rect class="a" x="338" y="316" width="5" height="8"/><rect class="a" x="346" y="316" width="5" height="8"/><rect class="a" x="354" y="316" width="5" height="8"/><polygon class="k" points="432.5,437 410,450 387.5,437 387.5,411 410,398 432.5,411"/><rect class="k" x="398" y="420" width="5" height="8"/><rect class="k" x="406" y="420" width="5" height="8"/><polygon class="k" points="492.5,541 470,554 447.5,541 447.5,515 470,502 492.5,515"/><rect class="k" x="458" y="524" width="5" height="8"/><polygon class="k" points="372.5,125 350,138 327.5,125 327.5,99 350,86 372.5,99"/><polygon class="k" points="432.5,229 410,242 387.5,229 387.5,203 410,190 432.5,203"/><rect class="k" x="398" y="212" width="5" height="8"/><rect class="k" x="406" y="212" width="5" height="8"/><rect class="k" x="414" y="212" width="5" height="8"/><polygon class="k" points="492.5,333 470,346 447.5,333 447.5,307 470,294 492.5,307"/><rect class="k" x="458" y="316" width="5" height="8"/><rect class="k" x="466" y="316" width="5" height="8"/><polygon class="k" points="552.5,437 530,450 507.5,437 507.5,411 530,398 552.5,411"/><rect class="k" x="518" y="420" width="5" height="8"/><polygon class="k" points="492.5,125 470,138 447.5,125 447.5,99 470,86 492.5,99"/><polygon class="k" points="552.5,229 530,242 507.5,229 507.5,203 530,190 552.5,203"/><rect class="k" x="518" y="212" width="5" height="8"/><rect class="k" x="526" y="212" width="5" height="8"/><rect class="k" x="534" y="212" width="5" height="8"/><polygon class="k" points="612.5,333 590,346 567.5,333 567.5,307 590,294 612.5,307"/><rect class="k" x="578" y="316" width="5" height="8"/><rect class="k" x="586" y="316" width="5" height="8"/><text class="t" x="574" y="104" text-anchor="start">CLUSTER</text><text class="t" x="20" y="660" text-anchor="start">SCHRITT 4 · BETREIBEN AUF EINEM FUNDAMENT</text></svg></div>
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> 03</span><span class="rail__t">Arbeitspakete</span><span class="rail__meta">Häufige<br>Einstiege</span></div>
+      <div class="body">
+        <h2 class="h2 rv">Typische Aufgaben <em>in Projekten.</em></h2>
+        <p class="lead rv">Wo ich einsteige, hängt von Ihrer Ausgangslage ab. Diese Aufgaben kommen am häufigsten vor, einzeln oder als Teil eines größeren Plattform-Vorhabens.</p>
+        <div class="aps rv">
+          <div class="ap"><span class="ap__h"><b>AP-01</b><span>Aufbau</span></span><h3 class="ap__t">Plattform von Grund auf</h3><p class="ap__b">Entwicklungs- und CI/CD-Infrastruktur für neue Produkte konzipieren und umsetzen, von der Architektur bis zum Betrieb.</p></div>
+          <div class="ap"><span class="ap__h"><b>AP-02</b><span>Modernisierung</span></span><h3 class="ap__t">Gewachsene CI/CD erneuern</h3><p class="ap__b">Bestehende Pipelines migrieren, vereinheitlichen und beschleunigen, ohne den laufenden Betrieb zu stören.</p></div>
+          <div class="ap"><span class="ap__h"><b>AP-03</b><span>Self-Service</span></span><h3 class="ap__t">Tickets abschaffen</h3><p class="ap__b">Projekte, Repositories und Umgebungen auf Knopfdruck, nach festen Standards und ohne Wartezeit.</p></div>
+          <div class="ap"><span class="ap__h"><b>AP-04</b><span>Betrieb</span></span><h3 class="ap__t">Betrieb automatisieren</h3><p class="ap__b">Deployments, Monitoring und Alerting so aufsetzen, dass der Betrieb ohne Handgriffe läuft und Probleme früh auffallen.</p></div>
+          <div class="ap"><span class="ap__h"><b>AP-05</b><span>Regulierte Umfelder</span></span><h3 class="ap__t">Compliance automatisieren</h3><p class="ap__b">Nachweise, Dokumentation und Prüfungen entstehen direkt in der Pipeline statt in Handarbeit vor dem Release.</p></div>
+          <div class="ap"><span class="ap__h"><b>AP-06</b><span>Embedded</span></span><h3 class="ap__t">Embedded-Builds modernisieren</h3><p class="ap__b">Versions-Upgrades, schnellere und stabilere Builds, Tests und Emulation direkt in der Pipeline.</p></div>
+        </div>
+        <div class="sublinks rv">
+          <a class="sublink" href="#/projekte" data-go><span class="sublink__p">/projekte</span><h3 class="sublink__t">Projekte</h3><p class="sublink__b">Ausgewählte Einsätze und eigene Open-Source-Arbeit.</p><span class="sublink__go" aria-hidden="true">→</span></a>
+          <a class="sublink" href="#/profil" data-go><span class="sublink__p">/profil</span><h3 class="sublink__t">Werdegang &amp; Stack</h3><p class="sublink__b">Erfahrung, Schwerpunkte und Stack.</p><span class="sublink__go" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BL.04 Aus einer Hand -->
+  <section class="sheet" id="bereiche">
+    <div class="bg-draw" aria-hidden="true"><svg class="small" viewBox="0 0 700 680" aria-hidden="true"><circle class="a" cx="350" cy="250" r="170"/><line class="k" x1="338" y1="250" x2="362" y2="250"/><line class="k" x1="350" y1="238" x2="350" y2="262"/><circle class="k" cx="240" cy="440" r="170"/><line class="k" x1="228" y1="440" x2="252" y2="440"/><line class="k" x1="240" y1="428" x2="240" y2="452"/><circle class="k" cx="460" cy="440" r="170"/><line class="k" x1="448" y1="440" x2="472" y2="440"/><line class="k" x1="460" y1="428" x2="460" y2="452"/><text class="t ta" x="350" y="62" text-anchor="middle">PLATFORM</text><text class="t" x="107.4" y="565.4" text-anchor="middle">SECURITY</text><text class="t" x="592.6" y="565.4" text-anchor="middle">AI</text><circle class="af" cx="350" cy="376.7" r="7"/><line class="c2" x1="350" y1="376.7" x2="560" y2="226.7"/><text class="ta" x="566" y="226.7" text-anchor="start">AUS EINER HAND</text><text class="t" x="20" y="660" text-anchor="start">SCHRITT 5 · ZUSAMMENFÜHREN</text></svg></div>
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> 04</span><span class="rail__t">Ansichten</span><span class="rail__meta">Ein Profil,<br>drei Seiten</span></div>
+      <div class="body">
+        <h2 class="h2 rv">Plattform ist das Fundament. <em><a class="xl" href="https://security.charemma.de">Security</a> und <a class="xl" href="https://ai.charemma.de">KI</a> bauen darauf auf.</em></h2>
+        <p class="lead rv">Wer eine Plattform baut, entscheidet auch, <a class="xl" href="https://security.charemma.de">wie sicher sie ist</a> und <a class="xl" href="https://ai.charemma.de">wie gut Agenten darauf arbeiten können</a>. Beides decke ich selbst ab, jeweils mit eigener Seite.</p>
+        <div class="views rv">
+          <div class="view-c view-c--here"><span class="view-c__h"><b>Ansicht A</b><span>hier</span></span><span class="view-c__host">charemma.de</span><h3 class="view-c__t">Platform &amp; DevOps</h3><p class="view-c__b">Entwicklerplattformen, Kubernetes, GitOps, CI/CD und deklarative Setups.</p></div>
+          <a class="view-c" href="https://security.charemma.de"><span class="view-c__h"><b>Ansicht B</b><span>↗</span></span><span class="view-c__host">security.charemma.de</span><h3 class="view-c__t">Security &amp; Pentests</h3><p class="view-c__b">Pentests für Linux, Container, Kubernetes und Webanwendungen, dazu KI-Sicherheit.</p><span class="view-c__go">Zur Security-Seite →</span></a>
+          <a class="view-c" href="https://ai.charemma.de"><span class="view-c__h"><b>Ansicht C</b><span>↗</span></span><span class="view-c__host">ai.charemma.de</span><h3 class="view-c__t">AI &amp; LLM Engineering</h3><p class="view-c__b">Coding-Agenten, Spec-driven Development, LLM-Pipelines und KI-gestützte Setups auf Ihrer Infrastruktur.</p><span class="view-c__go">Zur AI-Seite →</span></a>
+        </div>
+        <p class="bridge rv"><b>Der Vorteil für Sie:</b> eine Person, die Plattform, <a class="xl" href="https://security.charemma.de">Angriffsfläche</a> und <a class="xl" href="https://ai.charemma.de">Agenten-Anbindung</a> zusammen denkt. Keine Übergaben zwischen drei Dienstleistern.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BL.05 Kontakt -->
+  <section class="sheet" id="kontakt">
+    <div class="bg-draw" aria-hidden="true"><svg viewBox="0 0 700 680" aria-hidden="true"><path class="c" d="M 410 360 A 80 80 0 0 0 302.6 284.8"/><path class="k" d="M 490 360 A 160 160 0 0 0 275.3 209.6"/><path class="c" d="M 570 360 A 240 240 0 0 0 247.9 134.5"/><line class="c2" x1="50" y1="360" x2="630" y2="360"/><line class="c2" x1="330" y1="80" x2="330" y2="420"/><circle class="a" cx="330" cy="360" r="5"/><line class="a" x1="330" y1="360" x2="443.1" y2="246.9"/><text class="ta" x="453.1" y="240.9" text-anchor="start">IHR NÄCHSTER SCHRITT</text><rect class="kf2" x="80" y="560" width="80" height="10"/><text class="t" x="80" y="588" text-anchor="middle">0</text><rect class="k" x="160" y="560" width="80" height="10"/><text class="t" x="160" y="588" text-anchor="middle">1</text><rect class="kf2" x="240" y="560" width="80" height="10"/><text class="t" x="240" y="588" text-anchor="middle">2</text><rect class="k" x="320" y="560" width="80" height="10"/><text class="t" x="320" y="588" text-anchor="middle">3</text><rect class="kf2" x="400" y="560" width="80" height="10"/><text class="t" x="400" y="588" text-anchor="middle">4</text><rect class="k" x="480" y="560" width="80" height="10"/><text class="t" x="480" y="588" text-anchor="middle">5</text><text class="t" x="560" y="588" text-anchor="middle">6</text><text class="t" x="580" y="569" text-anchor="start">MASSSTAB 1 : 1</text><text class="t" x="20" y="660" text-anchor="start">SCHRITT 6 · GEMEINSAM PLANEN</text></svg></div>
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> 05</span><span class="rail__t">Kontakt</span><span class="rail__meta">Raum Stuttgart<br>oder remote</span></div>
+      <div class="body">
+        <h2 class="cta__h rv">Plattformen, die Entwickler gern nutzen. <em>Und die morgen noch genauso bauen.</em></h2>
+        <div class="cta__card rv">
+          <p class="cta__p">Ein kurzes Gespräch reicht, um zu sehen, wo Ihre Builds Zeit verlieren und was sich standardisieren lässt.</p>
+          <div class="actions" style="margin-top:0">
+            <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Anfrage%20Platform%20Engineering">Erstgespräch vereinbaren <span class="arr">→</span></a>
+            <a class="btn btn--ghost" href="https://github.com/charemma">GitHub</a>
+          </div>
+          <span class="cta__mail">me@charemma.de</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="view-pane subpage" data-view="projekte" hidden>
+  <div class="wrap crumbs"><a href="#top" data-go>← Start</a><span>charemma.de / projekte</span></div>
+  <section class="sheet">
+    <div class="wrap sheet__in" style="padding-top:56px">
+      <div class="rail"><span class="rail__n"><b>BL.</b> P</span><span class="rail__t">Projekte</span></div>
+      <div class="body">
+        <h2 class="h2">Ausgewählte <em>Einsätze.</em></h2>
+        <p class="lead">Ein Querschnitt, bewusst ohne Interna. Details gern im persönlichen Gespräch.</p>
+        <div class="pgroup">
+          <div class="pgroup__h"><h3 class="pgroup__t">Bei Kunden</h3><span class="pgroup__s">Medizintechnik · Medienindustrie · Mittelstand</span></div>
+          <ul class="cards">
+            <li class="card"><div class="card__m"><b>Medizintechnik</b><span>Platform Engineering</span></div><h4 class="card__t">Plattform und Builds im regulierten Umfeld</h4><p class="card__b">Entwicklungsumgebungen vereinheitlicht, Build-Abläufe beschleunigt und eine selbst betriebene Kubernetes-Plattform aufgebaut, damit sich das Team auf das Produkt konzentrieren kann.</p></li>
+            <li class="card"><div class="card__m"><b>Medienindustrie</b><span>CI/CD &amp; Self-Service</span></div><h4 class="card__t">CI/CD modernisiert, Self-Service eingeführt</h4><p class="card__b">Pipelines migriert und standardisiert, Embedded-Builds modernisiert und Self-Service für Projekte und Entwicklungsumgebungen aufgebaut.</p><p class="card__r">Build-Zeiten um rund 80 % verkürzt.</p></li>
+            <li class="card"><div class="card__m"><b>Medizintechnik</b><span>DevOps</span></div><h4 class="card__t">DevOps für die Systementwicklung</h4><p class="card__b">Betrieb der Entwicklungsinfrastruktur übernommen und regulatorische Dokumentation sowie Prüfungen automatisiert.</p></li>
+            <li class="card"><div class="card__m"><b>Mittelstand</b><span>IT &amp; Anwendung</span></div><h4 class="card__t">IT und Web-App für einen Handwerksbetrieb</h4><p class="card__b">IT-Infrastruktur aufgebaut und eine mobile Web-App entwickelt, betrieben auf meiner eigenen Plattform.</p></li>
+          </ul>
+        </div>
+        <div class="pgroup">
+          <div class="pgroup__h"><h3 class="pgroup__t">Eigene Arbeit</h3><span class="pgroup__s">Öffentlich einsehbar</span></div>
+          <ul class="cards">
+            <li class="card"><div class="card__m"><b>Plattform</b><span>GitOps</span></div><h4 class="card__t">Eigene GitOps-Plattform</h4><p class="card__b">Kubernetes auf deklarativ verwalteten Servern, vollständig aus Git aufgebaut und abgeglichen. Darauf laufen Kundenanwendungen und eigene Dienste.</p><a class="card__l" href="https://github.com/charemma/platform">github.com/charemma/platform →</a></li>
+            <li class="card"><div class="card__m"><b>Open Source</b><span>Werkzeug</span></div><h4 class="card__t">ikno</h4><p class="card__b">Kommandozeilenwerkzeug, das den Arbeitstag aus Git-Repositories, Notizen und Agenten-Sitzungen zusammenfasst.</p><a class="card__l" href="https://github.com/charemma/ikno">github.com/charemma/ikno →</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="view-pane subpage" data-view="profil" hidden>
+  <div class="wrap crumbs"><a href="#top" data-go>← Start</a><span>charemma.de / profil</span></div>
+  <section class="sheet">
+    <div class="wrap sheet__in" style="padding-top:56px">
+      <div class="rail"><span class="rail__n"><b>BL.</b> W</span><span class="rail__t">Erfahrung</span></div>
+      <div class="body">
+        <h2 class="h2">Von der Software <em>zur Plattform.</em></h2>
+        <ol class="tl">
+          <li><span class="tl__y">Grundlage</span><div><h3 class="tl__t">Software Engineering</h3><p class="tl__b">Diplom in Softwaretechnik und viele Jahre Entwicklung, von Embedded-Systemen mit Echtzeitanforderungen bis zu Web und Werkzeugen.</p></div></li>
+          <li><span class="tl__y">DevOps</span><div><h3 class="tl__t">DevOps &amp; agile Teams</h3><p class="tl__b">DevOps-Praktiken eingeführt, Teams als Scrum Master begleitet und Entwicklung, IT und Test enger zusammengebracht.</p></div></li>
+          <li><span class="tl__y">Architektur</span><div><h3 class="tl__t">Plattform-Architektur</h3><p class="tl__b">Entwicklungs- und CI/CD-Infrastruktur für komplexe Produkte konzipiert, standardisiert und betrieben.</p></div></li>
+          <li><span class="tl__y">Security</span><div><h3 class="tl__t">Offensive Security</h3><p class="tl__b">Zertifiziert nach OSCP. Plattformen betrachte ich auch aus Angreifersicht. Mehr dazu auf <a class="xl" href="https://security.charemma.de">security.charemma.de</a>.</p></div></li>
+          <li><span class="tl__y">heute</span><div><h3 class="tl__t">Platform, <a class="xl" href="https://security.charemma.de">Security</a> und <a class="xl" href="https://ai.charemma.de">KI</a></h3><p class="tl__b">Freiberuflich für Unternehmen in Medizintechnik, Medienindustrie und Mittelstand.</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+  <section class="sheet">
+    <div class="wrap sheet__in">
+      <div class="rail"><span class="rail__n"><b>BL.</b> S</span><span class="rail__t">Stack</span></div>
+      <div class="body">
+        <h2 class="h2">Was ich <em>im Betrieb kenne.</em></h2>
+        <div class="stack">
+          <div class="stack__row"><span class="stack__k">Plattform</span><div class="stack__v"><ul class="tags"><li class="tag">Kubernetes</li><li class="tag">GitOps</li><li class="tag">Helm</li><li class="tag">Container</li></ul></div></div>
+          <div class="stack__row"><span class="stack__k">Infrastruktur</span><div class="stack__v"><ul class="tags"><li class="tag">Infrastructure as Code</li><li class="tag">Konfigurationsmanagement</li><li class="tag">Cloud &amp; On-Premise</li></ul></div></div>
+          <div class="stack__row"><span class="stack__k">Delivery</span><div class="stack__v"><ul class="tags"><li class="tag">CI/CD</li><li class="tag">Build-Systeme</li><li class="tag">Release-Prozesse</li><li class="tag">SBOM</li></ul></div></div>
+          <div class="stack__row"><span class="stack__k">Automatisierung</span><div class="stack__v"><ul class="tags"><li class="tag">Prozessautomatisierung</li><li class="tag">CLIs &amp; APIs</li><li class="tag">Deklarative Setups</li><li class="tag">Dev-Container</li><li class="tag">Onboarding</li></ul></div></div>
+          <div class="stack__row"><span class="stack__k">Embedded</span><div class="stack__v"><ul class="tags"><li class="tag">Embedded Linux</li><li class="tag">Cross-Builds</li><li class="tag">Emulation</li></ul></div></div>
+          <div class="stack__row"><span class="stack__k">Sprachen</span><div class="stack__v"><ul class="tags"><li class="tag">Python</li><li class="tag">Go</li><li class="tag">TypeScript</li><li class="tag">C++</li><li class="tag">Bash</li></ul></div></div>
+          <div class="stack__row"><span class="stack__k">Security</span><div class="stack__v"><ul class="tags"><li class="tag">DevSecOps</li><li class="tag">Least Privilege</li><li class="tag">Penetrationstests</li></ul><a href="https://security.charemma.de">security.charemma.de →</a></div></div>
+          <div class="stack__row"><span class="stack__k">KI</span><div class="stack__v"><ul class="tags"><li class="tag">Coding-Agenten</li><li class="tag">Tool-Anbindung</li><li class="tag">LLM-Workflows</li></ul><a href="https://ai.charemma.de">ai.charemma.de →</a></div></div>
+          <div class="stack__row"><span class="stack__k">Abschlüsse</span><div class="stack__v"><ul class="tags"><li class="tag">Dipl.-Ing. Softwaretechnik</li><li class="tag">OSCP</li><li class="tag">SCP</li><li class="tag">PSM I</li></ul></div></div>
+        </div>
+        <p class="note">Die vollständige Werkzeugliste steht im Lebenslauf, gern auf Anfrage.</p>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span>© 2026 Charalambos Emmanouilidis</span>
+    <span>Raum Stuttgart / Remote</span>
+    <span class="foot__links"><a href="https://github.com/charemma">GitHub</a><a href="https://dev.to/charemma">dev.to</a></span>
+    <span class="foot__links"><a href="https://security.charemma.de">security.charemma.de</a><a href="https://ai.charemma.de">ai.charemma.de</a></span>
+    <p class="foot__made">Gestaltet im Vibe mit Claude Design, umgesetzt per Spec-driven Development. <a href="https://ai.charemma.de">Wie das funktioniert →</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Theme: light by default, dark only on explicit choice */
+  document.getElementById('themeBtn').addEventListener('click', function () {
+    var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('platform-theme', next); } catch (e) {}
+  });
+
+  /* Reveal */
+  var io = null;
+  if ('IntersectionObserver' in window && !reduce) {
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+  } else { root.classList.add('noio'); }
+  function observeAll() {
+    document.querySelectorAll('.view-pane:not([hidden]) .rv:not(.in)').forEach(function (el) {
+      if (!io || el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in'); else io.observe(el);
+    });
+  }
+  setTimeout(function () { document.querySelectorAll('.rv').forEach(function (el) { el.classList.add('in'); }); }, 4000);
+
+  /* Typewriter: chapter headings appear character by character as they come into view */
+  function prepType(el) {
+    el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+    var nodes = [], chars = [], walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (tn) {
+      var frag = document.createDocumentFragment();
+      tn.nodeValue.split(/(\s+)/).forEach(function (tok) {
+        if (!tok) return;
+        if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(' ')); return; }
+        var w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+        for (var i = 0; i < tok.length; i++) { var c = document.createElement('span'); c.className = 'ch'; c.textContent = tok[i]; w.appendChild(c); chars.push(c); }
+        frag.appendChild(w);
+      });
+      tn.parentNode.replaceChild(frag, tn);
+    });
+    el._chars = chars; el.classList.add('ty');
+  }
+  function playType(el) {
+    var chars = el._chars; if (!chars || el._played) return; el._played = true;
+    if (reduce || !chars.length) { el.classList.add('typed'); return; }
+    var caret = document.createElement('span'); caret.className = 'caret'; caret.setAttribute('aria-hidden', 'true');
+    var speed = Math.max(14, Math.min(40, 1200 / chars.length)), i = 0;
+    chars[0].parentNode.insertBefore(caret, chars[0]);
+    (function tick() {
+      if (i >= chars.length) { setTimeout(function () { caret.remove(); el.classList.add('typed'); }, 900); return; }
+      var c = chars[i++]; c.classList.add('on'); c.after(caret);
+      setTimeout(tick, /[.,:]/.test(c.textContent) ? speed * 6 : speed * (0.6 + Math.random() * 0.8));
+    })();
+  }
+  var typeEls = Array.prototype.slice.call(document.querySelectorAll('.h1, .h2, .cta__h'));
+  if (!reduce && 'IntersectionObserver' in window) {
+    typeEls.forEach(prepType);
+    var tio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { playType(e.target); tio.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.2 });
+    typeEls.forEach(function (el) { tio.observe(el); });
+    window.__retype = function () { typeEls.forEach(function (el) { if (!el._played && !el.closest('[hidden]')) { tio.unobserve(el); tio.observe(el); } }); };
+  }
+
+  /* Strand + diamond */
+  var homePane = document.querySelector('[data-view="home"]'), strand = document.querySelector('.strand');
+  var sFill = strand && strand.querySelector('.strand__fill'), sDot = strand && strand.querySelector('.strand__dot');
+  var rails = Array.prototype.slice.call(document.querySelectorAll('[data-view="home"] .sheet .rail'));
+  var sTop = 0, sH = 0, ticking = false;
+  function layoutStrand() {
+    if (!strand || homePane.hidden) return;
+    var first = document.getElementById('fokus'), last = document.getElementById('kontakt'), pr = homePane.getBoundingClientRect();
+    var r = first.querySelector('.rail').getBoundingClientRect();
+    sTop = r.top - pr.top + 6; sH = last.getBoundingClientRect().bottom - pr.top - 112 - sTop;
+    strand.style.left = (r.right - 1 - pr.left) + 'px'; strand.style.top = sTop + 'px'; strand.style.height = Math.max(0, sH) + 'px';
+    updStrand();
+  }
+  // the diamond rests at the start of the current chapter; on reaching a new chapter it travels
+  // there, leaving a short tail, and lands
+  var pos = null, from = 0, to = null, t0 = 0, animating = false, idleT = null;
+  function easeIO(p) { return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; }
+  function paint() {
+    sDot.style.transform = 'translateY(' + pos + 'px) rotate(45deg)';
+    var top = Math.min(from, pos), h = Math.abs(pos - from);
+    sFill.style.transform = 'translateY(' + top + 'px)'; sFill.style.height = h + 'px';
+    sFill.classList.toggle('up', pos < from);
+  }
+  function step(now) {
+    var p = Math.min(1, (now - t0) / 750); pos = from + (to - from) * easeIO(p); paint();
+    if (p < 1) requestAnimationFrame(step);
+    else { animating = false; clearTimeout(idleT); idleT = setTimeout(function () { strand.classList.remove('moving'); }, 350); }
+  }
+  function updStrand() {
+    ticking = false;
+    if (!strand || homePane.hidden) return;
+    var pr = homePane.getBoundingClientRect(), y = window.innerHeight * .5 - pr.top - sTop, target = null;
+    rails.forEach(function (rl) {
+      var ry = rl.getBoundingClientRect().top - pr.top - sTop + 9, on = y >= ry - 4;
+      rl.classList.toggle('lit', on);
+      if (on) target = ry - .5;
+    });
+    sDot.style.visibility = target === null ? 'hidden' : 'visible';
+    if (target === null) { to = null; pos = null; strand.classList.remove('moving'); sFill.style.height = '0px'; return; }
+    if (pos === null) { pos = from = to = target; paint(); return; }
+    if (target !== to) {
+      from = pos; to = target; t0 = performance.now();
+      if (reduce) { pos = from = to; paint(); return; }
+      strand.classList.add('moving');
+      if (!animating) { animating = true; requestAnimationFrame(step); }
+    }
+  }
+  window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(updStrand); } }, { passive: true });
+  window.addEventListener('resize', layoutStrand);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutStrand);
+  window.addEventListener('load', layoutStrand);
+
+  /* drawings fade in with their chapter */
+  var sheets = document.querySelectorAll('[data-view="home"] .sheet');
+  if ('IntersectionObserver' in window && !reduce) {
+    var dio = new IntersectionObserver(function (en) { en.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('seen'); dio.unobserve(e.target); } }); }, { threshold: 0.15 });
+    sheets.forEach(function (sh) { dio.observe(sh); });
+  } else { sheets.forEach(function (sh) { sh.classList.add('seen'); }); }
+
+  /* Views */
+  var panes = document.querySelectorAll('.view-pane');
+  function route() {
+    var h = window.location.hash || '', m = h.match(/^#\/(projekte|profil)/), view = m ? m[1] : 'home';
+    panes.forEach(function (p) { p.hidden = p.dataset.view !== view; });
+    document.querySelectorAll('.nav a[data-view-link]').forEach(function (a) { a.classList.toggle('is-current', a.dataset.viewLink === view); });
+    var target = null;
+    if (!m && h && h !== '#top') { try { target = document.querySelector(h); } catch (err) { target = null; } }
+    window.scrollTo({ top: target ? target.getBoundingClientRect().top + window.scrollY - 64 : 0, behavior: 'instant' });
+    observeAll();
+    if (window.__retype) window.__retype();
+    if (view === 'home') layoutStrand();
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-go]');
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    var href = a.getAttribute('href');
+    try { history.pushState(null, '', href === '#top' ? window.location.pathname + window.location.search : href); } catch (err) { window.location.hash = href; }
+    route();
+  });
+  window.addEventListener('popstate', route);
+  route();
+})();
+</script>
+
+</body></html>
