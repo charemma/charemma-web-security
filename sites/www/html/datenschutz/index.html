@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Datenschutz · charemma.de</title>
+<meta name="description" content="Welche Daten diese Website bei einem Besuch verarbeitet und warum.">
+<link rel="canonical" href="https://charemma.de/datenschutz/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Styles taken from the start page (index.html), reduced to what this page uses */
+:root {
+  --paper: #f5f6f7;
+  --ink: #13202b;
+  --text: #3a4852;
+  --muted: #62717b;
+  --line: #d6dde2;
+  --line-2: #b9c5cc;
+  --grid: rgba(30, 70, 110, 0.055);
+  --grid-major: rgba(30, 70, 110, 0.1);
+  --accent: #1e5bb8;
+  --on-accent: #ffffff;
+  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --container: 1240px;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --paper: #0b1824; --ink: #e6eef3; --text: #a9bac5; --muted: #7c8f9b;
+  --line: #1c3040; --line-2: #2b4356; --grid: rgba(150, 195, 235, 0.05); --grid-major: rgba(150, 195, 235, 0.09);
+  --accent: #6aa8ff; --on-accent: #06101f;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--ink); font-family: var(--font-sans); font-size: 17px; line-height: 1.6;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px), linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--on-accent); }
+.wrap { max-width: var(--container); margin: 0 auto; padding-left: max(24px, env(safe-area-inset-left, 0px)); padding-right: max(24px, env(safe-area-inset-right, 0px)); }
+.head { border-bottom: 1px solid var(--line-2); }
+.head__in { display: flex; align-items: center; min-height: 64px; }
+.brand { font-family: var(--font-mono); font-size: 14.5px; display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
+.brand__u { color: var(--muted); }
+.legal { max-width: 760px; padding-block: 56px 96px; color: var(--text); }
+.legal__back { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.legal__back:hover { color: var(--accent); }
+.legal h1 { margin: 24px 0 12px; color: var(--ink); font-size: clamp(36px, 6vw, 56px); line-height: 1.05; font-weight: 600; }
+.legal__lead { margin: 0 0 40px; font-size: 19px; }
+.legal h2 { margin: 36px 0 10px; color: var(--ink); font-size: 22px; line-height: 1.3; font-weight: 600; }
+.legal p { margin: 0 0 16px; }
+.legal p a { color: var(--accent); border-bottom: 1px solid var(--line-2); }
+.foot { border-top: 1px solid var(--ink); background: var(--paper); }
+.foot__in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; padding-block: 24px 32px; font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); }
+.foot a { color: var(--muted); padding: 6px 0; display: inline-block; }
+.foot a:hover { color: var(--accent); }
+@media (max-width: 600px) {
+  .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+}
+</style>
+<script data-goatcounter="https://stats.charemma.de/count" data-goatcounter-settings='{"path": "charemma.de/datenschutz/"}' async src="https://stats.charemma.de/count.js"></script>
+<script>
+  try { var t0 = localStorage.getItem('platform-theme'); if (t0 === 'dark' || t0 === 'light') document.documentElement.dataset.theme = t0; } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="head">
+  <div class="wrap head__in">
+    <a class="brand" href="/"><span class="brand__u">charemma@platform:</span>~$</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="legal">
+    <a class="legal__back" href="/">← zurück zur Startseite</a>
+    <h1>Datenschutz</h1>
+    <p class="legal__lead">Was diese Website über Ihren Besuch erfasst und warum. Kurz: keine Cookies und keine Weitergabe der Statistikdaten an Dritte.</p>
+
+    <h2>Verantwortlich</h2>
+    <p>Charalambos Emmanouilidis<br>E-Mail: <a href="mailto:me@charemma.de">me@charemma.de</a></p>
+
+    <h2>Reichweitenmessung mit GoatCounter</h2>
+    <p>Diese Website zählt Seitenaufrufe mit GoatCounter. GoatCounter läuft selbst gehostet unter stats.charemma.de auf meinem eigenen Server.</p>
+    <p>Es werden keine Cookies gesetzt und nichts auf Ihrem Gerät gespeichert. GoatCounter speichert keine IP-Adressen. Erfasst werden die aufgerufene Seite, die verweisende Seite, Browser und Betriebssystem, die Bildschirmgröße und das aus der IP-Adresse abgeleitete Land.</p>
+    <p>Die Statistikdaten werden nicht an Dritte weitergegeben.</p>
+    <p>Rechtsgrundlage ist mein berechtigtes Interesse zu wissen, wie die Website genutzt wird (Art. 6 Abs. 1 lit. f DSGVO).</p>
+
+    <h2>Server-Logs</h2>
+    <p>Der Webserver protokolliert jede Anfrage mit Zeitpunkt, aufgerufener Adresse, Statuscode und Browser, um den Betrieb zu sichern und Fehler zu finden. Die Protokolle werden nicht dauerhaft gespeichert und gehen bei jedem Neustart des Servers verloren.</p>
+    <p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>
+
+    <h2>Hosting</h2>
+    <p>Die Website und die Statistik laufen auf Servern der Hetzner Online GmbH in Deutschland (EU). Hetzner verarbeitet die Daten als Auftragsverarbeiter.</p>
+
+    <h2>Ihre Rechte</h2>
+    <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung sowie das Recht, der Verarbeitung zu widersprechen. Wenden Sie sich dafür an die oben genannte E-Mail-Adresse.</p>
+    <p>Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren.</p>
+  </article>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <span>© 2026 Charalambos Emmanouilidis</span>
+    <a href="/">charemma.de</a>
+    <a href="/datenschutz/" aria-current="page">Datenschutz</a>
+  </div>
+</footer>
+
+</body>
+</html>
