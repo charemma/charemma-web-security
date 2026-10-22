@@ -21,6 +21,10 @@
   <script type="module" src="{{ asset_url('/assets/js/lang.js') }}"></script>
   {%- endif %}
   {%- block scripts %}{% endblock %}
+  {#- Visitor statistics under host plus path; pages without a canonical address (404) do not count, spec 014 #}
+  {%- if canonical %}
+  <script data-goatcounter="{{ site.stats.endpoint }}" data-goatcounter-settings='{{ {"path": canonical | replace(site.base_url, site_host)} | tojson }}' async src="{{ site.stats.script }}"></script>
+  {%- endif %}
 </head>
 <body class="{% block body_class %}page-dark{% endblock %}">
   <div class="site-header-bar">

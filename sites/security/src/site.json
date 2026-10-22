@@ -28,5 +28,9 @@
     "github": "https://github.com/charemma",
     "repo": "https://github.com/charemma/charemma-web-security",
     "main_site": "https://charemma.de"
+  },
+  "stats": {
+    "endpoint": "https://stats.charemma.de/count",
+    "script": "https://stats.charemma.de/count.js"
   }
 }
