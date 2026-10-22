@@ -315,4 +315,5 @@ The use of this column — whether a file requires it, and what the referenced f
 | `sites/ai/.ai` | `registry.md` | rules | editable |  |  | Site registry for ai.charemma.de: the site's intent and the registry rows of every file in its site folder. |
 | `sites/www/.ai` | `registry.md` | rules | editable |  |  | Site registry for charemma.de: the site's intent and the registry rows of every file in its site folder. |
 | `specs` | `013-site-images.md` | spec | editable |  |  | Spec for the site images: how each site folder becomes its own checked, built and published container image and where the cluster reads its manifests, and the reasons for it. |
+| `specs` | `014-visitor-statistics.md` | spec | editable |  |  | Spec for visitor statistics on all sites: what is counted and under which path, how pages load the counter, which policy allows it, what the privacy notice states, and the reasons for it. |
 | `.github/workflows` | `build.yml` | code | spec-maintained | `001-version-display.md`, `013-site-images.md` |  | CI pipeline definition: which checks run on a push and how the image is built and published. |
