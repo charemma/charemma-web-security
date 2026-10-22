@@ -1,0 +1,25 @@
+{% extends "base.html.j2" %}
+{% block title %}{{ t.privacy.meta_title }}{% endblock %}
+{% block description %}{{ t.privacy.meta_description }}{% endblock %}
+{% block body_class %}page-light{% endblock %}
+{% block nav_links %}{% endblock %}
+{% block main %}
+    <article class="article container">
+      <div class="article__head">
+        <a class="overview__back" href="{{ home_href }}">{{ t.privacy.back }}</a>
+        <h1 class="overview__title">{{ t.privacy.title }}</h1>
+        <p class="overview__lead">{{ t.privacy.lead }}</p>
+      </div>
+      <div class="article__body">
+        {#- The postal address follows once spec 014 names it #}
+        <h2>{{ t.privacy.controller.heading }}</h2>
+        <p>{{ t.privacy.controller.name }}<br>{{ t.privacy.controller.email }} <a href="mailto:{{ site.contact_email }}">{{ site.contact_email }}</a></p>
+        {%- for section in t.privacy.sections %}
+        <h2>{{ section.heading }}</h2>
+        {%- for paragraph in section.paragraphs %}
+        <p>{{ paragraph }}</p>
+        {%- endfor %}
+        {%- endfor %}
+      </div>
+    </article>
+{% endblock %}

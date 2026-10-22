@@ -8,8 +8,10 @@
   ],
   "pages": [
     { "template": "index.html.j2", "path": "" },
-    { "template": "wissen.html.j2", "path": "wissen/ki-sicherheit/" }
+    { "template": "wissen.html.j2", "path": "wissen/ki-sicherheit/" },
+    { "template": "datenschutz.html.j2", "path": "datenschutz/" }
   ],
+  "privacy_path": "datenschutz/",
   "knowledge": {
     "path": "wissen/ki-sicherheit/",
     "groups": ["llm", "infra"],

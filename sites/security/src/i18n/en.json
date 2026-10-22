@@ -134,5 +134,49 @@
     "title": "Page not found",
     "body": "There is nothing at this address.",
     "back": "Back to the homepage"
+  },
+  "privacy": {
+    "link": "Privacy",
+    "meta_title": "Privacy · security.charemma.de",
+    "meta_description": "Which data this website processes during a visit, and why.",
+    "back": "← back to the start page",
+    "title": "Privacy",
+    "lead": "What this website records about your visit, and why. In short: no cookies, and the statistics data is not passed on to third parties.",
+    "controller": {
+      "heading": "Controller",
+      "name": "Charalambos Emmanouilidis",
+      "email": "E-mail:"
+    },
+    "sections": [
+      {
+        "heading": "Visitor statistics with GoatCounter",
+        "paragraphs": [
+          "This website counts page views with GoatCounter. GoatCounter is self-hosted at stats.charemma.de on my own server.",
+          "No cookies are set and nothing is stored on your device. GoatCounter stores no IP addresses. It records the page visited, the referring page, browser and operating system, screen size and the country derived from the IP address.",
+          "The statistics data is not passed on to third parties.",
+          "The legal basis is my legitimate interest in knowing how the website is used (Art. 6 (1) (f) GDPR)."
+        ]
+      },
+      {
+        "heading": "Server logs",
+        "paragraphs": [
+          "The web server logs each request with time, requested address, status code and browser, to keep the site running and to find errors. The logs are not stored permanently and are lost whenever the server restarts.",
+          "The legal basis is Art. 6 (1) (f) GDPR."
+        ]
+      },
+      {
+        "heading": "Hosting",
+        "paragraphs": [
+          "The website and the statistics run on servers of Hetzner Online GmbH in Germany (EU). Hetzner processes the data as processor."
+        ]
+      },
+      {
+        "heading": "Your rights",
+        "paragraphs": [
+          "You have the right of access, rectification, erasure and restriction of processing, and the right to object to processing. To exercise them, write to the e-mail address above.",
+          "You may also lodge a complaint with a data protection supervisory authority."
+        ]
+      }
+    ]
   }
 }
