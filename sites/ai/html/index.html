@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!doctype html>
 <html lang="de" data-theme="light">
 <head>
@@ -87,8 +88,10 @@ main, .site-footer { position: relative; z-index: 1; }
 /* robot eye: two straight shutters with LED edges, a glowing slit while closed */
 .visor { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
 .visor__lid { position: absolute; left: 0; right: 0; height: 50.2%; background: #07080d; transition: transform .32s cubic-bezier(.2, .8, .2, 1); }
-.visor__lid--top { top: 0; transform: translateY(-101%); box-shadow: 0 1px 0 0 var(--accent-2), 0 0 24px 2px rgba(50, 208, 245, .55); }
-.visor__lid--bot { bottom: 0; transform: translateY(101%); box-shadow: 0 -1px 0 0 var(--accent-2), 0 0 24px 2px rgba(50, 208, 245, .55); }
+.visor__lid--top { top: 0; transform: translateY(-101%); }
+.visor__lid--bot { bottom: 0; transform: translateY(101%); }
+.visor.is-shut .visor__lid--top { box-shadow: 0 1px 0 0 var(--accent-2), 0 0 24px 2px rgba(50, 208, 245, .55); }
+.visor.is-shut .visor__lid--bot { box-shadow: 0 -1px 0 0 var(--accent-2), 0 0 24px 2px rgba(50, 208, 245, .55); }
 .visor__slit { position: absolute; left: 50%; top: 50%; width: min(46vw, 520px); height: 4px; margin: -2px 0 0 calc(min(46vw, 520px) / -2); border-radius: 4px; background: linear-gradient(90deg, transparent, var(--accent-2) 20%, #fff 50%, var(--accent-2) 80%, transparent); box-shadow: 0 0 18px 4px rgba(50, 208, 245, .6); opacity: 0; transform: scaleX(.2); transition: opacity .15s, transform .25s cubic-bezier(.2, .8, .2, 1); }
 .visor.is-shut { pointer-events: all; }
 .visor.is-shut .visor__lid { transform: none; transition: transform .2s cubic-bezier(.7, 0, .9, .4); }
@@ -182,7 +185,17 @@ section { position: relative; }
 @keyframes cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
 
 /* ---------- Stats ---------- */
-.stats { border-top: 1px solid var(--glass-line); border-bottom: 1px solid var(--glass-line); background: var(--glass); backdrop-filter: blur(22px) saturate(1.3); -webkit-backdrop-filter: blur(22px) saturate(1.3); }
+.stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: transparent; }
+.stat__v, .stat__l { text-shadow: 0 0 14px var(--bg), 0 0 4px var(--bg); }
+.dialog__text { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+.dialog__kicker { margin: 0; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.dialog__kicker i { font-style: normal; color: var(--accent); }
+.dialog__lead { margin: 22px 0 0; max-width: 680px; font-size: clamp(17px, 1.6vw, 20px); color: var(--text); text-shadow: 0 0 18px var(--bg), 0 0 6px var(--bg); }
+.chapter-audio { min-height: calc(100vh - 69px); display: flex; flex-direction: column; justify-content: space-between; padding-top: 56px; }
+.audio__cap { margin: 0; text-align: center; font-family: var(--font-mono); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 12px; }
+.audio__cap span { color: var(--ink); }
+.audio__cap i { font-style: normal; color: var(--accent); }
+.audio__cap em { font-style: normal; text-transform: none; letter-spacing: .02em; }
 .stats__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .stat { padding: 34px 0 34px 0; display: flex; flex-direction: column; gap: 6px; }
 .stat + .stat { padding-left: 28px; border-left: 1px solid var(--line); }
@@ -432,26 +445,30 @@ section { position: relative; }
   <!-- HERO -->
   <section class="container hero" data-shape="code">
     <div class="hero__float">
-    <div class="hero__kicker reveal">Charalambos Emmanouilidis <i>·</i> AI Engineer</div>
-    <h1 class="hero__title" data-type data-type-now><span class="vibe">Die Spec entsteht im Vibe.</span><br><span class="acc">Aus der Spec entsteht der Code.</span></h1>
-    <p class="hero__lead reveal">Ideen, Spezifikation und Plan entstehen frei und explorativ – im Dialog mit dem Modell. Umgesetzt wird dann streng nach Spec: Agenten schreiben den Code, ich sorge dafür, dass es der richtige ist. Mit eigenen MCP-Servern, Audit-Trail und auf Ihrer Infrastruktur.</p>
-    <div class="hero__actions reveal">
-      <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Anfrage%20AI%20Engineering">Gespräch vereinbaren <span class="arr">→</span></a>
-      <a class="btn btn--ghost" href="#arbeitsweise" data-go>Wie ich arbeite</a>
-    </div>
+      <h1 class="hero__title" data-type data-type-now><span class="vibe">Die Spec entsteht im Vibe.</span><br><span class="acc">Aus der Spec entsteht der Code.</span></h1>
     </div>
     <div class="scroll-cue" aria-hidden="true">SCROLL<i></i></div>
   </section>
 
-  <!-- STATS -->
-  <div class="stats" data-shape="code">
-    <div class="container stats__grid stagger">
+  <!-- DIALOG -->
+  <section class="chapter-audio" id="dialog" data-shape="audio">
+    <div class="container dialog__text">
+      <p class="dialog__kicker reveal">Charalambos Emmanouilidis <i>·</i> AI Engineer</p>
+      <p class="dialog__lead reveal">Ideen, Spezifikation und Plan entstehen frei und explorativ – im Dialog mit dem Modell. Umgesetzt wird dann streng nach Spec: Agenten schreiben den Code, ich sorge dafür, dass es der richtige ist. Mit eigenen MCP-Servern, Audit-Trail und auf Ihrer Infrastruktur.</p>
+      <div class="hero__actions reveal">
+        <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Anfrage%20AI%20Engineering">Gespräch vereinbaren <span class="arr">→</span></a>
+        <a class="btn btn--ghost" href="#arbeitsweise" data-go>Wie ich arbeite</a>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="container stats__grid stagger">
       <div class="stat"><span class="stat__v"><span class="br">[</span> 20+ <span class="br">]</span></span><span class="stat__l">Jahre Software &amp; Plattform</span></div>
       <div class="stat"><span class="stat__v"><span class="br">[</span> 2023 <span class="br">]</span></span><span class="stat__l">KI fest im Entwicklungsalltag</span></div>
       <div class="stat"><span class="stat__v"><span class="br">[</span> 100% <span class="br">]</span></span><span class="stat__l">Spec vor Code</span></div>
       <div class="stat"><span class="stat__v"><span class="br">[</span> OSCP <span class="br">]</span></span><span class="stat__l">Offensive Security zertifiziert</span></div>
     </div>
-  </div>
+    </div>
+  </section>
 
   <!-- 01 -->
   <section class="container sec" id="schwerpunkte" data-shape="hub">
@@ -812,8 +829,8 @@ section { position: relative; }
     var col = { node: '74,58,255', pkt: '0,168,214' };
     var mouse = { x: -9999, y: -9999 };
     var mode = 'chaos', N = 0, P = [], PAR = {}, time = 0, TAU = Math.PI * 2;
-    var reg = { cx: 0, cy: 0, s: 1 }, goal = { cx: 0, cy: 0, s: 1 };
-    var rot = { y: 0, x: .3 }, rotGoal = { y: 0, x: .3 }, LINES = [], SX = null, SY = null, waveMix = 0, modeT = 0;
+    var reg = { cx: 0, cy: 0, s: 1, a: .4, ps: .8 }, goal = { cx: 0, cy: 0, s: 1, a: .4, ps: .8 }, heroPr = 0;
+    var rot = { y: 0, x: .3 }, rotGoal = { y: 0, x: .3 }, LINESET = {}, lineMode = null, SX = null, SY = null, waveMix = 0, modeT = 0;
     function rnd(a, b) { return a + Math.random() * (b - a); }
     function g() { var u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(TAU * v); }
     function pick(a) { return a[(Math.random() * a.length) | 0]; }
@@ -872,7 +889,7 @@ section { position: relative; }
     var FORMS = {
       chaos: {
         init: function () { return { b: [rnd(-1.7, 1.7), rnd(-1.05, 1.05), rnd(-1, 1)], ph: Math.random() * TAU }; },
-        pos: function (q, t) { var b = q.b; return [b[0] + Math.sin(t * .35 + q.ph + b[1] * 1.6) * .3 + Math.sin(t * .9 + q.ph * 2) * .05, b[1] + Math.cos(t * .3 + q.ph * 1.7 + b[2] * 1.4) * .22, b[2] + Math.sin(t * .27 + q.ph * .6 + b[0] * 1.2) * .3]; },
+        pos: function (q, t) { var b = q.b, k = 1 - heroPr * .45, c = 1 - heroPr * .35, sw = Math.sin(t * .22) * .12; return [b[0] * c + sw + Math.sin(t * .18 + q.ph + b[1] * 1.4) * .2 * k, b[1] * c + Math.cos(t * .15 + q.ph * 1.7 + b[2] * 1.2) * .14 * k, b[2] * c + Math.sin(t * .14 + q.ph * .6 + b[0]) * .2 * k]; },
         rot: function (t) { return { y: t * .06, x: .25 }; }
       },
       gears: {
@@ -922,13 +939,39 @@ section { position: relative; }
       },
       // mathematical surface (like MATLAB's peaks), drawn as a wire grid, breathing slowly
       surface: {
-        init: function () { var G = 26, u = Math.random(), line = (Math.random() * G | 0) / (G - 1); return Math.random() < .5 ? { x: line * 2 - 1, y: u * 2 - 1 } : { x: u * 2 - 1, y: line * 2 - 1 }; },
+        // own landscape: two soft hills and a valley that drift slowly, plus a long gentle swell
+        init: function () { var G = 22, u = Math.random(), li = (Math.random() * G) | 0, line = li / (G - 1); return Math.random() < .5 ? { x: line * 2 - 1, y: u * 2 - 1, l: li, k: u } : { x: u * 2 - 1, y: line * 2 - 1, l: G + li, k: u }; },
         pos: function (q, t) {
-          var x = q.x * 3, y = q.y * 3, a = 1 + Math.sin(t * .35) * .12;
-          var z = 3 * (1 - x) * (1 - x) * Math.exp(-x * x - (y + 1) * (y + 1)) - 10 * (x / 5 - x * x * x - Math.pow(y, 5)) * Math.exp(-x * x - y * y) - Math.exp(-(x + 1) * (x + 1) - y * y) / 3;
-          return [q.x * 1.05, -z / 9 * a + .1, q.y * 1.05];
+          var x = q.x, y = q.y, h1x = -.35 + Math.sin(t * .18) * .15, h1y = -.25 + Math.cos(t * .15) * .12, h2x = .45 + Math.cos(t * .16) * .12, h2y = .35 + Math.sin(t * .13) * .15;
+          var z = .42 * Math.exp(-((x - h1x) * (x - h1x) + (y - h1y) * (y - h1y)) * 4.5)
+                + .28 * Math.exp(-((x - h2x) * (x - h2x) + (y - h2y) * (y - h2y)) * 6)
+                - .22 * Math.exp(-((x - .1) * (x - .1) + (y + .55) * (y + .55)) * 5)
+                + .07 * Math.sin(x * 3 + y * 1.4 + t * .45) + .03 * Math.cos(y * 3.4 - t * .3);
+          return [x * 1.05, -z + .12, y * 1.05];
         },
-        rot: function (t) { return { y: -.7 + t * .05, x: .5 + Math.sin(t * .1) * .05 }; }
+        rot: function (t) { return { y: -.6 + Math.sin(t * .07) * .35, x: .52 + Math.sin(t * .1) * .04 }; }
+      },
+      layers: {
+        // a cube built from four stacked layers inside a wire frame - depth, one level at a time
+        init: function () {
+          if (Math.random() < .74) { var L = (Math.random() * 3) | 0, G = 10, gx = (Math.random() * G | 0) / (G - 1) * 1.3 - .65, gz = (Math.random() * G | 0) / (G - 1) * 1.3 - .65; return { p: [gx + g() * .006, -.52 + L * .52, gz + g() * .006], L: L }; }
+          var E = [[-1, -1, -1, 1, -1, -1], [-1, 1, -1, 1, 1, -1], [-1, -1, 1, 1, -1, 1], [-1, 1, 1, 1, 1, 1], [-1, -1, -1, -1, 1, -1], [1, -1, -1, 1, 1, -1], [-1, -1, 1, -1, 1, 1], [1, -1, 1, 1, 1, 1], [-1, -1, -1, -1, -1, 1], [1, -1, -1, 1, -1, 1], [-1, 1, -1, -1, 1, 1], [1, 1, -1, 1, 1, 1]];
+          var e = E[(Math.random() * E.length) | 0], u = Math.random(), k = .78;
+          return { p: [(e[0] + (e[3] - e[0]) * u) * k, (e[1] + (e[4] - e[1]) * u) * k, (e[2] + (e[5] - e[2]) * u) * k], L: -1 };
+        },
+        pos: function (q, t) { if (q.L < 0) return q.p; var lift = Math.sin(t * .5 - q.L * .9) * .025; return [q.p[0], q.p[1] + lift, q.p[2]]; },
+        rot: function (t) { return { y: .7 + t * .06, x: .5 + Math.sin(t * .1) * .04 }; }
+      },
+      audio: {
+        // dialog as an audio signal: waveform bars, two voices take turns with short pauses in between
+        init: function () { var NB = 96, bi = (Math.random() * NB) | 0; return { x: -1.35 + bi / (NB - 1) * 2.7, v: rnd(-1, 1), z: rnd(-.015, .015), f: .55 + .45 * Math.abs(Math.sin(bi * 12.9898) * 43758.5453 % 1), ph: bi * .7 }; },
+        pos: function (q, t) {
+          var x = q.x, turn = Math.sin(x * 1.6 - t * .5);
+          var voice = Math.pow(Math.max(0, Math.abs(turn) - .12) / .88, 1.3);
+          var amp = (.015 + .34 * voice * (.55 + .45 * Math.abs(Math.sin(q.ph + t * 1.6))) * q.f) * (1 - Math.pow(Math.abs(x) / 1.4, 6));
+          return [x, q.v * amp, q.z];
+        },
+        rot: function (t) { return { y: Math.sin(t * .05) * .1, x: .06 }; }
       },
       helix: {
         init: function () {
@@ -946,7 +989,7 @@ section { position: relative; }
         rot: function (t) { return { y: Math.sin(t * .04) * .12, x: .62 }; }
       }
     };
-    var ALIAS = { code: 'chaos', cloud: 'chaos', hub: 'gears', loop: 'flow', stack: 'surface', shield: 'helix', ring: 'waves' };
+    var ALIAS = { code: 'chaos', cloud: 'chaos', hub: 'gears', loop: 'flow', stack: 'layers', shield: 'helix', ring: 'surface' };
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -956,7 +999,7 @@ section { position: relative; }
       if (want !== N) {
         N = want; PAR = {};
         Object.keys(FORMS).forEach(function (k) { PAR[k] = []; for (var i = 0; i < N; i++) PAR[k].push(FORMS[k].init(i)); });
-        LINES = []; PAR.waves.forEach(function (q, i) { (LINES[q.l] = LINES[q.l] || []).push(i); }); LINES.forEach(function (L) { L.sort(function (a, b) { return PAR.waves[a].x - PAR.waves[b].x; }); });
+        LINESET = {}; ['waves', 'surface'].forEach(function (fm) { var LS = []; PAR[fm].forEach(function (q, i) { (LS[q.l] = LS[q.l] || []).push(i); }); LS.forEach(function (L) { L.sort(function (a, b) { var A = PAR[fm][a], B = PAR[fm][b]; return (A.k !== undefined ? A.k - B.k : A.x - B.x); }); }); LINESET[fm] = LS; });
         SX = new Float32Array(N); SY = new Float32Array(N);
         P = []; for (var i = 0; i < N; i++) { var c = FORMS.chaos.pos(PAR.chaos[i], 0); P.push({ x: c[0], y: c[1], z: c[2], k: rnd(1.0, 2.2), c: Math.random() < .12, big: Math.random() < .05, ox: 0, oy: 0 }); }
       }
@@ -964,10 +1007,19 @@ section { position: relative; }
       if (reduce) settle();
     }
     function setGoal() {
-      if (mode === 'chaos') { goal.cx = W / 2; goal.cy = H * .5; goal.s = Math.min(W * .5, H * .62); }
+      goal.a = 1; goal.ps = 1;
+      if (mode === 'chaos') {
+        // at the very top the swarm stays far back and faint; scrolling pulls it forward and bundles it
+        var pr = Math.max(0, Math.min(1, window.scrollY / (H * .75))); heroPr = pr;
+        var fx = W / 2, fs = Math.min(W * .4, H * .5);
+        goal.cx = W / 2 + (fx - W / 2) * pr; goal.cy = H * .5; goal.s = Math.min(W * .46, H * .56) * (1 - pr) + fs * pr;
+        goal.a = .4 + .56 * pr; goal.ps = .8 + .2 * pr;
+      }
+      else if (mode === 'audio') { goal.cx = W / 2; goal.cy = H * .62; goal.s = Math.min(W * .44, H * .5); }
+      else if (mode === 'surface') { goal.cx = W / 2; goal.cy = H * .58; goal.s = Math.min(W * .4, H * .62); }
       else if (mode === 'waves') { goal.cx = W / 2; goal.cy = H * .6; goal.s = Math.min(W * .48, H * .7); }
       else if (mobile) { goal.cx = W / 2; goal.cy = H * .5; goal.s = W * .44; }
-      else { goal.cx = W * .74; goal.cy = H * (mode === 'surface' ? .56 : mode === 'flow' ? .47 : .52); goal.s = mode === 'flow' ? Math.min(W * .2, H * .33) : Math.min(W * .2, H * .36); }
+      else { goal.cx = W * .74; goal.cy = H * (mode === 'surface' ? .56 : mode === 'flow' ? .47 : .52); goal.s = mode === 'flow' ? Math.min(W * .2, H * .33) : mode === 'layers' ? Math.min(W * .15, H * .28) : Math.min(W * .2, H * .36); }
     }
     function settle() { var f = FORMS[mode]; P.forEach(function (p, i) { var v = f.pos(PAR[mode][i], 0); p.x = v[0]; p.y = v[1]; p.z = v[2]; }); var r = f.rot(0); rot.y = r.y; rot.x = r.x; draw(0, true); }
     function setShape(name) { name = ALIAS[name] || name; if (!FORMS[name] || name === mode) return; mode = name; modeT = 0; setGoal(); if (reduce) { reg.cx = goal.cx; reg.cy = goal.cy; reg.s = goal.s; settle(); } }
@@ -983,8 +1035,8 @@ section { position: relative; }
       var dt = still ? .016 : Math.min(.05, (t - last) / 1000 || .016); last = t;
       if (!still) { time += dt; modeT += dt; }
       var km = reduce ? 1 : 1 - Math.pow(.05, dt);
-      reg.cx += (goal.cx - reg.cx) * km; reg.cy += (goal.cy - reg.cy) * km; reg.s += (goal.s - reg.s) * km;
-      var f = FORMS[mode], par = PAR[mode];
+      reg.cx += (goal.cx - reg.cx) * km; reg.cy += (goal.cy - reg.cy) * km; reg.s += (goal.s - reg.s) * km; reg.a += (goal.a - reg.a) * km; reg.ps += (goal.ps - reg.ps) * km;
+      var f = FORMS[mode], par = PAR[mode], GA = reg.a, PS = reg.ps;
       if (!still) { var rg = f.rot(time); rot.y += (rg.y - rot.y) * (1 - Math.exp(-1.2 * dt)); rot.x += (rg.x - rot.x) * (1 - Math.exp(-1.2 * dt)); }
       var cy = Math.cos(rot.y), sy = Math.sin(rot.y), cx = Math.cos(rot.x), sx = Math.sin(rot.x), F = 3.2;
       ctx.clearRect(0, 0, W, H);
@@ -1007,28 +1059,32 @@ section { position: relative; }
         SX[i] = X; SY[i] = Y;
         if (p.big) bigs.push(X, Y, k, depth); else buckets[depth].push(X, Y, k, p.c ? 1 : 0);
       }
-      waveMix += ((mode === 'waves' && modeT > 2.2 ? 1 : 0) - waveMix) * (1 - Math.exp(-.8 * dt));
+      var wantLines = LINESET[mode] && modeT > 2.2;
+      if (wantLines && lineMode !== mode) { if (waveMix < .03) lineMode = mode; }
+      waveMix += ((wantLines && lineMode === mode ? 1 : 0) - waveMix) * (1 - Math.exp(-.8 * dt));
+      var LINES = LINESET[lineMode] || [];
       if (waveMix > .02) {
-        ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(' + col.node + ',' + (.28 * waveMix).toFixed(3) + ')'; ctx.beginPath();
-        LINES.forEach(function (L) { for (var n = 1; n < L.length; n++) { var a = L[n - 1], c2 = L[n]; var ddx = SX[c2] - SX[a], ddy = SY[c2] - SY[a]; if (ddx * ddx + ddy * ddy > 900) continue; ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[c2], SY[c2]); } });
+        ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(' + col.node + ',' + (.28 * waveMix * GA).toFixed(3) + ')'; ctx.beginPath();
+        LINES.forEach(function (L) { for (var n = 1; n < L.length; n++) { var a = L[n - 1], c2 = L[n]; var ddx = SX[c2] - SX[a], ddy = SY[c2] - SY[a]; if (ddx * ddx + ddy * ddy > (lineMode === 'surface' ? 4200 : 900)) continue; ctx.moveTo(SX[a], SY[a]); ctx.lineTo(SX[c2], SY[c2]); } });
         ctx.stroke();
       }
       for (var bi = 0; bi < 5; bi++) {
-        var L = buckets[bi], al = .3 + bi * .16, sz, j;
+        var L = buckets[bi], al = (.3 + bi * .16) * GA, sz, j;
         ctx.fillStyle = 'rgba(' + col.node + ',' + al.toFixed(3) + ')';
-        for (j = 0; j < L.length; j += 4) { if (L[j + 3]) continue; sz = 1.35 * L[j + 2] + bi * .22; ctx.fillRect(L[j] - sz / 2, L[j + 1] - sz / 2, sz, sz); }
+        for (j = 0; j < L.length; j += 4) { if (L[j + 3]) continue; sz = (1.35 * L[j + 2] + bi * .22) * PS; ctx.fillRect(L[j] - sz / 2, L[j + 1] - sz / 2, sz, sz); }
         ctx.fillStyle = 'rgba(' + col.pkt + ',' + Math.min(1, al + .1).toFixed(3) + ')';
-        for (j = 0; j < L.length; j += 4) { if (!L[j + 3]) continue; sz = 1.5 * L[j + 2] + bi * .24; ctx.fillRect(L[j] - sz / 2, L[j + 1] - sz / 2, sz, sz); }
+        for (j = 0; j < L.length; j += 4) { if (!L[j + 3]) continue; sz = (1.5 * L[j + 2] + bi * .24) * PS; ctx.fillRect(L[j] - sz / 2, L[j + 1] - sz / 2, sz, sz); }
       }
       for (var m = 0; m < bigs.length; m += 4) {
-        ctx.fillStyle = 'rgba(' + col.node + ',' + (.35 + bigs[m + 3] * .15).toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(bigs[m], bigs[m + 1], 1.4 * bigs[m + 2] + bigs[m + 3] * .35, 0, TAU); ctx.fill();
+        ctx.fillStyle = 'rgba(' + col.node + ',' + ((.35 + bigs[m + 3] * .15) * GA).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(bigs[m], bigs[m + 1], (1.4 * bigs[m + 2] + bigs[m + 3] * .35) * PS, 0, TAU); ctx.fill();
       }
     }
     var paused = false;
     function loop(t) { if (!document.hidden && !paused) draw(t); else last = t; requestAnimationFrame(loop); }
     window.addEventListener('resize', resize);
     window.addEventListener('pointermove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+    window.addEventListener('scroll', function () { setGoal(); if (reduce) draw(0, true); }, { passive: true });
     document.addEventListener('pointerleave', function () { mouse.x = mouse.y = -9999; });
     readColors(); resize();
     if (!reduce) requestAnimationFrame(loop); else settle();
@@ -1077,6 +1133,8 @@ section { position: relative; }
   window.addEventListener('pageshow', function (e) { if (e.persisted) blinkOpen(); });
 
   /* Intro: the eye opens, then the hero types */
+  try { history.scrollRestoration = 'manual'; } catch (err) {}
+  if (!window.location.hash) window.scrollTo(0, 0);
   route();
   var hero = document.querySelector('[data-type-now]');
   setTimeout(function () {
@@ -1087,3 +1145,5 @@ section { position: relative; }
 </script>
 </body>
 </html>
+
+</body></html>
