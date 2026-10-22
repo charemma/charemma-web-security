@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: charemma-web-www
+spec:
+  selector:
+    app: charemma-web-www
+  ports:
+    - port: 80
+      targetPort: 80
