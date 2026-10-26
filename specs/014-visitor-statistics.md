@@ -1,6 +1,7 @@
 # 014 Visitor statistics
 
-Status: approved 2026-10-22
+Status: approved 2026-10-22, amended 2026-10-26 (access log, Cloudflare on all
+sites)
 
 ## Why
 
@@ -13,7 +14,9 @@ One GoatCounter site collects all three domains. Paths alone would mix them
 up (`/` exists on every site), so every counted path starts with the host.
 
 Counting visitors is processing of personal data even without cookies, so
-every site says what it counts in a privacy notice.
+every site says what it counts in a privacy notice. The same holds for the
+access log of the reverse proxy in front of the sites, which records the
+visitor's IP address with every request.
 
 ## What
 
@@ -87,15 +90,31 @@ spec.
   - the statistics data is not passed on to third parties;
   - the legal basis is the legitimate interest in knowing how the site is
     used (Art. 6 (1) (f) GDPR).
-- It states on the server logs: the web server logs each request (time,
-  requested address, status, browser) to keep the site running and to find
-  errors; the logs are not stored permanently and are lost when the server
-  restarts; the legal basis is Art. 6 (1) (f) GDPR.
+- It states on the server logs:
+  - the reverse proxy in front of the site logs each request with the
+    visitor's IP address, time, requested host and path, status code,
+    referring page and browser (user agent);
+  - the purposes are running the site securely, finding errors, spotting
+    scans and attacks, and a rough picture of where visits come from;
+  - the log is evaluated only by the operator, in a non-public view on the
+    operator's own server, which derives country and network (provider)
+    from the IP address using a database kept on that server; the log is
+    not passed on to third parties;
+  - the log is not archived: it is kept only in the proxy's container log
+    and a temporary working directory, both are cut at a fixed size, and
+    both are lost when the proxy restarts; there is no fixed retention
+    period beyond that;
+  - the legal basis is the legitimate interest in running the site
+    securely and in knowing roughly where visits come from (Art. 6 (1) (f)
+    GDPR).
 - It states on hosting: the sites and the statistics run on servers of
   Hetzner Online GmbH, Germany, in the EU, as processor.
-- On `ai.charemma.de` only, it states that requests pass through the proxy
-  of Cloudflare, Inc., which processes the visitor's IP address to deliver
-  the page and fend off attacks, as processor.
+- It states that requests to the site pass through the proxy of
+  Cloudflare, Inc., which processes the visitor's IP address to deliver the
+  page and fend off attacks, as processor, and that Cloudflare passes the
+  IP address on to the operator's server, where it lands in the server log;
+  as Cloudflare, Inc. is based in the USA, the data may be transferred to a
+  third country, on the basis of the EU-US Data Privacy Framework.
 - It lists the visitor's rights: access, rectification, erasure,
   restriction, objection, and complaint to a supervisory authority.
 - The page is German on `charemma.de` and `ai.charemma.de`. On
