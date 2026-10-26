@@ -154,7 +154,7 @@ The Type column carries a categorical label describing what the file is. The set
   - Files of type `scene` MUST be named `<slug>-<lang>-scene.j2`, where `<slug>` is a topic slug from `topics.json` and `<lang>` a language code from `site.json`.
   - The Dependencies column of a file of type `scene` MUST list the article spec that specifies the animation and `006-article-animation.md`.
   - The Instructions column of a file of type `scene` MUST name `article-writing.md`.
-  - The markup of a file of type `scene` MUST be derived from the article spec in its Dependencies and follow the format of `006-article-animation.md`; do not use other sources.
+  - The markup of a file of type `scene` MUST be derived from the article spec in its Dependencies, and for a translation from the default-language scene per `article-writing.md`, and follow the format of `006-article-animation.md`; do not use other sources.
   - A scene file whose article has no spec that specifies an animation MUST NOT be registered until that spec exists.
 - `asset`: a file delivered to the browser as is, neither written nor read by the generator (fonts, icons, images, crawler and well-known files).
   - Files of type `asset` MUST carry the `editable` protocol.

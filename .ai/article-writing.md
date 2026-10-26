@@ -1,6 +1,6 @@
 # Article Writing Rules
 
-This file states the rules for writing and revising knowledge articles under `src/articles/`. It applies whenever a user instruction asks for a new article or a change to an existing one, and whenever a file of type `article` is written or regenerated from its spec. The page structure, the publication logic and the front matter fields are defined in `003-knowledge-articles.md`; this file governs the text of the article and of its animation scene; the format and mechanics of the scene are defined in `006-article-animation.md`.
+This file states the rules for writing, translating and revising knowledge articles under `src/articles/`. It applies whenever a user instruction asks for a new article or a change to an existing one, and whenever a file of type `article` is written or regenerated from its spec. The page structure, the publication logic and the front matter fields are defined in `003-knowledge-articles.md`; this file governs the text of the article and of its animation scene; the format and mechanics of the scene are defined in `006-article-animation.md`.
 
 ## File and Front Matter
 
@@ -85,6 +85,17 @@ Review checklist:
 
 - Before the article is committed, the text MUST go through one rewrite pass along the principles of William Zinsser's _On Writing Well_: check the lead, check the unity of point, pronoun, tense and tone, and cut clutter.
 - After the rewrite pass, the two weakest passages MUST be named to the user, with the reason, so the user can decide whether to change them.
+
+## Translation
+
+- An article or scene in a language other than the default language of `site.json` MUST be written as a translation of the file of the same slug and kind in the default language; do not write it from the spec alone.
+- The registry row of a translation MUST list the default-language file in its Dependencies next to the files its type requires, so that a change to that file flags the translation as stale.
+- A translation MUST keep the structure, case, scenario, sources, chapters and cues of the default-language file; do not add, drop, reorder or reword a statement beyond what the target language needs.
+- A translation MUST follow the **Voice** section in the target language and read as text written in that language; do not render it word by word.
+- A quote that the default-language file translates from a source written in the target language MUST appear in the source's original wording, read from the source; do not translate the quote back.
+- Sources listed in the default-language file MAY be carried over without reading them again, except to take the original wording of a quote.
+- A translation whose body falls outside the word count of the **Voice** section MUST be named to the user; do not shorten or extend it against its default-language file.
+- A translation MUST be created on the instruction IMPLEMENT THE SPEC, naming the spec and the target language, under the **Workflow** section.
 
 ## Workflow
 
