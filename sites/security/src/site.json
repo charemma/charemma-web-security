@@ -7,7 +7,7 @@
       "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/" }
     },
     {
-      "code": "en", "label": "EN", "prefix": "en/", "published": false,
+      "code": "en", "label": "EN", "prefix": "en/", "published": true,
       "paths": { "knowledge": "knowledge/ai-security/", "privacy": "privacy/" }
     },
     {

@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/assets/css/main.css?v=bc47fabeac">
   <link rel="icon" href="/favicon.ico">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js?v=a97d520012"></script>
 </head>
 <body class="page-dark">
   <div class="site-header-bar">
@@ -21,6 +22,10 @@
         <a href="/#fallbeispiel">Vorgehen</a>
         <a href="/#ablauf">Zusammenarbeit</a>
         <a href="/#wissen">Wissen</a>
+        <span class="lang-switch" role="group" aria-label="Sprache / Language / Γλώσσα">
+          <a href="/" hreflang="de" lang="de" data-lang="de" aria-current="true">DE</a>
+          <a href="/en/" hreflang="en" lang="en" data-lang="en">EN</a>
+        </span>
       </nav>
     </header>
   </div>
@@ -31,6 +36,10 @@
       <div class="not-found" lang="de">
         <h1 class="not-found__title">Seite nicht gefunden</h1>
         <p>Unter dieser Adresse gibt es nichts. <a href="/">Zur Startseite</a></p>
+      </div>
+      <div class="not-found" lang="en">
+        <h1 class="not-found__title">Page not found</h1>
+        <p>There is nothing at this address. <a href="/en/">Back to the homepage</a></p>
       </div>
     </section>
 

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sensitive information disclosure · AI security · security.charemma.de</title>
+  <meta name="description" content="A model gives away what it sees. And it usually sees more than the task needs: documents, database rows, credentials, other people&#39;s sessions. The chat answer is only one of many ways out.">
+  <link rel="canonical" href="https://security.charemma.de/en/knowledge/ai-security/sensitive-information-disclosure/">
+  <link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/sensitive-information-disclosure/">
+  <link rel="alternate" hreflang="en" href="https://security.charemma.de/en/knowledge/ai-security/sensitive-information-disclosure/">
+  <link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/sensitive-information-disclosure/">
+  <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css?v=bc47fabeac">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js?v=a97d520012"></script>
+  <script type="module" src="/assets/js/player.js?v=e0f72dceb7"></script>
+  <script data-goatcounter="https://stats.charemma.de/count" data-goatcounter-settings='{"path": "security.charemma.de/en/knowledge/ai-security/sensitive-information-disclosure/"}' async src="https://stats.charemma.de/count.js"></script>
+</head>
+<body class="page-light">
+  <div class="site-header-bar">
+    <header class="site-header">
+      <a class="brand" href="/en/#top"><span class="brand__user">charemma@</span><span>security</span><span class="brand__prompt">:~$</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <span class="lang-switch" role="group" aria-label="Sprache / Language / Γλώσσα">
+          <a href="/wissen/ki-sicherheit/sensitive-information-disclosure/" hreflang="de" lang="de" data-lang="de">DE</a>
+          <a href="/en/knowledge/ai-security/sensitive-information-disclosure/" hreflang="en" lang="en" data-lang="en" aria-current="true">EN</a>
+        </span>
+      </nav>
+    </header>
+  </div>
+
+  <main>
+    <article class="article container">
+      <div class="article__head">
+        <a class="overview__back" href="/en/knowledge/ai-security/">← back to the topic overview</a>
+        <span class="knowledge__eyebrow">
+          <span class="pill"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>
+Knowledge</span>
+          <span>LLM applications · LLM02:2026</span>
+        </span>
+        <h1 class="overview__title">Sensitive information disclosure</h1>
+        <p class="overview__lead">A model gives away what it sees. And it usually sees more than the task needs: documents, database rows, credentials, other people&#39;s sessions. The chat answer is only one of many ways out.</p>
+        <p class="article__updated">Last updated <time datetime="2026-10-26">2026-10-26</time></p>
+      </div>
+      <div class="article__body">
+<h2>What this is about</h2>
+<p>A system with a language model discloses confidential, regulated or protected data over a channel its owner never approved. OWASP lists this risk as LLM02:2026 Sensitive Information Disclosure. Besides chat answers, it covers tool arguments, retrieved text chunks, logs, telemetry, reasoning traces (the intermediate steps a model writes out) and embeddings (numeric representations of text). According to OWASP, you must classify and redact all of these outputs. The animation shows a constructed scenario: someone just asks a question.</p>
+<figure data-animation aria-label="Animated illustration: data leaking through an assistant&#39;s answer">
+<div data-switch><span data-variant="exposed">unprotected</span><span data-variant="protected">with rights check</span></div>
+
+<section data-chapter data-label="Question" data-duration="8000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistant</strong><span class="surface__account">signed in as <strong>t.lang</strong> · external</span></div>
+    <div class="surface__chatlog"></div>
+    <div class="surface__chatinput"><span class="surface__inputfield"><span class="anim-type" data-cue="type" data-at="500" data-for="1500">How is the quarter going?</span></span><span class="surface__btn surface__btn--send" data-cue="press" data-at="2500">Send</span></div>
+  </div>
+</div><p data-caption><span data-scenario>A constructed scenario:</span><strong>An external contractor asks a harmless question.</strong> Like everyone who works in the company, they can use the internal assistant, and they want to know how the quarter is going.</p>
+</section>
+
+<section data-chapter data-label="Retrieval" data-duration="8000" data-address="assist.example.net · Context">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Context</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--prompt">
+    <span class="surface__promptlabel">Context for the model · search hits</span>
+    <div class="surface__merge">
+      <div class="surface__block surface__block--intended">
+        <span class="surface__blocklabel">From t.lang</span>
+        How is the quarter going?
+      </div>
+      <div class="surface__retrieved" data-cue="lines" data-at="500" data-for="3000">
+        <div class="surface__block surface__block--data">
+          <span class="surface__blocklabel">From Shares/General · Quarterly update for all</span>
+          The quarter is stable, details will follow at Friday&#39;s town hall.
+        </div>
+        <div class="surface__block surface__block--data">
+          <span class="surface__blocklabel">From Shares/Management · Board, confidential</span>
+          Q3 revenue: ••••. Full-year forecast: ••••. Management only.
+        </div>
+      </div>
+    </div>
+    <span class="surface__promptlabel">Index: service account · all shares</span>
+  </div>
+</div><p data-caption><strong>The search finds what matches the question.</strong> It brings back an update for everyone and a confidential board paper with the figures. Both go to the model as context.</p>
+</section>
+
+<section data-chapter data-label="Answer" data-duration="8000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistant</strong><span class="surface__account">signed in as <strong>t.lang</strong> · external</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">How is the quarter going?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer" data-cue="lines" data-at="500" data-for="2500"><p>The quarter is stable, details will follow at Friday&#39;s town hall.</p>
+<p>Q3 revenue is ••••, the full-year forecast is ••••.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Sources</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quarterly update for all</span><span class="surface__origin">Shares/General</span></span>
+  <span class="surface__source"><span class="surface__sourcetitle">Board, confidential</span><span class="surface__origin">Shares/Management</span></span>
+  
+</div>
+      </div>
+    </div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption><strong>The assistant answers helpfully, with figures.</strong> Revenue and forecast, with the sources below. Nobody had to crack anything.</p>
+</section>
+
+<section data-chapter data-label="Compare" data-duration="9000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistant</strong><span class="surface__account">signed in as <strong>t.lang</strong> · external</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">How is the quarter going?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div data-aha="compare" data-at="1000" data-for="5000">
+<div data-state="answer" data-label="What this person got"><div class="surface__answer"><p>The quarter is stable, details will follow at Friday&#39;s town hall.</p>
+<p>Q3 revenue is ••••, the full-year forecast is ••••.</p></div><div class="surface__sources"><span class="surface__sourceslabel">Sources</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quarterly update for all</span><span class="surface__origin">Shares/General</span></span>
+  <span class="surface__source"><span class="surface__sourcetitle">Board, confidential</span><span class="surface__origin">Shares/Management</span></span>
+  
+</div></div>
+          <div data-state="origin" data-label="Where the answer came from"><div class="surface__answer"><p>The quarter is stable, details will follow at Friday&#39;s town hall.</p>
+<span class="surface__from">Quarterly update for all · Shares/General · access t.lang: yes</span>
+<p>Q3 revenue is ••••, the full-year forecast is ••••.</p>
+<span class="surface__from surface__from--harm">Board, confidential · Shares/Management · access t.lang: no</span></div></div>
+</div>
+      </div>
+    </div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption><strong>What this person got, and where it came from.</strong> The first sentence comes from a text for everyone, the figures from a paper that t.lang could not even open in the share. Flip between the two views yourself.</p>
+</section>
+
+<section data-chapter data-label="Rights" data-duration="8000" data-address="assist.example.net · Chat">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">assist.example.net · Chat</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel data-variant="exposed" data-harm><p class="anim-variant-label" data-variant-label>unprotected</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistant</strong><span class="surface__account">signed in as <strong>t.lang</strong> · external</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">How is the quarter going?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer"><p>The quarter is stable, details will follow at Friday&#39;s town hall.</p>
+<p>Q3 revenue is ••••, the full-year forecast is ••••.</p></div>
+        <div class="surface__sources" data-cue="lines" data-at="500" data-for="1500"><span class="surface__sourceslabel">Sources</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quarterly update for all</span><span class="surface__origin">Shares/General</span></span>
+  <span class="surface__source surface__source--harm"><span class="surface__sourcetitle">Board, confidential</span><span class="surface__origin">Shares/Management</span><span class="surface__sourcetag">no access</span></span>
+  
+</div>
+      </div>
+    </div>
+    <div class="surface__config">Search: asker's rights not checked</div>
+    <div class="surface__outcome surface__outcome--harm" data-cue="show" data-at="3000">The figures reached a person without access</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption data-variant="exposed"><strong>The search does not ask who is asking.</strong> The index reads every share through a service account and returns hits by similarity, not by rights. The figures are now with a person who should never have been able to open the paper.</p><div data-panel data-variant="protected"><p class="anim-variant-label" data-variant-label>with rights check</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Assistant</strong><span class="surface__account">signed in as <strong>t.lang</strong> · external</span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">How is the quarter going?</div>
+      <div class="surface__bubble surface__bubble--assistant">
+        <div class="surface__answer"><p>The quarter is stable, details will follow at Friday&#39;s town hall.</p></div>
+        <div class="surface__sources" data-cue="lines" data-at="500" data-for="1500"><span class="surface__sourceslabel">Sources</span>
+  <span class="surface__source"><span class="surface__sourcetitle">Quarterly update for all</span><span class="surface__origin">Shares/General</span></span>
+  
+  <span class="surface__source surface__source--ok"><span class="surface__sourcetitle">1 hit omitted</span><span class="surface__origin">Shares/Management</span><span class="surface__sourcetag">no access</span></span>
+</div>
+      </div>
+    </div>
+    <div class="surface__config">Search: asker's rights checked</div>
+    <div class="surface__outcome" data-cue="show" data-at="3000">Answer within the rights of t.lang</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption data-variant="protected"><strong>Same question, but the search checks the rights.</strong> Hits that t.lang may not open stay out, and the answer comes without the figures. Residual risk: anything wrongly shared in the source system passes the check and still gets through.</p>
+</section>
+</figure>
+<p>Nobody had to break in. One question was enough. The search reached further than the rights of the person asking.</p>
+<p>Aim Security found the EchoLeak vulnerability (CVE-2025-32711) in Microsoft 365 Copilot, as reported by <a href="https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html">The Hacker News</a> and <a href="https://arxiv.org/abs/2509.10540">Reddy and Gujral</a>. Confidential data within the assistant's reach left the environment through the address of an automatically loaded image, after a <a href="../prompt-injection/">prompt injection</a> (a smuggled-in instruction) in an email had set off the outflow. Nobody had treated this channel as an output.</p>
+<h2>Four ways out</h2>
+<p><strong>During training.</strong> What a model sees in training or fine-tuning (further training on your own data) it can later reproduce verbatim. Suppose you train an adapter, a small model extension, on old tickets so the assistant answers in your support team's tone. The tickets hold SSH keys from past debugging. According to OWASP, such narrow adapters memorize rare examples especially faithfully. Whatever ends up in the learned model parameters (weights), adapters or embeddings survives the deletion of its source.</p>
+<p><strong>At runtime.</strong> The model can pass on documents, system prompts, tool outputs, stored memories or other users' session data. Suppose you ask an internal assistant: &quot;How do I get onto the staging database?&quot; It names host, user and password from a guide a colleague left in the team share, fully indexed and readable for you. Nobody had to attack the model. According to OWASP, open shares and stale permissions are often the cause. With RAG, the application fetches matching passages before answering. How similar they are to the question says nothing about read rights, Kimmerle and Okeyode stress. Without filters for identity, tenant and document rights, users asking the same question get the same hits. A shared cache or search store can also mix sessions.</p>
+<p><strong>In the pipeline and in operations.</strong> According to OWASP, observability platforms log full model inputs, answers and traces by default. Suppose an assistant looks up a customer account. Customer number and address land in the host journal as tool arguments, readable by group <code>adm</code>. The chat answer was clean. The log holds the data. According to OWASP, leaked embeddings can be turned back into plaintext: even an &quot;embeddings-only&quot; backup can expose documents.</p>
+<p><strong>Through observation.</strong> Even without plaintext, the length of encrypted answers, response times and confidence values (the model's estimate of its own certainty) give something away. On a shared model server with a prefix cache, which keeps the already processed beginnings of inputs, repeated questions are answered measurably faster. Farlow describes such side channels as less reliable and harder to detect than direct attacks.</p>
+<h2>Neighbors</h2>
+<p>The most frequent trigger is a <a href="../prompt-injection/">prompt injection</a>: an instruction in a document makes the model print its system prompt along with the access key, or send data out through a tool. How far that gets is decided by <a href="../excessive-agency/">excessive agency</a>.</p>
+<h2>What I check in a pentest</h2>
+<ol>
+<li><strong>Data surface.</strong> I check which shares are actually indexed, since when and with which rights. I run a secrets scanner over the text corpus, as I would over a repository.</li>
+<li><strong>Authorization before retrieval.</strong> I ask the same question from two accounts with different rights. I check whether the rights check happens in the search query or only afterwards. I test the filter with wrong permission tags on documents and check whether one tenant gets another's hits.</li>
+<li><strong>Output channels.</strong> I follow a marked record through the journal, the observability platform, tool arguments, cache and backup. At every stop I check who can read it.</li>
+<li><strong>More than asked.</strong> I test summarizing, translating and extracting: does hidden PDF text show up, or neighboring database fields, or the system prompt? With fine-tuned models, I try to make them complete training examples.</li>
+<li><strong>Session separation.</strong> I run parallel sessions under different users and check whether stored memories or caches carry content from one to another.</li>
+</ol>
+<h2>Countermeasures that hold</h2>
+<ul>
+<li><strong>Shrink the data surface.</strong> Wilson asks of every source what happens if the model gives it out. Classify sources, and remove unneeded content, credentials, personal data and duplicates before ingestion.</li>
+<li><strong>Authorization in the query.</strong> Enforce rights on documents and chunks during the search itself. A later filter cannot take back content once handed over. For sensitive data, use separate indexes per tenant.</li>
+<li><strong>Minimize the context.</strong> Send external providers only the fields they need. Credentials do not belong in the system prompt.</li>
+<li><strong>Memory at the right boundary.</strong> Separate memories by user and tenant, and limit the scope and lifetime of caches. Kimmerle and Okeyode rely on this isolation.</li>
+<li><strong>Logs and traces are outputs.</strong> Redact before export and restrict read access. Never store reasoning steps raw. Enforce promises like &quot;no training on your data&quot; technically.</li>
+<li><strong>Filters last.</strong> Combine regular expressions with filters that classify content and recognize sensitive details. Text patterns alone fail on encodings and other languages.</li>
+</ul>
+<p>Neither in the scenario nor with EchoLeak did anyone have to break in. The system passed on what lay within its reach: once to a person with no right to it, once over an output channel nobody had noticed. Start there, with the reach and with the channels.</p>
+      </div>
+      <div class="anim-i18n" hidden
+        data-play="Play"
+        data-pause="Pause"
+        data-replay="Play again"
+        data-chapters="Chapters"
+        data-variants="Variant"
+        data-illustration="Illustration"
+        data-raw-show="Show raw text"
+        data-raw-hide="Hide raw text"></div>
+      <section class="article__sources">
+        <h2>Sources</h2>
+        <ol>
+          <li><a href="https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/">OWASP Top 10 for LLM Applications 2026, LLM02:2026 Sensitive Information Disclosure</a></li>
+          <li>Steve Wilson: The Developer&#39;s Playbook for Large Language Model Security</li>
+          <li>Kris Kimmerle, David Okeyode: AI Under Attack</li>
+          <li>Harriet Farlow: Practical AI Security</li>
+          <li><a href="https://thehackernews.com/2025/06/zero-click-ai-vulnerability-exposes.html">The Hacker News: Zero-Click AI Vulnerability Exposes Microsoft 365 Copilot Data Without User Interaction</a></li>
+          <li><a href="https://arxiv.org/abs/2509.10540">Pavan Reddy, Aditya Sanjay Gujral: EchoLeak: The First Real-World Zero-Click Prompt Injection Exploit in a Production LLM System</a></li>
+          <li><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-32711">NIST NVD: CVE-2025-32711</a></li>
+        </ol>
+      </section>
+    </article>
+    <section class="cta">
+      <div class="cta__inner container">
+        <h2 class="cta__title">What would an attacker find in your systems?</h2>
+        <a class="btn btn--inverse" href="mailto:me@charemma.de?subject=Pentest%20request">Book an initial call →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="site-footer-bar">
+    <footer class="site-footer">
+      <span>© 2026 Charalambos Emmanouilidis</span>
+      <div class="site-footer__links">
+        <a href="https://github.com/charemma">GitHub</a>
+        <a href="https://charemma.de">charemma.de</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a class="site-footer__version" href="https://github.com/charemma/charemma-web-security/commit/__SITE_COMMIT__">git:(__SITE_VERSION__)</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
