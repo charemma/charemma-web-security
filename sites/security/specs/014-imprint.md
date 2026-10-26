@@ -38,7 +38,7 @@ replaces it.
   `links.imprint`. A language without its own entry takes the entry of the
   default language.
 - The link sits directly before the privacy link: GitHub, charemma.de,
-  legal notice, privacy, version.
+  how I test (spec 015), legal notice, privacy, version.
 - The label is `Impressum` in German and `Legal notice` in English; Greek
   takes its label from `el.json`. The label is an interface text in
   `src/i18n/<lang>.json` under the key `imprint`. Those files are `content`;
