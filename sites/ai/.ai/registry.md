@@ -19,3 +19,4 @@ This site is ai.charemma.de, the AI engineering website of Charalambos Emmanouil
 | `sites/ai/k8s` | `service.yaml` | code | spec-maintained | `013-site-images.md` |  | Kubernetes service manifest: how the site's pods are reachable inside the cluster. |
 | `sites/ai/k8s` | `ingress.yaml` | code | spec-maintained | `013-site-images.md` |  | Kubernetes ingress manifest: under which host name and with which TLS settings the site is reachable from outside. |
 | `sites/ai/k8s` | `kustomization.yaml` | code | spec-maintained | `013-site-images.md` |  | Kustomize entry point: which manifests ArgoCD applies and which image tag they run, the tag being written by the image updater. |
+| `sites/ai/specs` | `001-imprint-link.md` | spec | editable |  |  | Spec for the legal notice link: how the pages of this site link to the central legal notice, where the link sits, and the reasons for it. |
