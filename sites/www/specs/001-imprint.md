@@ -1,6 +1,6 @@
 # 001 Imprint
 
-Status: approved 2026-10-26
+Status: approved 2026-10-26, amended 2026-10-26 for the English version
 
 ## Why
 
@@ -19,24 +19,34 @@ The notice lives on `charemma.de`, the main site. The other two sites link
 to it from their footer (`sites/security/specs/014-imprint.md`,
 `sites/ai/specs/001-imprint-link.md`).
 
+security.charemma.de is published in German and English. Its English
+readers get the legal notice in English, so they can read who runs the
+site without a German detour. The German version stays authoritative: the
+obligation comes from German law, and one binding text avoids two that
+could drift apart in meaning.
+
 ## What
 
 ### Page
 
 - The legal notice is the page `https://charemma.de/impressum/`, delivered
   from `sites/www/html/impressum/index.html`.
-- The page is German only, like the rest of `charemma.de`. It has no other
-  language version; the footer links of the other sites lead here in every
-  language.
-- It uses the layout of the site's privacy page: the brand header, a back
-  link to the start page, the title, a lead and the body as headed blocks,
-  and the footer.
-- It is counted like every other page (`specs/014-visitor-statistics.md`),
-  under the path `charemma.de/impressum/`, and may be indexed.
+- Its English version is the page `https://charemma.de/en/legal-notice/`,
+  delivered from `sites/www/html/en/legal-notice/index.html`. The address
+  follows the pattern of `security.charemma.de`: the language prefix `en/`
+  and an English path segment. It is the only English page of
+  `charemma.de`; the rest of the site stays German.
+- There is no Greek version.
+- Both versions use the layout of the site's privacy page: the brand
+  header, a back link to the start page, the title, a lead and the body as
+  headed blocks, and the footer.
+- Both are counted like every other page (`specs/014-visitor-statistics.md`),
+  under the paths `charemma.de/impressum/` and `charemma.de/en/legal-notice/`,
+  and may be indexed.
 
 ### Domains covered
 
-The page states that it is the legal notice for the websites
+Each version states that it is the legal notice for the websites
 `charemma.de`, `security.charemma.de` and `ai.charemma.de`, each named in
 full. A visitor arriving from any of the three sites sees that the notice
 is meant for the site they came from.
@@ -64,6 +74,42 @@ Top to bottom:
 Blocks 5 and 6 and the telephone line are left out entirely, heading
 included, while their value is unknown.
 
+### English version
+
+The English page has the same blocks in the same order, with the same
+values and the same rule for unknown values. Headings and labels are
+translated; the names of the laws and the § references stay in their
+German form, because they cite German law:
+
+1. Title `Legal notice`; lead `Information pursuant to § 5 DDG`.
+2. Scope: `This legal notice applies to the websites charemma.de,
+   security.charemma.de and ai.charemma.de.`
+3. `Provider`: name; `Freelancer, Platform Engineering, penetration
+   testing and AI Engineering`; street; postal code and city; country as
+   `Germany`.
+4. `Contact`: `Email:`; `Phone:` only when known.
+5. Only when known: `VAT identification number pursuant to § 27a
+   Umsatzsteuergesetz:` and the number.
+6. Only when known: `Business identification number pursuant to § 139c
+   Abgabenordnung:` and the number.
+7. `Responsible for the content pursuant to § 18 (2) MStV`: name, street,
+   postal code and city, country as `Germany`.
+
+The page title is `Legal notice · charemma.de`, the back link reads
+`← back to the start page` and leads to the German start page.
+
+### Language versions
+
+- The English page states, directly after the lead: `This is a
+  translation. The German version is authoritative.`, with `German
+  version` linking to `/impressum/` (`hreflang="de"`).
+- The German page links to the English one directly after the lead with
+  the line `English version`, linking to `/en/legal-notice/`
+  (`hreflang="en"`, `lang="en"`).
+- Both pages name themselves as canonical and carry
+  `<link rel="alternate">` entries for `de`, `en` and `x-default`, the
+  last pointing to the German page.
+
 ### Values
 
 - Name: `Charalambos Emmanouilidis`. E-mail: `me@charemma.de`.
@@ -72,23 +118,26 @@ included, while their value is unknown.
   carries them as written by the user; AI enters such a value only when the
   user names it and never invents or derives one.
 - Entering or changing one of these values on the page is a value change
-  this spec covers; no spec change is needed for it.
+  this spec covers; no spec change is needed for it. A value change
+  applies to both language versions in the same change.
 - The tax number (Steuernummer) is never published.
 
 ### Complete before published
 
-The page is published only with a complete postal address (street, postal
+The pages are published only with a complete postal address (street, postal
 code, city, country). Without it the page would claim a compliance the
 sites do not have. The footer links on all three sites go live together
-with the page or after it, never before, so no site links to a missing
-page.
+with the page they target or after it, never before, so no site links to a
+missing page. This holds for the English page as well.
 
 ### Footer link
 
 Every page of `charemma.de` that carries a footer links to `/impressum/`
 with the label `Impressum`, placed directly before the privacy link. On the
-legal notice page itself the link is marked as the current page, as the
-privacy page does for its own link.
+German legal notice page the link is marked as the current page, as the
+privacy page does for its own link. The English page carries the same
+German footer, without a current-page mark, because none of its links
+leads to the English page itself.
 
 ### Not on this page
 
@@ -114,8 +163,10 @@ if one does not hold, the spec changes:
   legal notice on another domain of the same provider that names all
   domains it covers, satisfies § 5 DDG for each of those domains (easily
   recognizable, directly reachable, permanently available).
-- An English label `Legal notice` leading to the German notice satisfies
-  the same requirement for the English pages of `security.charemma.de`.
+- An English translation of the notice, marked as non-authoritative and
+  linking to the German version, satisfies the same requirement for the
+  English pages of `security.charemma.de`; the German version remains the
+  binding notice.
 - E-mail together with the postal address satisfies the requirement of fast
   electronic contact and direct communication (§ 5 (1) no. 2 DDG, CJEU
   C-298/07). A telephone number is not required.
@@ -138,7 +189,8 @@ if one does not hold, the spec changes:
 - The postal address on the privacy pages (`specs/014-visitor-statistics.md`
   decides).
 - Legal notices for profiles on other platforms (GitHub, dev.to).
-- An English or Greek version of the legal notice.
+- A Greek version of the legal notice.
+- English versions of other pages of `charemma.de`.
 - The footer links of `security.charemma.de` and `ai.charemma.de` (their
   own specs).
 
@@ -159,12 +211,23 @@ a complete address on the page.
    `/impressum/`; on the legal notice page it is marked as the current page.
 5. The page carries the visitor statistics snippet with the path
    `charemma.de/impressum/`.
-6. `just check` passes.
+6. `/en/legal-notice/` answers `200` with a page in English (`lang="en"`)
+   titled `Legal notice` that shows the blocks of "English version" in that
+   order, with the same values as the German page.
+7. The English page carries the translation note with a link to
+   `/impressum/`; the German page carries `English version` linking to
+   `/en/legal-notice/`. Both carry the canonical and the `de`, `en` and
+   `x-default` alternates.
+8. The English page carries the visitor statistics snippet with the path
+   `charemma.de/en/legal-notice/`.
+9. `just check` passes.
 
 ## Touches
 
 Orientation for the implementation, not an instruction: a new page
 `sites/www/html/impressum/index.html` (with its site registry row), the
 footers of `sites/www/html/index.html` and
-`sites/www/html/datenschutz/index.html`. The pages are `asset` files, so
-no Dependencies column changes.
+`sites/www/html/datenschutz/index.html`; for the English version a new
+page `sites/www/html/en/legal-notice/index.html` (with its site registry
+row) and the alternates and link on the German page. The pages are
+`asset` files, so no Dependencies column changes.
