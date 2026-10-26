@@ -1,6 +1,6 @@
 # 009 Published languages
 
-Status: approved 2026-10-20, amended 2026-10-20 (relative redirect locations)
+Status: approved 2026-10-20, amended 2026-10-20 (relative redirect locations), 2026-10-26 (localized paths)
 
 ## Why
 
@@ -66,9 +66,14 @@ page itself. No alternate points to a page the site does not deliver.
 
 The English and Greek pages were live and may be indexed or bookmarked. The
 web server answers every address under `/en/` or `/el/`, and `/en` and `/el`
-themselves, for which no file exists, with a `302` redirect to the same path
-without the language prefix: `/en/wissen/ki-sicherheit/` leads to
-`/wissen/ki-sicherheit/`, `/el/` to `/`. The query string is kept.
+themselves, for which no file exists, with a `302` redirect to the same page
+in the default language: the language prefix is dropped and the language's
+path segments are replaced by the default language's, per
+`013-localized-paths.md`. `/en/knowledge/ai-security/` leads to
+`/wissen/ki-sicherheit/`, `/el/` to `/`. The query string is kept. A former
+address under the default language's segments, such as
+`/en/wissen/ki-sicherheit/`, first answers the `301` of
+`013-localized-paths.md`.
 
 The redirect is temporary on purpose. A `301` would be stored by browsers and
 search engines as permanent, and a browser that once saw it would keep
@@ -99,9 +104,10 @@ redirects nginx adds by itself, such as the trailing slash of a directory.
 - Bringing a language back is a change of its `published` value and a
   rebuild. Nothing else has to change; the switcher, `lang.js`, alternates
   and sitemap return by themselves.
-- The web server lists the configured language prefixes in its redirect
-  rule. Adding a fourth language adds it there; publishing or unpublishing
-  one does not touch the rule.
+- The web server configuration names no language prefix; it includes the
+  prefixes and path segments the generator writes from `site.json`
+  (`013-localized-paths.md`). Adding, publishing or unpublishing a language
+  does not touch the web server configuration.
 
 ## Out of scope
 
@@ -118,7 +124,7 @@ Checked against a local nginx serving the stamped site.
    the ones that existed.
 3. `sitemap.xml` and the 404 page contain German only; every page names
    `de` and `x-default` as its only alternates, both pointing to itself.
-4. `curl -I` on `/en`, `/en/`, `/en/wissen/ki-sicherheit/` and `/el/` answers
+4. `curl -I` on `/en`, `/en/`, `/en/knowledge/ai-security/` and `/el/` answers
    `302` with a relative `Location` on the German counterpart (a path
    without scheme and host) and `Cache-Control: no-cache`; the same holds
    for the `security.txt` redirect and a directory address without its
