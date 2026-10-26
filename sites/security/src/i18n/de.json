@@ -189,5 +189,45 @@
         ]
       }
     ]
+  },
+  "conduct": {
+    "link": "So teste ich",
+    "meta_title": "So teste ich · security.charemma.de",
+    "meta_description": "Nach welchen Regeln ich teste: Auftrag, Ablauf des Tests, Einsatz von KI, Standards und Nachweise.",
+    "back": "← zurück zur Startseite",
+    "title": "So teste ich",
+    "lead": "Ich teste nur mit Ihrem Auftrag und nach vorher vereinbarten Regeln. Die Einzelheiten jedes Auftrags legen wir in Angebot und Vertrag fest.",
+    "sections": [
+      {
+        "heading": "Auftrag und Freigabe",
+        "paragraphs": [
+          "Ich teste nur mit einem schriftlichen Auftrag und nur Systeme, die Ihnen gehören oder die Sie testen lassen dürfen.",
+          "Vor dem Test legen wir Umfang, Testart (Black-, Grey- oder White-Box) und Zeitfenster schriftlich fest."
+        ]
+      },
+      {
+        "heading": "Während des Tests",
+        "paragraphs": [
+          "Kritische Funde melde ich Ihnen sofort, nicht erst im Bericht.",
+          "Tests, die Daten löschen oder den Betrieb Ihrer Systeme beeinträchtigen könnten (destruktive Tests), führe ich nur nach ausdrücklicher Absprache mit Ihnen durch."
+        ]
+      },
+      {
+        "heading": "KI im Penetrationstest",
+        "paragraphs": [
+          "KI-Agenten übernehmen Aufklärung und Breite: Sie kartieren die Angriffsfläche und testen breit und automatisiert. Ich gebe ihnen den vereinbarten Umfang als feste Grenze vor und beaufsichtige ihre Arbeit. Ausnutzbare Funde verfolge ich von Hand weiter, und jeden Fund im Bericht prüfe ich selbst.",
+          "Daten aus Ihrem Auftrag gebe ich nur mit Ihrer schriftlichen Zustimmung an Anthropic Claude. Sonst arbeite ich ohne Cloud-KI."
+        ]
+      },
+      {
+        "heading": "Standards und Nachweise",
+        "paragraphs": [
+          "Ich arbeite nach dem BSI IS-Pentest-Leitfaden und dem OWASP Web Security Testing Guide (WSTG).",
+          "Meine Zertifizierungen: OSCP und SCP Web Application Security.",
+          "Ich habe eine Berufshaftpflichtversicherung bei exali."
+        ]
+      }
+    ],
+    "process_link": "So teste ich: Regeln für jeden Auftrag"
   }
 }
