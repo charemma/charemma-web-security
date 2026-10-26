@@ -61,11 +61,17 @@ WALKTHROUGH_PHASES = 6
 WALKTHROUGH_MODES = {"ai", "manual", "assist"}
 WALKTHROUGH_PHASE_TEXTS = ("titles", "hits", "rail")
 
+# Localized paths, spec 013
+KNOWLEDGE_KEY = "knowledge"
+PRIVACY_KEY = "privacy"
+PATH_PATTERN = re.compile(r"(?:[a-z0-9-]+/)+")
+NGINX_INCLUDE = SRC_DIR.parent / "nginx" / "language-paths.conf"
+
 
 @dataclass(frozen=True)
 class Page:
     template: str
-    path: str
+    key: str | None = None  # page key into the paths of a language; None: the start page
     langs: tuple[str, ...] | None = None  # None: the page exists in every language
     slug: str | None = None  # set for article pages
 
@@ -97,6 +103,47 @@ def split_languages(site: dict) -> tuple[list[dict], list[dict]]:
     return published, unpublished
 
 
+def default_language(config: dict) -> dict:
+    return next(lang for lang in config["languages"] if lang["code"] == config["default_lang"])
+
+
+def page_keys(config: dict) -> list[str]:
+    """The keys every language needs a path for: the pages with a path segment, and the articles' overview."""
+    return sorted({KNOWLEDGE_KEY} | {p["key"] for p in config["pages"] if "key" in p})
+
+
+def check_paths(config: dict) -> None:
+    """Every configured language, published or not, has a valid path per page key, spec 013."""
+    keys = page_keys(config)
+    for lang in config["languages"]:
+        where = f"{SITE_CONFIG.name}: language '{lang['code']}'"
+        paths = lang.get("paths")
+        if not isinstance(paths, dict):
+            raise ValueError(f"{where} needs 'paths'")
+        missing = [key for key in keys if key not in paths]
+        if missing:
+            raise ValueError(f"{where} has no path for {missing}")
+        for key in keys:
+            if not PATH_PATTERN.fullmatch(paths[key]):
+                raise ValueError(
+                    f"{where}: path '{paths[key]}' of '{key}' must be lowercase ASCII letters, digits and dashes"
+                    " in segments, each ending with /"
+                )
+        if len({paths[key] for key in keys}) != len(keys):
+            raise ValueError(f"{where}: two page keys share a path")
+        if lang["code"] != config["default_lang"] and not PATH_PATTERN.fullmatch(lang["prefix"]):
+            raise ValueError(f"{where} needs a prefix in the form of a path")
+    default_paths = default_language(config)["paths"]
+    for lang in config["languages"]:
+        for key in keys:
+            for other in keys:
+                if other != key and lang["paths"][key] == default_paths[other]:
+                    raise ValueError(
+                        f"{SITE_CONFIG.name}: language '{lang['code']}': path of '{key}' equals the default"
+                        f" language's path of '{other}'"
+                    )
+
+
 @cache
 def asset_url(path: str) -> str:
     """The address of a file under html/ with the hash of its content appended, so a change gets a new address."""
@@ -111,6 +158,21 @@ def url_path(prefix: str, page_path: str) -> str:
     return "/" + prefix + page_path
 
 
+def page_path(lang: dict, page: Page) -> str:
+    """The part of the page's address after the language prefix, in the paths of that language, spec 013."""
+    if page.slug is not None:
+        return lang["paths"][KNOWLEDGE_KEY] + page.slug + "/"
+    return lang["paths"][page.key] if page.key else ""
+
+
+def page_url(lang: dict, page: Page) -> str:
+    return url_path(lang["prefix"], page_path(lang, page))
+
+
+def key_url(lang: dict, key: str) -> str:
+    return url_path(lang["prefix"], lang["paths"][key])
+
+
 def page_langs(site: dict, page: Page) -> list[dict]:
     return [lang for lang in site["languages"] if page.langs is None or lang["code"] in page.langs]
 
@@ -123,9 +185,9 @@ def x_default_lang(site: dict, langs: list[dict]) -> dict:
 def alternates(site: dict, page: Page) -> list[dict]:
     base = site["base_url"]
     langs = page_langs(site, page)
-    links = [{"hreflang": lang["code"], "href": base + url_path(lang["prefix"], page.path)} for lang in langs]
+    links = [{"hreflang": lang["code"], "href": base + page_url(lang, page)} for lang in langs]
     default = x_default_lang(site, langs)
-    links.append({"hreflang": X_DEFAULT, "href": base + url_path(default["prefix"], page.path)})
+    links.append({"hreflang": X_DEFAULT, "href": base + page_url(default, page)})
     return links
 
 
@@ -136,7 +198,7 @@ def lang_links(site: dict, page: Page) -> list[dict]:
         {
             "code": lang["code"],
             "label": lang["label"],
-            "path": url_path(lang["prefix"], page.path if lang["code"] in available else site["knowledge"]["path"]),
+            "path": page_url(lang, page) if lang["code"] in available else key_url(lang, KNOWLEDGE_KEY),
         }
         for lang in site["languages"]
     ]
@@ -147,12 +209,12 @@ def localize(value, lang: str):
     return value[lang] if isinstance(value, dict) else value
 
 
-def topic_href(site: dict, prefix: str, slug: str, published: bool) -> str:
-    base = url_path(prefix, site["knowledge"]["path"])
+def topic_href(lang: dict, slug: str, published: bool) -> str:
+    base = key_url(lang, KNOWLEDGE_KEY)
     return f"{base}{slug}/" if published else f"{base}#{slug}"
 
 
-def localized_topics(site: dict, topics: list[dict], articles: dict, lang: dict) -> list[dict]:
+def localized_topics(topics: list[dict], articles: dict, lang: dict) -> list[dict]:
     published_slugs = articles[lang["code"]]
     return [
         {
@@ -160,7 +222,7 @@ def localized_topics(site: dict, topics: list[dict], articles: dict, lang: dict)
             "group": t["group"],
             "slug": t["slug"],
             "published": t["slug"] in published_slugs,
-            "href": topic_href(site, lang["prefix"], t["slug"], t["slug"] in published_slugs),
+            "href": topic_href(lang, t["slug"], t["slug"] in published_slugs),
             **t[lang["code"]],
         }
         for t in topics
@@ -512,20 +574,39 @@ def article_pages(site: dict, topics: list[dict], articles: dict) -> list[Page]:
     for t in topics:
         langs = tuple(lang["code"] for lang in site["languages"] if t["slug"] in articles[lang["code"]])
         if langs:
-            pages.append(Page(ARTICLE_TEMPLATE, site["knowledge"]["path"] + t["slug"] + "/", langs, t["slug"]))
+            pages.append(Page(ARTICLE_TEMPLATE, langs=langs, slug=t["slug"]))
     return pages
+
+
+def remove_dir(stale: Path) -> None:
+    if stale.is_dir():
+        shutil.rmtree(stale)
+        print(f"removed {stale.relative_to(OUT_DIR.parent)}")
 
 
 def remove_stale_article_dirs(site: dict, topics: list[dict], articles: dict) -> None:
     """Drop rendered article pages whose article no longer exists or became a draft."""
     for lang in site["languages"]:
         for t in topics:
-            if t["slug"] in articles[lang["code"]]:
-                continue
-            stale = OUT_DIR / lang["prefix"] / site["knowledge"]["path"] / t["slug"]
-            if stale.is_dir():
-                shutil.rmtree(stale)
-                print(f"removed {stale.relative_to(OUT_DIR.parent)}")
+            if t["slug"] not in articles[lang["code"]]:
+                remove_dir(OUT_DIR / lang["prefix"] / lang["paths"][KNOWLEDGE_KEY] / t["slug"])
+
+
+def remove_former_dirs(config: dict, site: dict) -> None:
+    """Drop pages rendered under the default language's paths for a language that has paths of its own, spec 013."""
+    default = default_language(config)
+    for lang in site["languages"]:
+        if lang["code"] == default["code"]:
+            continue
+        for key in page_keys(config):
+            if lang["paths"][key] != default["paths"][key]:
+                lang_dir = OUT_DIR / lang["prefix"]
+                former = lang_dir / default["paths"][key]
+                remove_dir(former)
+                for parent in former.parents:
+                    if parent == lang_dir or not parent.is_dir() or any(parent.iterdir()):
+                        break
+                    parent.rmdir()
 
 
 def remove_unpublished_dirs(unpublished: list[dict]) -> None:
@@ -597,7 +678,7 @@ def article_page_data(data: dict, texts: dict, lang: dict, page: Page, topics: l
 
 
 def page_data(site: dict, data: dict, texts: dict, lang: dict, page: Page) -> dict:
-    topics = localized_topics(site, data["topics"], data["articles"], lang)
+    topics = localized_topics(data["topics"], data["articles"], lang)
     return {
         **article_page_data(data, texts, lang, page, topics),
         "tools": localized_tools(data["tools"], lang["code"]),
@@ -605,7 +686,7 @@ def page_data(site: dict, data: dict, texts: dict, lang: dict, page: Page) -> di
         "featured_groups": featured_groups(site, texts, topics),
         "topic_count": len(topics),
         "engagement": engagement_data(data["engagement"], texts),
-        "overview_href": url_path(lang["prefix"], site["knowledge"]["path"]),
+        "overview_href": key_url(lang, KNOWLEDGE_KEY),
     }
 
 
@@ -625,12 +706,13 @@ def render_pages(env: Environment, site: dict, texts: dict, data: dict, pages: l
                 site_host=urlparse(site["base_url"]).netloc,
                 lang=lang["code"],
                 t=texts[lang["code"]],
-                canonical=site["base_url"] + url_path(lang["prefix"], page.path),
+                canonical=site["base_url"] + page_url(lang, page),
                 alternates=alternates(site, page),
                 lang_links=lang_links(site, page),
                 home_href=url_path(lang["prefix"], ""),
+                privacy_href=key_url(lang, PRIVACY_KEY),
             )
-            write(OUT_DIR / lang["prefix"] / page.path / "index.html", html)
+            write(OUT_DIR / lang["prefix"] / page_path(lang, page) / "index.html", html)
 
 
 def render_not_found(env: Environment, site: dict, texts: dict) -> None:
@@ -645,8 +727,9 @@ def render_not_found(env: Environment, site: dict, texts: dict) -> None:
         t=texts[default],
         canonical=None,
         alternates=[],
-        lang_links=lang_links(site, Page(NOT_FOUND_TEMPLATE, "")),
+        lang_links=lang_links(site, Page(NOT_FOUND_TEMPLATE)),
         home_href="/",
+        privacy_href=key_url(default_language(site), PRIVACY_KEY),
         translations=translations,
     )
     write(OUT_DIR / "404.html", html)
@@ -657,7 +740,7 @@ def render_sitemap(site: dict, pages: list[Page]) -> None:
     for page in pages:
         links = alternates(site, page)
         for lang in page_langs(site, page):
-            loc = site["base_url"] + url_path(lang["prefix"], page.path)
+            loc = site["base_url"] + page_url(lang, page)
             alt_tags = "".join(
                 f'\n    <xhtml:link rel="alternate" hreflang="{a["hreflang"]}" href="{escape(a["href"])}"/>'
                 for a in links
@@ -671,8 +754,48 @@ def render_sitemap(site: dict, pages: list[Page]) -> None:
     write(OUT_DIR / "sitemap.xml", xml)
 
 
+def former_address_rules(lang: dict, default: dict, keys: list[str]) -> list[str]:
+    """Map rules from the default language's paths under the prefix to the language's own paths (301)."""
+    root = "/" + lang["prefix"].rstrip("/")
+    return [
+        f"    ~^{root}/{default['paths'][key]}(.*)$  /{lang['prefix']}{lang['paths'][key]}$1;"
+        for key in keys
+        if lang["paths"][key] != default["paths"][key]
+    ]
+
+
+def default_address_rules(lang: dict, default: dict, keys: list[str]) -> list[str]:
+    """Map rules from the language's addresses to the same page in the default language (302), spec 009."""
+    root = "/" + lang["prefix"].rstrip("/")
+    longest_first = sorted(keys, key=lambda key: len(lang["paths"][key]), reverse=True)
+    return [
+        *(f"    ~^{root}/{lang['paths'][key]}(.*)$  /{default['paths'][key]}$1;" for key in longest_first),
+        f"    ~^{root}$  /;",
+        f"    ~^{root}(/.*)$  $1;",
+    ]
+
+
+def render_nginx_include(config: dict) -> None:
+    """The language prefixes and path pairs of every configured language, for the web server, spec 013."""
+    default = default_language(config)
+    keys = page_keys(config)
+    others = [lang for lang in config["languages"] if lang["code"] != default["code"]]
+    former = [rule for lang in others for rule in former_address_rules(lang, default, keys)]
+    to_default = [rule for lang in others for rule in default_address_rules(lang, default, keys)]
+    conf = (
+        f"# Generated by src/{Path(__file__).name} from src/{SITE_CONFIG.name}; do not edit.\n"
+        "# Former addresses under the default language's paths, see specs/013-localized-paths.md.\n"
+        "map $uri $former_lang_uri {\n" + "".join(rule + "\n" for rule in former) + "}\n\n"
+        "# Addresses of a language without a file: the same page in the default language,\n"
+        "# see specs/009-published-languages.md and specs/013-localized-paths.md.\n"
+        "map $uri $default_lang_uri {\n" + "".join(rule + "\n" for rule in to_default) + "}\n"
+    )
+    write(NGINX_INCLUDE, conf)
+
+
 def main() -> None:
     config = load_json(SITE_CONFIG)
+    check_paths(config)
     published, unpublished = split_languages(config)
     site = {**config, "languages": published}
     texts = {lang["code"]: load_json(I18N_DIR / f"{lang['code']}.json") for lang in site["languages"]}
@@ -694,10 +817,12 @@ def main() -> None:
     }
     check_engagement(data["engagement"])
     remove_unpublished_dirs(unpublished)
+    remove_former_dirs(config, site)
     remove_stale_article_dirs(site, topics, articles)
     render_pages(env, site, texts, data, pages)
     render_not_found(env, site, texts)
     render_sitemap(site, pages)
+    render_nginx_include(config)
 
 
 if __name__ == "__main__":

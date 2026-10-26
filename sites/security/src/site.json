@@ -2,18 +2,25 @@
   "base_url": "https://security.charemma.de",
   "default_lang": "de",
   "languages": [
-    { "code": "de", "label": "DE", "prefix": "", "published": true },
-    { "code": "en", "label": "EN", "prefix": "en/", "published": false },
-    { "code": "el", "label": "EL", "prefix": "el/", "published": false }
+    {
+      "code": "de", "label": "DE", "prefix": "", "published": true,
+      "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/" }
+    },
+    {
+      "code": "en", "label": "EN", "prefix": "en/", "published": false,
+      "paths": { "knowledge": "knowledge/ai-security/", "privacy": "privacy/" }
+    },
+    {
+      "code": "el", "label": "EL", "prefix": "el/", "published": false,
+      "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/" }
+    }
   ],
   "pages": [
-    { "template": "index.html.j2", "path": "" },
-    { "template": "wissen.html.j2", "path": "wissen/ki-sicherheit/" },
-    { "template": "datenschutz.html.j2", "path": "datenschutz/" }
+    { "template": "index.html.j2" },
+    { "template": "wissen.html.j2", "key": "knowledge" },
+    { "template": "datenschutz.html.j2", "key": "privacy" }
   ],
-  "privacy_path": "datenschutz/",
   "knowledge": {
-    "path": "wissen/ki-sicherheit/",
     "groups": ["llm", "infra"],
     "featured": {
       "llm": ["LLM01:2026", "LLM02:2026", "LLM03:2026"],
