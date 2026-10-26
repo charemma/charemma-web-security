@@ -38,7 +38,7 @@ This file states the rules for writing, translating and revising knowledge artic
 - Sentences SHOULD be short; one idea per sentence.
 - The text MUST be direct and practical; delete every paragraph that only informs without changing what the reader does.
 - The text MUST NOT contain marketing language, emojis or dashes used as punctuation; use a period, colon, comma or parentheses instead.
-- The body MUST have 600 to 900 words, counted without the front matter.
+- The body of an article in the default language of `site.json` MUST have 600 to 900 words, counted without the front matter.
 
 ## Sources
 
@@ -94,7 +94,7 @@ Review checklist:
 - A translation MUST follow the **Voice** section in the target language and read as text written in that language; do not render it word by word.
 - A quote that the default-language file translates from a source written in the target language MUST appear in the source's original wording, read from the source; do not translate the quote back.
 - Sources listed in the default-language file MAY be carried over without reading them again, except to take the original wording of a quote.
-- A translation whose body falls outside the word count of the **Voice** section MUST be named to the user; do not shorten or extend it against its default-language file.
+- The body of a translation MUST follow the length of its default-language file, not the word count of the **Voice** section; do not shorten or extend it against that file.
 - A translation MUST be created on the instruction IMPLEMENT THE SPEC, naming the spec and the target language, under the **Workflow** section.
 
 ## Workflow
