@@ -8,10 +8,10 @@ build:
 # Run every check of this site (the CI entry point, see specs/013-site-images.md)
 check: check-generated check-security-txt
 
-# Fail if the committed html/ is out of date with src/
+# Fail if the committed generator output (html/, the web server include) is out of date with src/
 check-generated: build
-    git diff --exit-code -- html
-    test -z "$(git status --porcelain -- html)"
+    git diff --exit-code -- html nginx/language-paths.conf
+    test -z "$(git status --porcelain -- html nginx/language-paths.conf)"
 
 # Fail if security.txt expires within 30 days
 check-security-txt:
