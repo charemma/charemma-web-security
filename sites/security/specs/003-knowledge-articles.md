@@ -1,6 +1,6 @@
 # 003 Knowledge articles
 
-Status: approved 2026-10-17, amended 2026-10-19, 2026-10-20
+Status: approved 2026-10-17, amended 2026-10-19, 2026-10-20, 2026-10-26
 
 ## Why
 
@@ -66,16 +66,18 @@ page. Wide tables scroll horizontally on narrow screens for the same reason.
 
 ### Page address and head
 
-The article lives at `/<prefix>wissen/ki-sicherheit/<slug>/`, the address
-the overview card already points to, in every published language (spec 009)
-that has the article. The page title is `<topic title> · <overview section title> ·
+The article lives at `/<prefix><knowledge path><slug>/`, with the knowledge
+path of its language per `013-localized-paths.md`, the address the overview
+card already points to, in every published language (spec 009) that has the
+article. The page title is `<topic title> · <overview section title> ·
 security.charemma.de`, following the pattern of the overview page. The meta
 description is the lead.
 
 Canonical and `hreflang` follow the other pages, with one difference: the
 alternates name only the published languages in which the article exists, plus
-`x-default`. `x-default` points to the German article when it exists,
-otherwise to the first existing language in the order of `site.json`.
+`x-default`, each at the address of its language (`013-localized-paths.md`).
+`x-default` points to the German article when it exists, otherwise to the
+first existing language in the order of `site.json`.
 
 ### Page structure
 
@@ -136,8 +138,9 @@ every page; with a single published language there is no switcher. For a
 language that has this article, the entry leads to the article in that
 language. For a language without it, the entry leads to the overview page
 of that language, so a reader who switches lands on the list of topics and
-not on a missing page. The saved-language redirect in `lang.js` then follows
-the same links and needs no change.
+not on a missing page. Each entry uses the address of its language
+(`013-localized-paths.md`). The saved-language redirect in `lang.js` then
+follows the same links and needs no change.
 
 ### Overview and start page
 
@@ -204,8 +207,8 @@ pages without a change to this spec.
    and `hreflang="x-default"`, both pointing to the German page, and no
    English or Greek alternate.
 4. While English and Greek are published (spec 009), the English and Greek
-   entries of the language switcher on the article page lead to `/en/wissen/ki-sicherheit/` and
-   `/el/wissen/ki-sicherheit/`.
+   entries of the language switcher on the article page lead to
+   `/en/knowledge/ai-security/` and `/el/wissen/ki-sicherheit/`.
 5. `sitemap.xml` contains the German article once, with alternates for
    `de` and `x-default` only.
 6. Setting `draft: true` in the file and rebuilding removes the page, the
