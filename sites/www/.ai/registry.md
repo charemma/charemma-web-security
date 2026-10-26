@@ -19,3 +19,4 @@ This site is charemma.de, the main website of Charalambos Emmanouilidis. It curr
 | `sites/www/k8s` | `service.yaml` | code | spec-maintained | `013-site-images.md` |  | Kubernetes service manifest: how the site's pods are reachable inside the cluster. |
 | `sites/www/k8s` | `ingress.yaml` | code | spec-maintained | `013-site-images.md` |  | Kubernetes ingress manifest: under which host name and with which TLS settings the site is reachable from outside. |
 | `sites/www/k8s` | `kustomization.yaml` | code | spec-maintained | `013-site-images.md` |  | Kustomize entry point: which manifests ArgoCD applies and which image tag they run, the tag being written by the image updater. |
+| `sites/www/specs` | `001-imprint.md` | spec | editable |  |  | Spec for the central legal notice page: which domains it covers, which provider details it states and in which order, its footer link on this site, when it may be published, and the reasons for it. |
