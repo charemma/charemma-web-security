@@ -74,8 +74,10 @@ with the client. This matches step 02 of the process section.
 
 - AI agents do reconnaissance and breadth: they map the attack surface and
   run broad, automated tests.
-- I decide every attack step myself; no agent exploits a finding on its
-  own.
+- I set the agreed scope as a fixed boundary for the agents and supervise
+  their work.
+- I follow up exploitable findings by hand and verify every finding in the
+  report myself.
 - Data from an engagement goes to an AI model only with the client's
   written consent. The model is named: Anthropic Claude.
 - Without that consent I work without cloud AI.

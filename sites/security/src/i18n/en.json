@@ -189,5 +189,45 @@
         ]
       }
     ]
+  },
+  "conduct": {
+    "link": "How I test",
+    "meta_title": "How I test · security.charemma.de",
+    "meta_description": "The rules I test by: authorization, conduct during the test, use of AI, standards and credentials.",
+    "back": "← back to the homepage",
+    "title": "How I test",
+    "lead": "I test only with your authorization and under rules agreed in advance. The details of each engagement are settled in the offer and the contract.",
+    "sections": [
+      {
+        "heading": "Authorization",
+        "paragraphs": [
+          "I test only with a written order, and only systems that you own or are permitted to have tested.",
+          "Before the test we agree in writing on scope, test type (black, grey or white box) and time window."
+        ]
+      },
+      {
+        "heading": "During the test",
+        "paragraphs": [
+          "I report critical findings to you immediately, not only in the report.",
+          "I run tests that could delete data or impair the operation of your systems (destructive tests) only after explicit agreement with you."
+        ]
+      },
+      {
+        "heading": "AI in the penetration test",
+        "paragraphs": [
+          "AI agents handle reconnaissance and breadth: they map the attack surface and run broad, automated tests. I set the agreed scope as a fixed boundary for them and supervise their work. I follow up exploitable findings by hand and verify every finding in the report myself.",
+          "I pass data from your engagement to an AI model, Anthropic Claude, only with your written consent. Without it I work without cloud AI."
+        ]
+      },
+      {
+        "heading": "Standards and credentials",
+        "paragraphs": [
+          "I follow the BSI penetration testing guideline (IS-Pentest-Leitfaden) and the OWASP Web Security Testing Guide (WSTG).",
+          "My certifications: OSCP and SCP Web Application Security.",
+          "I hold professional liability insurance with exali."
+        ]
+      }
+    ],
+    "process_link": "How I test: rules for every engagement"
   }
 }
