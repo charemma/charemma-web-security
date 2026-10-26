@@ -58,7 +58,9 @@
       <div class="site-footer__links">
         <a href="{{ site.links.github }}">GitHub</a>
         <a href="{{ site.links.main_site }}">charemma.de</a>
-        <a href="https://charemma.de/impressum/" hreflang="de">{{ t.imprint }}</a>
+        {#- Legal notice in the page language, else in the default language, spec 014 #}
+        {%- set imprint_lang = lang if lang in site.links.imprint else site.default_lang %}
+        <a href="{{ site.links.imprint[imprint_lang] }}" hreflang="{{ imprint_lang }}">{{ t.imprint }}</a>
         <a href="{{ privacy_href }}">{{ t.privacy.link }}</a>
         {#- __SITE_VERSION__ and __SITE_COMMIT__ are replaced when the deliverable is built (Dockerfile, justfile), not here #}
         <a class="site-footer__version" href="{{ site.links.repo }}/commit/__SITE_COMMIT__">git:(__SITE_VERSION__)</a>
