@@ -4,21 +4,22 @@
   "languages": [
     {
       "code": "de", "label": "DE", "prefix": "", "published": true,
-      "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/" }
+      "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/", "conduct": "so-teste-ich/" }
     },
     {
       "code": "en", "label": "EN", "prefix": "en/", "published": true,
-      "paths": { "knowledge": "knowledge/ai-security/", "privacy": "privacy/" }
+      "paths": { "knowledge": "knowledge/ai-security/", "privacy": "privacy/", "conduct": "how-i-test/" }
     },
     {
       "code": "el", "label": "EL", "prefix": "el/", "published": false,
-      "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/" }
+      "paths": { "knowledge": "wissen/ki-sicherheit/", "privacy": "datenschutz/", "conduct": "so-teste-ich/" }
     }
   ],
   "pages": [
     { "template": "index.html.j2" },
     { "template": "wissen.html.j2", "key": "knowledge" },
-    { "template": "datenschutz.html.j2", "key": "privacy" }
+    { "template": "datenschutz.html.j2", "key": "privacy" },
+    { "template": "so-teste-ich.html.j2", "key": "conduct" }
   ],
   "knowledge": {
     "groups": ["llm", "infra"],

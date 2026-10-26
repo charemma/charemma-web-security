@@ -1,0 +1,22 @@
+{% extends "base.html.j2" %}
+{% block title %}{{ t.conduct.meta_title }}{% endblock %}
+{% block description %}{{ t.conduct.meta_description }}{% endblock %}
+{% block body_class %}page-light{% endblock %}
+{% block nav_links %}{% endblock %}
+{% block main %}
+    <article class="article container">
+      <div class="article__head">
+        <a class="overview__back" href="{{ home_href }}">{{ t.conduct.back }}</a>
+        <h1 class="overview__title">{{ t.conduct.title }}</h1>
+        <p class="overview__lead">{{ t.conduct.lead }}</p>
+      </div>
+      <div class="article__body">
+        {%- for section in t.conduct.sections %}
+        <h2>{{ section.heading }}</h2>
+        {%- for paragraph in section.paragraphs %}
+        <p>{{ paragraph }}</p>
+        {%- endfor %}
+        {%- endfor %}
+      </div>
+    </article>
+{% endblock %}

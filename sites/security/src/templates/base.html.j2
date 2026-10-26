@@ -58,6 +58,7 @@
       <div class="site-footer__links">
         <a href="{{ site.links.github }}">GitHub</a>
         <a href="{{ site.links.main_site }}">charemma.de</a>
+        <a href="{{ conduct_href }}">{{ t.conduct.link }}</a>
         {#- Legal notice in the page language, else in the default language, spec 014 #}
         {%- set imprint_lang = lang if lang in site.links.imprint else site.default_lang %}
         <a href="{{ site.links.imprint[imprint_lang] }}" hreflang="{{ imprint_lang }}">{{ t.imprint }}</a>

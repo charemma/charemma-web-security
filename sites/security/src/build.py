@@ -64,6 +64,7 @@ WALKTHROUGH_PHASE_TEXTS = ("titles", "hits", "rail")
 # Localized paths, spec 013
 KNOWLEDGE_KEY = "knowledge"
 PRIVACY_KEY = "privacy"
+CONDUCT_KEY = "conduct"  # how I test page, spec 015
 PATH_PATTERN = re.compile(r"(?:[a-z0-9-]+/)+")
 NGINX_INCLUDE = SRC_DIR.parent / "nginx" / "language-paths.conf"
 
@@ -711,6 +712,7 @@ def render_pages(env: Environment, site: dict, texts: dict, data: dict, pages: l
                 lang_links=lang_links(site, page),
                 home_href=url_path(lang["prefix"], ""),
                 privacy_href=key_url(lang, PRIVACY_KEY),
+                conduct_href=key_url(lang, CONDUCT_KEY),
             )
             write(OUT_DIR / lang["prefix"] / page_path(lang, page) / "index.html", html)
 
@@ -730,6 +732,7 @@ def render_not_found(env: Environment, site: dict, texts: dict) -> None:
         lang_links=lang_links(site, Page(NOT_FOUND_TEMPLATE)),
         home_href="/",
         privacy_href=key_url(default_language(site), PRIVACY_KEY),
+        conduct_href=key_url(default_language(site), CONDUCT_KEY),
         translations=translations,
     )
     write(OUT_DIR / "404.html", html)
