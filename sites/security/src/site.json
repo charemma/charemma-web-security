@@ -36,7 +36,11 @@
   "links": {
     "github": "https://github.com/charemma",
     "repo": "https://github.com/charemma/charemma-web-security",
-    "main_site": "https://charemma.de"
+    "main_site": "https://charemma.de",
+    "imprint": {
+      "de": "https://charemma.de/impressum/",
+      "en": "https://charemma.de/en/legal-notice/"
+    }
   },
   "stats": {
     "endpoint": "https://stats.charemma.de/count",
