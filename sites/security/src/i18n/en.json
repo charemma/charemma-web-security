@@ -161,14 +161,24 @@
       {
         "heading": "Server logs",
         "paragraphs": [
-          "The web server logs each request with time, requested address, status code and browser, to keep the site running and to find errors. The logs are not stored permanently and are lost whenever the server restarts.",
-          "The legal basis is Art. 6 (1) (f) GDPR."
+          "A reverse proxy runs in front of the website. It logs each request with your IP address, the time, the requested domain and address, the status code, the referring page and the browser (user agent).",
+          "I use it to keep the site running, find errors, spot scans and attacks, and get a rough picture of where visits come from.",
+          "Only I evaluate the log, in a non-public view on my own server. It derives country and network (provider) from the IP address, using a database kept on the same server. The log is not passed on to third parties.",
+          "The log is not archived. It is kept only in the proxy's container log and in a temporary working directory. Both are cut once they reach a fixed size and are lost whenever the proxy restarts. There is no fixed retention period beyond that.",
+          "The legal basis is my legitimate interest in running the website securely and in knowing roughly where visits come from (Art. 6 (1) (f) GDPR)."
         ]
       },
       {
         "heading": "Hosting",
         "paragraphs": [
           "The website and the statistics run on servers of Hetzner Online GmbH in Germany (EU). Hetzner processes the data as processor."
+        ]
+      },
+      {
+        "heading": "Cloudflare",
+        "paragraphs": [
+          "Requests to this website pass through the proxy of Cloudflare, Inc. Cloudflare processes your IP address to deliver the page and fend off attacks, and acts as processor. Cloudflare passes the IP address on to my server, where it ends up in the server log.",
+          "Cloudflare, Inc. is based in the USA, so data may be transferred to a third country. This transfer is based on the EU-US Data Privacy Framework."
         ]
       },
       {

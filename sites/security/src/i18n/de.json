@@ -161,14 +161,24 @@
       {
         "heading": "Server-Logs",
         "paragraphs": [
-          "Der Webserver protokolliert jede Anfrage mit Zeitpunkt, aufgerufener Adresse, Statuscode und Browser, um den Betrieb zu sichern und Fehler zu finden. Die Protokolle werden nicht dauerhaft gespeichert und gehen bei jedem Neustart des Servers verloren.",
-          "Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO."
+          "Vor der Website läuft ein Reverse Proxy. Er protokolliert jede Anfrage mit Ihrer IP-Adresse, dem Zeitpunkt, der aufgerufenen Domain und Adresse, dem Statuscode, der verweisenden Seite und dem Browser (User-Agent).",
+          "Damit sichere ich den Betrieb, finde Fehler, erkenne Scans und Angriffe und bekomme ein grobes Bild davon, woher Besuche kommen.",
+          "Das Protokoll werte nur ich aus, in einer nicht öffentlichen Ansicht auf meinem eigenen Server. Sie leitet aus der IP-Adresse Land und Netz (Provider) ab, mit einer Datenbank, die auf demselben Server liegt. Das Protokoll wird nicht an Dritte weitergegeben.",
+          "Das Protokoll wird nicht archiviert. Es liegt nur im Container-Log des Proxys und in einem temporären Arbeitsverzeichnis. Beide werden ab einer festen Größe gekürzt und gehen bei jedem Neustart des Proxys verloren. Eine feste Speicherfrist darüber hinaus gibt es nicht.",
+          "Rechtsgrundlage ist mein berechtigtes Interesse, die Website sicher zu betreiben und grob zu wissen, woher Besuche kommen (Art. 6 Abs. 1 lit. f DSGVO)."
         ]
       },
       {
         "heading": "Hosting",
         "paragraphs": [
           "Die Website und die Statistik laufen auf Servern der Hetzner Online GmbH in Deutschland (EU). Hetzner verarbeitet die Daten als Auftragsverarbeiter."
+        ]
+      },
+      {
+        "heading": "Cloudflare",
+        "paragraphs": [
+          "Anfragen an diese Website laufen über den Proxy von Cloudflare, Inc. Cloudflare verarbeitet dabei Ihre IP-Adresse, um die Seite auszuliefern und Angriffe abzuwehren, und handelt als Auftragsverarbeiter. Cloudflare gibt die IP-Adresse an meinen Server weiter, wo sie im Server-Log landet.",
+          "Cloudflare, Inc. hat ihren Sitz in den USA, daher können Daten in ein Drittland übermittelt werden. Grundlage dafür ist das EU-US Data Privacy Framework."
         ]
       },
       {
