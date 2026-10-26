@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penetration testing for Linux infrastructure · Charalambos Emmanouilidis</title>
+  <meta name="description" content="Penetration testing with a focus on Linux infrastructure: servers, containers and Kubernetes, plus the web applications running on them.">
+  <link rel="canonical" href="https://security.charemma.de/en/">
+  <link rel="alternate" hreflang="de" href="https://security.charemma.de/">
+  <link rel="alternate" hreflang="en" href="https://security.charemma.de/en/">
+  <link rel="alternate" hreflang="x-default" href="https://security.charemma.de/">
+  <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css?v=bc47fabeac">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js?v=a97d520012"></script>
+  <script type="module" src="/assets/js/engagement.js?v=8a7a69aaa5"></script>
+  <script data-goatcounter="https://stats.charemma.de/count" data-goatcounter-settings='{"path": "security.charemma.de/en/"}' async src="https://stats.charemma.de/count.js"></script>
+</head>
+<body class="page-dark">
+  <div class="site-header-bar">
+    <header class="site-header">
+      <a class="brand" href="/en/#top"><span class="brand__user">charemma@</span><span>security</span><span class="brand__prompt">:~$</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/en/#leistungen">Services</a>
+        <a href="/en/#fallbeispiel">Approach</a>
+        <a href="/en/#ablauf">Process</a>
+        <a href="/en/#wissen">Knowledge</a>
+        <span class="lang-switch" role="group" aria-label="Sprache / Language / Γλώσσα">
+          <a href="/" hreflang="de" lang="de" data-lang="de">DE</a>
+          <a href="/en/" hreflang="en" lang="en" data-lang="en" aria-current="true">EN</a>
+        </span>
+      </nav>
+    </header>
+  </div>
+
+  <main>
+    <section id="top" class="hero container">
+      <div class="hero__meta mono">
+        <span><span class="accent" aria-hidden="true">●</span> Charalambos Emmanouilidis · OSCP</span>
+        <span>Focus: Linux infrastructure</span>
+        <span>Germany · remote</span>
+      </div>
+      <h1 class="hero__title">I attack your systems <span class="hero__title-accent">before someone else does.</span></h1>
+      <p class="hero__lead">Penetration testing with a focus on Linux infrastructure: servers, containers and Kubernetes – and the web applications running on them. AI-assisted reconnaissance, manual depth and a report your team can act on right away.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="mailto:me@charemma.de?subject=Pentest%20request">Request a pentest</a>
+      </div>
+    </section>
+
+    <section class="profile" aria-label="Profile">
+      <dl class="profile__grid container mono">
+        <div class="profile__item"><dt>certifications</dt><dd>OSCP · SCP Web Application Security</dd></div>
+        <div class="profile__item"><dt>methodology</dt><dd>BSI pentest guideline · OWASP WSTG</dd></div>
+        <div class="profile__item"><dt>offensive_since</dt><dd>2019 · bug bounty, disclosure, pentests</dd></div>
+        <div class="profile__item"><dt>reports</dt><dd>German · English</dd></div>
+      </dl>
+    </section>
+
+    <section id="leistungen" class="services container">
+      <div class="section-head">
+        <span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>01 / services</span>
+        <h2 class="section-title">What I test</h2>
+      </div>
+      <div class="services__grid">
+        <article class="service">
+          <span class="service__tag">linux · focus</span>
+          <h3 class="service__title">Linux servers &amp; infrastructure</h3>
+          <p class="service__body">Exposed services, SSH, sudo and file permissions, systemd units, firewall rules and privilege escalation – from attacker shell to root.</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">linux · container</span>
+          <h3 class="service__title">Containers &amp; Kubernetes</h3>
+          <p class="service__body">Container escapes, RBAC, network policies, secrets and images: how far does an attacker get from a compromised pod?</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">web / api</span>
+          <h3 class="service__title">Web application &amp; API pentest</h3>
+          <p class="service__body">Manual testing following OWASP WSTG: authentication, authorization, input validation, injection and business logic.</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">external</span>
+          <h3 class="service__title">External attack surface</h3>
+          <p class="service__body">What does an attacker see from the outside? Subdomains, exposed services and forgotten systems – mapped with AI, assessed by hand.</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">linux · ci/cd</span>
+          <h3 class="service__title">Pipeline &amp; supply chain</h3>
+          <p class="service__body">Build runners, secrets, permissions, container images and dependencies: who can push what into production?</p>
+        </article>
+        <article class="service">
+          <span class="service__tag">ai</span>
+          <h3 class="service__title">AI applications &amp; pipelines</h3>
+          <p class="service__body">LLM features following the OWASP Top 10 for LLM Applications, agents with tool access, and the data and model pipeline behind them.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fallbeispiel" class="approach">
+      <div class="approach__intro container">
+        <div class="approach__head">
+          <span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>02 / approach</span>
+          <h2 class="section-title">Agents map it. <span class="accent">I go in.</span></h2>
+        </div>
+        <div class="approach__text">
+          <p class="approach__lead">AI agents map your attack surface and run broad, automated tests. I verify findings by hand and follow exploitable chains in a controlled way within the agreed scope. You receive a report with reproducible evidence and concrete fixes.</p>
+        </div>
+      </div>
+      <div class="walk" data-engagement>
+        <script type="application/json" data-engagement-data>{"steps": [{"cmd": "ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint", "hit": "Inputs, model \u0026 tools captured", "mode": "ai", "rail": "attack surface", "title": "Attack surface"}, {"cmd": "ai-probe run --suite owasp-llm --agents jailbreak,leak,injection,tool-enum", "hit": "Anomalies: injection via upload, tool access in a pod", "mode": "ai", "rail": "broad testing", "title": "Broad testing"}, {"cmd": "ai-recon brief --to me \u0026\u0026 triage --chain upload,rag,agent-pod", "hit": "Two targets: RAG ingestion and agent pod", "mode": "manual", "rail": "analysis", "title": "Analysis"}, {"cmd": "python3 craft_doc.py --hidden-instructions -o angebot.pdf", "hit": "Indirect prompt injection, pod with cluster-admin", "mode": "manual", "rail": "manual testing", "title": "Manual testing"}, {"cmd": "curl -F file=@angebot.pdf https://app.[redacted].ai/upload", "hit": "Through the agent into the cluster: secrets exposed", "mode": "manual", "rail": "exploit", "title": "Exploit"}, {"cmd": "ai-report draft --map owasp-llm \u0026\u0026 review", "hit": "Report with fixes delivered", "mode": "assist", "rail": "reporting", "title": "Reporting"}], "texts": {"labels": {"legend": ["AI component", "Kubernetes / infrastructure"], "me": "pentester", "pod": "agent pod \u00b7 too many rights?", "rag": "rag \u00b7 ingest \u00b7 AI-specific", "review": "human review"}, "modes": {"ai": "AI-DRIVEN WITH SUBAGENTS", "assist": "AI-ASSISTED \u00b7 HUMAN REVIEW", "manual": "MANUAL"}, "phase": "PHASE", "report": {"cols": ["ID", "SEVERITY", "FINDING"], "conf": "CONFIDENTIAL", "foot": "Every finding with PoC, risk and a concrete fix.", "meta": "Scope: *.[redacted].ai \u00b7 black box \u00b7 Oct 2026", "rows": [["CRITICAL", "Prompt injection \u00b7 upload", "LLM01"], ["CRITICAL", "Agent runs commands", "LLM06"], ["HIGH", "Pod with cluster-admin", "K8S"], ["MEDIUM", "System prompt leaks", "LLM07"], ["LOW", "No rate limit", "LLM10"]], "title": "PENTEST REPORT"}}}</script>
+        <canvas class="walk__canvas" data-canvas role="img" aria-label="Animation: a particle swarm forms an AI pipeline, the target, the attack path via prompt injection and the report of a penetration test."></canvas>
+        <div class="walk__over">
+          <span class="walk__phase"><span data-phase-no>PHASE 01 / 06</span><span class="walk__mode walk__mode--ai" data-mode>AI-DRIVEN WITH SUBAGENTS</span></span>
+          <div class="walk__titles">
+            <span class="walk__title" data-title>Attack surface</span>
+            <span class="walk__hit" data-hit>Inputs, model &amp; tools captured</span>
+          </div>
+          <div class="walk__cmd"><span class="accent">❯ </span><span data-cmd>ai-recon map --app app.[redacted].ai --agents input-mapping,model-fingerprint</span><span class="walk__cursor" aria-hidden="true">▌</span></div>
+        </div>
+        <ol class="walk__rail" aria-label="Phases">
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 1: attack surface" aria-current="step">
+              <span class="walk__track"><span class="walk__fill walk__fill--ai" data-fill></span></span>
+              <span class="walk__rail-label">attack surface</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 2: broad testing">
+              <span class="walk__track"><span class="walk__fill walk__fill--ai" data-fill></span></span>
+              <span class="walk__rail-label">broad testing</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 3: analysis">
+              <span class="walk__track"><span class="walk__fill walk__fill--manual" data-fill></span></span>
+              <span class="walk__rail-label">analysis</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 4: manual testing">
+              <span class="walk__track"><span class="walk__fill walk__fill--manual" data-fill></span></span>
+              <span class="walk__rail-label">manual testing</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 5: exploit">
+              <span class="walk__track"><span class="walk__fill walk__fill--manual" data-fill></span></span>
+              <span class="walk__rail-label">exploit</span>
+            </button>
+          </li>
+          <li class="walk__rail-item">
+            <button type="button" class="walk__rail-btn" data-rail aria-label="PHASE 6: reporting">
+              <span class="walk__track"><span class="walk__fill walk__fill--assist" data-fill></span></span>
+              <span class="walk__rail-label">reporting</span>
+            </button>
+          </li>
+        </ol>
+      </div>
+
+      <div class="approach__note container">The animation follows a real black-box assessment of an AI application, simplified and anonymized.</div>
+    </section>
+
+    <section id="ablauf" class="process">
+      <div class="process__inner container">
+        <div class="section-head">
+          <span class="eyebrow eyebrow--light">03 / process</span>
+          <h2 class="section-title section-title--light">From scoping to retest</h2>
+        </div>
+        <ol class="process__steps">
+          <li class="process__step">
+            <span class="process__n">01</span>
+            <h3 class="process__title">Scoping</h3>
+            <p class="process__body">Goals, scope, test type (black, grey or white box) and time window agreed in writing.</p>
+          </li>
+          <li class="process__step">
+            <span class="process__n">02</span>
+            <h3 class="process__title">Testing</h3>
+            <p class="process__body">AI-assisted reconnaissance, then manual testing. Critical findings are reported immediately, not just in the report.</p>
+          </li>
+          <li class="process__step">
+            <span class="process__n">03</span>
+            <h3 class="process__title">Report</h3>
+            <p class="process__body">Management summary plus technical findings with reproduction steps, PoC and a concrete fix.</p>
+          </li>
+          <li class="process__step">
+            <span class="process__n">04</span>
+            <h3 class="process__title">Retest</h3>
+            <p class="process__body">After your fixes I test again and confirm the remediation in writing.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="toolbox container" aria-labelledby="warum">
+      <div class="toolbox__intro">
+        <span class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span>04 / toolbox</span>
+        <h2 id="warum" class="section-title">Knowing Linux from the inside to attack it from the outside</h2>
+        <p class="toolbox__lead">I have worked with Linux every day since 2006 – from embedded systems in medical and camera technology to build and development servers and production Kubernetes clusters. I know the systems I attack from the inside: permissions, services, configuration and the usual shortcuts in operations. For reconnaissance and reporting I use my own agent workflows; my lab is fully reproducible, and I train regularly on HackTheBox.</p>
+      </div>
+      <div class="toolbox__groups">
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">offense</h3>
+          <ul class="toolbox__items">
+            <li class="chip chip--hot">Burp Suite</li>
+            <li class="chip chip--hot">OWASP ZAP</li>
+            <li class="chip chip--hot">mitmproxy</li>
+            <li class="chip chip--hot">nmap</li>
+            <li class="chip chip--hot">sqlmap</li>
+            <li class="chip chip--hot">ffuf</li>
+            <li class="chip chip--hot">nuclei</li>
+            <li class="chip chip--hot">subfinder</li>
+            <li class="chip chip--hot">httpx</li>
+            <li class="chip chip--hot">katana</li>
+            <li class="chip chip--hot">dnsx</li>
+            <li class="chip chip--hot">dalfox</li>
+            <li class="chip chip--hot">custom exploits &amp; PoCs</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">ai &amp; agents</h3>
+          <ul class="toolbox__items">
+            <li class="chip chip--hot">Claude Code</li>
+            <li class="chip chip--hot">subagents</li>
+            <li class="chip chip--hot">MCP</li>
+            <li class="chip chip--hot">own agents</li>
+            <li class="chip chip--hot">LangGraph</li>
+            <li class="chip chip--hot">Ollama</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">distributions</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Debian</li>
+            <li class="chip">Ubuntu</li>
+            <li class="chip">Red Hat</li>
+            <li class="chip">NixOS</li>
+            <li class="chip">Talos Linux</li>
+            <li class="chip">Kali Linux</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">operations &amp; hardening</h3>
+          <ul class="toolbox__items">
+            <li class="chip">systemd</li>
+            <li class="chip">auditd</li>
+            <li class="chip">OpenSSH</li>
+            <li class="chip">nftables</li>
+            <li class="chip">WireGuard</li>
+            <li class="chip">Tailscale</li>
+            <li class="chip">own PKI / CA</li>
+            <li class="chip">HashiCorp Vault</li>
+            <li class="chip">Ansible</li>
+            <li class="chip">Nix Flakes</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">container &amp; cluster</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Kubernetes</li>
+            <li class="chip">k3s</li>
+            <li class="chip">OpenShift</li>
+            <li class="chip">Docker</li>
+            <li class="chip">Podman</li>
+            <li class="chip">Helm</li>
+            <li class="chip">ArgoCD</li>
+            <li class="chip">RBAC</li>
+            <li class="chip">NetworkPolicies</li>
+            <li class="chip">Sealed Secrets</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">embedded linux</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Yocto / BitBake</li>
+            <li class="chip">NXP i.MX6 / i.MX8</li>
+            <li class="chip">QEMU</li>
+            <li class="chip">Cross-Builds</li>
+            <li class="chip">remote debugging &amp; firmware updates</li>
+          </ul>
+        </div>
+        <div class="toolbox__group">
+          <h3 class="toolbox__label">pipeline security</h3>
+          <ul class="toolbox__items">
+            <li class="chip">Trivy</li>
+            <li class="chip">SonarQube</li>
+            <li class="chip">Renovate</li>
+            <li class="chip">SBOM / SPDX</li>
+            <li class="chip">secrets management</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="wissen" class="knowledge" aria-labelledby="wissen-h">
+      <div class="knowledge__inner container">
+        <div class="knowledge__head">
+          <div class="knowledge__title-block">
+            <span class="knowledge__eyebrow">
+              <span class="pill"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>
+Knowledge</span>
+              <span>05 / ai-security</span>
+            </span>
+            <h2 id="wissen-h" class="section-title section-title--dark">More than prompt injection</h2>
+          </div>
+          <p class="knowledge__lead">AI applications inherit the weaknesses of classic software and add their own. Here I explain the most important risks for LLM applications and AI infrastructure – briefly, clearly and with a link to the in-depth article.</p>
+        </div>
+        <div class="topic-group">
+          <div class="topic-group__head">
+            <h3 class="topic-group__title">LLM applications</h3>
+            <span class="topic-group__sub">Risks in applications built on language models</span>
+          </div>
+          <ul class="topic-grid topic-grid--home">
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Knowledge</span><span class="topic-card__id">LLM01:2026</span></span>
+  <h4 class="topic-card__title">Prompt injection</h4>
+  <p class="topic-card__body">Inputs – typed directly or hidden in documents, web pages and emails – make a model ignore its instructions or follow someone else’s.</p>
+  <a class="topic-card__link" href="/en/knowledge/ai-security/prompt-injection/" aria-label="Read more: Prompt injection">Read more →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Knowledge</span><span class="topic-card__id">LLM02:2026</span></span>
+  <h4 class="topic-card__title">Sensitive information disclosure</h4>
+  <p class="topic-card__body">A model reveals confidential data – from its training data, the conversation context or connected systems.</p>
+  <a class="topic-card__link" href="/en/knowledge/ai-security/sensitive-information-disclosure/" aria-label="Read more: Sensitive information disclosure">Read more →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Knowledge</span><span class="topic-card__id">LLM03:2026</span></span>
+  <h4 class="topic-card__title">Excessive agency</h4>
+  <p class="topic-card__body">An agent can do more than its task requires: too many tools, too broad permissions, too little human confirmation.</p>
+  <a class="topic-card__link" href="/en/knowledge/ai-security/excessive-agency/" aria-label="Read more: Excessive agency">Read more →</a>
+</li>
+          </ul>
+        </div>
+        <div class="topic-group">
+          <div class="topic-group__head">
+            <h3 class="topic-group__title">AI infrastructure</h3>
+            <span class="topic-group__sub">Operations, hosts and access around the model</span>
+          </div>
+          <ul class="topic-grid topic-grid--home">
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Knowledge</span><span class="topic-card__id">INFRA·03</span></span>
+  <h4 class="topic-card__title">Agents &amp; tool access</h4>
+  <p class="topic-card__body">MCP and tool servers as the test object: authentication, network reach, sandboxing of execution and the identities they act with.</p>
+  <a class="topic-card__link" href="/en/knowledge/ai-security/#agenten-und-tool-anbindung" aria-label="Read more: Agents &amp; tool access">Read more →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Knowledge</span><span class="topic-card__id">INFRA·01</span></span>
+  <h4 class="topic-card__title">MLOps pipeline &amp; registry</h4>
+  <p class="topic-card__body">Training jobs, CI/CD for models and the registry decide which artifact reaches production, and who can swap it on the way.</p>
+  <a class="topic-card__link" href="/en/knowledge/ai-security/#mlops-pipeline-und-registry" aria-label="Read more: MLOps pipeline &amp; registry">Read more →</a>
+</li>
+            <li class="topic-card">
+  <span class="topic-card__meta"><span class="topic-card__badge">Knowledge</span><span class="topic-card__id">INFRA·02</span></span>
+  <h4 class="topic-card__title">Inference infrastructure</h4>
+  <p class="topic-card__body">Model servers, containers, GPUs and tenant separation: services like any other – exposed, often weakly isolated, rarely with resource limits.</p>
+  <a class="topic-card__link" href="/en/knowledge/ai-security/#inferenz-infrastruktur" aria-label="Read more: Inference infrastructure">Read more →</a>
+</li>
+          </ul>
+        </div>
+
+        <div class="knowledge__footer">
+          <p class="knowledge__note">Based on the OWASP Top 10 for LLM Applications 2026 and hands-on work with agent workflows.</p>
+          <a class="btn btn--light" href="/en/knowledge/ai-security/">All AI security topics →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta__inner container">
+        <h2 class="cta__title">What would an attacker find in your systems?</h2>
+        <a class="btn btn--inverse" href="mailto:me@charemma.de?subject=Pentest%20request">Book an initial call →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="site-footer-bar">
+    <footer class="site-footer">
+      <span>© 2026 Charalambos Emmanouilidis</span>
+      <div class="site-footer__links">
+        <a href="https://github.com/charemma">GitHub</a>
+        <a href="https://charemma.de">charemma.de</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a class="site-footer__version" href="https://github.com/charemma/charemma-web-security/commit/__SITE_COMMIT__">git:(__SITE_VERSION__)</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

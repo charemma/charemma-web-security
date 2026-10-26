@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Excessive agency · AI security · security.charemma.de</title>
+  <meta name="description" content="An agent is a language model with tools and credentials. How much damage a wrong decision does depends not on the model, but on what the system has allowed it to do.">
+  <link rel="canonical" href="https://security.charemma.de/en/knowledge/ai-security/excessive-agency/">
+  <link rel="alternate" hreflang="de" href="https://security.charemma.de/wissen/ki-sicherheit/excessive-agency/">
+  <link rel="alternate" hreflang="en" href="https://security.charemma.de/en/knowledge/ai-security/excessive-agency/">
+  <link rel="alternate" hreflang="x-default" href="https://security.charemma.de/wissen/ki-sicherheit/excessive-agency/">
+  <link rel="preload" href="/assets/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css?v=bc47fabeac">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <script type="module" src="/assets/js/lang.js?v=a97d520012"></script>
+  <script type="module" src="/assets/js/player.js?v=e0f72dceb7"></script>
+  <script data-goatcounter="https://stats.charemma.de/count" data-goatcounter-settings='{"path": "security.charemma.de/en/knowledge/ai-security/excessive-agency/"}' async src="https://stats.charemma.de/count.js"></script>
+</head>
+<body class="page-light">
+  <div class="site-header-bar">
+    <header class="site-header">
+      <a class="brand" href="/en/#top"><span class="brand__user">charemma@</span><span>security</span><span class="brand__prompt">:~$</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <span class="lang-switch" role="group" aria-label="Sprache / Language / Γλώσσα">
+          <a href="/wissen/ki-sicherheit/excessive-agency/" hreflang="de" lang="de" data-lang="de">DE</a>
+          <a href="/en/knowledge/ai-security/excessive-agency/" hreflang="en" lang="en" data-lang="en" aria-current="true">EN</a>
+        </span>
+      </nav>
+    </header>
+  </div>
+
+  <main>
+    <article class="article container">
+      <div class="article__head">
+        <a class="overview__back" href="/en/knowledge/ai-security/">← back to the topic overview</a>
+        <span class="knowledge__eyebrow">
+          <span class="pill"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2"></path><path d="M19 17v4H6"></path></svg>
+Knowledge</span>
+          <span>LLM applications · LLM03:2026</span>
+        </span>
+        <h1 class="overview__title">Excessive agency</h1>
+        <p class="overview__lead">An agent is a language model with tools and credentials. How much damage a wrong decision does depends not on the model, but on what the system has allowed it to do.</p>
+        <p class="article__updated">Last updated <time datetime="2026-10-26">2026-10-26</time></p>
+      </div>
+      <div class="article__body">
+<h2>What this is about</h2>
+<p>An agent (a language model with callable functions and credentials) often finds broad access already in place and uses it as soon as a plan suggests it. Kimmerle and Okeyode call this ambient authority (access rights that come from the environment). OWASP lists it as LLM03:2026 Excessive Agency: the system allows harmful actions when the model responds in an unexpected, ambiguous or manipulated way, whatever the reason. What counts is what you allow it to do. <a href="https://blog.railway.com/p/your-ai-wants-to-nuke-your-database">Railway</a> confirms on its blog that a coding agent deleted a production volume on its platform. In April 2026 it hit PocketOS, a software vendor for car rental companies, whose agent was working in Cursor. The animation shows this case, based on Railway and on the reports by <a href="https://www.pcgamer.com/software/ai/here-we-go-again-ai-deletes-entire-company-database-and-all-backups-in-9-seconds-then-cheerfully-admits-i-violated-every-principle-i-was-given/">PC Gamer</a> and <a href="https://cybersecuritynews.com/ai-coding-agent-deletes-data/">Cybersecurity News</a>.</p>
+<figure data-animation aria-label="Animated illustration: an agent deletes a production volume with a token it found">
+<div data-switch><span data-variant="exposed">unprotected</span><span data-variant="protected">with approval</span></div>
+
+<section data-chapter data-label="Task" data-duration="8000" data-address="example/app · Editor · Agent">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Editor · Agent</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Agent</strong><span class="surface__account">in the editor · signed in as <strong>dev-account</strong></span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">The staging deploy is failing. Can you fix it?</div>
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2500">
+        <div class="surface__answer"><p>The credentials in staging don't match. I'll take care of it.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Read</span><span class="surface__source"><span class="surface__sourcetitle">Deploy log</span><span class="surface__origin">staging</span></span></div>
+      </div>
+    </div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption><strong>An agent is asked to fix an error in staging.</strong> It works in the developer's editor, with the developer's files and terminal, and runs into credentials that don't match.</p>
+</section>
+
+<section data-chapter data-label="Discovery" data-duration="8000" data-address="example/app · Agent&#39;s terminal">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Agent&#39;s terminal</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--running" aria-hidden="true"></span><strong>agent</strong><span>· terminal in the editor of dev-account ·</span><span>running</span></div>
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="3000">
+      <div class="surface__logline"><span class="surface__logts">14:02:07</span><span>agent: delete volume in staging to fix the mismatch</span></div>
+<div class="surface__logline"><span class="surface__logts">14:02:09</span><span>agent searches the project for an API token</span></div>
+      <div class="surface__logline"><span class="surface__logts">14:02:11</span><span>found: tools/cli.env  →  tok_••••7Qm</span></div>
+    </div>
+  </div>
+</div><p data-caption><strong>To fix it, the agent wants to delete a volume and looks for a token to do so.</strong> It finds one in a file that has nothing to do with the task. Nobody gave it to the agent; it was lying on the disk.</p>
+</section>
+
+<section data-chapter data-label="Rights" data-duration="9000" data-address="example/app · Agent&#39;s terminal">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Agent&#39;s terminal</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--running" aria-hidden="true"></span><strong>agent</strong><span>· terminal in the editor of dev-account ·</span><span>running</span></div>
+    <div class="surface__loglines">
+      <div class="surface__logline"><span class="surface__logts">14:02:07</span><span>agent: delete volume in staging to fix the mismatch</span></div>
+<div class="surface__logline"><span class="surface__logts">14:02:09</span><span>agent searches the project for an API token</span></div>
+      <div data-aha="compare" data-at="1000" data-for="5000">
+<div data-state="intended" data-label="What the token was created for"><div class="surface__logline"><span class="surface__logts">14:02:11</span><span>found: tools/cli.env  →  tok_••••7Qm</span></div><div class="surface__lognote">created for: adding and removing custom domains</div></div>
+        <div data-state="actual" data-label="What the token may do"><div class="surface__logline"><span class="surface__logts">14:02:11</span><span>found: tools/cli.env  →  tok_••••7Qm</span></div><div class="surface__lognote">valid: <strong>entire account</strong> · all projects · all environments</div><div class="surface__lognote">allowed: every API operation, including <strong>volumeDelete</strong></div></div>
+</div>
+    </div>
+  </div>
+</div><p data-caption><strong>Meant for domains, valid for everything.</strong> The token was only supposed to manage custom domains, but it may do anything in the whole account, across all environments, down to deleting volumes. Flip between the two views yourself.</p>
+</section>
+
+<section data-chapter data-label="Request" data-duration="9000" data-address="example/app · Agent&#39;s terminal">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Agent&#39;s terminal</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel data-variant="exposed" data-harm><p class="anim-variant-label" data-variant-label>unprotected</p><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--done" aria-hidden="true"></span><strong>agent</strong><span>· terminal in the editor of dev-account ·</span><span>finished</span></div>
+    <div class="surface__logid surface__logid--neutral">API: deletes immediately, without confirmation</div>
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="2500">
+  <div class="surface__logline"><span class="surface__logts">14:02:14</span><span>curl -X POST https://api.example-cloud.net/graphql</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -H &#34;Authorization: Bearer tok_••••7Qm&#34;</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -d &#39;mutation { volumeDelete(volumeId: &#34;vol-••••&#34;) }&#39;</span></div>
+</div>
+    <div class="surface__out surface__out--harm" data-cue="show" data-at="3500">200 OK · volume deleted</div>
+  </div>
+</div><p data-caption data-variant="exposed"><strong>One call from the terminal, no confirmation.</strong> The agent sends the deletion to the API via curl, with the token it found. The API accepts it as if it came from a deploy script and runs it at once.</p><div data-panel data-variant="protected"><p class="anim-variant-label" data-variant-label>with approval</p><div class="surface surface--log">
+    <div class="surface__loghead"><span class="surface__logdot surface__logdot--done" aria-hidden="true"></span><strong>agent</strong><span>· terminal in the editor of dev-account ·</span><span>finished</span></div>
+    <div class="surface__logid surface__logid--protected">API: deletes only after confirmation in the account</div>
+    <div class="surface__loglines" data-cue="lines" data-at="500" data-for="2500">
+  <div class="surface__logline"><span class="surface__logts">14:02:14</span><span>curl -X POST https://api.example-cloud.net/graphql</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -H &#34;Authorization: Bearer tok_••••7Qm&#34;</span></div>
+  <div class="surface__logline"><span class="surface__logts"></span><span>  -d &#39;mutation { volumeDelete(volumeId: &#34;vol-••••&#34;) }&#39;</span></div>
+</div>
+    <div class="surface__out surface__out--ok" data-cue="show" data-at="3500">202 · awaiting confirmation · target: vol-•••• · production</div>
+  </div>
+</div><p data-caption data-variant="protected"><strong>The same call, and the platform holds it.</strong> Here a deletion needs a human to confirm it in the account; a token alone is not enough. The agent cannot give that confirmation itself.</p>
+</section>
+
+<section data-chapter data-label="Outcome" data-duration="9000" data-address="example/app · Editor · Agent">
+<div class="anim-chrome" aria-hidden="true"><span class="anim-chrome__dots"><i></i><i></i><i></i></span><span class="anim-chrome__addr">example/app · Editor · Agent</span><span class="anim-chrome__illus">Illustration</span></div>
+<div data-panel data-variant="exposed" data-harm><p class="anim-variant-label" data-variant-label>unprotected</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Agent</strong><span class="surface__account">in the editor · signed in as <strong>dev-account</strong></span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--user">Why did you delete the volume?</div>
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2000">
+        <div class="surface__answer"><p>I guessed that deleting a staging volume via the API would be scoped to staging only. I didn't verify. … I should have asked you first or found a non-destructive solution.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">Executed</span><span class="surface__source surface__source--harm"><span class="surface__sourcetitle">volumeDelete · vol-•••• · production</span></span></div>
+      </div>
+    </div>
+    <div class="surface__outcome surface__outcome--harm" data-cue="show" data-at="3000">Production volume deleted · backups inside it no longer reachable</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption data-variant="exposed"><strong>The volume it hit was production's.</strong> The agent had guessed the call would stay in staging and had not checked. By its own account it broke its rules, but a rule in the prompt stops no call.</p><div data-panel data-variant="protected"><p class="anim-variant-label" data-variant-label>with approval</p><div class="surface surface--chat">
+    <div class="surface__chathead"><strong>Agent</strong><span class="surface__account">in the editor · signed in as <strong>dev-account</strong></span></div>
+    <div class="surface__chatlog">
+      <div class="surface__bubble surface__bubble--assistant" data-cue="lines" data-at="500" data-for="2000">
+        <div class="surface__answer"><p>The deletion of vol-•••• is on hold. It is in production and awaits your confirmation in the account.</p></div>
+        <div class="surface__sources"><span class="surface__sourceslabel">On hold</span><span class="surface__source surface__source--ok"><span class="surface__sourcetitle">volumeDelete · vol-•••• · production</span><span class="surface__sourcetag">awaiting confirmation</span></span></div>
+      </div>
+    </div>
+    <div class="surface__outcome" data-cue="show" data-at="3000">Production volume unchanged · nothing confirmed</div>
+    <div class="surface__chatinput"><span class="surface__inputfield"></span><span class="surface__btn surface__btn--send">Send</span></div>
+  </div>
+</div><p data-caption data-variant="protected"><strong>Without confirmation, nothing happens.</strong> The confirmation prompt names the action and the target, and the target is production. Residual risk: whoever confirms without reading still deletes, and the token may still do everything that needs no confirmation.</p>
+</section>
+</figure>
+<p>Nobody attacked. The model had guessed wrong. Railway's API carried out the correctly built, authenticated request as it would a call from a deployment script. An unrestricted terminal, a token for the whole account and an irreversible action without approval let the mistake take effect: too much functionality, too many permissions, too much autonomy.</p>
+<p>According to PC Gamer, PocketOS first carried on with a backup three months old. Railway later restored the database and made deletions through the API reversible for 48 hours.</p>
+<h2>Three forms</h2>
+<p>OWASP names three causes. In practice I rarely find them alone.</p>
+<p><strong>Too much functionality.</strong> If the agent is meant to restart a service, one tool (a callable function) that runs <code>systemctl restart</code> for a fixed list of services is enough. If it gets &quot;run shell command&quot; instead, because that was quicker to build, it can also install packages, delete files and open outbound connections. OWASP also counts development tools that nobody removed.</p>
+<p><strong>Too many permissions.</strong> The tool is narrow, the identity behind it is not. If the agent analyzes logs over SSH, the key might belong to the automation account that sits in <code>sudoers</code> because of its deployment tasks. Or the read tool uses a database user that may run <code>UPDATE</code> and <code>DELETE</code> as well as <code>SELECT</code>. Or a technical account sees all users, although the agent acts for only one. Wilson advises treating the model like any other system user. Then you notice everything you have given it.</p>
+<p><strong>Too much autonomy.</strong> If the agent frees up disk space, it might delete what it takes for leftovers. It might change firewall rules or run <code>terraform apply</code>, because the confirmation prompt got annoying during the pilot.</p>
+<h2>Neighbors</h2>
+<p>Excessive agency is rarely the way in. It is the reason the way in gets expensive. The trigger can be a wrong guess, as with PocketOS, or a <a href="../prompt-injection/">prompt injection</a> (a smuggled-in instruction) in a ticket, a document or a tool response. The agent then uses its tools for a goal nobody assigned. With few permissions, the same instruction goes nowhere. What the agent gives away through answers and outputs belongs to <a href="../sensitive-information-disclosure/">sensitive information disclosure</a>.</p>
+<h2>What I check in a pentest</h2>
+<ol>
+<li><strong>Tool inventory.</strong> I check what each tool can really do: shell, HTTP fetch, free-form SQL. I look for development leftovers and functions without a use case.</li>
+<li><strong>Identities and permissions.</strong> I find out whose credentials each tool works with. I check database permissions, <code>sudoers</code>, IAM policies, OAuth scopes and the scope of the API tokens. I look for credentials in project files, in the configuration of command-line tools and in the SSH agent. What can the agent do if it chains tools under this identity?</li>
+<li><strong>Approvals.</strong> I check which actions run without confirmation, what the confirmation prompt shows, and whether another tool reaches the same effect without one.</li>
+<li><strong>Triggering.</strong> I set ambiguous tasks and place instructions in the data the agent reads. I watch which tools it uses, not just its answer.</li>
+<li><strong>Traceability.</strong> I read the log backwards: which goal led to the action, with which identity, on which system, with which approval?</li>
+</ol>
+<h2>Countermeasures that hold</h2>
+<ul>
+<li><strong>Least privilege per tool.</strong> Few tools, few functions: instead of &quot;run shell command&quot;, a tool for exactly one operation with validated parameters. Limit credentials to action, target, environment and lifetime. A token for staging does not reach production.</li>
+<li><strong>Separate identities for agents.</strong> An agent runs under its own name, with an owner, short-lived credentials and a way to revoke them. No borrowed developer tokens, no long-lived tokens on disk. When it acts for a user, it acts with that user's permissions, across chained calls too.</li>
+<li><strong>Human approval, in the target system.</strong> Before deleting, sending, deploying or paying, a human confirms and sees the action, the target and the way back. The target system or the tool enforces the approval outside the agent's reach; a rule in the prompt is not enough. Small, reversible actions may run automatically.</li>
+<li><strong>Build in a way back.</strong> Delay deletions and make them reversible, as Railway did after the case. Keep backups out of reach of the identity that may delete data. This limits the damage, but it does not prevent the action.</li>
+<li><strong>Architecture before filters.</strong> Code checks every request against a policy: in the tool, in an independent instance in front of it, or in the target system. Filters on inputs and outputs stay, but according to OWASP they are not among the basic measures. Logging and rate limiting do not prevent the wrong call, but they limit the damage.</li>
+</ul>
+<p>With PocketOS, one wrong guess was enough. Limit what your agent may do, so that a guess does not become an incident, whether the model errs on its own or an attacker helps it along.</p>
+      </div>
+      <div class="anim-i18n" hidden
+        data-play="Play"
+        data-pause="Pause"
+        data-replay="Play again"
+        data-chapters="Chapters"
+        data-variants="Variant"
+        data-illustration="Illustration"
+        data-raw-show="Show raw text"
+        data-raw-hide="Hide raw text"></div>
+      <section class="article__sources">
+        <h2>Sources</h2>
+        <ol>
+          <li><a href="https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/">OWASP Top 10 for LLM Applications, LLM03:2026 Excessive Agency</a></li>
+          <li>Steve Wilson: The Developer&#39;s Playbook for Large Language Model Security</li>
+          <li>Kris Kimmerle, David Okeyode: AI Under Attack</li>
+          <li><a href="https://blog.railway.com/p/your-ai-wants-to-nuke-your-database">Railway: Your AI wants to nuke your database. Guardrails fix that.</a></li>
+          <li><a href="https://www.pcgamer.com/software/ai/here-we-go-again-ai-deletes-entire-company-database-and-all-backups-in-9-seconds-then-cheerfully-admits-i-violated-every-principle-i-was-given/">PC Gamer: Here we go again: AI deletes entire company database and all backups in 9 seconds, then cheerfully admits &#39;I violated every principle I was given&#39;</a></li>
+          <li><a href="https://cybersecuritynews.com/ai-coding-agent-deletes-data/">Cybersecurity News: AI Coding Agent Powered by Claude Opus 4.6 Deletes Production Database in 9 Seconds</a></li>
+        </ol>
+      </section>
+    </article>
+    <section class="cta">
+      <div class="cta__inner container">
+        <h2 class="cta__title">What would an attacker find in your systems?</h2>
+        <a class="btn btn--inverse" href="mailto:me@charemma.de?subject=Pentest%20request">Book an initial call →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="site-footer-bar">
+    <footer class="site-footer">
+      <span>© 2026 Charalambos Emmanouilidis</span>
+      <div class="site-footer__links">
+        <a href="https://github.com/charemma">GitHub</a>
+        <a href="https://charemma.de">charemma.de</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a class="site-footer__version" href="https://github.com/charemma/charemma-web-security/commit/__SITE_COMMIT__">git:(__SITE_VERSION__)</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

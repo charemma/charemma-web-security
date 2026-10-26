@@ -1,23 +1,28 @@
 # 009 Published languages
 
-Status: approved 2026-10-20, amended 2026-10-20 (relative redirect locations), 2026-10-26 (localized paths)
+Status: approved 2026-10-20, amended 2026-10-20 (relative redirect locations), 2026-10-26 (localized paths), 2026-10-26 (English published)
 
 ## Why
 
-The articles exist only in German. An English or Greek visitor today gets a
+The articles first existed only in German. An English or Greek visitor got a
 start page, an overview of fifteen teasers and not a single article to read.
-That looks unfinished, so the site goes out in German only for now.
+That looked unfinished, so the site went out in German only.
 
 English and Greek come back once the articles are written and translated one
 after another. Bringing a language back has to be a switch in the
 configuration, not a rebuild of templates, generator or web server.
+
+As of 2026-10-26 English is published. All three articles (specs 005, 007
+and 011) are translated into English together with their animation scenes,
+so an English visitor finds every article the German site offers. Greek
+stays unpublished until its articles are translated.
 
 ## What
 
 ### A published flag per language
 
 Every entry in the `languages` list of `site.json` carries `published`, `true`
-or `false`. Today German is `true`, English and Greek are `false`. The
+or `false`. Today German and English are `true`, Greek is `false`. The
 languages stay in the list; their interface texts `en.json` and `el.json`
 stay in the repository.
 
@@ -38,7 +43,7 @@ its language goes live. A language code that `site.json` does not configure
 still fails the build.
 
 For every unpublished language the generator removes its output directory,
-`html/en/` and `html/el/` today, the way it removes stale article pages. The
+`html/el/` today, the way it removes stale article pages. The
 committed `html/` then holds only what the site delivers.
 
 ### Header and language memory
@@ -65,11 +70,12 @@ page itself. No alternate points to a page the site does not deliver.
 ### Old addresses
 
 The English and Greek pages were live and may be indexed or bookmarked. The
-web server answers every address under `/en/` or `/el/`, and `/en` and `/el`
-themselves, for which no file exists, with a `302` redirect to the same page
+web server answers every address under the prefix of an unpublished
+language, `/el/` today, and `/el` itself, for which no file exists, with a
+`302` redirect to the same page
 in the default language: the language prefix is dropped and the language's
 path segments are replaced by the default language's, per
-`013-localized-paths.md`. `/en/knowledge/ai-security/` leads to
+`013-localized-paths.md`. `/el/wissen/ki-sicherheit/` leads to
 `/wissen/ki-sicherheit/`, `/el/` to `/`. The query string is kept. A former
 address under the default language's segments, such as
 `/en/wissen/ki-sicherheit/`, first answers the `301` of
@@ -119,23 +125,25 @@ redirects nginx adds by itself, such as the trailing slash of a directory.
 
 Checked against a local nginx serving the stamped site.
 
-1. No page has a `lang-switch` group in the header or loads `lang.js`.
-2. `just build` writes no file under `html/en/` or `html/el/`, and removes
-   the ones that existed.
-3. `sitemap.xml` and the 404 page contain German only; every page names
-   `de` and `x-default` as its only alternates, both pointing to itself.
-4. `curl -I` on `/en`, `/en/`, `/en/knowledge/ai-security/` and `/el/` answers
-   `302` with a relative `Location` on the German counterpart (a path
-   without scheme and host) and `Cache-Control: no-cache`; the same holds
-   for the `security.txt` redirect and a directory address without its
-   trailing slash.
-5. With `sec-lang` set to `en` in `localStorage`, a German page stays where it
-   is.
+1. Every page has a `lang-switch` group in the header listing `DE` and `EN`
+   and loads `lang.js`.
+2. `just build` writes no file under `html/el/`, and removes the ones that
+   existed.
+3. `sitemap.xml` and the 404 pages contain German and English only; every
+   page names `de`, `en` (where the page exists in English) and `x-default`
+   as its alternates, at the addresses of `013-localized-paths.md`.
+4. `curl -I` on `/el`, `/el/` and `/el/wissen/ki-sicherheit/` answers `302`
+   with a relative `Location` on the German counterpart (a path without
+   scheme and host) and `Cache-Control: no-cache`; the same holds for the
+   `security.txt` redirect and a directory address without its trailing
+   slash. `/en/` answers `200`.
+5. With `sec-lang` set to `el` in `localStorage`, a German page stays where
+   it is.
 6. `just check-generated` passes.
-7. Setting `published` to `true` for English and rebuilding renders the
-   English pages again, with a switcher of `DE` and `EN` and `lang.js`
-   loaded, and the web server answers `/en/` with `200`. Setting it back to
-   `false` and rebuilding returns to the state of point 1.
+7. Setting `published` to `false` for English and rebuilding removes the
+   switcher and `lang.js` from every page, and the web server answers `/en/`
+   with `302` to `/`. Setting it back to `true` and rebuilding returns to
+   the state of point 1.
 
 ## Touches
 
