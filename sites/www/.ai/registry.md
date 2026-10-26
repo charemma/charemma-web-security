@@ -12,7 +12,8 @@ This site is charemma.de, the main website of Charalambos Emmanouilidis. It curr
 | --- | --- | --- | --- | --- | --- | --- |
 | `sites/www/html` | `index.html` | asset | editable |  |  | Start page: the front page of the site, delivered to the browser as is. |
 | `sites/www/html/datenschutz` | `index.html` | asset | editable |  |  | Privacy page: the site's privacy notice, delivered to the browser as is. |
-| `sites/www/html/impressum` | `index.html` | asset | editable |  |  | Legal notice page: the provider details that apply to every site of this provider, delivered to the browser as is. |
+| `sites/www/html/impressum` | `index.html` | asset | editable |  |  | Legal notice page, German and authoritative version: the provider details that apply to every site of this provider, delivered to the browser as is. |
+| `sites/www/html/en/legal-notice` | `index.html` | asset | editable |  |  | Legal notice page, English translation: the provider details of the German legal notice page in English, delivered to the browser as is. |
 | `sites/www` | `Dockerfile` | code | spec-maintained | `013-site-images.md` |  | Container image recipe: how the delivered site is packaged into the web server image and which build-time values it takes. _Tool-imposed name; see Build-tool exemption rule._ |
 | `sites/www` | `justfile` | code | spec-maintained | `013-site-images.md` |  | Task runner recipes: the local and CI entry points for checking, stamping, serving and building the site. _Tool-imposed name; see Build-tool exemption rule._ |
 | `sites/www/nginx` | `default.conf` | code | spec-maintained | `013-site-images.md` |  | Web server configuration: how requests are routed and which response headers apply. |
