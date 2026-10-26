@@ -47,8 +47,8 @@
     "eyebrow": "02 / approach",
     "title_a": "Agents map it. ",
     "title_b": "I go in.",
-    "lead": "AI agents map the attack surface of your AI application and fire broad batteries of test prompts. Then I take over: the one chain that does real damage – from a crafted document into the Kubernetes cluster, by hand and reproducible.",
-    "note": "The animation follows a real black-box assessment – simplified and anonymised."
+    "lead": "AI agents map your attack surface and run broad, automated tests. I verify findings by hand and follow exploitable chains in a controlled way within the agreed scope. You receive a report with reproducible evidence and concrete fixes.",
+    "note": "The animation follows a real black-box assessment of an AI application, simplified and anonymized."
   },
   "engagement": {
     "phase": "PHASE",
@@ -139,13 +139,13 @@
     "link": "Privacy",
     "meta_title": "Privacy · security.charemma.de",
     "meta_description": "Which data this website processes during a visit, and why.",
-    "back": "← back to the start page",
+    "back": "← back to the homepage",
     "title": "Privacy",
     "lead": "What this website records about your visit, and why. In short: no cookies, and the statistics data is not passed on to third parties.",
     "controller": {
       "heading": "Controller",
       "name": "Charalambos Emmanouilidis",
-      "email": "E-mail:"
+      "email": "Email:"
     },
     "sections": [
       {

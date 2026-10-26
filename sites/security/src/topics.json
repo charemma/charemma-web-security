@@ -196,7 +196,7 @@
     },
     "en": {
       "title": "Inference infrastructure",
-      "body": "Model servers, containers, GPUs and tenant separation: services like any other – exposed, often weakly isolated, rarely rate-limited."
+      "body": "Model servers, containers, GPUs and tenant separation: services like any other – exposed, often weakly isolated, rarely with resource limits."
     },
     "el": {
       "title": "Υποδομή inference",
