@@ -66,9 +66,11 @@ the client owns or may have tested. Before the test, scope, test type
 contradict it.
 
 **2. During the test.** Critical findings are reported to the client
-immediately, not only in the report. Tests that could destroy data or
-impair systems (destructive tests) happen only after explicit agreement
-with the client. This matches step 02 of the process section.
+immediately, not only in the report. Destructive tests (deleting data,
+deliberately impairing systems) are not performed. The statement says
+"deliberately": broad automated tests can still strain a fragile system
+unintentionally, so the page does not promise more than that. The first
+sentence matches step 02 of the process section.
 
 **3. AI in the penetration test.** The section states:
 
@@ -188,7 +190,9 @@ site.
    standards and credentials.
 4. The German and English texts state the facts of *Content* and no others;
    the authorization section limits tests to systems the client owns or
-   may have tested; the AI section names Anthropic Claude, written consent and work without
+   may have tested; the during-the-test section states that destructive
+   tests are not performed, with no exception by agreement; the AI section
+   names Anthropic Claude, written consent and work without
    cloud AI otherwise; the credentials section names BSI guideline, OWASP
    WSTG, OSCP, SCP Web Application Security and a professional liability
    insurance with exali, without a sum.
