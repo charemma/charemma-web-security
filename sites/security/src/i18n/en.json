@@ -208,8 +208,7 @@
       {
         "heading": "During the test",
         "paragraphs": [
-          "I report critical findings to you immediately, not only in the report.",
-          "I do not run destructive tests: I do not delete data or deliberately take your systems down."
+          "I report critical findings to you immediately, not only in the report."
         ]
       },
       {
