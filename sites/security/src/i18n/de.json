@@ -209,7 +209,7 @@
         "heading": "Während des Tests",
         "paragraphs": [
           "Kritische Funde melde ich Ihnen sofort, nicht erst im Bericht.",
-          "Tests, die Daten löschen oder den Betrieb Ihrer Systeme beeinträchtigen könnten (destruktive Tests), führe ich nur nach ausdrücklicher Absprache mit Ihnen durch."
+          "Destruktive Tests führe ich nicht durch: Ich lösche keine Daten und lege Ihre Systeme nicht bewusst lahm."
         ]
       },
       {

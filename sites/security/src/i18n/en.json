@@ -209,7 +209,7 @@
         "heading": "During the test",
         "paragraphs": [
           "I report critical findings to you immediately, not only in the report.",
-          "I run tests that could delete data or impair the operation of your systems (destructive tests) only after explicit agreement with you."
+          "I do not run destructive tests: I do not delete data or deliberately take your systems down."
         ]
       },
       {
